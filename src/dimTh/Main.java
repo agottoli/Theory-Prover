@@ -1,12 +1,13 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+/**
+ * Ragionamento Automatico, I semestre, Anno Accademico 2012-2013
+ * 
+ * Dimostratore di Teoremi mediante Risoluzione Ordinata
  */
 package dimTh;
 
 /**
  *
- * @author ale
+ * @author Alessandro Gottoli vr352595
  */
 public class Main {
 

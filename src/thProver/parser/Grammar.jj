@@ -1,0 +1,182 @@
+PARSER_BEGIN(CNFParser)
+package thProver.parser;
+
+import thProver.CNFFormula;
+import thProver.Clause;
+import thProver.Literal;
+import thProver.Term;
+import thProver.Atom;
+import thProver.Constant;
+import thProver.Variable;
+import thProver.Function;
+
+import java.util.List;
+import java.util.ArrayList;
+import java.util.LinkedList;
+
+public class CNFParser {
+
+    private static CNFFormula f = new CNFFormula();
+
+    public CNFFormula getCNFFormula() {
+        CNFFormula currentFormula = f;
+        f = new CNFFormula();
+        return currentFormula;
+    }
+
+}
+PARSER_END(CNFParser)
+
+SKIP:
+{ <" ">
+| <"\n">
+| <"\r">
+| <"\t">
+| <"#"(~["\n"])* "\n"> // comment
+}
+
+TOKEN:
+{ <OR: "|">
+| <PREDICATE: (["A"-"Z","0"-"9","_"])+>
+| <SYMBOL: (["a"-"z","0"-"9","_"])+>
+| <COMMA: ",">
+| <SEMICOLON: ";">
+| <LPAR: "(">
+| <RPAR: ")">
+| <NOT: "!" | "~">
+// constants declaration
+| <CONST: "const:">
+// precedence over the signature symbols (the precedenza sui simboli della segnatura)
+| <PREC: "prec:">
+| <RANGLEPAR: ">">
+}
+
+
+/*
+* Productions
+*/
+void Start():
+{
+    Clause c;
+}
+{
+	[ Declaration() ]
+        ( Clause() [ <SEMICOLON> Clause() ] )*
+	<EOF>
+}
+
+// constants declaration
+void Declaration():
+{}
+{
+	<CONST> [Consts()]
+}
+
+void Consts():
+{
+    Token c;
+}
+{
+	c = <SYMBOL>
+        { f.addConstant(c.image); f.addArity(c.image, 1); }
+	( <COMMA> c = <SYMBOL>
+            { f.addConstant(c.image); f.addArity(c.image, 1); } )*
+}
+
+// a clause
+void Clause():
+{
+    Clause c = new Clause();
+    Literal l;
+}
+{
+	l = Literal()
+        { c.addLiteral(l); }
+        ( <OR> l = Literal() 
+            { c.addLiteral(l); } )*
+
+        { f.addClause(c); }
+}
+
+// a literal
+Literal Literal():
+{
+    Literal l = new Literal();
+    Atom a;
+}
+{
+	[ <NOT> { l.setPositive(false); } ]
+        a = Atom()
+        { l.setAtom(a); }
+
+        { return f.addLiteral(l); }
+}
+
+Atom Atom():
+{
+    Atom a = new Atom();
+    Term[] terms;
+    Token p;
+}
+{
+    p = <PREDICATE>
+        { a.setSymbol(p.image); }
+        [ <LPAR> terms = Terms() 
+                  { a.setArgs(terms);
+                    boolean ok = f.checkArity(p.image, terms.length); 
+                    if (!ok) {
+                        throw new IllegalArgumentException("Errore di arietà: " + p.image + "\n");
+                    } 
+                  } <RPAR> ]
+
+        { return f.addAtom(a); }
+}
+
+Term[] Terms():
+{
+    List<Term> tl = new LinkedList<Term>();
+    Term t;
+}
+{
+	t = Term()  { tl.add(t); } ( <COMMA> t = Term() { tl.add(t); } )*
+
+        { return tl.toArray(new Term[tl.size()]); }
+}
+
+Term Term():
+{
+    boolean noArgs = true;
+    Token s;
+    Term t;
+    Term[] terms = null;
+
+}
+{
+	s = <SYMBOL>
+        [ { noArgs = false; } <LPAR> terms = Terms() <RPAR> ]
+
+        {  if (noArgs) { // constant or variable
+                if (!f.isConstant(s.image)) {
+                    boolean ok = f.checkArity(s.image, 1);
+                    if (!ok) {
+                        throw new IllegalArgumentException("Errore di arietà: " + s.image + "\n");
+                    }
+                    t = new Variable(s.image);
+                } else
+                    t = f.addConstant(s.image); // per recuperare il puntatore alla costante
+            } else { // function
+                boolean ok = f.checkArity(s.image, terms.length);
+                if (!ok) {
+                    throw new IllegalArgumentException("Errore di arietà: " + s.image + "\n");
+                }
+                t = new Function();
+                t.setSymbol(s.image);
+                ((Function) t).setArgs(terms);
+           }
+           return f.addTerm(t);
+
+            
+        }
+
+}
+

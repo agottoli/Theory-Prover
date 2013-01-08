@@ -57,7 +57,9 @@ public class Main {
          */
         Reader formulaReader;
         if (interactive) {
-            formulaReader = new StringReader(startInteractive());
+            String stringa = "const: a,b,c\nprec: d>p>c\nprec: a>q\nP(d)\n";
+            formulaReader = new StringReader(stringa);
+            //formulaReader = new StringReader(startInteractive());
         } else {
             formulaReader = new FileReader(fileName);
         }
@@ -97,7 +99,23 @@ public class Main {
         System.out.println("Please, insert the constants (separated by ',')");
         line = stdin.nextLine();
         sb.append("const: ").append(line).append('\n');
-
+        
+        System.out.println("Please, insert the precedence (signature symbol separate by '>', ? for help)");
+        while (true) {
+            line = stdin.nextLine();
+            if (line.length() == 0)
+                continue;
+            if (line.equals("end"))
+                break;
+            if (line.equals("?")) {
+                System.out.println(
+                        "Insert a precedence (if partial a furthermore precedence can be inserted in a new line).\n"
+                        + "Insert \"end\" in a line to terminate the formula.\n");
+                continue;
+            }
+            sb.append("prec: ").append(line).append('\n');
+        }
+        
         System.out.println("Please, insert the formula (? for help)");
 
         while (true) {

@@ -45,7 +45,7 @@ public class Clause implements Comparable<Clause> {
         }
 
         if (!literals.isEmpty()) {
-            sb.deleteCharAt(sb.length() - 2);
+            sb.replace(sb.length()-3,sb.length(), "");
         }
 
         return sb.toString();

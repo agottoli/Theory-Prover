@@ -61,7 +61,8 @@ void Start():
 }
 {
 	[ Declaration() ]
-        ( Clause() [ <SEMICOLON> Clause() ] )*
+        ( Precedence() )*
+        ( Clause() ( <SEMICOLON> Clause() )* )*
 	<EOF>
 }
 
@@ -69,7 +70,7 @@ void Start():
 void Declaration():
 {}
 {
-	<CONST> [Consts()]
+	<CONST> [Consts()] 
 }
 
 void Consts():
@@ -81,6 +82,18 @@ void Consts():
         { f.addConstant(c.image); f.addArity(c.image, 1); }
 	( <COMMA> c = <SYMBOL>
             { f.addConstant(c.image); f.addArity(c.image, 1); } )*
+}
+
+// precedence specification
+void Precedence():
+{
+    Token t;
+}
+{
+    <PREC>
+    ( t = <PREDICATE> | t = <SYMBOL> ) { f.incrNPrecList(); f.addPrecedence(t.image); } 
+
+    ( <RANGLEPAR> ( t = <PREDICATE> | t = <SYMBOL> ) { f.addPrecedence(t.image); } )+
 }
 
 // a clause

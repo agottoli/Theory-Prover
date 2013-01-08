@@ -1,7 +1,9 @@
 package thProver;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.TreeSet;
@@ -18,6 +20,9 @@ public class CNFFormula {
     private HashMap<String, Atom> atoms; // atom.toString(), atom
     private HashMap<String, Literal> literals;
     private List<Clause> clauses;
+    
+    private List<List<String>> precedences;
+    private int nPrecedencesList = -1;
 
     /* questi sotto si faranno nel prover */
     //private TreeSet<Clause> To_Select_tree; //clauses; poll() <-- ritorna e rimuove la testa
@@ -30,6 +35,7 @@ public class CNFFormula {
         atoms = new HashMap<>();
         literals = new HashMap<>();
         clauses = new ArrayList<>(); // oppure LinkedList<>()
+        precedences = new ArrayList<>();
     }
     
     public Constant addConstant(String key) {
@@ -123,59 +129,58 @@ public class CNFFormula {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        //StringBuilder sb = new StringBuilder("Constants: ");
-        //sb.append(constants.toString()).append('\n');
-
-        sb.append("Clauses: ");
-        for (Clause c : clauses)
-            sb.append(c).append("; ");
-        sb.deleteCharAt(sb.length() - 1);
-        sb.deleteCharAt(sb.length() - 1);
-
+        StringBuilder sb = new StringBuilder(getConstantString());
+        sb.append("\n").append(getPrecedencesString());
+        sb.append("\n").append(getClauseString());
 
         return sb.toString();
     }
-    /*
-     public CNFFormula(boolean tree) {
-     constants = new HashMap<>();
-     terms = new HashMap<>();
-     atoms = new HashMap<>();
-     if (tree) {
-     this.tree = true;
-     To_Select_tree = new TreeSet<>();
-     } else {
-     this.tree = false;
-     To_Select_queue = new PriorityQueue<>();
-     }
-     }
-
-     public void addClause(Clause clause) {
-     if (tree)
-     To_Select_tree.add(clause);
-     else
-     To_Select_queue.add(clause);
-     }
-
-     @Override
-     public String toString() {
-     StringBuilder sb = new StringBuilder("Constants: ");
-     sb.append(constants).append('\n');
-
-     sb.append("To_Select: ");
-     if (tree) {
-     for (Clause c : To_Select_tree)
-     sb.append(c).append("; ");
-     sb.deleteCharAt(sb.length()-1);
-     sb.deleteCharAt(sb.length()-1);
-     } else {
-     for (Clause c : To_Select_queue)
-     sb.append(c).append("; ");
-     sb.deleteCharAt(sb.length()-1);
-     sb.deleteCharAt(sb.length()-1);
-     }
+    
+    public String getConstantString() { // DA MIGLIORARE
+        StringBuilder sb = new StringBuilder("Constants: { ");
+        Collection<Term> cost = terms.values();
+        for (Iterator<Term> it = cost.iterator(); it.hasNext();) {
+            Term t = it.next();
+            if (t instanceof Constant)
+                sb.append(t.toString()).append(",");
+        }
+        sb.replace(sb.length()-1, sb.length(), " }");
+        return sb.toString();
+    }
+    
+    public String getClauseString() {
+        StringBuilder sb = new StringBuilder("Clauses: { ");
+        for (Clause c : clauses)
+            sb.append(c).append(" ; ");
+        if (!clauses.isEmpty())
+            sb.replace(sb.length()-2, sb.length(), "");
+        sb.append("}");
+        return sb.toString();
+    }
+    
+    public String getPrecedencesString() {
+        StringBuilder sb = new StringBuilder();
+        if (nPrecedencesList < 1)
+            sb.append("Precedence: ");
+        else 
+            sb.append("Precedences: ");
         
-     return sb.toString();
-     }
-     */
+        for (List<String> l : precedences) {
+            for (String s : l)
+                sb.append(s).append(" > ");
+            sb.replace(sb.length()-2, sb.length(), "; ");
+        }
+        sb.replace(sb.length()-3, sb.length(), "");
+        //sb.append(precedences.toString());
+        return sb.toString();
+    }
+    
+    public void incrNPrecList() {
+        nPrecedencesList++;
+        precedences.add(new ArrayList<String>());
+    }
+    
+    public void addPrecedence(String s) {
+        precedences.get(nPrecedencesList).add(s);
+    }
 }

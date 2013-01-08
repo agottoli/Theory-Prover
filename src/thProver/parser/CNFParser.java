@@ -40,23 +40,39 @@ public class CNFParser implements CNFParserConstants {
     label_1:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case PREDICATE:
-      case NOT:
+      case PREC:
         ;
         break;
       default:
         jj_la1[1] = jj_gen;
         break label_1;
       }
-      Clause();
+      Precedence();
+    }
+    label_2:
+    while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case SEMICOLON:
-        jj_consume_token(SEMICOLON);
-        Clause();
+      case PREDICATE:
+      case NOT:
+        ;
         break;
       default:
         jj_la1[2] = jj_gen;
-        ;
+        break label_2;
+      }
+      Clause();
+      label_3:
+      while (true) {
+        switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+        case SEMICOLON:
+          ;
+          break;
+        default:
+          jj_la1[3] = jj_gen;
+          break label_3;
+        }
+        jj_consume_token(SEMICOLON);
+        Clause();
       }
     }
     jj_consume_token(0);
@@ -70,7 +86,7 @@ public class CNFParser implements CNFParserConstants {
       Consts();
       break;
     default:
-      jj_la1[3] = jj_gen;
+      jj_la1[4] = jj_gen;
       ;
     }
   }
@@ -79,19 +95,63 @@ public class CNFParser implements CNFParserConstants {
     Token c;
     c = jj_consume_token(SYMBOL);
           f.addConstant(c.image); f.addArity(c.image, 1);
-    label_2:
+    label_4:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case COMMA:
         ;
         break;
       default:
-        jj_la1[4] = jj_gen;
-        break label_2;
+        jj_la1[5] = jj_gen;
+        break label_4;
       }
       jj_consume_token(COMMA);
       c = jj_consume_token(SYMBOL);
               f.addConstant(c.image); f.addArity(c.image, 1);
+    }
+  }
+
+// precedence specification
+  static final public void Precedence() throws ParseException {
+    Token t;
+    jj_consume_token(PREC);
+    switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+    case PREDICATE:
+      t = jj_consume_token(PREDICATE);
+      break;
+    case SYMBOL:
+      t = jj_consume_token(SYMBOL);
+      break;
+    default:
+      jj_la1[6] = jj_gen;
+      jj_consume_token(-1);
+      throw new ParseException();
+    }
+                                         f.incrNPrecList(); f.addPrecedence(t.image);
+    label_5:
+    while (true) {
+      jj_consume_token(RANGLEPAR);
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case PREDICATE:
+        t = jj_consume_token(PREDICATE);
+        break;
+      case SYMBOL:
+        t = jj_consume_token(SYMBOL);
+        break;
+      default:
+        jj_la1[7] = jj_gen;
+        jj_consume_token(-1);
+        throw new ParseException();
+      }
+                                                       f.addPrecedence(t.image);
+      switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case RANGLEPAR:
+        ;
+        break;
+      default:
+        jj_la1[8] = jj_gen;
+        break label_5;
+      }
     }
   }
 
@@ -101,15 +161,15 @@ public class CNFParser implements CNFParserConstants {
     Literal l;
     l = Literal();
           c.addLiteral(l);
-    label_3:
+    label_6:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case OR:
         ;
         break;
       default:
-        jj_la1[5] = jj_gen;
-        break label_3;
+        jj_la1[9] = jj_gen;
+        break label_6;
       }
       jj_consume_token(OR);
       l = Literal();
@@ -128,7 +188,7 @@ public class CNFParser implements CNFParserConstants {
                   l.setPositive(false);
       break;
     default:
-      jj_la1[6] = jj_gen;
+      jj_la1[10] = jj_gen;
       ;
     }
     a = Atom();
@@ -155,7 +215,7 @@ public class CNFParser implements CNFParserConstants {
       jj_consume_token(RPAR);
       break;
     default:
-      jj_la1[7] = jj_gen;
+      jj_la1[11] = jj_gen;
       ;
     }
           {if (true) return f.addAtom(a);}
@@ -167,15 +227,15 @@ public class CNFParser implements CNFParserConstants {
     Term t;
     t = Term();
                       tl.add(t);
-    label_4:
+    label_7:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case COMMA:
         ;
         break;
       default:
-        jj_la1[8] = jj_gen;
-        break label_4;
+        jj_la1[12] = jj_gen;
+        break label_7;
       }
       jj_consume_token(COMMA);
       t = Term();
@@ -199,7 +259,7 @@ public class CNFParser implements CNFParserConstants {
       jj_consume_token(RPAR);
       break;
     default:
-      jj_la1[9] = jj_gen;
+      jj_la1[13] = jj_gen;
       ;
     }
            if (noArgs) { // constant or variable
@@ -234,13 +294,13 @@ public class CNFParser implements CNFParserConstants {
   static public Token jj_nt;
   static private int jj_ntk;
   static private int jj_gen;
-  static final private int[] jj_la1 = new int[10];
+  static final private int[] jj_la1 = new int[14];
   static private int[] jj_la1_0;
   static {
       jj_la1_init_0();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x4000,0x2080,0x400,0x100,0x200,0x40,0x2000,0x800,0x200,0x800,};
+      jj_la1_0 = new int[] {0x4000,0x8000,0x2080,0x400,0x100,0x200,0x180,0x180,0x10000,0x40,0x2000,0x800,0x200,0x800,};
    }
 
   /** Constructor with InputStream. */
@@ -261,7 +321,7 @@ public class CNFParser implements CNFParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 10; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 14; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -275,7 +335,7 @@ public class CNFParser implements CNFParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 10; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 14; i++) jj_la1[i] = -1;
   }
 
   /** Constructor. */
@@ -292,7 +352,7 @@ public class CNFParser implements CNFParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 10; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 14; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -302,7 +362,7 @@ public class CNFParser implements CNFParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 10; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 14; i++) jj_la1[i] = -1;
   }
 
   /** Constructor with generated Token Manager. */
@@ -318,7 +378,7 @@ public class CNFParser implements CNFParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 10; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 14; i++) jj_la1[i] = -1;
   }
 
   /** Reinitialise. */
@@ -327,7 +387,7 @@ public class CNFParser implements CNFParserConstants {
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
-    for (int i = 0; i < 10; i++) jj_la1[i] = -1;
+    for (int i = 0; i < 14; i++) jj_la1[i] = -1;
   }
 
   static private Token jj_consume_token(int kind) throws ParseException {
@@ -383,7 +443,7 @@ public class CNFParser implements CNFParserConstants {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
     }
-    for (int i = 0; i < 10; i++) {
+    for (int i = 0; i < 14; i++) {
       if (jj_la1[i] == jj_gen) {
         for (int j = 0; j < 32; j++) {
           if ((jj_la1_0[i] & (1<<j)) != 0) {

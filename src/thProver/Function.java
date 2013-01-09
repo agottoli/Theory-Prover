@@ -1,5 +1,6 @@
 package thProver;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -68,4 +69,21 @@ public class Function implements Term {
         return n;
     }
     
+    public List<Term> getArgsMultiSet() {
+        List<Term> l = new ArrayList<>();
+        for (Term t : args)
+            l.add(t);
+        return l;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+        /*if (other instanceof Function)
+            if (this.symbol.equals(((Function) other).getSymbol()))
+         */
+        // siccome durante il parsing costruisco una solo oggetto
+        // posso usare i puntatori per vedere se è uguale
+        // proprio come fa Object tra l'altro
+        return this == other;
+    }
 }

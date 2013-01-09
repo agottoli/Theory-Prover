@@ -59,16 +59,29 @@ public class Literal {
     @Override
     public boolean equals(Object obj) {
        
+       /*
         Literal other = (Literal) obj;
         if (positive != other.positive || !atom.equals(other.getAtom())) {
             return false;
         }
         return true;
+        */
+        return this == obj;
 
     }
     
     public int symbolsNumber() {
         return atom.symbolsNumber();
+    }
+    
+    public List<Object> getMultiSet() {
+        List<Object> l = new ArrayList<>();
+        l.add(this.atom);
+        if (isPositive())
+            l.add(new Atom("Top"));
+        else
+            l.add(new Atom("Bottom"));
+        return l;
     }
 
 }

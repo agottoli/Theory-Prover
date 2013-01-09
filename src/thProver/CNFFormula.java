@@ -20,6 +20,7 @@ public class CNFFormula {
     private HashMap<String, Atom> atoms; // atom.toString(), atom
     private HashMap<String, Literal> literals;
     private List<Clause> clauses;
+    private List<Clause> sos;
     
     private List<List<String>> precedences;
     private int nPrecedencesList = -1;
@@ -35,6 +36,7 @@ public class CNFFormula {
         atoms = new HashMap<>();
         literals = new HashMap<>();
         clauses = new ArrayList<>(); // oppure LinkedList<>()
+        sos = new ArrayList<>(); // oppure LinkedList<>()
         precedences = new ArrayList<>();
     }
     
@@ -110,6 +112,10 @@ public class CNFFormula {
         clauses.add(clause);
     }
     
+    public void addSOS(Clause clause) {
+        sos.add(clause);
+    }
+    
     public boolean checkArity(String name, int nArgs) {
         Integer n;
         if ((n = arities.get(name)) == null) {
@@ -130,8 +136,9 @@ public class CNFFormula {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder(getConstantString());
-        sb.append("\n").append(getPrecedencesString());
-        sb.append("\n").append(getClauseString());
+        sb.append(getPrecedencesString());
+        sb.append(getSOSString());
+        sb.append(getClausesString());
 
         return sb.toString();
     }
@@ -144,17 +151,28 @@ public class CNFFormula {
             if (t instanceof Constant)
                 sb.append(t.toString()).append(",");
         }
-        sb.replace(sb.length()-1, sb.length(), " }");
+        sb.replace(sb.length()-1, sb.length(), " }\n");
         return sb.toString();
     }
     
-    public String getClauseString() {
+    public String getSOSString() {
+        if (sos.isEmpty()) return "";
+        StringBuilder sb = new StringBuilder("sos: { ");
+        for (Clause c : sos)
+            sb.append(c).append(" ; ");
+        if (!sos.isEmpty())
+            sb.replace(sb.length()-2, sb.length(), "");
+        sb.append("}\n");
+        return sb.toString();
+    }
+    
+    public String getClausesString() {
         StringBuilder sb = new StringBuilder("Clauses: { ");
         for (Clause c : clauses)
             sb.append(c).append(" ; ");
         if (!clauses.isEmpty())
             sb.replace(sb.length()-2, sb.length(), "");
-        sb.append("}");
+        sb.append("}\n");
         return sb.toString();
     }
     
@@ -170,7 +188,7 @@ public class CNFFormula {
                 sb.append(s).append(" > ");
             sb.replace(sb.length()-2, sb.length(), "; ");
         }
-        sb.replace(sb.length()-3, sb.length(), "");
+        sb.replace(sb.length()-3, sb.length(), "\n");
         //sb.append(precedences.toString());
         return sb.toString();
     }
@@ -182,5 +200,17 @@ public class CNFFormula {
     
     public void addPrecedence(String s) {
         precedences.get(nPrecedencesList).add(s);
+    }
+    
+    public List<List<String>> getPrecedences() {
+        return precedences;
+    }
+    
+    public int getNPrec() {
+        return nPrecedencesList;
+    }
+    
+    public List<Clause> getClauses() {
+        return clauses;
     }
 }

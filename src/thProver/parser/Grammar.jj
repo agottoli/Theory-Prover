@@ -49,6 +49,10 @@ TOKEN:
 // precedence over the signature symbols (the precedenza sui simboli della segnatura)
 | <PREC: "prec:">
 | <RANGLEPAR: ">">
+// set of support
+| <SOS: "sos:"> 
+// clauses
+| <CLAUSES: "clauses:">
 }
 
 
@@ -61,8 +65,9 @@ void Start():
 }
 {
 	[ Declaration() ]
-        ( Precedence() )*
-        ( Clause() ( <SEMICOLON> Clause() )* )*
+        [ Precedences() ]
+        [ Sos() ]
+        [ Clauses() ]
 	<EOF>
 }
 
@@ -84,20 +89,42 @@ void Consts():
             { f.addConstant(c.image); f.addArity(c.image, 1); } )*
 }
 
-// precedence specification
+// precedences specification
+void Precedences():
+{}
+{
+    <PREC> ( Precedence() { f.addPrecedence("Bottom"); f.addPrecedence("Top"); } )*
+}
 void Precedence():
 {
     Token t;
 }
 {
-    <PREC>
     ( t = <PREDICATE> | t = <SYMBOL> ) { f.incrNPrecList(); f.addPrecedence(t.image); } 
 
     ( <RANGLEPAR> ( t = <PREDICATE> | t = <SYMBOL> ) { f.addPrecedence(t.image); } )+
 }
 
+// SOS
+void Sos():
+{
+    Clause c;
+}
+{
+    <SOS> ( c = Clause() { f.addSOS(c); } ( <SEMICOLON> c = Clause() { f.addSOS(c); } )* )*
+}
+
+// clauses
+void Clauses():
+{ 
+    Clause c;
+}
+{
+ <CLAUSES> ( c = Clause() { f.addClause(c); } ( <SEMICOLON> c = Clause() { f.addClause(c); } )* )*
+}
+
 // a clause
-void Clause():
+Clause Clause():
 {
     Clause c = new Clause();
     Literal l;
@@ -108,7 +135,7 @@ void Clause():
         ( <OR> l = Literal() 
             { c.addLiteral(l); } )*
 
-        { f.addClause(c); }
+        { return c; }
 }
 
 // a literal

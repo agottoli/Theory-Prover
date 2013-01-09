@@ -32,6 +32,10 @@ public interface CNFParserConstants {
   int PREC = 15;
   /** RegularExpression Id. */
   int RANGLEPAR = 16;
+  /** RegularExpression Id. */
+  int SOS = 17;
+  /** RegularExpression Id. */
+  int CLAUSES = 18;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -55,6 +59,8 @@ public interface CNFParserConstants {
     "\"const:\"",
     "\"prec:\"",
     "\">\"",
+    "\"sos:\"",
+    "\"clauses:\"",
   };
 
 }

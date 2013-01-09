@@ -57,7 +57,11 @@ public class Main {
          */
         Reader formulaReader;
         if (interactive) {
-            String stringa = "const: a,b,c\nprec: d>p>c\nprec: a>q\nP(d)\n";
+            String stringa = 
+                    "const: a,b,c,d\n" +
+                    "prec: P>R>f>g>c>d\n" + 
+                   // "sos: Q(c)" +
+                    "clauses: P(f(f(x,y),z)) | P(f(x,f(y,z))) \n Q(b)\n";
             formulaReader = new StringReader(stringa);
             //formulaReader = new StringReader(startInteractive());
         } else {
@@ -70,6 +74,32 @@ public class Main {
         f = parser.getCNFFormula();
         
         System.out.println(f.toString());
+        
+        // ???? prova ordinamento
+        System.out.println("PROVA ORDINAMENTO LETTERALI:");
+        Clause c = f.getClauses().iterator().next();
+        System.out.println("c: " + c.toString());
+        Ordering or = new Ordering();
+        or.setPrecedence(f.getPrecedences(), f.getNPrec(), false);
+        Literal l1 = c.literals.get(0);
+        Literal l2 = c.literals.get(1);
+        /*if (or.isGreater(l1, l2))
+            System.out.println(l1.toString() + " > " + l2.toString());
+        else if (or.isGreater(l2, l1))
+            System.out.println(l2.toString() + " > " + l1.toString());
+        else
+            System.out.println(l1.toString() + " # " + l2.toString());
+        */
+        Term t1 = l1.getAtom().getArgs()[0];
+        Term t2 = l2.getAtom().getArgs()[0];
+        if (or.isGreater(t1, t2))
+            System.out.println(t1.toString() + " > " + t2.toString());
+        else if (or.isGreater(t2, t1))
+            System.out.println(t2.toString() + " > " + t1.toString());
+        else
+            System.out.println(t1.toString() + " # " + t2.toString());
+        
+        
     }
     
     /******************************************************************/

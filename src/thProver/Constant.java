@@ -1,5 +1,7 @@
 package thProver;
 
+import java.util.List;
+
 /**
  *
  * @author ale
@@ -28,5 +30,15 @@ public class Constant implements Term {
     @Override
     public int symbolsNumber() {
         return 1;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+        return this == other;
+    }
+
+    @Override
+    public List<Term> getArgsMultiSet() {
+        return null;
     }
 }

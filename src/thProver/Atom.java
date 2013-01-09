@@ -4,6 +4,9 @@
  */
 package thProver;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author ale
@@ -60,6 +63,7 @@ public class Atom {
     @Override
     public boolean equals(Object obj) {
        
+        /*
         Atom other = (Atom) obj;
         if (symbol != other.symbol) {
             return false;
@@ -72,6 +76,8 @@ public class Atom {
             }
         }
         return eq;
+        */
+        return this == obj;
 
     }
 
@@ -85,4 +91,17 @@ public class Atom {
         return n;
     }
     
+    
+    public List<Object> getMultiSet() {
+        List<Object> l = new ArrayList<>();
+        l.add(this);
+        return l;
+    }
+    
+    public List<Term> getArgsMultiSet() {
+        List<Term> l = new ArrayList<>();
+        for (Term t : args)
+            l.add(t);
+        return l;
+    }
 }

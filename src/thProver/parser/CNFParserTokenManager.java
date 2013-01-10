@@ -353,36 +353,36 @@ static private int jjMoveNfa_0(int startState, int curPos)
             switch(jjstateSet[--i])
             {
                case 0:
-                  if ((0x7fffffe80000000L & l) != 0L)
+                  if ((0x7fffffe00000000L & l) != 0L)
                   {
                      if (kind > 8)
                         kind = 8;
                      jjCheckNAdd(4);
+                  }
+                  else if ((0x7fffffeL & l) != 0L)
+                  {
+                     if (kind > 7)
+                        kind = 7;
+                     jjCheckNAdd(3);
                   }
                   else if (curChar == 126)
                   {
                      if (kind > 13)
                         kind = 13;
                   }
-                  if ((0x87fffffeL & l) != 0L)
-                  {
-                     if (kind > 7)
-                        kind = 7;
-                     jjCheckNAdd(3);
-                  }
                   break;
                case 1:
                   jjAddStates(0, 1);
                   break;
                case 3:
-                  if ((0x87fffffeL & l) == 0L)
+                  if ((0x7fffffeL & l) == 0L)
                      break;
                   if (kind > 7)
                      kind = 7;
                   jjCheckNAdd(3);
                   break;
                case 4:
-                  if ((0x7fffffe80000000L & l) == 0L)
+                  if ((0x7fffffe00000000L & l) == 0L)
                      break;
                   if (kind > 8)
                      kind = 8;

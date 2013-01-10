@@ -70,7 +70,7 @@ public class Ordering {
             if (statusMultiSet)
                 return isGreaterMulL(la, lb);
             else {
-                int i = isGreaterLexL(la, lb);
+                int i = isGreaterLex(la, lb);
                 if (i == -1)
                     return false;
                 /* // ???? quando si estende a letterali si guarda solo 
@@ -128,7 +128,7 @@ public class Ordering {
             else {
                 //int i = isGreaterLex(ltA, ltB);
                 // proviamo a castare per fare un solo metodo
-                int i = isGreaterLexL((List<Object>)(List<?>) ltA, (List<Object>)(List<?>) ltB);
+                int i = isGreaterLex((List<Object>)(List<?>) ltA, (List<Object>)(List<?>) ltB);
                 if (i == -1)
                     return false;
                 if (i+1 > ltB.size()) return true; // a > vuoto :)
@@ -191,7 +191,7 @@ public class Ordering {
         return true;
     }
     
-    public int isGreaterLexL(List<Object> a, List<Object> b) {
+    public int isGreaterLex(List<Object> a, List<Object> b) {
         int i = 0;
         ListIterator<Object> iA = a.listIterator();
         ListIterator<Object> iB = b.listIterator();
@@ -209,4 +209,10 @@ public class Ordering {
         
         return -1;
     }
+    
+    public List<Literal> getMaximalLiterals(Clause clause) {
+        ListIterator<Literal> li1 = clause.getLiterals().listIterator();
+        return null; // DA FARE
+    }
+    
 }

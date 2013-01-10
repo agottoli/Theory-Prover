@@ -340,7 +340,7 @@ public class CNFParser implements CNFParserConstants {
                     if (!ok) {
                         {if (true) throw new IllegalArgumentException("Errore di ariet\u00e0: " + s.image + "\u005cn");}
                     }
-                    t = new Variable(s.image);
+                    t = f.addVariable(s.image);
                 } else
                     t = f.addConstant(s.image); // per recuperare il puntatore alla costante
             } else { // function
@@ -351,8 +351,9 @@ public class CNFParser implements CNFParserConstants {
                 t = new Function();
                 t.setSymbol(s.image);
                 ((Function) t).setArgs(terms);
+                t = f.addTerm(t);
            }
-           {if (true) return f.addTerm(t);}
+           {if (true) return t;}
     throw new Error("Missing return statement in function");
   }
 

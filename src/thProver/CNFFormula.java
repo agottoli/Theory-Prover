@@ -20,6 +20,7 @@ public class CNFFormula {
     private HashMap<String, Atom> atoms; // atom.toString(), atom
     private HashMap<String, Literal> literals;
     private List<Clause> clauses;
+    private int nClausesAndSOS;
     private List<Clause> sos;
     
     private List<List<String>> precedences;
@@ -38,6 +39,7 @@ public class CNFFormula {
         clauses = new ArrayList<>(); // oppure LinkedList<>()
         sos = new ArrayList<>(); // oppure LinkedList<>()
         precedences = new ArrayList<>();
+        nClausesAndSOS = 0;
     }
     
     public Constant addConstant(String key) {
@@ -68,6 +70,16 @@ public class CNFFormula {
         if ((v = terms.get(var.toString())) == null) {
             v = var;
             terms.put(var.toString(), var);
+        }  
+        return (Variable) v;
+    }
+    
+    public Variable addVariable(String var) {
+        Term v;
+        String rinNewVar = var + "_" + nClausesAndSOS;
+        if ((v = terms.get(rinNewVar)) == null) {
+            v = new Variable(rinNewVar);
+            terms.put(rinNewVar, v);
         }  
         return (Variable) v;
     }
@@ -119,10 +131,12 @@ public class CNFFormula {
     
     public void addClause(Clause clause) {
         clauses.add(clause);
+        nClausesAndSOS++;
     }
     
     public void addSOS(Clause clause) {
         sos.add(clause);
+        nClausesAndSOS++;
     }
     
     public boolean checkArity(String name, int nArgs) {

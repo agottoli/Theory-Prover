@@ -35,6 +35,10 @@ public class Clause implements Comparable<Clause> {
     public void addLiteral(Literal literal) {
         literals.add(literal);
     }
+    
+    public List<Literal> getLiterals() {
+        return literals;
+    }
 
     @Override
     public String toString() {

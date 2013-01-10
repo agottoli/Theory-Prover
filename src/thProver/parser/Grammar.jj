@@ -37,8 +37,8 @@ SKIP:
 
 TOKEN:
 { <OR: "|">
-| <PREDICATE: (["A"-"Z","0"-"9","_"])+>
-| <SYMBOL: (["a"-"z","0"-"9","_"])+>
+| <PREDICATE: (["A"-"Z","0"-"9"])+>
+| <SYMBOL: (["a"-"z","0"-"9"])+>
 | <COMMA: ",">
 | <SEMICOLON: ";">
 | <LPAR: "(">
@@ -201,7 +201,7 @@ Term Term():
                     if (!ok) {
                         throw new IllegalArgumentException("Errore di arietà: " + s.image + "\n");
                     }
-                    t = new Variable(s.image);
+                    t = f.addVariable(s.image);
                 } else
                     t = f.addConstant(s.image); // per recuperare il puntatore alla costante
             } else { // function
@@ -212,8 +212,9 @@ Term Term():
                 t = new Function();
                 t.setSymbol(s.image);
                 ((Function) t).setArgs(terms);
+                t = f.addTerm(t);
            }
-           return f.addTerm(t);
+           return t;
 
             
         }

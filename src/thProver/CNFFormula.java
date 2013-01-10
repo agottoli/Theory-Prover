@@ -84,10 +84,19 @@ public class CNFFormula {
     public Term addTerm(Term term) {
         Term t;
         if ((t = terms.get(term.toString())) == null) {
+            /* DEBUG inizio */
+            System.out.println(term.toString() + " nuovo termine");
+            /* DEBUG fine */
+            
             t = term;
             terms.put(term.toString(), term);
-        }  
-        return term;
+        } 
+        /* DEBUG inizio */
+        //else
+        //    System.out.println(term.toString() + " termine esistente");
+        /* DEBUG fine */
+        
+        return t;
     }
     
     public Literal addLiteral(Literal lit) {
@@ -213,4 +222,11 @@ public class CNFFormula {
     public List<Clause> getClauses() {
         return clauses;
     }
+    
+    /* DEBUG inizio */
+    // temporaneo per vedere se ci sono doppi
+    public String getTermsString() {
+        return terms.toString();
+    }
+    /* DEBUG fine */
 }

@@ -44,7 +44,7 @@ public class Ordering {
      * @return
      */
     public boolean isGreater(Object a, Object b) {
-        
+        /* NON SI CONFRONTANO CLAUSOLE, ma si comincia dai LETTERALI DI  UNA CLAUSOLA
         if (a instanceof Clause) {
             List<Object> la = (List<Object>)(List<?>) ((Clause) a).getMultiSet();
             List<Object> lb;
@@ -57,6 +57,7 @@ public class Ordering {
                 lb = (List<Object>)(List<?>)((Atom) b).getMultiSet();
             return isGreaterLexL(la, lb) != -1;
         }
+        */
 
         if (a instanceof Literal) { // anche b sarà sicuramente Literal
             List<Object> la = ((Literal) a).getMultiSet();
@@ -72,10 +73,13 @@ public class Ordering {
                 int i = isGreaterLexL(la, lb);
                 if (i == -1)
                     return false;
+                /* // ???? quando si estende a letterali si guarda solo 
+                   //      lo status e non la condizione aggiuntiva
                 ListIterator<Object> li = lb.listIterator(i + 1);
                 while (li.hasNext())
                     if (!isGreater(a, li.next()))
                         return false;
+                 */
                 return true;
             }
                 
@@ -202,6 +206,7 @@ public class Ordering {
                 else return -1;
             } else
                 return i; // b sottotupla di a (t > si+1 che non esiste?)
+        
         return -1;
     }
 }

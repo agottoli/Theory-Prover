@@ -41,6 +41,13 @@ public class Variable implements Term {
     
     @Override
     public boolean equals(Object other) {
+        /* DEBUG inizio */
+        if (this == other)
+            System.out.println(this.toString() + " == " + other.toString());
+        else 
+            System.out.println(this.toString() + " != " + other.toString());
+        /* DEBUG fine */
+        
         return this == other;
     }
 

@@ -74,6 +74,7 @@ public class Main {
         f = parser.getCNFFormula();
         
         System.out.println(f.toString());
+        //System.out.println(f.getTermsString());
         
         // ???? prova ordinamento
         System.out.println("PROVA ORDINAMENTO LETTERALI:");
@@ -83,13 +84,13 @@ public class Main {
         or.setPrecedence(f.getPrecedences(), f.getNPrec(), false);
         Literal l1 = c.literals.get(0);
         Literal l2 = c.literals.get(1);
-        /*if (or.isGreater(l1, l2))
+        if (or.isGreater(l1, l2))
             System.out.println(l1.toString() + " > " + l2.toString());
         else if (or.isGreater(l2, l1))
             System.out.println(l2.toString() + " > " + l1.toString());
         else
             System.out.println(l1.toString() + " # " + l2.toString());
-        */
+        /*
         Term t1 = l1.getAtom().getArgs()[0];
         Term t2 = l2.getAtom().getArgs()[0];
         if (or.isGreater(t1, t2))
@@ -98,7 +99,7 @@ public class Main {
             System.out.println(t2.toString() + " > " + t1.toString());
         else
             System.out.println(t1.toString() + " # " + t2.toString());
-        
+        */
         
     }
     

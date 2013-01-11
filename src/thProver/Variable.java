@@ -52,7 +52,7 @@ public class Variable implements Term {
     }
 
     @Override
-    public List<Term> getArgsMultiSet() {
+    public List<Term> getArgsTupla() {
         return null;
     }
 

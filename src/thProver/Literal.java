@@ -74,7 +74,7 @@ public class Literal {
         return atom.symbolsNumber();
     }
     
-    public List<Object> getMultiSet() {
+    public List<Object> getTupla() {
         List<Object> l = new ArrayList<>();
         l.add(this.atom);
         if (isPositive())

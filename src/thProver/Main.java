@@ -59,9 +59,12 @@ public class Main {
         if (interactive) {
             String stringa = 
                     "const: a,b,c,d\n" +
-                    "prec: P>R>f>g>c>d\n" + 
+                    "prec: P>R>f>g>a>c>d\n" + 
                    // "sos: Q(c)" +
-                    "clauses: P(f(f(x,y),z)) | P(f(x,f(y,z))) \n Q(b)\n";
+                    "clauses: ~P(f(z)) | P(f(z)) | R(a) | P(f(f(z))) \n Q(b)\n";
+            
+            // assofiatività :) >       
+            //"clauses: P(f(f(x,y),z)) | P(f(x,f(y,z))) \n Q(b)\n";
             formulaReader = new StringReader(stringa);
             //formulaReader = new StringReader(startInteractive());
         } else {
@@ -90,6 +93,16 @@ public class Main {
             System.out.println(l2.toString() + " > " + l1.toString());
         else
             System.out.println(l1.toString() + " # " + l2.toString());
+        
+        // prova trovare lista di letterali massimali
+        System.out.println("lits massimali: " + or.getMaximalLiterals(c));
+        
+        // prova letterale è massimale in quella clausola
+        Literal l3 = c.literals.get(2);
+        if (or.isMaxLitInClause(l3, c))
+            System.out.println("il letterale " + l3 + " è massimale.");
+        else
+            System.out.println("il letterale " + l3 + " NON è massimale.");
         /*
         Term t1 = l1.getAtom().getArgs()[0];
         Term t2 = l2.getAtom().getArgs()[0];

@@ -69,7 +69,7 @@ public class Function implements Term {
         return n;
     }
     
-    public List<Term> getArgsMultiSet() {
+    public List<Term> getArgsTupla() {
         List<Term> l = new ArrayList<>();
         for (Term t : args)
             l.add(t);

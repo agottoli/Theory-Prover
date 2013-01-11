@@ -12,5 +12,5 @@ public interface Term {
 
     public String getSymbol();
 
-    public List<Term> getArgsMultiSet();
+    public List<Term> getArgsTupla();
 }

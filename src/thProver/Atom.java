@@ -92,13 +92,13 @@ public class Atom {
     }
     
     
-    public List<Object> getMultiSet() {
+    public List<Object> getTupla() {
         List<Object> l = new ArrayList<>();
         l.add(this);
         return l;
     }
     
-    public List<Term> getArgsMultiSet() {
+    public List<Term> getArgsTupla() {
         List<Term> l = new ArrayList<>();
         for (Term t : args)
             l.add(t);

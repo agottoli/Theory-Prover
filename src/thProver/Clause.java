@@ -36,7 +36,7 @@ public class Clause implements Comparable<Clause> {
         literals.add(literal);
     }
     
-    public List<Literal> getLiterals() {
+    public ArrayList<Literal> getLiterals() {
         return literals;
     }
 

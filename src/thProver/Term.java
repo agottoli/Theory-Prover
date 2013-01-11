@@ -1,5 +1,6 @@
 package thProver;
 
+import com.google.common.collect.HashMultiset;
 import java.util.List;
 
 /**
@@ -13,4 +14,5 @@ public interface Term {
     public String getSymbol();
 
     public List<Term> getArgsTupla();
+    public HashMultiset<Object> getArgsMultiset();
 }

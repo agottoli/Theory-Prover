@@ -1,5 +1,7 @@
 package thProver;
 
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Multiset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -82,6 +84,16 @@ public class Literal {
         else
             l.add(new Atom("Bottom"));
         return l;
+    }
+
+    Multiset<Object> getMultiset() {
+        HashMultiset<Object> ms = HashMultiset.create();
+        ms.add(this.atom);
+        if (isPositive())
+            ms.add(new Atom("Top"));
+        else
+            ms.add(new Atom("Bottom"));
+        return ms;
     }
 
 }

@@ -1,5 +1,7 @@
 package thProver;
 
+import com.google.common.collect.HashMultiset;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,6 +41,11 @@ public class Constant implements Term {
 
     @Override
     public List<Term> getArgsTupla() {
-        return null;
+        return new ArrayList<Term>();
+    }
+
+    @Override
+    public HashMultiset<Object> getArgsMultiset() {
+        return  HashMultiset.create();
     }
 }

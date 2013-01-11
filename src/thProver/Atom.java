@@ -4,6 +4,8 @@
  */
 package thProver;
 
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Multiset;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,5 +105,18 @@ public class Atom {
         for (Term t : args)
             l.add(t);
         return l;
+    }
+
+    public Multiset<Object> getArgsMultiset() {
+        HashMultiset<Object> ms = HashMultiset.create();
+        for (Term t : args)
+            ms.add(t);
+        return ms;
+    }
+
+    Multiset<Object> getMultiset() {
+        HashMultiset<Object> ms = HashMultiset.create();
+        ms.add(this);
+        return ms;
     }
 }

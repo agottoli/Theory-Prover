@@ -1,5 +1,6 @@
 package thProver;
 
+import com.google.common.collect.HashMultiset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -85,5 +86,14 @@ public class Function implements Term {
         // posso usare i puntatori per vedere se è uguale
         // proprio come fa Object tra l'altro
         return this == other;
+    }
+
+    @Override
+    public HashMultiset<Object> getArgsMultiset() {
+        HashMultiset<Object> ms = HashMultiset.create();
+        for (int i = 0; i < args.length; i++) {
+            ms.add(args[i]);
+        }
+        return ms;
     }
 }

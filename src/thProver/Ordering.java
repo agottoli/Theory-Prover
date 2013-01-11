@@ -4,6 +4,8 @@
  */
 package thProver;
 
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Multiset;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -60,17 +62,27 @@ public class Ordering {
          }
          */
 
-        if (a instanceof Literal) { // anche b sarà sicuramente Literal
-            List<Object> la = ((Literal) a).getTupla();
-            List<Object> lb;
-            if (b instanceof Literal)
-                lb = ((Literal) b).getTupla();
-            else // è un atomo (e probabilmente si tratta di Top o Bottom
-                lb = ((Atom) b).getTupla();
-
-            if (statusMultiSet)
-                return isGreaterMulL(la, lb);
-            else {
+        if (a instanceof Literal) { 
+            // anche b sarà sicuramente Literal
+            // ma mettiamo il controllo che non si sa mai
+            
+            if (statusMultiSet) {
+                Multiset<Object> ma = ((Literal) a).getMultiset();
+                Multiset<Object> mb;
+                if (b instanceof Literal)
+                    mb = ((Literal) b).getMultiset();
+                else // è un atomo (e probabilmente si tratta di Top o Bottom
+                    mb = ((Atom) b).getMultiset();
+                
+                return isGreaterMul(ma, mb);
+            } else {
+                List<Object> la = ((Literal) a).getTupla();
+                List<Object> lb;
+                if (b instanceof Literal)
+                    lb = ((Literal) b).getTupla();
+                else // è un atomo (e probabilmente si tratta di Top o Bottom
+                    lb = ((Atom) b).getTupla();
+                
                 int i = isGreaterLex(la, lb);
                 if (i == -1)
                     return false;
@@ -111,21 +123,35 @@ public class Ordering {
         if (sA.equals(sB)) {
             // caso 3
 
-            List<Term> ltA, ltB;
-            if (a instanceof Atom) {
-                ltA = ((Atom) a).getArgsTupla();
-                ltB = ((Atom) b).getArgsTupla();
-            } else if (a instanceof Function) {
-                ltA = ((Term) a).getArgsTupla();
-                ltB = ((Term) b).getArgsTupla();
-            } else
-                // si tratta di costanti o variabili
-                // identiche quindi non può essere una maggiore
-                return false;
+            
+            if (statusMultiSet) {
+                Multiset<Object> msA, msB;
+                if (a instanceof Atom) {
+                    msA = ((Atom) a).getArgsMultiset();
+                    msB = ((Atom) b).getArgsMultiset();
+                } else if (a instanceof Function) {
+                    msA = ((Term) a).getArgsMultiset();
+                    msB = ((Term) b).getArgsMultiset();
+                } else
+                    // si tratta di costanti o variabili (che non hanno argomenti)
+                    // identiche quindi non può essere una maggiore
+                    return false;
 
-            if (statusMultiSet)
-                return isGreaterMul(ltA, ltB);
+                return isGreaterMul(msA, msB);
+            }
             else {
+                List<Term> ltA, ltB;
+                if (a instanceof Atom) {
+                    ltA = ((Atom) a).getArgsTupla();
+                    ltB = ((Atom) b).getArgsTupla();
+                } else if (a instanceof Function) {
+                    ltA = ((Term) a).getArgsTupla();
+                    ltB = ((Term) b).getArgsTupla();
+                } else
+                    // si tratta di costanti o variabili (che non hanno argomenti)
+                    // identiche quindi non può essere una maggiore
+                    return false;
+                               
                 //int i = isGreaterLex(ltA, ltB);
                 // proviamo a castare per fare un solo metodo
                 int i = isGreaterLex((List<Object>) (List<?>) ltA, (List<Object>) (List<?>) ltB);
@@ -162,12 +188,35 @@ public class Ordering {
             return false; // simboli incommensurabili
     }
 
-    public boolean isGreater(List<Object> a, List<Object> b) {
-        return true;
-    }
 
-    public boolean isGreaterMul(List<Term> a, List<Term> b) {
-        return true;
+    public boolean isGreaterMul(Multiset<Object> a, Multiset<Object> b) {
+        if (!a.isEmpty() && b.isEmpty()) {
+            // regola 1
+            return true;
+        }
+        for (Object o : a) {
+            if (b.contains(o)) {
+                a.remove(o);
+                b.remove(o);
+                return isGreaterMul(a, b);
+            }
+        }
+        for (Object oA : a) {
+            for (Object oB : b) {
+                if (isGreater(oA, oB)) {
+                    HashMultiset<Object> copiaB = HashMultiset.create();
+                    for (Object c : b)
+                        copiaB.add(c);
+                    copiaB.remove(oB);
+                    if (isGreaterMul(a, copiaB))
+                        return true;
+                }
+            }
+        }
+        
+        // se arrivo qua non ho potuto applicare nessuna regola
+        return false; // multiinsiemi incommensurabili
+            
     }
     /*
      public int isGreaterLex(List<Term> a, List<Term> b) {
@@ -189,9 +238,6 @@ public class Ordering {
      }
      */
 
-    public boolean isGreaterMulL(List<Object> a, List<Object> b) {
-        return true;
-    }
 
     public int isGreaterLex(List<Object> a, List<Object> b) {
         int i = 0;

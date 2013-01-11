@@ -97,7 +97,4 @@ public class Clause implements Comparable<Clause> {
         return literals.isEmpty();
     }
 
-    public List<Literal> getMultiSet() {
-        return literals;
-    }
 }

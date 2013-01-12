@@ -76,8 +76,6 @@ public class Clause implements Comparable<Clause> {
         return n;
     }
 
-
-
     @Override
     public boolean equals(Object obj) {
         Clause other = (Clause) obj;
@@ -96,5 +94,34 @@ public class Clause implements Comparable<Clause> {
     boolean isEmpty() {
         return literals.isEmpty();
     }
-
+   
+    /**
+     * Determines if this clause is a tautology.
+     * @return <code>true</code> iff this clause is a tautology
+     */
+    boolean isTautology() {
+        List<Atom> pos = new ArrayList<>();
+        List<Atom> neg = new ArrayList<>();
+      
+        /*
+        HashMap<String, Atom> pos = new HashMap<>();
+        HashMap<String, Atom> neg = new HashMap<>();
+        */
+        // try for each literal...
+        for (Literal l : literals) {
+            Atom a = l.getAtom();
+            if (l.isPositive()) {
+                if (neg.contains(a))
+                    return true;
+                pos.add(a);
+            } else {
+                if (pos.contains(a))
+                    return true;
+                neg.add(a);
+            }
+        }
+        
+        // no complementary literal found
+        return false;
+    }
 }

@@ -61,8 +61,8 @@ public class Main {
                     "const: a,b,c,d\n" +
                     "prec: P>R>ack>succ>per>piu>f>g>a>c>d>0\n" + 
                    // "sos: Q(c)" +
-                    "clauses: P(ack(succ(x),succ(y))) | P(ack(x,ack(succ(x),y)))";
-                    //"clauses: ~P(f(z)) | P(f(z)) | R(a) | P(f(f(z))) \n Q(b)\n";
+                    //"clauses: P(ack(succ(x),succ(y))) | P(ack(x,ack(succ(x),y)))";
+                    "clauses: R(x) | ~P(f(z)) | R(a) | P(f(f(z))) | P(f(z)) \n Q(b)\n";
             
             // associatività per mul # e per lex > (ok)    
             //"clauses: P(f(f(x,y),z)) | P(f(x,f(y,z))) \n Q(b)\n";
@@ -93,6 +93,7 @@ public class Main {
         Clause c = f.getClauses().iterator().next();
         System.out.println("c: " + c.toString());
         
+        /* Check ORDERING 
         Ordering or = new Ordering();
         boolean ordMul = true;
         String tipo = ordMul ? "{mul}" : "{lex}";
@@ -107,7 +108,7 @@ public class Main {
             System.out.println(l1.toString() + " <" + tipo + " " + l2.toString());
         else
             System.out.println(l1.toString() + " #" + tipo + " " + l2.toString());
-        
+        */
         // prova trovare lista di letterali massimali
         //System.out.println("lits massimali: " + or.getMaximalLiterals(c));
         
@@ -128,6 +129,13 @@ public class Main {
         else
             System.out.println(t1.toString() + " # " + t2.toString());
         */
+        
+        /* check isTautology();
+        String taut = " NON";
+        if (c.isTautology())
+            taut = "";
+        System.out.println("La clausola "+ c.toString() + taut + " è una tautologia");
+        */    
         
     }
     

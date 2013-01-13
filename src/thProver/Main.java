@@ -56,16 +56,17 @@ public class Main {
         /*
          * Read the formula
          */
+        int choice = 2;
         Reader formulaReader;
         if (interactive) {
             String stringa = 
                     "const: a,b,0,c,d\n" +
-                    "prec: P>R>succ>ack>per>piu>f>g>a>c>d>0\n" +
+                    "prec: P>R>ack>succ>per>piu>f>g>a>c>d>0\n" +
                     "weightVars: 1\n" +
-                    "weights: P = 1; ack = 1; succ = 2; 0 = 1\n" +
+                    "weights: P = 1; ack = 1; succ = 1; 0 = 1; a = 1\n" +
                     //"sos: Q(c)" +
                     //"clauses: P(ack(succ(x),succ(y))) | P(ack(x,ack(succ(x),y)))";
-                    "clauses: P(ack(0,y)) | P(succ(y))";
+                    "clauses: P(ack(succ(x),succ(y))) | P(ack(x,ack(succ(x),y)))";
                     //"clauses: R(x) | ~P(f(0)) | R(a) | P(f(f(z))) | P(f(z)) \n Q(b)\n";
             
             // associatività per mul # e per lex > (ok)    
@@ -115,11 +116,18 @@ public class Main {
         */
         
         /* Check KBO */ 
-        KBO or = new KBO();
-        String tipo = "KBO";
+        Ordering or = new Ordering();
         
-        or.setPrecedence(f.getPrecedences(), f.getNPrec(), true);
-        or.setWeights(f.getWeights(), f.getWeightVars());
+        or.setPrecedence(f.getPrecedences(), f.getNPrec());
+        or.setWeightsKBO(f.getWeights(), f.getWeightVars());
+        switch (choice) {
+            case 0: or.setLexicographicOrdering(); break;
+            case 1: or.setMultiSetOrdering(); break;
+            case 2: or.setKBOrdering();
+                
+        }
+
+        String tipo = or.getTipeOrdering();
         
         Literal l1 = c.literals.get(0);
         Literal l2 = c.literals.get(1);

@@ -7,6 +7,7 @@ package thProver;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -18,12 +19,23 @@ public class Ordering {
 
     private List<List<String>> prec;
     private int nPrec;
-    private boolean statusMultiSet;
+    private boolean kbo = false;
     
-    public void setPrecedence(List<List<String>> prec, int nPrec, boolean multiSet) {
+    /* solo per Ordinamento ricorsivo a cammini o lessicografico */
+    private boolean statusMultiSet = false; // a cammini
+    
+    /* solo per KBO */
+    HashMap<String, Integer> weightFunction;
+    int weightVars;
+    // struttura dati che mi conta per ogni variabile qualte occorrenze ci sono
+    HashMap<String, Integer> countA;
+    HashMap<String, Integer> countB;
+    boolean errCountVars;
+    
+    
+    public void setPrecedence(List<List<String>> prec, int nPrec) {
         this.prec = prec;
         this.nPrec = nPrec;
-        statusMultiSet = multiSet;
     }
 
     public boolean isGreaterInPrecedence(String a, String b) {
@@ -37,6 +49,27 @@ public class Ordering {
         }
         return false;
     }
+    
+    public void setWeightsKBO(HashMap<String, Integer> wF, int wV) {
+        weightFunction = wF;
+        weightVars = wV;
+    }
+    
+    public void setMultiSetOrdering() {
+        kbo = false;
+        statusMultiSet = true;
+    }
+    
+    public void setLexicographicOrdering() {
+        kbo = false;
+        statusMultiSet = false;
+    }
+    
+    public void setKBOrdering() {
+        kbo = true;
+        statusMultiSet = true;
+    }
+    
 
     /**
      * Passo iniziale dell'ordinamento ricorsivo a cammini (o lessicagrafico)
@@ -45,7 +78,7 @@ public class Ordering {
      * @param b Termine o Atomo o Letterale
      * @return
      */
-    public boolean isGreater(Object a, Object b) {
+    public boolean isGreaterMulLex(Object a, Object b) {
         /* NON SI CONFRONTANO CLAUSOLE, ma si comincia dai LETTERALI DI  UNA CLAUSOLA
          if (a instanceof Clause) {
          List<Object> la = (List<Object>)(List<?>) ((Clause) a).getMultiSet();
@@ -100,11 +133,11 @@ public class Ordering {
         //   if (a instanceof Atom) {
         if (a instanceof Atom && b instanceof Term) {
             for (Term argA : ((Atom) a).getArgs())
-                if (argA.equals((Term) b) || isGreater(argA, b))
+                if (argA.equals((Term) b) || isGreaterMulLex(argA, b))
                     return true; // caso 1
         } else if (a instanceof Function && b instanceof Term)
             for (Term argA : ((Function) a).getArgs())
-                if (argA.equals((Term) b) || isGreater(argA, b))
+                if (argA.equals((Term) b) || isGreaterMulLex(argA, b))
                     return true; // caso 1
 
         // b può essere Atom, Function, Variable, Constant
@@ -162,7 +195,7 @@ public class Ordering {
                 ListIterator<Term> li = ltB.listIterator(i + 1);
                 while (li.hasNext()) {
                     Term temp;
-                    if (!isGreater(a, temp = li.next()))
+                    if (!isGreaterMulLex(a, temp = li.next()))
                         return false;
                 }
                 return true;
@@ -180,7 +213,7 @@ public class Ordering {
                 return true; // non c'è più niente da controllare
 
             for (Term t : argsB)
-                if (!isGreater(a, t))
+                if (!isGreaterMulLex(a, t))
                     return false;
             return true;
         } else
@@ -202,7 +235,7 @@ public class Ordering {
         }
         for (Object oA : a) {
             for (Object oB : b) {
-                if (isGreater(oA, oB)) {
+                if (isGreaterMulLex(oA, oB)) {
                     HashMultiset<Object> copiaB = HashMultiset.create();
                     for (Object c : b)
                         copiaB.add(c);
@@ -298,4 +331,163 @@ public class Ordering {
         // se nessuno degli altri lo batte allora lui è uno dei massimali
         return true;
     }
+    
+    public boolean isGreaterKBO(Object a, Object b) {
+
+        if (a instanceof Literal) {
+            if (((Literal) a).getAtom().equals(((Literal) b).getAtom())
+                    && !((Literal) a).isPositive() && ((Literal) b).isPositive())
+                return true;
+
+            a = ((Literal) a).getAtom();
+            b = ((Literal) b).getAtom();
+        }
+
+        // struttura dati che mi conta per ogni variabile qualte occorrenze ci sono
+        //HashMap<String, Integer> countA = new HashMap<>();
+        //HashMap<String, Integer> countB = new HashMap<>();
+
+        int wA;
+        int wB;
+        /* init strutture per contare le occorrenze delle variabili */
+        errCountVars = false;
+        countA = new HashMap<>();
+        countB = new HashMap<>();
+        try {
+            wA = weight(a, true);
+            wB = weight(b, false);
+        } catch (NullPointerException npe) {
+            System.err.print("Ordinamento KBO: la funzione peso non è definita per tutti i simboli delle clausole.\n");
+            return false;
+        }
+
+        if (wA >= wB) {
+
+            // controllo se il numero di occorenze di ogni variabile è maggiore in a
+            if (errCountVars)
+                return false;
+            
+            if (wA == wB) {
+                // KBO2
+                String symA, symB;
+                int arity;
+                if (a instanceof Atom) {
+                    symA = ((Atom) a).getSymbol();
+                    arity = ((Atom) a).getNArgs();
+                } else {
+                    symA = ((Term) a).getSymbol();
+                    arity = ((Term) a).getNArgs();
+                }
+                if (b instanceof Atom) {
+                    symB = ((Atom) b).getSymbol();
+                } else {
+                    symB = ((Term) b).getSymbol();
+                }
+                if (weightFunction.get(symA) == 0 && arity == 1 
+                        && b instanceof Variable
+                        && checkFnToXKBO(a, (Variable) b)) {
+                    // KBO2a
+                    return true;
+                } else if (symA.equals(symB)) {
+                    // BKO2c
+                    List<Object> argsA, argsB;
+                    if (a instanceof Atom) {
+                        argsA = (List<Object>) (List<?>) ((Atom) a).getArgsTupla();
+                        argsB = (List<Object>) (List<?>) ((Atom) b).getArgsTupla();
+                    } else {
+                        argsA = (List<Object>) (List<?>) ((Term) a).getArgsTupla();
+                        argsB = (List<Object>) (List<?>) ((Term) b).getArgsTupla();
+                    }
+
+                    return isGreaterLex(argsA, argsB) != -1; // KBO usa Lex
+                    
+                } else if (isGreaterInPrecedence(symA, symB)) {
+                    // KBO2b
+                    return true;
+                } else {
+                    // non posso applicare nessuna KBO2 + a,b o c
+                    return false;
+                }
+            }
+
+            // KBO1
+            return true;
+        }
+
+        // se arrivo qua w(a) < w(b)
+        return false;
+    }
+    
+    public int weight(Object t, boolean isA) throws NullPointerException {
+        if (t instanceof Atom) {
+            int argsWeight = 0;
+            Term[] args = ((Atom) t).getArgs();
+            for (int i = 0; i < args.length; i++)
+                argsWeight += weight(args[i], isA);
+            return weightFunction.get(((Atom) t).getSymbol()) + argsWeight;
+        } else
+        if (t instanceof Function) {
+            int argsWeight = 0;
+            Term[] args = ((Function) t).getArgs();
+            for (int i = 0; i < args.length; i++)
+                argsWeight += weight(args[i], isA);
+            return weightFunction.get(((Function) t).getSymbol()) + argsWeight;
+        } else
+        
+        if (t instanceof Variable) {
+            // faccio subito il controllo del numero di occorrenze delle variabili
+            int nOccInA = 0;
+            Object nA = countA.get(t.toString());
+            if (nA != null)
+                nOccInA = ((Integer) nA).intValue();
+            if (isA) {
+                countA.put(t.toString(), nOccInA + 1);
+            } else {
+                int nOccInB = 0;
+                Object nB = countB.get(t.toString());
+                if (nB != null)
+                    nOccInB = ((Integer) nB).intValue();
+                if (nOccInB < nOccInA) {
+                    // anche se aggiungo questa occorrenza va bene
+                    countB.put(t.toString(), nOccInB + 1);
+                } else {
+                    errCountVars = true;
+                }    
+            }
+            return weightVars;
+        }
+         
+        // Costanti :)
+        return weightFunction.get(((Term) t).getSymbol());
+     
+    }
+    
+    private boolean checkFnToXKBO(Object a, Variable b) {
+        if (a instanceof Atom) {
+            return ((Atom) a).getArgs()[0].equals(b);
+        }
+        Term arg = (Term) a;
+        do {
+            arg = ((Term) arg).getArgs()[0];
+        } while (((Term) a).getSymbol().equals(arg.getSymbol()));
+        
+        return arg.equals(b);
+            
+    }
+    
+    public String getTipeOrdering() {
+        if (kbo)
+            return "kbo";
+        if (statusMultiSet)
+            return "mul";
+        return "lex";
+    }
+    
+    public boolean isGreater(Object a, Object b) {
+        if (kbo)
+            return isGreaterKBO(a, b);
+        
+        return isGreaterMulLex(a, b);
+    }
+    
 }

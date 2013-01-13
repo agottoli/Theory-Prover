@@ -18,15 +18,16 @@ public class GivenClauseProver {
     PriorityQueue<Clause> To_Select;
     List<Clause> Selected;
     private Ordering ord;
-    private final boolean aLaE, sos, multiSet;
+    private final boolean aLaE, sos, kbo, multiSet;
     private int generated, deleted;
     
     private long elapsedTime;
     private long startTime;
     
-    public GivenClauseProver(boolean aLaE, boolean sos, boolean multiSet) {
+    public GivenClauseProver(boolean aLaE, boolean sos, boolean kbo, boolean multiSet) {
         this.aLaE = aLaE;
         this.sos = sos;
+        this.kbo = kbo;
         this.multiSet = multiSet;
         To_Select = new PriorityQueue<>();
         Selected = new ArrayList<>();
@@ -47,7 +48,10 @@ public class GivenClauseProver {
         }
         
         // setto l'ordinamento
-        ord.setPrecedence(f.getPrecedences(), f.getNPrec(), multiSet);
+        ord.setPrecedence(f.getPrecedences(), f.getNPrec());
+        if (kbo)
+            ord.setWeightsKBO(f.getWeights(), f.getWeightVars());
+        ord.setKBOrdering();
         
         // given clause cicle
         while (!To_Select.isEmpty()) {

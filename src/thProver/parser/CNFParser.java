@@ -211,6 +211,7 @@ public class CNFParser implements CNFParserConstants {
     label_4:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
+      case INTEGER:
       case PREDICATE:
       case SYMBOL:
       case SEMICOLON:
@@ -240,6 +241,9 @@ public class CNFParser implements CNFParserConstants {
       break;
     case PREDICATE:
       s = jj_consume_token(PREDICATE);
+      break;
+    case INTEGER:
+      s = jj_consume_token(INTEGER);
       break;
     default:
       jj_la1[16] = jj_gen;
@@ -485,7 +489,7 @@ public class CNFParser implements CNFParserConstants {
       jj_la1_init_0();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x8000,0x10000,0x200000,0x100000,0x40000,0x80000,0x280,0x280,0x400,0x280,0x380,0x380,0x380,0x20000,0xb00,0x800,0x300,0x4100,0x800,0x4100,0x800,0x40,0x4000,0x1000,0x400,0x1000,0x280,};
+      jj_la1_0 = new int[] {0x8000,0x10000,0x200000,0x100000,0x40000,0x80000,0x280,0x280,0x400,0x280,0x380,0x380,0x380,0x20000,0xb80,0x800,0x380,0x4100,0x800,0x4100,0x800,0x40,0x4000,0x1000,0x400,0x1000,0x280,};
    }
 
   /** Constructor with InputStream. */

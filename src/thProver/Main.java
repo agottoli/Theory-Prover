@@ -60,19 +60,19 @@ public class Main {
         if (interactive) {
             String stringa = 
                     "const: a,b,0,c,d\n" +
-                    "prec: P>R>ack>succ>per>piu>f>g>a>c>d>0\n" +
+                    "prec: P>R>succ>ack>per>piu>f>g>a>c>d>0\n" +
                     "weightVars: 1\n" +
-                    "weights: P = 1; piu = 1\n" +
+                    "weights: P = 1; ack = 1; succ = 2; 0 = 1\n" +
                     //"sos: Q(c)" +
                     //"clauses: P(ack(succ(x),succ(y))) | P(ack(x,ack(succ(x),y)))";
-                    "clauses: P(piu(piu(x,y),z)) | P(piu(x,piu(y,z)))\n";
+                    "clauses: P(ack(0,y)) | P(succ(y))";
                     //"clauses: R(x) | ~P(f(0)) | R(a) | P(f(f(z))) | P(f(z)) \n Q(b)\n";
             
             // associatività per mul # e per lex > (ok)    
             //"clauses: P(f(f(x,y),z)) | P(f(x,f(y,z))) \n Q(b)\n";
             // distributività se per>piu per mul > e per lex > (ok) 
             //"clauses: P(per(x,piu(y,z)) | P(per(x,y),per(x,z))";
-            // se ack>succ mul > e lex >
+            // se ack>succ mul > e lex > , weight = 1 KBO1 >
             //"clauses: P(ack(0,y)) | P(succ(y))";
             // se ack>succ mul # e lex > (ok)
             //"clauses: P(ack(succ(x),a)) | P(ack(x,succ(a)))";

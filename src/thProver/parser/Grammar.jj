@@ -124,7 +124,7 @@ void Weight():
     Token s, i;
 }
 {
-     ( s = <SYMBOL> | s = <PREDICATE> ) <EQUALS> i = <INTEGER>
+     ( s = <SYMBOL> | s = <PREDICATE> | s = <INTEGER> ) <EQUALS> i = <INTEGER>
         { f.setWeight(s.image, i.image); }
 }
 void WeightVars():

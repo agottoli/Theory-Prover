@@ -17,16 +17,14 @@ public class KBO {
     int weightVars;
     private List<List<String>> prec;
     private int nPrec;
-    private boolean statusMultiSet;
+    private boolean statusMultiSet; // inutile in kbo
     // struttura dati che mi conta per ogni variabile qualte occorrenze ci sono
     HashMap<String, Integer> countA;
     HashMap<String, Integer> countB;
     boolean errCountVars;
     
     public KBO() {
-        errCountVars = false;
-        countA = new HashMap<>();
-        countB = new HashMap<>();
+        
     }
 
     /* ****************** COPIA e INCOLLA da Ordering ************************************** */
@@ -71,6 +69,10 @@ public class KBO {
 
         int wA;
         int wB;
+        /* init strutture per contare le occorrenze delle variabili */
+        errCountVars = false;
+        countA = new HashMap<>();
+        countB = new HashMap<>();
         try {
             wA = weight(a, true);
             wB = weight(b, false);
@@ -119,6 +121,9 @@ public class KBO {
                 } else if (isGreaterInPrecedence(symA, symB)) {
                     // KBO2b
                     return true;
+                } else {
+                    // non posso applicare nessuna KBO2 + a,b o c
+                    return false;
                 }
             }
 

@@ -13,29 +13,37 @@ public interface CNFParserConstants {
   /** RegularExpression Id. */
   int OR = 6;
   /** RegularExpression Id. */
-  int PREDICATE = 7;
+  int INTEGER = 7;
   /** RegularExpression Id. */
-  int SYMBOL = 8;
+  int PREDICATE = 8;
   /** RegularExpression Id. */
-  int COMMA = 9;
+  int SYMBOL = 9;
   /** RegularExpression Id. */
-  int SEMICOLON = 10;
+  int COMMA = 10;
   /** RegularExpression Id. */
-  int LPAR = 11;
+  int SEMICOLON = 11;
   /** RegularExpression Id. */
-  int RPAR = 12;
+  int LPAR = 12;
   /** RegularExpression Id. */
-  int NOT = 13;
+  int RPAR = 13;
   /** RegularExpression Id. */
-  int CONST = 14;
+  int NOT = 14;
   /** RegularExpression Id. */
-  int PREC = 15;
+  int CONST = 15;
   /** RegularExpression Id. */
-  int RANGLEPAR = 16;
+  int PREC = 16;
   /** RegularExpression Id. */
-  int SOS = 17;
+  int RANGLEPAR = 17;
   /** RegularExpression Id. */
-  int CLAUSES = 18;
+  int SOS = 18;
+  /** RegularExpression Id. */
+  int CLAUSES = 19;
+  /** RegularExpression Id. */
+  int WEIGHTS = 20;
+  /** RegularExpression Id. */
+  int WEIGHTVARS = 21;
+  /** RegularExpression Id. */
+  int EQUALS = 22;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -49,6 +57,7 @@ public interface CNFParserConstants {
     "\"\\t\"",
     "<token of kind 5>",
     "\"|\"",
+    "<INTEGER>",
     "<PREDICATE>",
     "<SYMBOL>",
     "\",\"",
@@ -61,6 +70,9 @@ public interface CNFParserConstants {
     "\">\"",
     "\"sos:\"",
     "\"clauses:\"",
+    "\"weights:\"",
+    "\"weightVars:\"",
+    "\"=\"",
   };
 
 }

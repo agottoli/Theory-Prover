@@ -7,7 +7,6 @@ package thProver;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -20,7 +19,7 @@ public class Ordering {
     private List<List<String>> prec;
     private int nPrec;
     private boolean statusMultiSet;
-
+    
     public void setPrecedence(List<List<String>> prec, int nPrec, boolean multiSet) {
         this.prec = prec;
         this.nPrec = nPrec;

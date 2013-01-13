@@ -25,6 +25,10 @@ public class CNFFormula {
     
     private List<List<String>> precedences;
     private int nPrecedencesList = -1;
+    
+    // weight for KBO
+    private HashMap<String, Integer> weights;
+    private int weightVars;
 
     /* questi sotto si faranno nel prover */
     //private TreeSet<Clause> To_Select_tree; //clauses; poll() <-- ritorna e rimuove la testa
@@ -39,6 +43,8 @@ public class CNFFormula {
         clauses = new ArrayList<>(); // oppure LinkedList<>()
         sos = new ArrayList<>(); // oppure LinkedList<>()
         precedences = new ArrayList<>();
+        weights = new HashMap<>();
+        weightVars = 1;
         nClausesAndSOS = 0;
     }
     
@@ -160,6 +166,7 @@ public class CNFFormula {
     public String toString() {
         StringBuilder sb = new StringBuilder(getConstantString());
         sb.append(getPrecedencesString());
+        sb.append(getWeightsString());
         sb.append(getSOSString());
         sb.append(getClausesString());
 
@@ -237,10 +244,46 @@ public class CNFFormula {
         return clauses;
     }
     
+    public List<Clause> getSOS() {
+        return sos;
+    }
+    
     /* DEBUG inizio */
     // temporaneo per vedere se ci sono doppi
     public String getTermsString() {
         return terms.toString();
     }
     /* DEBUG fine */
+    
+    public void setWeight(String sym, String weight) {
+        Object o = weights.put(sym, Integer.parseInt(weight));
+        if (o != null) {
+            // il peso per questo sym è già stato definito
+            throw new IllegalArgumentException("Sono stati definiti più pesi per " + sym + ".");
+        }
+    }
+    
+    public void setWeightVars(String weight) {
+        weightVars = Integer.parseInt(weight);
+    }
+    
+    public String getWeightsString() {
+        if (weights.isEmpty())
+            return "";
+        
+        StringBuilder sb = new StringBuilder("weightVars = ");
+        sb.append(weightVars);
+        sb.append("\nweights: ");
+        sb.append(weights.toString());
+        sb.append("\n");
+        return sb.toString();
+    }
+    
+    public HashMap<String, Integer> getWeights() {
+        return weights;
+    }
+    
+    public int getWeightVars() {
+        return weightVars;
+    }
 }

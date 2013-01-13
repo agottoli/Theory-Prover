@@ -63,4 +63,14 @@ public class Variable implements Term {
         return HashMultiset.create();
     }
 
+    @Override
+    public int getNArgs() {
+        return 0;
+    }
+
+    @Override
+    public Term[] getArgs() {
+        return null;
+    }
+
 }

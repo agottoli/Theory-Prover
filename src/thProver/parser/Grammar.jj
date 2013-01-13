@@ -37,8 +37,9 @@ SKIP:
 
 TOKEN:
 { <OR: "|">
-| <PREDICATE: (["A"-"Z","0"-"9"])+>
-| <SYMBOL: (["a"-"z","0"-"9"])+>
+| <INTEGER: (["0"-"9"])+>
+| <PREDICATE: ((["A"-"Z"])+(["A"-"Z","0"-"9"])*)>
+| <SYMBOL: ((["a"-"z"])+(["a"-"z","0"-"9"])*)>
 | <COMMA: ",">
 | <SEMICOLON: ";">
 | <LPAR: "(">
@@ -53,6 +54,10 @@ TOKEN:
 | <SOS: "sos:"> 
 // clauses
 | <CLAUSES: "clauses:">
+// weight per KBO
+| <WEIGHTS: "weights:">
+| <WEIGHTVARS: "weightVars:">
+| <EQUALS: "=">
 }
 
 
@@ -66,6 +71,8 @@ void Start():
 {
 	[ Declaration() ]
         [ Precedences() ]
+        [ WeightVars() ]
+        [ Weights() ]
         [ Sos() ]
         [ Clauses() ]
 	<EOF>
@@ -83,9 +90,9 @@ void Consts():
     Token c;
 }
 {
-	c = <SYMBOL>
+	( c = <SYMBOL> | c = <INTEGER> )
         { f.addConstant(c.image); f.addArity(c.image, 1); }
-	( <COMMA> c = <SYMBOL>
+	( <COMMA> ( c = <SYMBOL> | c = <INTEGER> )
             { f.addConstant(c.image); f.addArity(c.image, 1); } )*
 }
 
@@ -100,9 +107,32 @@ void Precedence():
     Token t;
 }
 {
-    ( t = <PREDICATE> | t = <SYMBOL> ) { f.incrNPrecList(); f.addPrecedence(t.image); } 
+    ( t = <PREDICATE> | t = <SYMBOL> | t = <INTEGER> ) { f.incrNPrecList(); f.addPrecedence(t.image); } 
 
-    ( <RANGLEPAR> ( t = <PREDICATE> | t = <SYMBOL> ) { f.addPrecedence(t.image); } )+
+    ( <RANGLEPAR> ( t = <PREDICATE> | t = <SYMBOL> | t = <INTEGER> ) { f.addPrecedence(t.image); } )+
+}
+
+// weight for KBO
+void Weights():
+{}
+{
+    <WEIGHTS> Weight() ( [ <SEMICOLON> ] Weight() )*
+}
+
+void Weight():
+{
+    Token s, i;
+}
+{
+     ( s = <SYMBOL> | s = <PREDICATE> ) <EQUALS> i = <INTEGER>
+        { f.setWeight(s.image, i.image); }
+}
+void WeightVars():
+{
+    Token i;
+}
+{
+    <WEIGHTVARS> i = <INTEGER> { f.setWeightVars(i.image); }
 }
 
 // SOS
@@ -192,8 +222,12 @@ Term Term():
 
 }
 {
-	s = <SYMBOL>
-        [ { noArgs = false; } <LPAR> terms = Terms() <RPAR> ]
+	( 
+            ( s = <SYMBOL>
+                [ { noArgs = false; } <LPAR> terms = Terms() <RPAR> ] ) 
+            | s = <INTEGER> { if (!f.isConstant(s.image)) throw new ParseException(s.image + " must be constant."); }
+
+        )
 
         {  if (noArgs) { // constant or variable
                 if (!f.isConstant(s.image)) {

@@ -96,4 +96,9 @@ public class Function implements Term {
         }
         return ms;
     }
+
+    @Override
+    public int getNArgs() {
+        return args.length;
+    }
 }

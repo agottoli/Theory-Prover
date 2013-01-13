@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
@@ -58,11 +59,14 @@ public class Main {
         Reader formulaReader;
         if (interactive) {
             String stringa = 
-                    "const: a,b,c,d\n" +
-                    "prec: P>R>ack>succ>per>piu>f>g>a>c>d>0\n" + 
-                   // "sos: Q(c)" +
+                    "const: a,b,0,c,d\n" +
+                    "prec: P>R>ack>succ>per>piu>f>g>a>c>d>0\n" +
+                    "weightVars: 1\n" +
+                    "weights: P = 1; piu = 1\n" +
+                    //"sos: Q(c)" +
                     //"clauses: P(ack(succ(x),succ(y))) | P(ack(x,ack(succ(x),y)))";
-                    "clauses: R(x) | ~P(f(z)) | R(a) | P(f(f(z))) | P(f(z)) \n Q(b)\n";
+                    "clauses: P(piu(piu(x,y),z)) | P(piu(x,piu(y,z)))\n";
+                    //"clauses: R(x) | ~P(f(0)) | R(a) | P(f(f(z))) | P(f(z)) \n Q(b)\n";
             
             // associatività per mul # e per lex > (ok)    
             //"clauses: P(f(f(x,y),z)) | P(f(x,f(y,z))) \n Q(b)\n";
@@ -109,6 +113,24 @@ public class Main {
         else
             System.out.println(l1.toString() + " #" + tipo + " " + l2.toString());
         */
+        
+        /* Check KBO */ 
+        KBO or = new KBO();
+        String tipo = "KBO";
+        
+        or.setPrecedence(f.getPrecedences(), f.getNPrec(), true);
+        or.setWeights(f.getWeights(), f.getWeightVars());
+        
+        Literal l1 = c.literals.get(0);
+        Literal l2 = c.literals.get(1);
+        if (or.isGreater(l1, l2))
+            System.out.println(l1.toString() + " >" + tipo + " " + l2.toString());
+        else if (or.isGreater(l2, l1))
+            System.out.println(l1.toString() + " <" + tipo + " " + l2.toString());
+        else
+            System.out.println(l1.toString() + " #" + tipo + " " + l2.toString());
+
+        
         // prova trovare lista di letterali massimali
         //System.out.println("lits massimali: " + or.getMaximalLiterals(c));
         
@@ -135,8 +157,8 @@ public class Main {
         if (c.isTautology())
             taut = "";
         System.out.println("La clausola "+ c.toString() + taut + " è una tautologia");
-        */    
-        
+        */ 
+               
     }
     
     /******************************************************************/

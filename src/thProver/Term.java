@@ -15,4 +15,8 @@ public interface Term {
 
     public List<Term> getArgsTupla();
     public HashMultiset<Object> getArgsMultiset();
+    public Term[] getArgs();
+
+    public int getNArgs();
+
 }

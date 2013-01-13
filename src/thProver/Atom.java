@@ -17,10 +17,12 @@ public class Atom {
     
     private String symbol; // Predicate
     private Term[] args;
+    private int weight;
     
     public Atom(String symbol, Term... args) {
         this.symbol = symbol;
         this.args = args;
+        weight = 1;
     }
     
     public Atom() {
@@ -34,12 +36,20 @@ public class Atom {
         this.args = args;
     }
     
+    public void setWeight(int w) {
+        weight = w;
+    }
+    
     public String getSymbol() {
         return symbol;
     }
     
     public Term[] getArgs() {
         return args;
+    }
+    
+    public int getWeight() {
+        return weight;
     }
     
     @Override
@@ -84,7 +94,7 @@ public class Atom {
     }
 
     public int symbolsNumber() {
-        int n = 1;
+        int n = weight;
         if (args != null) {
             for (Term a : args) {
                 n += a.symbolsNumber();
@@ -118,5 +128,9 @@ public class Atom {
         HashMultiset<Object> ms = HashMultiset.create();
         ms.add(this);
         return ms;
+    }
+
+    int getNArgs() {
+        return args.length;
     }
 }

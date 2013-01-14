@@ -19,10 +19,10 @@ public class Ordering {
 
     private List<List<String>> prec;
     private int nPrec;
-    private boolean kbo = false;
+    private boolean kbo;
     
     /* solo per Ordinamento ricorsivo a cammini o lessicografico */
-    private boolean statusMultiSet = false; // a cammini
+    private boolean statusMultiSet; // a cammini
     
     /* solo per KBO */
     HashMap<String, Integer> weightFunction;
@@ -31,6 +31,13 @@ public class Ordering {
     HashMap<String, Integer> countA;
     HashMap<String, Integer> countB;
     boolean errCountVars;
+    
+    public Ordering() {
+        kbo = false;
+        statusMultiSet = false;
+        countA = new HashMap<>();
+        countB = new HashMap<>();
+    }
     
     
     public void setPrecedence(List<List<String>> prec, int nPrec) {
@@ -351,8 +358,8 @@ public class Ordering {
         int wB;
         /* init strutture per contare le occorrenze delle variabili */
         errCountVars = false;
-        countA = new HashMap<>();
-        countB = new HashMap<>();
+        countA.clear();
+        countB.clear();
         try {
             wA = weight(a, true);
             wB = weight(b, false);

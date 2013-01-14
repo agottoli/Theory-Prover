@@ -197,7 +197,12 @@ public class CNFFormula {
     }
     
     public String getClausesString() {
-        StringBuilder sb = new StringBuilder("Clauses: { ");
+        StringBuilder sb = new StringBuilder();
+        sb.append(nClausesAndSOS);
+        if (nClausesAndSOS == 1)
+            sb.append(" Clause: { ");
+        else
+            sb.append(" Clauses: { ");
         for (Clause c : clauses)
             sb.append(c).append(" ; ");
         if (!clauses.isEmpty())
@@ -285,5 +290,9 @@ public class CNFFormula {
     
     public int getWeightVars() {
         return weightVars;
+    }
+    
+    public int getNumClausesAndSOS() {
+        return nClausesAndSOS;
     }
 }

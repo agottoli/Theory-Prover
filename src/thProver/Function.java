@@ -78,14 +78,29 @@ public class Function implements Term {
     }
     
     @Override
-    public boolean equals(Object other) {
-        /*if (other instanceof Function)
-            if (this.symbol.equals(((Function) other).getSymbol()))
-         */
-        // siccome durante il parsing costruisco una solo oggetto
+    public boolean equals(Object obj) {
+        /*// siccome durante il parsing costruisco una solo oggetto
         // posso usare i puntatori per vedere se è uguale
         // proprio come fa Object tra l'altro
-        return this == other;
+        return this == obj;*/
+        
+        if (this == obj)
+            return true;
+        
+        // aggiunta
+        if (obj instanceof Function) {
+            Function other = (Function) obj;
+            if (!symbol.equals(other.getSymbol()))
+                return false;
+            Term[] argsO = other.getArgs();
+            for (int i = 0; i < args.length; i++) {
+                if (!args[i].equals(argsO[i]))
+                    return false;
+            }
+            return true;
+        }
+        
+        return false;
     }
 
     @Override

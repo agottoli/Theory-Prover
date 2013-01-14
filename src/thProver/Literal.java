@@ -60,15 +60,18 @@ public class Literal {
 
     @Override
     public boolean equals(Object obj) {
+       if (this == obj)
+           return true;
        
-       /*
-        Literal other = (Literal) obj;
-        if (positive != other.positive || !atom.equals(other.getAtom())) {
-            return false;
-        }
-        return true;
-        */
-        return this == obj;
+       // aggiunta
+       if (obj instanceof Literal) {
+            Literal other = (Literal) obj;
+            if (positive != other.positive || !atom.equals(other.getAtom())) {
+                return false;
+            }
+            return true;
+       }
+       return false;
 
     }
     

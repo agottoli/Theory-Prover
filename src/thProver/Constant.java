@@ -35,8 +35,16 @@ public class Constant implements Term {
     }
     
     @Override
-    public boolean equals(Object other) {
-        return this == other;
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+       
+        // aggiunta
+        if (obj instanceof Constant) {
+            return symbol.equals((Constant) obj);
+        }
+        
+        return false;
     }
 
     @Override

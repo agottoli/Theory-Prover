@@ -13,6 +13,8 @@ public class Literal {
 
     private boolean positive = true;
     private Atom atom;
+    // stringa
+    private String string;
 
     /**
      * Constructs a literal.
@@ -21,21 +23,23 @@ public class Literal {
      * @param symbol the predicate symbol
      * @param args the list of term arguments
      */
-    Literal(boolean positive, Atom atom) {
+    public Literal(boolean positive, Atom atom) {
         this.positive = positive;
         this.atom = atom;
     }
 
-    public Literal() {
+    /*// per il parser (inizio)
+    public Literal() {       
     }
-
-    public void setPositive(boolean p) {
+    
+    public void setSign(boolean p) {
         positive = p;
     }
 
     public void setAtom(Atom atom) {
         this.atom = atom;
     }
+    // per il parser (fine)*/
     
     boolean isPositive() {
         return positive;
@@ -44,9 +48,16 @@ public class Literal {
     public Atom getAtom() {
         return atom;
     }
+    
+    public Literal copy() {
+        return new Literal(positive, atom.copy());
+    }
 
     @Override
     public String toString() {
+        if (string != null)
+            return string;
+        
         StringBuilder sb = new StringBuilder();
 
         if (!positive) {
@@ -55,7 +66,7 @@ public class Literal {
 
         sb.append(atom.toString());
 
-        return sb.toString();
+        return string = sb.toString();
     }
 
     @Override
@@ -66,13 +77,11 @@ public class Literal {
        // aggiunta
        if (obj instanceof Literal) {
             Literal other = (Literal) obj;
-            if (positive != other.positive || !atom.equals(other.getAtom())) {
-                return false;
-            }
-            return true;
+            return positive == other.positive &&
+                    atom.equals(other.getAtom());
        }
+       
        return false;
-
     }
     
     public int symbolsNumber() {

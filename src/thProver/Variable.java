@@ -53,7 +53,7 @@ public class Variable implements Term {
         
         return false;
     }
-
+/*
     @Override
     public List<Term> getArgsTupla() {
         return new ArrayList<Term>();
@@ -70,8 +70,13 @@ public class Variable implements Term {
     }
 
     @Override
-    public Term[] getArgs() {
+    public List<Term> getArgs() {
         return null;
+    }
+*/
+    @Override
+    public Term copy() {
+        return new Variable(symbol);
     }
 
 }

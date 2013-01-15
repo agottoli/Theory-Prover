@@ -15,13 +15,17 @@ public class Constant implements Term {
     public Constant(String symbol) {
         this.symbol = symbol;
     }
-    
+/*    
     public void setSymbol(String sym) {
         symbol = sym;
     }
-    
+*/   
     public String getSymbol() {
         return symbol;
+    }
+    
+    public Constant copy() {
+        return new Constant(symbol);
     }
         
     @Override
@@ -41,20 +45,20 @@ public class Constant implements Term {
        
         // aggiunta
         if (obj instanceof Constant) {
-            return symbol.equals((Constant) obj);
+            return symbol.equals(((Constant) obj).symbol);
         }
         
         return false;
     }
-
+/*
     @Override
     public List<Term> getArgsTupla() {
-        return new ArrayList<Term>();
+        return null;
     }
 
     @Override
     public HashMultiset<Object> getArgsMultiset() {
-        return  HashMultiset.create();
+        return null;
     }
 
     @Override
@@ -63,8 +67,8 @@ public class Constant implements Term {
     }
     
     @Override
-    public Term[] getArgs() {
+    public List<Term> getArgs() {
         return null;
     }
-        
+*/        
 }

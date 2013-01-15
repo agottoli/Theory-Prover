@@ -140,11 +140,11 @@ public class Ordering {
         //   if (a instanceof Atom) {
         if (a instanceof Atom && b instanceof Term) {
             for (Term argA : ((Atom) a).getArgs())
-                if (argA.equals((Term) b) || isGreaterMulLex(argA, b))
+                if (argA.equals(b) || isGreaterMulLex(argA, b))
                     return true; // caso 1
         } else if (a instanceof Function && b instanceof Term)
             for (Term argA : ((Function) a).getArgs())
-                if (argA.equals((Term) b) || isGreaterMulLex(argA, b))
+                if (argA.equals(b) || isGreaterMulLex(argA, b))
                     return true; // caso 1
 
         // b può essere Atom, Function, Variable, Constant
@@ -169,8 +169,8 @@ public class Ordering {
                     msA = ((Atom) a).getArgsMultiset();
                     msB = ((Atom) b).getArgsMultiset();
                 } else if (a instanceof Function) {
-                    msA = ((Term) a).getArgsMultiset();
-                    msB = ((Term) b).getArgsMultiset();
+                    msA = ((Function) a).getArgsMultiset();
+                    msB = ((Function) b).getArgsMultiset();
                 } else
                     // si tratta di costanti o variabili (che non hanno argomenti)
                     // identiche quindi non può essere una maggiore
@@ -184,8 +184,8 @@ public class Ordering {
                     ltA = ((Atom) a).getArgsTupla();
                     ltB = ((Atom) b).getArgsTupla();
                 } else if (a instanceof Function) {
-                    ltA = ((Term) a).getArgsTupla();
-                    ltB = ((Term) b).getArgsTupla();
+                    ltA = ((Function) a).getArgsTupla();
+                    ltB = ((Function) b).getArgsTupla();
                 } else
                     // si tratta di costanti o variabili (che non hanno argomenti)
                     // identiche quindi non può essere una maggiore
@@ -211,7 +211,7 @@ public class Ordering {
         } else if (isGreaterInPrecedence(sA, sB)) {
             // caso 2
 
-            Term[] argsB;
+            List<Term> argsB;
             if (b instanceof Atom)
                 argsB = ((Atom) b).getArgs();
             else if (b instanceof Function)
@@ -233,10 +233,16 @@ public class Ordering {
             // regola 1
             return true;
         }
+        int count;
         for (Object o : a) {
-            if (b.contains(o)) {
-                a.remove(o);
-                b.remove(o);
+            //if (b.contains(o)) {
+            if ((count = b.count(o)) > 0) {
+                int countT;
+                if (count != 1 && (countT = a.count(o)) > count) {
+                    count = countT;
+                }
+                a.remove(o, count); // non crea problemi perché non itero più sul ciclo
+                b.remove(o, count);
                 return isGreaterMul(a, b);
             }
         }
@@ -244,8 +250,9 @@ public class Ordering {
             for (Object oB : b) {
                 if (isGreaterMulLex(oA, oB)) {
                     HashMultiset<Object> copiaB = HashMultiset.create();
-                    for (Object c : b)
-                        copiaB.add(c);
+                    /*for (Object c : b)
+                        copiaB.add(c);*/
+                    copiaB.addAll(b);
                     copiaB.remove(oB);
                     if (isGreaterMul(a, copiaB))
                         return true;
@@ -383,14 +390,18 @@ public class Ordering {
                     arity = ((Atom) a).getNArgs();
                 } else {
                     symA = ((Term) a).getSymbol();
-                    arity = ((Term) a).getNArgs();
+                    if (a instanceof Function)
+                        arity = ((Function) a).getNArgs();
+                    else 
+                        arity = 0;
                 }
+                
                 if (b instanceof Atom) {
                     symB = ((Atom) b).getSymbol();
                 } else {
                     symB = ((Term) b).getSymbol();
                 }
-                if (weightFunction.get(symA) == 0 && arity == 1 
+                if (arity == 1 && weightFunction.get(symA) == 0 
                         && b instanceof Variable
                         && checkFnToXKBO(a, (Variable) b)) {
                     // KBO2a
@@ -401,10 +412,11 @@ public class Ordering {
                     if (a instanceof Atom) {
                         argsA = (List<Object>) (List<?>) ((Atom) a).getArgsTupla();
                         argsB = (List<Object>) (List<?>) ((Atom) b).getArgsTupla();
-                    } else {
-                        argsA = (List<Object>) (List<?>) ((Term) a).getArgsTupla();
-                        argsB = (List<Object>) (List<?>) ((Term) b).getArgsTupla();
-                    }
+                    } else if (a instanceof Function) {
+                        argsA = (List<Object>) (List<?>) ((Function) a).getArgsTupla();
+                        argsB = (List<Object>) (List<?>) ((Function) b).getArgsTupla();
+                    } else
+                        return false; // stessa variabile o costante
 
                     return isGreaterLex(argsA, argsB) != -1; // KBO usa Lex
                     
@@ -428,16 +440,16 @@ public class Ordering {
     public int weight(Object t, boolean isA) throws NullPointerException {
         if (t instanceof Atom) {
             int argsWeight = 0;
-            Term[] args = ((Atom) t).getArgs();
-            for (int i = 0; i < args.length; i++)
-                argsWeight += weight(args[i], isA);
+            List<Term> args = ((Atom) t).getArgs();
+            for (Term term : args)
+                argsWeight += weight(term, isA);
             return weightFunction.get(((Atom) t).getSymbol()) + argsWeight;
         } else
         if (t instanceof Function) {
             int argsWeight = 0;
-            Term[] args = ((Function) t).getArgs();
-            for (int i = 0; i < args.length; i++)
-                argsWeight += weight(args[i], isA);
+            List<Term> args = ((Function) t).getArgs();
+            for (Term term : args)
+                argsWeight += weight(term, isA);
             return weightFunction.get(((Function) t).getSymbol()) + argsWeight;
         } else
         
@@ -471,11 +483,12 @@ public class Ordering {
     
     private boolean checkFnToXKBO(Object a, Variable b) {
         if (a instanceof Atom) {
-            return ((Atom) a).getArgs()[0].equals(b);
+            return ((Atom) a).getArgs().get(0).equals(b);
         }
+        // sicuramente a è una Function
         Term arg = (Term) a;
         do {
-            arg = ((Term) arg).getArgs()[0];
+            arg = ((Function) arg).getArgs().get(0);
         } while (((Term) a).getSymbol().equals(arg.getSymbol()));
         
         return arg.equals(b);

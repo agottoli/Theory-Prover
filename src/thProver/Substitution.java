@@ -4,7 +4,9 @@
  */
 package thProver;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  *
@@ -94,10 +96,12 @@ public class Substitution {
     // quindi posso introdurre termini doppi
     public Term applySubstitution(Term t, Substitution tau) {
         if (t instanceof Function) {
-            Term[] args = t.getArgs();
-            Term[] argsNuovi = new Term[args.length];
-            for (int i = 0; i < args.length; i++)
-                argsNuovi[i] = applySubstitution(args[i], tau);
+            List<Term> args = ((Function) t).getArgs();
+            List<Term> argsNuovi = new ArrayList<>();
+            /*for (int i = 0; i < args.length; i++)
+                argsNuovi[i] = applySubstitution(args[i], tau);*/
+            for (Term te : args)
+                argsNuovi.add(applySubstitution(te, tau));
             return new Function(t.getSymbol(), argsNuovi);
         }
         //if (t instanceof Variable) {

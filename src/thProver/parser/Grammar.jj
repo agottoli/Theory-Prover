@@ -171,38 +171,41 @@ Clause Clause():
 // a literal
 Literal Literal():
 {
-    Literal l = new Literal();
+    boolean pos = true;
     Atom a;
 }
 {
-	[ <NOT> { l.setPositive(false); } ]
+	[ <NOT> { pos = false; } ]
         a = Atom()
-        { l.setAtom(a); }
 
-        { return f.addLiteral(l); }
+        { return f.addLiteral(new Literal(pos, a)); }
 }
 
 Atom Atom():
 {
-    Atom a = new Atom();
-    Term[] terms;
+    Atom a;
+    List<Term> terms = null;
     Token p;
 }
 {
     p = <PREDICATE>
-        { a.setSymbol(p.image); }
-        [ <LPAR> terms = Terms() 
-                  { a.setArgs(terms);
-                    boolean ok = f.checkArity(p.image, terms.length); 
-                    if (!ok) {
-                        throw new IllegalArgumentException("Errore di arietà: " + p.image + "\n");
-                    } 
-                  } <RPAR> ]
+        [ <LPAR> terms = Terms() <RPAR> ]
 
-        { return f.addAtom(a); }
+        { boolean ok;
+          if (terms != null) {
+             a = new Atom(p.image, terms);
+             ok = f.checkArity(p.image, terms.size());
+          } else {
+             a = new Atom(p.image);
+             ok = f.checkArity(p.image, 0);
+          }
+          if (!ok)
+             throw new IllegalArgumentException("Errore di arietà: " + p.image + "\n");
+
+          return f.addAtom(a); }
 }
 
-Term[] Terms():
+List<Term> Terms():
 {
     List<Term> tl = new LinkedList<Term>();
     Term t;
@@ -210,7 +213,7 @@ Term[] Terms():
 {
 	t = Term()  { tl.add(t); } ( <COMMA> t = Term() { tl.add(t); } )*
 
-        { return tl.toArray(new Term[tl.size()]); }
+        { return tl; }
 }
 
 Term Term():
@@ -218,7 +221,7 @@ Term Term():
     boolean noArgs = true;
     Token s;
     Term t;
-    Term[] terms = null;
+    List<Term> terms = null;
 
 }
 {
@@ -239,13 +242,13 @@ Term Term():
                 } else
                     t = f.addConstant(s.image); // per recuperare il puntatore alla costante
             } else { // function
-                boolean ok = f.checkArity(s.image, terms.length);
+                boolean ok = f.checkArity(s.image, terms.size());
                 if (!ok) {
                     throw new IllegalArgumentException("Errore di arietà: " + s.image + "\n");
                 }
-                t = new Function();
-                t.setSymbol(s.image);
-                ((Function) t).setArgs(terms);
+                t = new Function(s.image, terms);
+                //t.setSymbol(s.image);
+                //((Function) t).setArgs(terms);
                 t = f.addTerm(t);
            }
            return t;

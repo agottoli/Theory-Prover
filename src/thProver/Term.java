@@ -8,15 +8,22 @@ import java.util.List;
  */
 public interface Term {
     
-    public void setSymbol(String sym);
+    int weight = 1;
+    
+    //public void setSymbol(String sym);
     public int symbolsNumber();
 
     public String getSymbol();
-
+    
+    public Term copy();
+/*
     public List<Term> getArgsTupla();
     public HashMultiset<Object> getArgsMultiset();
-    public Term[] getArgs();
+    public List<Term> getArgs();
 
     public int getNArgs();
+*/    
+    @Override
+    public boolean equals(Object o);
 
 }

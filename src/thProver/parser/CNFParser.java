@@ -356,49 +356,53 @@ public class CNFParser implements CNFParserConstants {
 
 // a literal
   static final public Literal Literal() throws ParseException {
-    Literal l = new Literal();
+    boolean pos = true;
     Atom a;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case NOT:
       jj_consume_token(NOT);
-                  l.setPositive(false);
+                  pos = false;
       break;
     default:
       jj_la1[22] = jj_gen;
       ;
     }
     a = Atom();
-          l.setAtom(a);
-          {if (true) return f.addLiteral(l);}
+          {if (true) return f.addLiteral(new Literal(pos, a));}
     throw new Error("Missing return statement in function");
   }
 
   static final public Atom Atom() throws ParseException {
-    Atom a = new Atom();
-    Term[] terms;
+    Atom a;
+    List<Term> terms = null;
     Token p;
     p = jj_consume_token(PREDICATE);
-          a.setSymbol(p.image);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case LPAR:
       jj_consume_token(LPAR);
       terms = Terms();
-                    a.setArgs(terms);
-                    boolean ok = f.checkArity(p.image, terms.length);
-                    if (!ok) {
-                        {if (true) throw new IllegalArgumentException("Errore di ariet\u00e0: " + p.image + "\u005cn");}
-                    }
       jj_consume_token(RPAR);
       break;
     default:
       jj_la1[23] = jj_gen;
       ;
     }
+          boolean ok;
+          if (terms != null) {
+             a = new Atom(p.image, terms);
+             ok = f.checkArity(p.image, terms.size());
+          } else {
+             a = new Atom(p.image);
+             ok = f.checkArity(p.image, 0);
+          }
+          if (!ok)
+             {if (true) throw new IllegalArgumentException("Errore di ariet\u00e0: " + p.image + "\u005cn");}
+
           {if (true) return f.addAtom(a);}
     throw new Error("Missing return statement in function");
   }
 
-  static final public Term[] Terms() throws ParseException {
+  static final public List<Term> Terms() throws ParseException {
     List<Term> tl = new LinkedList<Term>();
     Term t;
     t = Term();
@@ -417,7 +421,7 @@ public class CNFParser implements CNFParserConstants {
       t = Term();
                                                           tl.add(t);
     }
-          {if (true) return tl.toArray(new Term[tl.size()]);}
+          {if (true) return tl;}
     throw new Error("Missing return statement in function");
   }
 
@@ -425,7 +429,7 @@ public class CNFParser implements CNFParserConstants {
     boolean noArgs = true;
     Token s;
     Term t;
-    Term[] terms = null;
+    List<Term> terms = null;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case SYMBOL:
       s = jj_consume_token(SYMBOL);
@@ -460,13 +464,13 @@ public class CNFParser implements CNFParserConstants {
                 } else
                     t = f.addConstant(s.image); // per recuperare il puntatore alla costante
             } else { // function
-                boolean ok = f.checkArity(s.image, terms.length);
+                boolean ok = f.checkArity(s.image, terms.size());
                 if (!ok) {
                     {if (true) throw new IllegalArgumentException("Errore di ariet\u00e0: " + s.image + "\u005cn");}
                 }
-                t = new Function();
-                t.setSymbol(s.image);
-                ((Function) t).setArgs(terms);
+                t = new Function(s.image, terms);
+                //t.setSymbol(s.image);
+                //((Function) t).setArgs(terms);
                 t = f.addTerm(t);
            }
            {if (true) return t;}

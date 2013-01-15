@@ -39,6 +39,16 @@ public class Clause implements Comparable<Clause> {
         negLits = new ArrayList<>();
     }
 
+    public Clause(Set<Literal> lits) {
+        this();
+        literals = lits;
+        for (Literal l : literals)
+            if (l.isPositive())
+                this.posLits.add(l);
+            else
+                this.negLits.add(l);
+    }
+
     // per quando creo una clausola da una regola di espansione
     // C or L  -L or D --> C or D
     public Clause(List<Literal> lits1, List<Literal> lits2) {
@@ -77,7 +87,7 @@ public class Clause implements Comparable<Clause> {
     public void addLiteral(Literal literal) {
         int nLiterals = literals.size();
         literals.add(literal);
-        
+
         // questo serve se uso Set perché non ammette oggetti ripetuti
         if (nLiterals < literals.size())
             // è un nuovo letterale quindi lo devo aggiungere anche alle liste
@@ -132,7 +142,7 @@ public class Clause implements Comparable<Clause> {
     private int symbolsNumber() {
         if (numSymbs != 0)
             return numSymbs;
-        
+
         int n = 0;
         for (Literal l : literals)
             n += l.symbolsNumber();
@@ -143,7 +153,7 @@ public class Clause implements Comparable<Clause> {
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
-        
+
         // DA MIGLIORARE
         if (obj instanceof Clause) {
             Clause other = (Clause) obj;
@@ -160,7 +170,7 @@ public class Clause implements Comparable<Clause> {
             // tutti i letterali sono in entrambe le clausole                            
             return true;
         }
-        
+
         return false;
     }
 
@@ -187,17 +197,17 @@ public class Clause implements Comparable<Clause> {
         // no complementary literal found
         return false;
     }
-    
+
     public List<Literal> getMaximalLiterals(Ordering ord) {
         if (maximalLits != null)
             return maximalLits;
-        
+
         return ord.getMaximalLiterals(this);
     }
 
     public Set<Clause> getFactors() {
-        if (factors != null)
-            return factors;
+        if (factors == null)
+           calculateFactors();
         
         return factors; //=
     }
@@ -205,8 +215,14 @@ public class Clause implements Comparable<Clause> {
     private void calculateFactors() {
         factors = new LinkedHashSet<>(); // oppure LinkedHashSet<>(); che non ha il problema dell'incremento dei costi di TreeSet
 
-        Map<Variable, Term> theta = new HashMap<Variable, Term>();
+        //Map<Variable, Term> theta = new HashMap<Variable, Term>();
+        Substitution substitution;
+
         List<Literal> lits = new ArrayList<>();
+
+        // provvisorio per mgu
+        InferenceSystem is = new InferenceSystem();
+
         for (int i = 0; i < 2; i++) {
             lits.clear();
             if (i == 0)
@@ -216,65 +232,53 @@ public class Clause implements Comparable<Clause> {
                 // Look at the negative literals
                 lits.addAll(negLits);
             /* DA FARE */
-             for (int x = 0; x < lits.size(); x++)
+            for (int x = 0; x < lits.size(); x++)
                 for (int y = x + 1; y < lits.size(); y++) {
                     Literal litX = lits.get(x);
                     Literal litY = lits.get(y);
                     // initializzo la sostituzione
-                    theta.clear();
-                    
-             //Map<Variable, Term> substitution = unify(litX, litY, theta);
-             /*       
-             if (null != substitution) {
-             List<Literal> posLits = new ArrayList<Literal>();
-             List<Literal> negLits = new ArrayList<Literal>();
-             if (i == 0)
-             posLits.add(_substVisitor.subst(substitution, litX));
-             else
-             negLits.add(_substVisitor.subst(substitution, litX));
-             for (Literal pl : positiveLiterals) {
-             if (pl == litX || pl == litY)
-             continue;
-             posLits.add(_substVisitor.subst(substitution, pl));
-             }
-             for (Literal nl : negativeLiterals) {
-             if (nl == litX || nl == litY)
-             continue;
-             negLits.add(_substVisitor.subst(substitution, nl));
-             }
-             // Ensure the non trivial factor is standardized apart
-             Map<Variable, Term> renameSubst = _standardizeApart
-             .standardizeApart(posLits, negLits,
-             _saIndexical);
-             Clause c = new Clause(posLits, negLits);
-             c.setProofStep(new ProofStepClauseFactor(c, this, litX,
-             litY, substitution, renameSubst));
-             if (isImmutable())
-             c.setImmutable();
-             if (!isStandardizedApartCheckRequired())
-             c.setStandardizedApartCheckNotRequired();
-             if (null == parentFactors) {
-             c.calculateFactors(nonTrivialFactors);
-             nonTrivialFactors.addAll(c.getFactors());
-             } else
-             if (!parentFactors.contains(c)) {
-             c.calculateFactors(nonTrivialFactors);
-             nonTrivialFactors.addAll(c.getFactors());
-             }
-             }*/
-             }
-             
+                    //theta.clear();
+                    //substitution.getAssignemnts().clear();
+
+                    //Map<Variable, Term> substitution = unify(litX, litY, theta);
+                    substitution = is.mgu(litX, litY, true);
+
+                    if (null != substitution)
+                        factors.add(this.applySubstitution(substitution));
+                }
+
         }
     }
-    
+
     public Set<Clause> orderedResolvents(Clause othC) {
         // DA FARE
         return new LinkedHashSet<>();
     }
-    
+
     public boolean subsumes(Clause othC) {
         // DA FARE
         return false;
     }
-   
+
+    public Clause applySubstitution(Substitution tau) {
+        Set<Literal> lits = new LinkedHashSet<>();
+        for (Literal l : literals)
+            lits.add(l.applySubstitution(tau));
+        if (lits.equals(literals))
+            return this;
+        return new Clause(lits);
+    }
+    
+    public String getFactorsString() {
+        StringBuilder sb = new StringBuilder("factors: ");
+        boolean flag = true;
+        for (Clause c : factors)
+            if (flag) {
+                flag = false;
+                sb.append(c.toString());
+            } else {
+                sb.append(" ; ").append(c.toString());
+            }
+        return sb.toString(); 
+    }
 }

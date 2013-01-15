@@ -65,10 +65,11 @@ public class Main {
                     "prec: P>R>ack>succ>per>piu>f>g>a>c>d>0\n" +
                     "weightVars: 1\n" +
                     "weights: P = 1; ack = 1; succ = 1; 0 = 1; a = 1\n" +
+                    "clauses: P(z,y) | P(x,g(x)) | ~P(u,v) | Q(b)";
                     //"sos: Q(c)" +
                     //"clauses: P(ack(succ(x),succ(y))) | P(ack(x,ack(succ(x),y)))";
                     //"clauses: P(ack(succ(x),succ(y))) | P(ack(x,ack(succ(x),y)))";
-                   "clauses: R(x) | ~P(f(0)) | R(a) | P(f(f(z))) | P(f(z)) \n Q(b)\n";
+                   //"clauses: R(x) | ~P(f(0)) | R(a) | P(f(f(z))) | P(f(z)) \n Q(b)\n";
             //"clauses: P(per(x,piu(y,z))) | P(piu(per(x,y),per(x,z)))";
             // associatività per mul # e per lex > (ok)    
             //"clauses: P(f(f(x,y),z)) | P(f(x,f(y,z))) \n Q(b)\n";
@@ -172,6 +173,7 @@ public class Main {
         
         
         // PROVA Substitution
+        /*
         Substitution sigma = new Substitution();
         Variable x_0 = new Variable("x_0");
         Variable y_0 = new Variable("y_0");
@@ -210,7 +212,24 @@ public class Main {
             System.out.println("non unificabili.");
         else
             System.out.println("sub: " + sub.toString());
+        */
+        /*
+        // MGU literals + applySub to Clause
+        Iterator<Literal> it = c.literals.iterator();
+        Literal l1 = it.next();
+        Literal l2 = it.next();
+        InferenceSystem is = new InferenceSystem();
+        Substitution sigma = is.mgu(l1, l2, true);
+        if (sigma != null) {
+            Clause cNuova = c.applySubstitution(sigma);
+            System.out.println("unificabili con: " + sigma.toString());
+            System.out.println("con risultato: " + cNuova.toString());
+        }
+        */
         
+        // GETFACTORS di Clause
+        c.getFactors();
+        System.out.println(c.getFactorsString());
                
     }
     

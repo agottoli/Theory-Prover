@@ -38,6 +38,13 @@ public class InferenceSystem {
         // se arrivo qua sono elementi diversi non unificabili
         return null;
     }
+    
+    public Substitution mgu(Literal x, Literal y, boolean sameSign) {
+        if ((x.isPositive() == y.isPositive() && sameSign)
+                || (x.isPositive() != y.isPositive() && !sameSign))
+            return mgu(x.getAtom(), y.getAtom());
+        return null;
+    }
 
     public Substitution mgu(List<Term> x, List<Term> y) {
         Iterator<Term> itX = x.iterator();

@@ -198,6 +198,8 @@ public class Atom {
         List<Term> argsNuovi = new ArrayList<>();
         for (Term te : args)
             argsNuovi.add(te.applySubstitution(tau));
+        if (argsNuovi.equals(args))
+            return this;
         return new Atom(symbol, argsNuovi);
     }
 }

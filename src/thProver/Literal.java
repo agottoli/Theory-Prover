@@ -107,5 +107,12 @@ public class Literal {
             ms.add(new Atom("Bottom"));
         return ms;
     }
+    
+    public Literal applySubstitution(Substitution tau) {
+        Atom a = atom.applySubstitution(tau);
+        if (a.equals(atom))
+            return this;
+        return new Literal(positive, a);
+    }
 
 }

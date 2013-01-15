@@ -8,6 +8,7 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -67,8 +68,8 @@ public class Main {
                     //"sos: Q(c)" +
                     //"clauses: P(ack(succ(x),succ(y))) | P(ack(x,ack(succ(x),y)))";
                     //"clauses: P(ack(succ(x),succ(y))) | P(ack(x,ack(succ(x),y)))";
-                   //"clauses: R(x) | ~P(f(0)) | R(a) | P(f(f(z))) | P(f(z)) \n Q(b)\n";
-            "clauses: P(per(x,piu(y,z))) | P(piu(per(x,y),per(x,z)))";
+                   "clauses: R(x) | ~P(f(0)) | R(a) | P(f(f(z))) | P(f(z)) \n Q(b)\n";
+            //"clauses: P(per(x,piu(y,z))) | P(piu(per(x,y),per(x,z)))";
             // associatività per mul # e per lex > (ok)    
             //"clauses: P(f(f(x,y),z)) | P(f(x,f(y,z))) \n Q(b)\n";
             // distributività se per>piu per mul > e per lex > (ok) 
@@ -126,11 +127,12 @@ public class Main {
             case 2: or.setKBOrdering();
                 
         }
-
+/*
         String tipo = or.getTipeOrdering();
+        Iterator<Literal> itL = c.getLiterals().iterator();
         
-        Literal l1 = c.literals.get(0);
-        Literal l2 = c.literals.get(1);
+        Literal l1 = itL.next();
+        Literal l2 = itL.next();
         if (or.isGreater(l1, l2))
             System.out.println(l1.toString() + " >" + tipo + " " + l2.toString());
         else if (or.isGreater(l2, l1))
@@ -138,7 +140,7 @@ public class Main {
         else
             System.out.println(l1.toString() + " #" + tipo + " " + l2.toString());
 
-        
+*/        
         // prova trovare lista di letterali massimali
         //System.out.println("lits massimali: " + or.getMaximalLiterals(c));
         
@@ -166,6 +168,49 @@ public class Main {
             taut = "";
         System.out.println("La clausola "+ c.toString() + taut + " è una tautologia");
         */ 
+        
+        
+        
+        // PROVA Substitution
+        Substitution sigma = new Substitution();
+        Variable x_0 = new Variable("x_0");
+        Variable y_0 = new Variable("y_0");
+        Variable z_0 = new Variable("z_0");
+        Term a = new Constant("a");
+        List<Term> argF = new ArrayList<Term>();
+        argF.add(x_0);
+        Term fx_0 = new Function("f", argF);
+        List<Term> argF2 = new ArrayList<Term>();
+        argF2.add(y_0);
+        Term fy_0 = new Function("f", argF2);
+        sigma.addAssignment(x_0, z_0);
+        sigma.addAssignment(z_0, fx_0);
+        System.out.println(sigma.toString());
+        Substitution tau = new Substitution();
+        tau.addAssignment(z_0, x_0);
+        //System.out.println(sigma.toString());
+        System.out.println(tau.toString());
+        sigma.compose(tau);
+        System.out.println(sigma.toString());
+        //System.out.println(c.toString() + " sigma = ");
+        
+        // PROVA MGU
+        InferenceSystem is = new InferenceSystem();
+        List<Term> args1 = new ArrayList<>();
+        args1.add(x_0);
+        args1.add(fx_0);
+        Atom at1 = new Atom("P", args1);
+        List<Term> args2 = new ArrayList<>();
+        args2.add(fy_0);
+        args2.add(z_0);
+        Atom at2 = new Atom("P", args2);
+        System.out.println(at1.toString() + " " + at2.toString());
+        Substitution sub = is.mgu(at1, at2);
+        if (sub == null)
+            System.out.println("non unificabili.");
+        else
+            System.out.println("sub: " + sub.toString());
+        
                
     }
     

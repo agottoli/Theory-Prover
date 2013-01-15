@@ -1,8 +1,5 @@
 package thProver;
 
-import com.google.common.collect.HashMultiset;
-import java.util.List;
-
 /**
  * A term.
  */
@@ -25,5 +22,7 @@ public interface Term {
 */    
     @Override
     public boolean equals(Object o);
+    
+    public Term applySubstitution(Substitution tau);
 
 }

@@ -79,4 +79,14 @@ public class Variable implements Term {
         return new Variable(symbol);
     }
 
+    @Override
+    public Term applySubstitution(Substitution tau) {
+        Term term = tau.getTerm(this);
+        if (term != null)
+            return term;
+        
+        return this;
+
+    }
+
 }

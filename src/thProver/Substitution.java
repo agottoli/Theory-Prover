@@ -7,6 +7,7 @@ package thProver;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -14,13 +15,13 @@ import java.util.List;
  */
 public class Substitution {
 
-    private HashMap<String, Term> assignments;
+    private Map<Variable, Term> assignments;
 
     /**
      * Constructs an empty substitution.
      */
     public Substitution() {
-        assignments = new HashMap<String, Term>();
+        assignments = new HashMap<>();
     }
 
     /**
@@ -29,9 +30,9 @@ public class Substitution {
      * @param varSymbol the variable symbol
      * @param t the term to assign
      */
-    Substitution(String varSymbol, Term t) {
+    Substitution(Variable var, Term t) {
         this();
-        addAssignment(varSymbol, t);
+        addAssignment(var, t);
     }
 
     /**
@@ -40,12 +41,16 @@ public class Substitution {
      * @param varSymbol the variable symbol
      * @param t the term to assign
      */
-    final void addAssignment(String varSymbol, Term t) {
-        if (assignments.containsKey(varSymbol))
-            throw new IllegalArgumentException("Substitution: " + varSymbol
+    public void addAssignment(Variable var, Term t) {
+        if (assignments.containsKey(var))
+            throw new IllegalArgumentException("Substitution: " + var
                     + " ha già un assegnamento.");
 
-        assignments.put(varSymbol, t);
+        assignments.put(var, t);
+    }
+    
+    public Map<Variable, Term> getAssignemnts() {
+        return assignments;
     }
 
     @Override
@@ -67,29 +72,37 @@ public class Substitution {
      * @param tau a substitution
      */
     void compose(Substitution tau) {
-        HashMap<String, Term> assignmentsCopy = assignments; // new HashMap<String, Term>();
-        //assignmentsCopy.putAll(assignments);
+        if (assignments == null || tau == null || tau.assignments == null) {
+            assignments = null;
+            return;
+        }
+        
+        
+        // devo copiare perché se cancello una entry
+        // succede la ConcurrentModificationExceprion
+        Map<Variable, Term> assignmentsCopy = new HashMap<>();
+        assignmentsCopy.putAll(assignments);
 
         /* apply tau to all terms in sigma */
-        for (String varSymbol : assignmentsCopy.keySet()) {
-            Term t = assignmentsCopy.get(varSymbol);
+        for (Variable var : assignmentsCopy.keySet()) {
+            Term t = assignmentsCopy.get(var);
             Term tnuovo = applySubstitution(t, tau);
             /* if after the substitution the term equals his variable delete the assignment */
-            if (t.equals(tnuovo))
-                continue;
-            if (t.getSymbol().equals(varSymbol))
+            if (tnuovo.equals(var))
                 // sicuramente è una variabile e della forma x <- x
-                assignments.remove(varSymbol);
+                assignments.remove(var);
+            else if (t.equals(tnuovo))
+                continue;
             else
                 // aggiorno il valore
-                assignments.put(varSymbol, tnuovo);
+                assignments.put(var, tnuovo);
         }
 
         /* add tau's assignments */
-        for (String varSymbol : tau.assignments.keySet())
+        for (Variable var : tau.assignments.keySet())
             /* ... only if not already in original substitution */
-            if (!assignmentsCopy.containsKey(varSymbol))
-                assignments.put(varSymbol, tau.assignments.get(varSymbol));
+            if (!assignmentsCopy.containsKey(var))
+                assignments.put(var, tau.assignments.get(var));
     }
 
     // qua creo nuovi termini e non guardo se già ci sono
@@ -99,36 +112,46 @@ public class Substitution {
             List<Term> args = ((Function) t).getArgs();
             List<Term> argsNuovi = new ArrayList<>();
             /*for (int i = 0; i < args.length; i++)
-                argsNuovi[i] = applySubstitution(args[i], tau);*/
+             argsNuovi[i] = applySubstitution(args[i], tau);*/
             for (Term te : args)
                 argsNuovi.add(applySubstitution(te, tau));
             return new Function(t.getSymbol(), argsNuovi);
         }
-        //if (t instanceof Variable) {
-        Term term = tau.getTerm(t.getSymbol());
-        if (term != null)
-            return term;
-        //} 
+        if (t instanceof Variable) {
+            Term term = tau.getTerm((Variable) t);
+            if (term != null)
+                return term;
+        } 
 
         return t;
     }
+    
+    public Atom applySubstitution(Atom a, Substitution tau) {
+        List<Term> args = a.getArgs();
+        List<Term> argsNuovi = new ArrayList<>();
+        /*for (int i = 0; i < args.length; i++)
+         argsNuovi[i] = applySubstitution(args[i], tau);*/
+        for (Term te : args)
+            argsNuovi.add(applySubstitution(te, tau));
+        return new Atom(a.getSymbol(), argsNuovi);
+    }
 
-    public Term getTerm(String varSymbol) {
-        return assignments.get(varSymbol);
+    public Term getTerm(Variable var) {
+        return assignments.get(var);
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("{ ");
 
-        for (String varSymbol : assignments.keySet())
-            sb.append(varSymbol).append(" <- ").append(assignments.get(varSymbol)).append(", ");
-        /*
-         if (!assignments.isEmpty()) {
+        for (Variable var : assignments.keySet())
+            sb.append(var.toString()).append(" <- ")
+                    .append(assignments.get(var).toString()).append(", ");
+
+        if (!assignments.isEmpty()) {
          sb.deleteCharAt(sb.length() - 2);
          }
-         */
-        sb.append(" }");
+        sb.append("}");
 
         return sb.toString();
     }

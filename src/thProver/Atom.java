@@ -11,7 +11,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- *
+ * Predicate
+ * 
  * @author ale
  */
 public class Atom {
@@ -191,5 +192,12 @@ public class Atom {
 
     int getNArgs() {
         return args.size();
+    }
+    
+    public Atom applySubstitution(Substitution tau) {
+        List<Term> argsNuovi = new ArrayList<>();
+        for (Term te : args)
+            argsNuovi.add(te.applySubstitution(tau));
+        return new Atom(symbol, argsNuovi);
     }
 }

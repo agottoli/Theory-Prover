@@ -141,4 +141,13 @@ public class Function implements Term {
     public int getNArgs() {
         return args.size();
     }
+
+    @Override
+    public Term applySubstitution(Substitution tau) {
+            List<Term> argsNuovi = new ArrayList<>();
+            for (Term te : args)
+                argsNuovi.add(te.applySubstitution(tau));
+            return new Function(getSymbol(), argsNuovi);
+
+    }
 }

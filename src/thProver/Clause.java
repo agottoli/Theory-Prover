@@ -15,7 +15,7 @@ import java.util.Set;
 public class Clause implements Comparable<Clause> {
 
     // NOTA : meglio mettere Set<Literal> perché non ci interessa l'ordine
-    List<Literal> literals; // perché non interessa l'ordine e se ho due letterali uguali me ne tiene solo uno
+    Set<Literal> literals; // perché non interessa l'ordine e se ho due letterali uguali me ne tiene solo uno
     // per velocizzare le operazioni mi divido i letterali positivi dai negativi
     // NOTA: tengo sono gli atomi, visto che so il segno
     List<Literal> posLits;
@@ -34,7 +34,7 @@ public class Clause implements Comparable<Clause> {
      * Constructs an empty clause.
      */
     public Clause() {
-        literals = new ArrayList<>();
+        literals = new LinkedHashSet<>();
         posLits = new ArrayList<>();
         negLits = new ArrayList<>();
     }
@@ -88,7 +88,7 @@ public class Clause implements Comparable<Clause> {
                 negLits.add(literal);
     }
 
-    public List<Literal> getLiterals() {
+    public Set<Literal> getLiterals() {
         return literals;
     }
 
@@ -196,9 +196,10 @@ public class Clause implements Comparable<Clause> {
     }
 
     public Set<Clause> getFactors() {
-        if (factors == null)
-            calculateFactors();
-        return factors;
+        if (factors != null)
+            return factors;
+        
+        return factors; //=
     }
 
     private void calculateFactors() {
@@ -214,16 +215,16 @@ public class Clause implements Comparable<Clause> {
             else
                 // Look at the negative literals
                 lits.addAll(negLits);
-            /* DA FARE 
+            /* DA FARE */
              for (int x = 0; x < lits.size(); x++)
-             for (int y = x + 1; y < lits.size(); y++) {
-             Atom atomX = lits.get(x);
-             Atom atomY = lits.get(y);
-
-             theta.clear();
+                for (int y = x + 1; y < lits.size(); y++) {
+                    Literal litX = lits.get(x);
+                    Literal litY = lits.get(y);
+                    // initializzo la sostituzione
+                    theta.clear();
                     
-             Map<Variable, Term> substitution = unify(atomX, atomY, theta);
-                    
+             //Map<Variable, Term> substitution = unify(litX, litY, theta);
+             /*       
              if (null != substitution) {
              List<Literal> posLits = new ArrayList<Literal>();
              List<Literal> negLits = new ArrayList<Literal>();
@@ -260,19 +261,20 @@ public class Clause implements Comparable<Clause> {
              c.calculateFactors(nonTrivialFactors);
              nonTrivialFactors.addAll(c.getFactors());
              }
+             }*/
              }
-             }
-             */
+             
         }
     }
     
     public Set<Clause> orderedResolvents(Clause othC) {
         // DA FARE
-        return null;
+        return new LinkedHashSet<>();
     }
     
     public boolean subsumes(Clause othC) {
         // DA FARE
         return false;
     }
+   
 }

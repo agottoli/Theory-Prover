@@ -56,7 +56,7 @@ public class Main {
         /*
          * Read the formula
          */
-        int choice = 2;
+        int choice = 1;
         Reader formulaReader;
         if (interactive) {
             String stringa = 
@@ -67,12 +67,12 @@ public class Main {
                     //"sos: Q(c)" +
                     //"clauses: P(ack(succ(x),succ(y))) | P(ack(x,ack(succ(x),y)))";
                     //"clauses: P(ack(succ(x),succ(y))) | P(ack(x,ack(succ(x),y)))";
-                    "clauses: R(x) | ~P(f(0)) | R(a) | P(f(f(z))) | P(f(z)) \n Q(b)\n";
-            
+                   //"clauses: R(x) | ~P(f(0)) | R(a) | P(f(f(z))) | P(f(z)) \n Q(b)\n";
+            "clauses: P(per(x,piu(y,z))) | P(piu(per(x,y),per(x,z)))";
             // associatività per mul # e per lex > (ok)    
             //"clauses: P(f(f(x,y),z)) | P(f(x,f(y,z))) \n Q(b)\n";
             // distributività se per>piu per mul > e per lex > (ok) 
-            //"clauses: P(per(x,piu(y,z)) | P(per(x,y),per(x,z))";
+            //"clauses: P(per(x,piu(y,z))) | P(piu(per(x,y),per(x,z)))";
             // se ack>succ mul > e lex > , weight = 1 KBO1 >
             //"clauses: P(ack(0,y)) | P(succ(y))";
             // se ack>succ mul # e lex > (ok)

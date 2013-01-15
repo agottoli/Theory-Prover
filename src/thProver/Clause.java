@@ -17,8 +17,8 @@ public class Clause implements Comparable<Clause> {
     List<Literal> literals;
     // per velocizzare le operazioni mi divido i letterali positivi dai negativi
     // NOTA: tengo sono gli atomi, visto che so il segno
-    List<Atom> posLits;
-    List<Atom> negLits;
+    List<Literal> posLits;
+    List<Literal> negLits;
     // mi salvo tutti i fattori di una clausola per non doverli rigenerare
     // ad ogni risoluzione
     Set<Clause> factors;
@@ -31,45 +31,50 @@ public class Clause implements Comparable<Clause> {
         posLits = new ArrayList<>();
         negLits = new ArrayList<>();
     }
-
-    /**
+/*
+    /* *
      * Constructs a clause containing the given literals.
      *
      * @param lits the list of literals
-     */
+     * /
     Clause(Literal... lits) {
         literals = new ArrayList<>(Arrays.asList(lits));
         posLits = new ArrayList<>();
         negLits = new ArrayList<>();
         for (Literal l : lits)
             if (l.isPositive())
-                posLits.add(l.getAtom());
+                posLits.add(l);
             else
-                negLits.add(l.getAtom());
+                negLits.add(l);
     }
-
+*/
     /**
      * Adds a literal to this clause.
      *
      * @param literal the literal to add
      */
     public void addLiteral(Literal literal) {
+        int nLiterals = literals.size();
         literals.add(literal);
-        if (literal.isPositive())
-            posLits.add(literal.getAtom());
-        else
-            negLits.add(literal.getAtom());
+        if (nLiterals != literals.size()) {
+            // è un nuovo letterale quindi lo devo aggiungere anche alle liste
+            // dei letterali positivi e negativi
+            if (literal.isPositive())
+                posLits.add(literal);
+            else
+                negLits.add(literal);
+        }
     }
 
     public List<Literal> getLiterals() {
         return literals;
     }
 
-    public List<Atom> getPosiviveLiterals() {
+    public List<Literal> getPosiviveLiterals() {
         return posLits;
     }
 
-    public List<Atom> getNegativeLiterals() {
+    public List<Literal> getNegativeLiterals() {
         return negLits;
     }
 
@@ -128,18 +133,16 @@ public class Clause implements Comparable<Clause> {
      * @return <code>true</code> iff this clause is a tautology
      */
     boolean isTautology() {
-        /*if (posLits.size() <= negLits.size()) {*/
-        // try for each positive literal...
-        for (Atom a : posLits)
-            if (negLits.contains(a))
-                return true;
-        /*} else {
-         // try for each negative literal
-         for (Atom a : negLits) {
-         if (posLits.contains(a))
-         return true;
-         }*/
-
+        
+        for (Literal l1 : posLits) {
+            Atom a1 = l1.getAtom();
+            for (Literal l2 : negLits) {
+                Atom a2 = l2.getAtom();
+                if (a1.equals(a2))
+                    return true;
+            }
+        }
+        
         // no complementary literal found
         return false;
     }
@@ -154,7 +157,7 @@ public class Clause implements Comparable<Clause> {
         factors = new LinkedHashSet<>(); // oppure LinkedHashSet<>(); che non ha il problema dell'incremento dei costi di TreeSet
  
         Map<Variable, Term> theta = new HashMap<Variable, Term>();
-        List<Atom> lits = new ArrayList<>();
+        List<Literal> lits = new ArrayList<>();
         for (int i = 0; i < 2; i++) {
             lits.clear();
             if (i == 0)
@@ -163,7 +166,7 @@ public class Clause implements Comparable<Clause> {
             else
                 // Look at the negative literals
                 lits.addAll(negLits);
-            
+           /* DA FARE 
             for (int x = 0; x < lits.size(); x++)
                 for (int y = x + 1; y < lits.size(); y++) {
                     Atom atomX = lits.get(x);
@@ -211,6 +214,7 @@ public class Clause implements Comparable<Clause> {
                             }
                     }
                 }
+                */
         }
     }
 }

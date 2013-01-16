@@ -88,4 +88,9 @@ public class Constant implements Term {
     public Term applySubstitution(Variable var, Term ter) {
         return this;
     }
+
+    @Override
+    public Term renameVariables(long num) {
+        return this;
+    }
 }

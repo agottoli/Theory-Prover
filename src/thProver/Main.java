@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 /**
  * Ragionamento Automatico, I semestre, Anno Accademico 2012-2013
@@ -68,7 +69,7 @@ public class Main {
                     //"clauses: P(z,y) | ~P(x,g(u)) | P(x,g(x)) | ~P(u,v) | Q(b)";
                     //"sos: Q(c)" +
                     //"clauses: P(ack(succ(x),succ(y))) | P(ack(x,ack(succ(x),y)))";
-                    "clauses: R(x) | ~P(f(0)) | R(a) | P(f(f(z))) | P(f(z)) \n Q(b)\n";
+                    //"clauses: R(x) | ~P(f(0)) | R(a) | P(f(f(z))) | P(f(z)) \n Q(b)\n";
             //"clauses: P(per(x,piu(y,z))) | P(piu(per(x,y),per(x,z)))";
             // associatività per mul # e per lex > (ok)    
             //"clauses: P(f(f(x,y),z)) | P(f(x,f(y,z))) \n Q(b)\n";
@@ -80,6 +81,8 @@ public class Main {
             //"clauses: P(ack(succ(x),a)) | P(ack(x,succ(a)))";
             // se ack>succ mul < e lex > (ok)
             //"clauses: P(ack(succ(x),succ(y))) | P(ack(x,ack(succ(x),y)))";
+            // esempio trova tutti i risolventi
+            "clauses: ~P(x,y,u) | ~P(y,z,v) | ~P(x,v,w) | P(u,z,w) ; P(g(x,y),x,y)";
             formulaReader = new StringReader(stringa);
             //formulaReader = new StringReader(startInteractive());
         } else {
@@ -96,7 +99,9 @@ public class Main {
         
         /* ???? prova ordinamento */
         System.out.println("PROVA ORDINAMENTO:");
-        Clause c = f.getClauses().iterator().next();
+        Iterator<Clause> it = f.getClauses().iterator();
+        Clause c = it.next();
+        Clause othC = it.next();
         System.out.println("c: " + c.toString());
         
         /* Check ORDERING */
@@ -126,10 +131,22 @@ public class Main {
         */
         
         /* Letterali massimali */
-        List<Literal> maxLits = c.getMaximalLiterals(or);
-        System.out.println(maxLits.toString());
-        System.out.println(c.getFactorsString());
-        System.out.println(c.getMaximalFactorsString());
+        //c.getFactors();
+        //List<Literal> maxLits = c.getMaximalLiterals(or);
+        //c.getMaximalFactors(or);
+         System.out.println(System.nanoTime());
+System.out.println(System.nanoTime());
+System.out.println(System.nanoTime());
+System.out.println(System.nanoTime());System.out.println(System.nanoTime());
+System.out.println(System.nanoTime());
+System.out.println(System.nanoTime());
+
+         Set<Clause> res = c.allTheResolvents(othC);
+        //System.out.println(maxLits.toString());
+        //System.out.println(c.getFactorsString());
+        //System.out.println(c.getMaximalFactorsString());
+        System.out.println("\n\n\n-------------------------" + res.toString() 
+                + "-------------------------\n\n\n");
         
         // prova trovare lista di letterali massimali
         //System.out.println("lits massimali: " + or.getMaximalLiterals(c));

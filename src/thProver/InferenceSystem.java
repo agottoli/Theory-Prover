@@ -34,16 +34,16 @@ public class InferenceSystem {
         Term xSub = x.applySubstitution(sub);
         Term ySub = y.applySubstitution(sub);
         if (xSub instanceof Variable) {
-            sub.addAssignment((Variable) x, y);
+            sub.addAssignment((Variable) xSub, ySub);
             return;
         }
         if (ySub instanceof Variable) {
-            sub.addAssignment((Variable) y, x);
+            sub.addAssignment((Variable) ySub, xSub);
             return;
         }
-        if (x instanceof Function && y instanceof Function
-                && ((Function) x).getSymbol().equals(((Function) y).getSymbol())) {
-            mgu(((Function) x).getArgs(), ((Function) y).getArgs(), sub);
+        if (xSub instanceof Function && ySub instanceof Function
+                && ((Function) xSub).getSymbol().equals(((Function) ySub).getSymbol())) {
+            mgu(((Function) xSub).getArgs(), ((Function) ySub).getArgs(), sub);
             return;
         }
 

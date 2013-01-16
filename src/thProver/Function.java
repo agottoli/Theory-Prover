@@ -155,4 +155,14 @@ public class Function implements Term {
         return new Function(getSymbol(), argsNuovi);
 
     }
+
+    @Override
+    public Term renameVariables(long num) {
+        List<Term> argsNuovi = new ArrayList<>();
+        for (Term te : args)
+            argsNuovi.add(te.renameVariables(num));
+        if (argsNuovi.equals(args))
+            return this;
+        return new Function(getSymbol(), argsNuovi);
+    }
 }

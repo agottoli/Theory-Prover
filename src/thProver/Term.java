@@ -29,5 +29,7 @@ public interface Term {
     public Term applySubstitution(Substitution tau);
     
     public Term applySubstitution(Variable var, Term ter);
+    
+    public Term renameVariables(long num);
 
 }

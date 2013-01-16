@@ -83,4 +83,9 @@ public class Constant implements Term {
     public Term applySubstitution(Substitution tau) {
         return this;
     }
+
+    @Override
+    public Term applySubstitution(Variable var, Term ter) {
+        return this;
+    }
 }

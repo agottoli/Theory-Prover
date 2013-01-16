@@ -28,8 +28,11 @@ public class Clause implements Comparable<Clause> {
     // mi salvo tutti i fattori di una clausola per non doverli rigenerare
     // ad ogni risoluzione
     Set<Clause> factors;
+    Set<Clause> maximalFactors;
     // lista dei letterali massimali
     private List<Literal> maximalLits;
+    List<Literal> posMaximalLits;
+    List<Literal> negMaximalLits;
 
     /**
      * Constructs an empty clause.
@@ -210,7 +213,20 @@ public class Clause implements Comparable<Clause> {
         if (maximalLits != null)
             return maximalLits;
 
-        return ord.getMaximalLiterals(this);
+        calculateMaximalLits(ord);
+        posMaximalLits = new ArrayList<>();
+        negMaximalLits = new ArrayList<>();
+        for (Literal l : maximalLits) {
+            if (l.isPositive())
+                posMaximalLits.add(l);
+            else
+                negMaximalLits.add(l);
+        }
+        return maximalLits;
+    }
+    
+    public void calculateMaximalLits(Ordering ord) {
+        maximalLits = ord.getMaximalLiterals(this);
     }
 
     public Set<Clause> getFactors() {
@@ -218,6 +234,13 @@ public class Clause implements Comparable<Clause> {
            calculateFactors();
         
         return factors; //=
+    }
+    
+    public Set<Clause> getMaximalFactors() {
+        if (maximalFactors == null)
+           calculateMaximalFactors();
+        
+        return maximalFactors; //=
     }
 
     private void calculateFactors() {
@@ -229,7 +252,7 @@ public class Clause implements Comparable<Clause> {
         List<Literal> lits = new ArrayList<>();
 
         // provvisorio per mgu
-        InferenceSystem is = new InferenceSystem();
+        //InferenceSystem is = new InferenceSystem();
 
         for (int i = 0; i < 2; i++) {
             lits.clear();
@@ -249,10 +272,49 @@ public class Clause implements Comparable<Clause> {
                     //substitution.getAssignemnts().clear();
 
                     //Map<Variable, Term> substitution = unify(litX, litY, theta);
-                    substitution = is.mgu(litX, litY, true);
+                    substitution = InferenceSystem.mgu(litX, litY, true);
 
                     if (null != substitution)
                         factors.add(this.applySubstitution(substitution));
+                }
+
+        }
+    }
+    
+    // prima di chiamarlo devo calcolare i letterali massimali dato un ordinamento
+    private void calculateMaximalFactors() {
+        maximalFactors = new LinkedHashSet<>(); // oppure LinkedHashSet<>(); che non ha il problema dell'incremento dei costi di TreeSet
+
+        //Map<Variable, Term> theta = new HashMap<Variable, Term>();
+        Substitution substitution;
+
+        List<Literal> lits = new ArrayList<>();
+
+        // provvisorio per mgu
+        //InferenceSystem is = new InferenceSystem();
+
+        for (int i = 0; i < 2; i++) {
+            lits.clear();
+            if (i == 0)
+                // Look at the positive literals
+                lits.addAll(posMaximalLits);
+            else
+                // Look at the negative literals
+                lits.addAll(negMaximalLits);
+            /* DA FARE */
+            for (int x = 0; x < lits.size(); x++)
+                for (int y = x + 1; y < lits.size(); y++) {
+                    Literal litX = lits.get(x);
+                    Literal litY = lits.get(y);
+                    // initializzo la sostituzione
+                    //theta.clear();
+                    //substitution.getAssignemnts().clear();
+
+                    //Map<Variable, Term> substitution = unify(litX, litY, theta);
+                    substitution = InferenceSystem.mgu(litX, litY, true);
+
+                    if (null != substitution && substitution.isWellFormed())
+                        maximalFactors.add(this.applySubstitution(substitution));
                 }
 
         }
@@ -279,8 +341,27 @@ public class Clause implements Comparable<Clause> {
     
     public String getFactorsString() {
         StringBuilder sb = new StringBuilder("factors: ");
+        if (factors == null)
+            calculateFactors();
+        
         boolean flag = true;
         for (Clause c : factors)
+            if (flag) {
+                flag = false;
+                sb.append(c.toString());
+            } else {
+                sb.append(" ; ").append(c.toString());
+            }
+        return sb.toString(); 
+    }
+    
+    public String getMaximalFactorsString() {
+        StringBuilder sb = new StringBuilder("maximalFactors: ");
+        if (maximalFactors == null)
+            calculateMaximalFactors();
+        
+        boolean flag = true;
+        for (Clause c : maximalFactors)
             if (flag) {
                 flag = false;
                 sb.append(c.toString());

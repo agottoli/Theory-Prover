@@ -144,4 +144,15 @@ public class Function implements Term {
         return new Function(getSymbol(), argsNuovi);
 
     }
+    
+    @Override
+    public Term applySubstitution(Variable var, Term ter) {
+        List<Term> argsNuovi = new ArrayList<>();
+        for (Term te : args)
+            argsNuovi.add(te.applySubstitution(var, ter));
+        if (argsNuovi.equals(args))
+            return this;
+        return new Function(getSymbol(), argsNuovi);
+
+    }
 }

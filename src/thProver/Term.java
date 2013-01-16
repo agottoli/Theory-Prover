@@ -27,5 +27,7 @@ public interface Term {
     public int hashCode();
     
     public Term applySubstitution(Substitution tau);
+    
+    public Term applySubstitution(Variable var, Term ter);
 
 }

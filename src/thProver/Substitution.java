@@ -32,7 +32,7 @@ public class Substitution {
      */
     Substitution(Variable var, Term t) {
         this();
-        addAssignment(var, t);
+        assignments.put(var, t);
     }
 
     /**
@@ -41,16 +41,28 @@ public class Substitution {
      * @param varSymbol the variable symbol
      * @param t the term to assign
      */
-    public void addAssignment(Variable var, Term t) {
-        if (assignments.containsKey(var))
-            throw new IllegalArgumentException("Substitution: " + var
+    public void addAssignment(Variable v, Term t) {
+        if (assignments.containsKey(v))
+            throw new IllegalArgumentException("Substitution: " + v
                     + " ha già un assegnamento.");
 
-        assignments.put(var, t);
+        for (Variable var : assignments.keySet()) {
+            Term term = assignments.get(var);
+            Term termSub = term.applySubstitution(v, t);
+            if (!term.equals(termSub))
+                assignments.put(var, termSub);
+
+        }
+
+        assignments.put(v, t);
+    }
+
+    public Map<Variable, Term> getAssignments() {
+        return assignments;
     }
     
-    public Map<Variable, Term> getAssignemnts() {
-        return assignments;
+    public void setAssignments(Map<Variable, Term> map) {
+        assignments = map;
     }
 
     @Override
@@ -76,22 +88,24 @@ public class Substitution {
             assignments = null;
             return;
         }
-        
-        
+
+
         // devo copiare perché se cancello una entry
-        // succede la ConcurrentModificationExceprion
+        // succede la ConcurrentModificationException
         Map<Variable, Term> assignmentsCopy = new HashMap<>();
         assignmentsCopy.putAll(assignments);
 
         /* apply tau to all terms in sigma */
         for (Variable var : assignmentsCopy.keySet()) {
             Term t = assignmentsCopy.get(var);
-            Term tnuovo = applySubstitution(t, tau);
+            Term tnuovo = t.applySubstitution(tau);
             /* if after the substitution the term equals his variable delete the assignment */
-            if (tnuovo.equals(var))
+            if (tnuovo.equals(var)) {
                 // sicuramente è una variabile e della forma x <- x
                 assignments.remove(var);
-            else if (t.equals(tnuovo))
+                continue;
+            }
+            if (t.equals(tnuovo)) // la sostituzione non ha avuto effetto
                 continue;
             else
                 // aggiorno il valore
@@ -104,37 +118,38 @@ public class Substitution {
             if (!assignmentsCopy.containsKey(var))
                 assignments.put(var, tau.assignments.get(var));
     }
+    /*
+     // qua creo nuovi termini e non guardo se già ci sono
+     // quindi posso introdurre termini doppi
+     public Term applySubstitution(Term t, Substitution tau) {
+     if (t instanceof Function) {
+     List<Term> args = ((Function) t).getArgs();
+     List<Term> argsNuovi = new ArrayList<>();
+     / *for (int i = 0; i < args.length; i++)
+     argsNuovi[i] = applySubstitution(args[i], tau);* /
+     for (Term te : args)
+     argsNuovi.add(applySubstitution(te, tau));
+     return new Function(t.getSymbol(), argsNuovi);
+     }
+     if (t instanceof Variable) {
+     Term term = tau.getTerm((Variable) t);
+     if (term != null)
+     return term;
+     } 
 
-    // qua creo nuovi termini e non guardo se già ci sono
-    // quindi posso introdurre termini doppi
-    public Term applySubstitution(Term t, Substitution tau) {
-        if (t instanceof Function) {
-            List<Term> args = ((Function) t).getArgs();
-            List<Term> argsNuovi = new ArrayList<>();
-            /*for (int i = 0; i < args.length; i++)
-             argsNuovi[i] = applySubstitution(args[i], tau);*/
-            for (Term te : args)
-                argsNuovi.add(applySubstitution(te, tau));
-            return new Function(t.getSymbol(), argsNuovi);
-        }
-        if (t instanceof Variable) {
-            Term term = tau.getTerm((Variable) t);
-            if (term != null)
-                return term;
-        } 
-
-        return t;
-    }
+     return t;
+     }
     
-    public Atom applySubstitution(Atom a, Substitution tau) {
-        List<Term> args = a.getArgs();
-        List<Term> argsNuovi = new ArrayList<>();
-        /*for (int i = 0; i < args.length; i++)
-         argsNuovi[i] = applySubstitution(args[i], tau);*/
-        for (Term te : args)
-            argsNuovi.add(applySubstitution(te, tau));
-        return new Atom(a.getSymbol(), argsNuovi);
-    }
+     public Atom applySubstitution(Atom a, Substitution tau) {
+     List<Term> args = a.getArgs();
+     List<Term> argsNuovi = new ArrayList<>();
+     / *for (int i = 0; i < args.length; i++)
+     argsNuovi[i] = applySubstitution(args[i], tau);* /
+     for (Term te : args)
+     argsNuovi.add(applySubstitution(te, tau));
+     return new Atom(a.getSymbol(), argsNuovi);
+     }
+     */
 
     public Term getTerm(Variable var) {
         return assignments.get(var);
@@ -148,11 +163,33 @@ public class Substitution {
             sb.append(var.toString()).append(" <- ")
                     .append(assignments.get(var).toString()).append(", ");
 
-        if (!assignments.isEmpty()) {
-         sb.deleteCharAt(sb.length() - 2);
-         }
+        if (!assignments.isEmpty())
+            sb.deleteCharAt(sb.length() - 2);
         sb.append("}");
 
         return sb.toString();
+    }
+
+    public void kill() {
+        assignments = null;
+    }
+    
+    public boolean isKilled() {
+        return assignments == null;
+    }
+    
+    public Substitution copy() {
+        Substitution s = new Substitution();
+        Map<Variable, Term> m = new HashMap<>();
+        m.putAll(assignments);
+        s.setAssignments(m);
+        return s;
+    }
+    
+    public boolean isWellFormed() {
+        // DA MIGLIORARE
+        Substitution copia = this.copy();
+        copia.compose(this);
+        return copia.equals(this);
     }
 }

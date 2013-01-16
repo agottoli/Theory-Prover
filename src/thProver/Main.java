@@ -62,13 +62,13 @@ public class Main {
         if (interactive) {
             String stringa = 
                     "const: a,b,0,c,d\n" +
-                    "prec: P>R>ack>succ>per>piu>f>g>a>c>d>0\n" +
+                    "prec: P>R>Q>ack>succ>per>piu>f>g>a>c>d>0\n" +
                     "weightVars: 1\n" +
                     "weights: P = 1; ack = 1; succ = 1; 0 = 1; a = 1\n" +
-                    "clauses: P(z,y) | P(x,g(x)) | ~P(u,v) | Q(b)";
+                    //"clauses: P(z,y) | ~P(x,g(u)) | P(x,g(x)) | ~P(u,v) | Q(b)";
                     //"sos: Q(c)" +
                     //"clauses: P(ack(succ(x),succ(y))) | P(ack(x,ack(succ(x),y)))";
-                    //"clauses: R(x) | ~P(f(0)) | R(a) | P(f(f(z))) | P(f(z)) \n Q(b)\n";
+                    "clauses: R(x) | ~P(f(0)) | R(a) | P(f(f(z))) | P(f(z)) \n Q(b)\n";
             //"clauses: P(per(x,piu(y,z))) | P(piu(per(x,y),per(x,z)))";
             // associatività per mul # e per lex > (ok)    
             //"clauses: P(f(f(x,y),z)) | P(f(x,f(y,z))) \n Q(b)\n";
@@ -91,11 +91,11 @@ public class Main {
         parser.Start();
         f = parser.getCNFFormula();
         
-        System.out.println(f.toString());
+        //System.out.println(f.toString());
         //System.out.println(f.getTermsString());
         
-        // ???? prova ordinamento
-        System.out.println("PROVA ORDINAMENTO LETTERALI:");
+        /* ???? prova ordinamento */
+        System.out.println("PROVA ORDINAMENTO:");
         Clause c = f.getClauses().iterator().next();
         System.out.println("c: " + c.toString());
         
@@ -112,6 +112,7 @@ public class Main {
         }
 
         String tipo = or.getTipeOrdering();
+        /* Ordinamento letterali * /
         Iterator<Literal> itL = c.getLiterals().iterator();
         
         Literal l1 = itL.next();
@@ -122,7 +123,13 @@ public class Main {
             System.out.println(l1.toString() + " <" + tipo + " " + l2.toString());
         else
             System.out.println(l1.toString() + " #" + tipo + " " + l2.toString());
-
+        */
+        
+        /* Letterali massimali */
+        List<Literal> maxLits = c.getMaximalLiterals(or);
+        System.out.println(maxLits.toString());
+        System.out.println(c.getFactorsString());
+        System.out.println(c.getMaximalFactorsString());
         
         // prova trovare lista di letterali massimali
         //System.out.println("lits massimali: " + or.getMaximalLiterals(c));
@@ -215,6 +222,7 @@ public class Main {
         System.out.println(c.getFactorsString());
         */
         
+        /*
         // prova MultiSet
         List<Term> ar = c.getLiterals().iterator().next().getAtom().getArgs();
         MultiSet ms = new MultiSet((List<Object>) (List<?>) ar);
@@ -233,7 +241,7 @@ public class Main {
                     System.out.println(t1 + " = " + t2);
                 else
                     System.out.println(t1 + " != " + t2);
-        
+        */
         
     }
     

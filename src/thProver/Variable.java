@@ -96,4 +96,11 @@ public class Variable implements Term {
 
     }
 
+    @Override
+    public Term applySubstitution(Variable var, Term ter) {
+        if (this.equals(var))
+            return ter;
+        return this;
+    }
+
 }

@@ -23,6 +23,9 @@ public interface Term {
     @Override
     public boolean equals(Object o);
     
+    @Override
+    public int hashCode();
+    
     public Term applySubstitution(Substitution tau);
 
 }

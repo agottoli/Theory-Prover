@@ -1,6 +1,5 @@
 package thProver;
 
-import com.google.common.collect.HashMultiset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -126,14 +125,9 @@ public class Function implements Term {
         return hash;
     }
 
-    public HashMultiset<Object> getArgsMultiset() {
-        // utilizzo la classe trovata su google-code per creare un multiinsieme
-        HashMultiset<Object> ms = HashMultiset.create();
-        /*for (int i = 0; i < args.length; i++) {
-         ms.add(args[i]);
-         }*/
-        ms.addAll(args);
-        return ms;
+    public MultiSet getArgsMultiset() {
+        return new MultiSet((List<Object>) (List<?>) args);
+
     }
 
     public int getNArgs() {

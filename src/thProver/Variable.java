@@ -4,9 +4,9 @@
  */
 package thProver;
 
-import com.google.common.collect.HashMultiset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -48,10 +48,17 @@ public class Variable implements Term {
        
         // aggiunta
         if (obj instanceof Variable) {
-            return symbol.equals((Variable) obj);
+            return symbol.equals(((Variable) obj).symbol);
         }
         
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 79 * hash + Objects.hashCode(this.symbol);
+        return hash;
     }
 /*
     @Override

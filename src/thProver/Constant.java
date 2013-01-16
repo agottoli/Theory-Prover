@@ -1,8 +1,8 @@
 package thProver;
 
-import com.google.common.collect.HashMultiset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -71,6 +71,13 @@ public class Constant implements Term {
         return null;
     }
 */        
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 97 * hash + Objects.hashCode(this.symbol);
+        return hash;
+    }
 
     @Override
     public Term applySubstitution(Substitution tau) {

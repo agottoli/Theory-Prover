@@ -4,11 +4,10 @@
  */
 package thProver;
 
-import com.google.common.collect.HashMultiset;
-import com.google.common.collect.Multiset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Predicate
@@ -136,6 +135,14 @@ public class Atom {
 
     }
 
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 97 * hash + Objects.hashCode(this.symbol);
+        hash = 97 * hash + Objects.hashCode(this.args);
+        return hash;
+    }
+
     public int symbolsNumber() {
         if (symsNum != 0)
             return symsNum;
@@ -171,23 +178,12 @@ public class Atom {
         //return Collections.unmodifiableList(args);
     }
 
-    public Multiset<Object> getArgsMultiset() {
-        //if (args == null)
-        //    return null;
-        
-        HashMultiset<Object> ms = HashMultiset.create();
-        /*for (Term t : args)
-            ms.add(t);*/
-        ms.addAll(args);
-        return ms;
+    public MultiSet getArgsMultiset() {
+        return new MultiSet((List<Object>) (List<?>) args);
     }
 
-    Multiset<Object> getMultiset() {
-        //if (args == null)
-        //    return null;
-        HashMultiset<Object> ms = HashMultiset.create();
-        ms.add(this);
-        return ms;
+    MultiSet getMultiset() {
+        return new MultiSet(this);
     }
 
     int getNArgs() {

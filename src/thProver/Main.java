@@ -68,8 +68,7 @@ public class Main {
                     "clauses: P(z,y) | P(x,g(x)) | ~P(u,v) | Q(b)";
                     //"sos: Q(c)" +
                     //"clauses: P(ack(succ(x),succ(y))) | P(ack(x,ack(succ(x),y)))";
-                    //"clauses: P(ack(succ(x),succ(y))) | P(ack(x,ack(succ(x),y)))";
-                   //"clauses: R(x) | ~P(f(0)) | R(a) | P(f(f(z))) | P(f(z)) \n Q(b)\n";
+                    //"clauses: R(x) | ~P(f(0)) | R(a) | P(f(f(z))) | P(f(z)) \n Q(b)\n";
             //"clauses: P(per(x,piu(y,z))) | P(piu(per(x,y),per(x,z)))";
             // associatività per mul # e per lex > (ok)    
             //"clauses: P(f(f(x,y),z)) | P(f(x,f(y,z))) \n Q(b)\n";
@@ -79,8 +78,8 @@ public class Main {
             //"clauses: P(ack(0,y)) | P(succ(y))";
             // se ack>succ mul # e lex > (ok)
             //"clauses: P(ack(succ(x),a)) | P(ack(x,succ(a)))";
-            // se ack>succ mul > e lex > (ok)
-            //"clauses: P(ack(succ(x),succ(y))) | P(ack(x,ack(succ(x),y))";
+            // se ack>succ mul < e lex > (ok)
+            //"clauses: P(ack(succ(x),succ(y))) | P(ack(x,ack(succ(x),y)))";
             formulaReader = new StringReader(stringa);
             //formulaReader = new StringReader(startInteractive());
         } else {
@@ -100,26 +99,9 @@ public class Main {
         Clause c = f.getClauses().iterator().next();
         System.out.println("c: " + c.toString());
         
-        /* Check ORDERING 
-        Ordering or = new Ordering();
-        boolean ordMul = true;
-        String tipo = ordMul ? "{mul}" : "{lex}";
-        
-        or.setPrecedence(f.getPrecedences(), f.getNPrec(), ordMul);
-        
-        Literal l1 = c.literals.get(0);
-        Literal l2 = c.literals.get(1);
-        if (or.isGreater(l1, l2))
-            System.out.println(l1.toString() + " >" + tipo + " " + l2.toString());
-        else if (or.isGreater(l2, l1))
-            System.out.println(l1.toString() + " <" + tipo + " " + l2.toString());
-        else
-            System.out.println(l1.toString() + " #" + tipo + " " + l2.toString());
-        */
-        
-        /* Check KBO */ 
-        Ordering or = new Ordering();
-        
+        /* Check ORDERING */
+        Ordering or = new Ordering();        
+        /* Check KBO */       
         or.setPrecedence(f.getPrecedences(), f.getNPrec());
         or.setWeightsKBO(f.getWeights(), f.getWeightVars());
         switch (choice) {
@@ -128,7 +110,7 @@ public class Main {
             case 2: or.setKBOrdering();
                 
         }
-/*
+
         String tipo = or.getTipeOrdering();
         Iterator<Literal> itL = c.getLiterals().iterator();
         
@@ -141,7 +123,7 @@ public class Main {
         else
             System.out.println(l1.toString() + " #" + tipo + " " + l2.toString());
 
-*/        
+        
         // prova trovare lista di letterali massimali
         //System.out.println("lits massimali: " + or.getMaximalLiterals(c));
         
@@ -227,10 +209,32 @@ public class Main {
         }
         */
         
+        /*
         // GETFACTORS di Clause
         c.getFactors();
         System.out.println(c.getFactorsString());
-               
+        */
+        
+        // prova MultiSet
+        List<Term> ar = c.getLiterals().iterator().next().getAtom().getArgs();
+        MultiSet ms = new MultiSet((List<Object>) (List<?>) ar);
+        System.out.println(ms.toString());
+        ms.addElement(c.getLiterals().iterator().next().getAtom().getArgs().get(0));
+        ms.addElement(c.getLiterals().iterator().next().getAtom().getArgs().get(0));
+        ms.addElement(c.getLiterals().iterator().next().getAtom().getArgs().get(0));
+        Variable z_0 = new Variable("z_0");
+        ms.addElement(z_0);
+        System.out.println(ms.multiset.toString());
+        System.out.println(ms.toString());
+        
+        for (Object t1 : ms.multiset.keySet())
+            for (Object t2 : ms.multiset.keySet())
+                if (t1.equals(t2))
+                    System.out.println(t1 + " = " + t2);
+                else
+                    System.out.println(t1 + " != " + t2);
+        
+        
     }
     
     /******************************************************************/

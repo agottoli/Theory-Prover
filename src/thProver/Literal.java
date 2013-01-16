@@ -1,10 +1,9 @@
 package thProver;
 
-import com.google.common.collect.HashMultiset;
-import com.google.common.collect.Multiset;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A Literal is an Atom with sign.
@@ -83,6 +82,14 @@ public class Literal {
        
        return false;
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 53 * hash + (this.positive ? 1 : 0);
+        hash = 53 * hash + Objects.hashCode(this.atom);
+        return hash;
+    }
     
     public int symbolsNumber() {
         return atom.symbolsNumber();
@@ -98,13 +105,12 @@ public class Literal {
         return l;
     }
 
-    Multiset<Object> getMultiset() {
-        HashMultiset<Object> ms = HashMultiset.create();
-        ms.add(this.atom);
+    MultiSet getMultiset() {
+        MultiSet ms = new MultiSet(this.atom);
         if (isPositive())
-            ms.add(new Atom("Top"));
+            ms.addElement(new Atom("Top"));
         else
-            ms.add(new Atom("Bottom"));
+            ms.addElement(new Atom("Bottom"));
         return ms;
     }
     

@@ -4,8 +4,6 @@
  */
 package thProver;
 
-import com.google.common.collect.HashMultiset;
-import com.google.common.collect.Multiset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -106,8 +104,8 @@ public class Ordering {
             // ma mettiamo il controllo che non si sa mai
             
             if (statusMultiSet) {
-                Multiset<Object> ma = ((Literal) a).getMultiset();
-                Multiset<Object> mb;
+                MultiSet ma = ((Literal) a).getMultiset();
+                MultiSet mb;
                 if (b instanceof Literal)
                     mb = ((Literal) b).getMultiset();
                 else // è un atomo (e probabilmente si tratta di Top o Bottom
@@ -164,7 +162,7 @@ public class Ordering {
 
             
             if (statusMultiSet) {
-                Multiset<Object> msA, msB;
+                MultiSet msA, msB;
                 if (a instanceof Atom) {
                     msA = ((Atom) a).getArgsMultiset();
                     msB = ((Atom) b).getArgsMultiset();
@@ -228,32 +226,29 @@ public class Ordering {
     }
 
 
-    public boolean isGreaterMul(Multiset<Object> a, Multiset<Object> b) {
+    public boolean isGreaterMul(MultiSet a, MultiSet b) {
         if (!a.isEmpty() && b.isEmpty()) {
             // regola 1
             return true;
         }
         int count;
-        for (Object o : a) {
+        for (Object o : a.getDistintElements()) {
             //if (b.contains(o)) {
             if ((count = b.count(o)) > 0) {
                 int countT;
                 if (count != 1 && (countT = a.count(o)) > count) {
                     count = countT;
                 }
-                a.remove(o, count); // non crea problemi perché non itero più sul ciclo
-                b.remove(o, count);
+                a.removeElement(o, count); // non crea problemi perché non itero più sul ciclo
+                b.removeElement(o, count);
                 return isGreaterMul(a, b);
             }
         }
-        for (Object oA : a) {
-            for (Object oB : b) {
+        for (Object oA : a.getDistintElements()) {
+            for (Object oB : b.getDistintElements()) {
                 if (isGreaterMulLex(oA, oB)) {
-                    HashMultiset<Object> copiaB = HashMultiset.create();
-                    /*for (Object c : b)
-                        copiaB.add(c);*/
-                    copiaB.addAll(b);
-                    copiaB.remove(oB);
+                    MultiSet copiaB = b.copy();
+                    copiaB.removeElement(oB);
                     if (isGreaterMul(a, copiaB))
                         return true;
                 }

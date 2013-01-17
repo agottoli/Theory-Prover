@@ -308,18 +308,24 @@ public class Ordering {
                 for (int j = i + 1; j < lits.length; j++)
                     if (lits[j] != null)
                         if (isGreater(lits[i], lits[j])) {
-                            System.out.println(lits[i].toString() + " > " + lits[j].toString()
-                                    + " quindi cancello l2.");
+                            // DEBUG inizio //
+                            //System.out.println(lits[i].toString() + " > " + lits[j].toString()
+                            //        + " quindi cancello l2.");
+                            // DEBUG fine //
                             lits[j] = null;
                         } else if (isGreater(lits[j], lits[i])) {
-                            System.out.println(lits[i].toString() + " < " + lits[j].toString()
-                                    + " quindi cancello l1.");
+                            // DEBUG inizio //
+                            //System.out.println(lits[i].toString() + " < " + lits[j].toString()
+                            //        + " quindi cancello l1.");
+                            // DEBUG fine //
                             lits[i] = null;
                             break; // esce dal while annidato perché ho eliminato 
                             //        l'elemento del while esterno
-                        } else
-                            System.out.println(lits[i].toString() + " # " + lits[j].toString()
-                                    + " quindi li lascio.");
+                        } // DEBUG inizio //
+                            //else
+                            //System.out.println(lits[i].toString() + " # " + lits[j].toString()
+                            //        + " quindi li lascio.");
+                            // DEBUG fine //
         
         List<Literal> maxLits = new ArrayList<>();
         for (int i = 0; i < lits.length; i++) {

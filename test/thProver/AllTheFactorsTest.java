@@ -44,7 +44,9 @@ public class AllTheFactorsTest {
             // se ack>succ mul < e lex > (ok)
             //"clauses: P(ack(succ(x),succ(y))) | P(ack(x,ack(succ(x),y)))";
             // esempio trova tutti i risolventi
-            "clauses: ~P(x,y,u) | ~P(y,z,v) | ~P(x,v,w) | P(u,z,w) ; P(g(x,y),x,y)";
+            //"clauses: ~P(x,y,u) | ~P(y,z,v) | ~P(x,v,w) | P(u,z,w) ; P(g(x,y),x,y)";
+            "clauses: ~P(x,y,u) | R(x) | R(f(z)) | ~P(y,z,v) | ~P(x,v,w) | P(u,z,w)";
+            
             
             formulaReader = new StringReader(stringa);
 

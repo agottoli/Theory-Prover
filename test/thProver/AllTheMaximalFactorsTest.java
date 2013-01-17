@@ -44,7 +44,8 @@ public class AllTheMaximalFactorsTest {
             // se ack>succ mul < e lex > (ok)
             //"clauses: P(ack(succ(x),succ(y))) | P(ack(x,ack(succ(x),y)))";
             // esempio trova tutti i risolventi
-            "clauses: ~P(x,y,u) | ~P(y,z,v) | ~P(x,v,w) | P(u,z,w) ; P(g(x,y),x,y)";
+            //"clauses: ~P(x,y,u) | ~P(y,z,v) | ~P(x,v,w) | P(u,z,w) ; P(g(x,y),x,y)";
+            "clauses: ~P(x,y,u) | R(x) | R(f(z)) | ~P(y,z,v) | ~P(x,v,w) | P(u,z,w)";
             
             formulaReader = new StringReader(stringa);
 
@@ -68,6 +69,7 @@ public class AllTheMaximalFactorsTest {
         or.setWeightsKBO(f.getWeights(), f.getWeightVars());
         
      
+        StringBuilder sb = new StringBuilder();
         
         for (int choice = 0; choice < 3; choice++) {
        
@@ -80,7 +82,6 @@ public class AllTheMaximalFactorsTest {
 
             String tipo = or.getTipeOrdering();
             
-            StringBuilder sb = new StringBuilder();
             sb.append("\nPer ordinamento ").append(tipo);
             
             for (Clause c : f.getClauses()) {
@@ -88,8 +89,10 @@ public class AllTheMaximalFactorsTest {
                 c.getMaximalFactors(or);
                 sb.append(c.getMaximalFactorsString());
             }
-            System.out.println(sb.toString());
+            
         }
+        
+        System.out.println(sb.toString());
         
     }
     

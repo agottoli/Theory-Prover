@@ -56,7 +56,7 @@ public class CNFFormula {
         int hC = nuovo.hashCode();
         if ((c = terms.get(hC)) == null) { // hs)) == null) {
             /* DEBUG inizio */
-            System.out.println(nuovo.toString() + " nuova costante");
+            //System.out.println(nuovo.toString() + " nuova costante");
             /* DEBUG fine */
             
             c = nuovo; // new Constant(key);
@@ -105,7 +105,7 @@ public class CNFFormula {
         int hC = nuovo.hashCode();
         if ((v = terms.get(hC)) == null) {
             /* DEBUG inizio */
-            System.out.println(var.toString() + " nuova variabile");
+            //System.out.println(var.toString() + " nuova variabile");
             /* DEBUG fine */
             
             
@@ -120,7 +120,7 @@ public class CNFFormula {
         int hC = fun.hashCode();
         if ((f = terms.get(hC)) == null) {
             /* DEBUG inizio */
-            System.out.println(fun.toString() + " nuova funzione");
+            //System.out.println(fun.toString() + " nuova funzione");
             /* DEBUG fine */
             
             f = fun;
@@ -134,7 +134,7 @@ public class CNFFormula {
         int hC = term.hashCode();
         if ((t = terms.get(hC)) == null) {
             /* DEBUG inizio */
-            System.out.println(term.toString() + " nuovo termine");
+            //System.out.println(term.toString() + " nuovo termine");
             /* DEBUG fine */
             
             t = term;

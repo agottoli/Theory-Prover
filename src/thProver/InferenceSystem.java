@@ -1,7 +1,9 @@
 package thProver;
 
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -9,8 +11,54 @@ import java.util.List;
  */
 public class InferenceSystem {
 
-    public static Clause resolution(Clause c1, Clause c2, int indexNewClause) {
-        return null; // DA FARE
+    public static Set<Clause> resolution(Clause c1, Clause c2) {
+        return c1.allTheResolvents(c2);
+    }
+    
+    public static Set<Clause> orderedResolution(Clause c1, Clause c2, Ordering ord) {
+        return c1.allTheOrderedResolvents(c2, ord);
+    }
+    
+    public static Set<Clause> resolution(Clause c1, List<Clause> selected, Ordering ord) {
+        Set<Clause> resolvents = new LinkedHashSet<>();
+        for (Clause c2: selected) 
+            resolvents.addAll(c1.allTheResolvents(c2));
+        return resolvents;
+    }
+    
+    public static Set<Clause> orderedResolution(Clause c1, List<Clause> selected, Ordering ord) {
+        Set<Clause> resolvents = new LinkedHashSet<>();
+        for (Clause c2: selected) 
+            resolvents.addAll(c1.allTheOrderedResolvents(c2, ord));
+        return resolvents;
+    }
+    
+    public static Set<Clause> factorization(Clause c) {
+        return c.getFactors();
+    }
+    
+    public static Set<Clause> orderedFactorization(Clause c, Ordering ord) {
+        return c.getMaximalFactors(ord);
+    }
+    
+    public static void tautologyElimination(Clause c) {
+        return; // BOOOOOOOOO
+    }
+    
+    public static void tautologyElimination(List<Clause> c) {
+        return; // BOOOOOOOOO
+    }
+    
+    public static void semplificClause(Clause c, Clause sempl) {
+        // DA FARE
+    }
+    
+    public static void subsumedBy(Clause c, List<Clause> clauses) {
+        // DA FARE
+    }
+    
+    public static void subsume(Clause c, List<Clause> clauses) {
+        // DA FARE
     }
 
     // if mgu == null --> non unificabili

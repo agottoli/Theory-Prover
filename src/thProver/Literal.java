@@ -121,6 +121,13 @@ public class Literal {
         return new Literal(positive, a);
     }
     
+    public Literal applySubstitution(Substitution tau, long time) {
+        Atom a = atom.applySubstitution(tau, time);
+        if (a.equals(atom))
+            return this;
+        return new Literal(positive, a);
+    }
+    
     public Literal renameVariables(long num) {
         Atom a = atom.renameVariables(num);
         if (a.equals(atom))

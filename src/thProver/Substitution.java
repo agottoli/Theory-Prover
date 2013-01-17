@@ -196,4 +196,13 @@ public class Substitution {
         copia.compose(this);
         return copia.equals(this);
     }
+    
+    public void renameVariables(long time) {
+        Map<Variable, Term> temp = assignments;
+        assignments = new LinkedHashMap<>(temp.size());
+        for (Variable key : temp.keySet()) {
+            Term el = temp.get(key).renameVariables(time);
+            assignments.put(key, el);
+        }
+    }
 }

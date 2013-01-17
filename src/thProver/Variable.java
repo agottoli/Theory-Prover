@@ -98,6 +98,16 @@ public class Variable implements Term {
         return this;
 
     }
+    
+    @Override
+    public Term applySubstitution(Substitution tau, long time) {
+        Term term = tau.getTerm(this);
+        if (term != null)
+            return term;
+        
+        return renameVariables(time);
+
+    }
 
     @Override
     public Term applySubstitution(Variable var, Term ter) {

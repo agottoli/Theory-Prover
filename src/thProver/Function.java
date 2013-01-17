@@ -146,6 +146,17 @@ public class Function implements Term {
     }
     
     @Override
+    public Term applySubstitution(Substitution tau, long time) {
+        List<Term> argsNuovi = new ArrayList<>();
+        for (Term te : args)
+            argsNuovi.add(te.applySubstitution(tau, time));
+        if (argsNuovi.equals(args))
+            return this;
+        return new Function(getSymbol(), argsNuovi);
+
+    }
+    
+    @Override
     public Term applySubstitution(Variable var, Term ter) {
         List<Term> argsNuovi = new ArrayList<>();
         for (Term te : args)

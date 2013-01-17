@@ -1,0 +1,25 @@
+###########################################################
+#                                                         #
+# esercizio 22 novembre 2012 (preparazione al compito)    #
+#                                                         #
+# trova tutti i risolventi delle due clausole             #
+# input: (1) ~P(x,y,u) | ~P(y,z,v) | ~P(x,v,w) | P(u,z,w) #
+#        (2) P(g(x,y),x,y)                                #
+#                                                         #
+# fattori di (1): (a) ~P(z,z,v) | ~P(z,v,w) | P(v,z,w)    #
+#                 (b) ~P(x,v,w) | ~P(v,z,v) | P(w,z,w)    #
+#                 (c) ~P(x,x,u) | ~P(x,w,w) | P(u,w,w)    #
+# fattori di (2): nessuno                                 #
+#                                                         #
+# output: ~P(x,z,v) | ~P(g(x,y),v,w) | P(y,z,w)           #
+#         ~P(x,g(x,y),u) | ~P(x,y,w) | P(u,x,w)           #
+#         ~P(g(x,y),y,u) | ~P(y,z,x) | P(u,z,y)           #
+#         ~P(g(x,y),g(x,y),x) | P(x,g(x,y),y)             #
+#         ~P(x,z,x) | P(y,z,y)                            #
+#         ~P(g(y,y),g(y,y),u) | P(u,y,y)                  #
+#                                                         #
+###########################################################
+
+const: a,b,0,c,d
+prec: P>R>Q>ack>succ>per>piu>f>g>a>c>d>0
+clauses: ~P(x,y,u) | ~P(y,z,v) | ~P(x,v,w) | P(u,z,w) ; P(g(x,y),x,y)

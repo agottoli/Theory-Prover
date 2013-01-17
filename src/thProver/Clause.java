@@ -1,5 +1,6 @@
 package thProver;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -280,12 +281,14 @@ public class Clause implements Comparable<Clause> {
                     //substitution = InferenceSystem.mgu(litX, litY, true, substitution);
 
                     if (InferenceSystem.mgu(litX, litY, true, substitution)) {
-                        Clause nuova = this.applySubstitution(substitution);
+                        long time = System.nanoTime();
+                        substitution.renameVariables(time);
+                        Clause nuova = this.applySubstitution(substitution, time);
                         /* DEBUG inizio */
                         System.out.println("\te ottengo " + nuova + "\n\tda sub " + substitution.toString());
                         /* DEBUG fine */
                         if (!nuova.isTautology()) {
-                            nuova.renameVariables();
+                            //nuova.renameVariables();
                             factors.add(nuova);
                         } else {
                              /* DEBUG inizio */
@@ -350,12 +353,15 @@ public class Clause implements Comparable<Clause> {
                     //substitution = InferenceSystem.mgu(litX, litY, true);
 
                     if (InferenceSystem.mgu(litX, litY, true, substitution)) {
-                        Clause nuova = this.applySubstitution(substitution);
+                        long time = System.nanoTime();
+                        substitution.renameVariables(time);
+                        Clause nuova = this.applySubstitution(substitution, time);
+                        
                         /* DEBUG inizio */
                         System.out.println("\te ottengo " + nuova + "\n\tda sub " + substitution.toString());
                         /* DEBUG fine */
                         if (!nuova.isTautology()) {
-                            nuova.renameVariables();
+                            //nuova.renameVariables();
                             maximalFactors.add(nuova);
                         } else {
                              /* DEBUG inizio */
@@ -383,7 +389,7 @@ public class Clause implements Comparable<Clause> {
         // DA FARE
         return false;
     }
-
+/*
     public Clause applySubstitution(Substitution tau) {
         Set<Literal> lits = new LinkedHashSet<>();
         for (Literal l : literals)
@@ -392,19 +398,31 @@ public class Clause implements Comparable<Clause> {
             return this;
         return new Clause(lits);
     }
+*/    
+    public Clause applySubstitution(Substitution tau, long time) {
+        //long time = System.nanoTime();
+        Set<Literal> lits = new LinkedHashSet<>();
+        for (Literal l : literals)
+            lits.add(l.applySubstitution(tau, time));
+        if (lits.equals(literals))
+            return this;
+        return new Clause(lits);
+    }
 
     public String getFactorsString() {
-        StringBuilder sb = new StringBuilder("factors: ");
         if (factors == null)
             calculateFactors();
-
+        if (factors.isEmpty())
+            return "non ci sono fattori.";
+        
+        StringBuilder sb = new StringBuilder();
         boolean flag = true;
         for (Clause c : factors)
             if (flag) {
                 flag = false;
                 sb.append(c.toString());
             } else
-                sb.append(" ; ").append(c.toString());
+                sb.append(";\n").append(c.toString());
         return sb.toString();
     }
 
@@ -412,15 +430,17 @@ public class Clause implements Comparable<Clause> {
         if (maximalFactors == null)
             //calculateMaximalFactors();
             return "maximalFactors: non ancora calcolati.";
-
-        StringBuilder sb = new StringBuilder("maximalFactors: ");
+        if (maximalFactors.isEmpty())
+            return "non ci sono fattori.";
+        
+        StringBuilder sb = new StringBuilder();
         boolean flag = true;
         for (Clause c : maximalFactors)
             if (flag) {
                 flag = false;
                 sb.append(c.toString());
             } else
-                sb.append(" ; ").append(c.toString());
+                sb.append(";\n").append(c.toString());
         return sb.toString();
     }
 
@@ -456,19 +476,21 @@ public class Clause implements Comparable<Clause> {
 
                     if (InferenceSystem.mgu(litX, litY, false, substitution)) {
                         Set<Literal> set = new LinkedHashSet<>();
+                        long time = System.nanoTime();
+                        substitution.renameVariables(time);
                         for (Literal l : literals) {
                             if (l.equals(litX))
                                 continue;
-                            set.add(l.applySubstitution(substitution));
+                            set.add(l.applySubstitution(substitution, time));
                         }
                         for (Literal l : othC.literals) {
                             if (l.equals(litY))
                                 continue;
-                            set.add(l.applySubstitution(substitution));
+                            set.add(l.applySubstitution(substitution, time));
                         }
 
                         Clause nuova = new Clause(set);
-                        nuova.renameVariables();
+                        //nuova.renameVariables();
                         resolvents.add(nuova);
                     }
                 }
@@ -526,19 +548,21 @@ public class Clause implements Comparable<Clause> {
 
                     if (InferenceSystem.mgu(litX, litY, false, substitution)) {
                         Set<Literal> set = new LinkedHashSet<>();
+                        long time = System.nanoTime();
+                        substitution.renameVariables(time);
                         for (Literal l : literals) {
                             if (l.equals(litX))
                                 continue;
-                            set.add(l.applySubstitution(substitution));
+                            set.add(l.applySubstitution(substitution, time));
                         }
                         for (Literal l : othC.literals) {
                             if (l.equals(litY))
                                 continue;
-                            set.add(l.applySubstitution(substitution));
+                            set.add(l.applySubstitution(substitution, time));
                         }
 
                         Clause nuova = new Clause(set);
-                        nuova.renameVariables();
+                        //nuova.renameVariables();
                         resolvents.add(nuova);
                     }
                 }

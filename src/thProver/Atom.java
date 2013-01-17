@@ -199,6 +199,15 @@ public class Atom {
         return new Atom(symbol, argsNuovi);
     }
     
+    public Atom applySubstitution(Substitution tau, long time) {
+        List<Term> argsNuovi = new ArrayList<>();
+        for (Term te : args)
+            argsNuovi.add(te.applySubstitution(tau, time));
+        if (argsNuovi.equals(args))
+            return this;
+        return new Atom(symbol, argsNuovi);
+    }
+    
     public Atom renameVariables(long num) {
         List<Term> argsNuovi = new ArrayList<>();
         for (Term te : args)

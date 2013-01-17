@@ -4,9 +4,7 @@
  */
 package thProver;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -21,7 +19,7 @@ public class Substitution {
      * Constructs an empty substitution.
      */
     public Substitution() {
-        assignments = new HashMap<>();
+        assignments = new LinkedHashMap<>();
     }
 
     /**
@@ -84,15 +82,17 @@ public class Substitution {
      * @param tau a substitution
      */
     void compose(Substitution tau) {
-        if (assignments == null || tau == null || tau.assignments == null) {
-            assignments = null;
+        if (tau.assignments.isEmpty())
+            return;
+        if (assignments.isEmpty()) {
+            assignments = tau.assignments;
             return;
         }
 
 
         // devo copiare perché se cancello una entry
         // succede la ConcurrentModificationException
-        Map<Variable, Term> assignmentsCopy = new HashMap<>();
+        Map<Variable, Term> assignmentsCopy = new LinkedHashMap<>();
         assignmentsCopy.putAll(assignments);
 
         /* apply tau to all terms in sigma */
@@ -169,7 +169,11 @@ public class Substitution {
 
         return sb.toString();
     }
-
+    
+    public void clear() {
+        assignments.clear();
+    }
+/*
     public void kill() {
         assignments = null;
     }
@@ -177,10 +181,10 @@ public class Substitution {
     public boolean isKilled() {
         return assignments == null;
     }
-    
+*/    
     public Substitution copy() {
         Substitution s = new Substitution();
-        Map<Variable, Term> m = new HashMap<>();
+        Map<Variable, Term> m = new LinkedHashMap<>();
         m.putAll(assignments);
         s.setAssignments(m);
         return s;

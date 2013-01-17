@@ -14,9 +14,9 @@ public class InferenceSystem {
     }
 
     // if mgu == null --> non unificabili
-    public static void mgu(Term x, Term y, Substitution sub) {
+    public static boolean mgu(Term x, Term y, Substitution sub) {
         if (x.equals(y))
-            return;
+            return true;
 
         if ((x instanceof Function
                 && (y instanceof Function
@@ -27,66 +27,67 @@ public class InferenceSystem {
                 //                !((Constant) x).getSymbol().equals(((Constant) y).getSymbol()))
                 ) {
             // non sono unificabili ed evito di applicare la sostituzione
-            sub.kill();
-            return;
+            //sub.kill();
+            return false;
         }
 
         Term xSub = x.applySubstitution(sub);
         Term ySub = y.applySubstitution(sub);
         if (xSub instanceof Variable) {
             sub.addAssignment((Variable) xSub, ySub);
-            return;
+            return true;
         }
         if (ySub instanceof Variable) {
             sub.addAssignment((Variable) ySub, xSub);
-            return;
+            return true;
         }
         if (xSub instanceof Function && ySub instanceof Function
                 && ((Function) xSub).getSymbol().equals(((Function) ySub).getSymbol())) {
-            mgu(((Function) xSub).getArgs(), ((Function) ySub).getArgs(), sub);
-            return;
+            return mgu(((Function) xSub).getArgs(), ((Function) ySub).getArgs(), sub);
+            //return;
         }
 
         // se arrivo qua non sono unificabili
-        sub.kill();
+        return false; //sub.kill();
     }
 
-    public static void mgu(List<Term> x, List<Term> y, Substitution sub) {
-        if (sub.isKilled())
-            return;
+    public static boolean mgu(List<Term> x, List<Term> y, Substitution sub) {
+        //if (sub.isKilled())
+        //    return;
 
         Iterator<Term> itX = x.iterator();
         Iterator<Term> itY = y.iterator();
         while (itX.hasNext()) {
-            mgu(itX.next(), itY.next(), sub);
-            if (sub.isKilled())
-                return;
+            //mgu(itX.next(), itY.next(), sub);
+            if (!mgu(itX.next(), itY.next(), sub))
+                return false;
         }
+        // tutti i termini sono unificabili
+        return true;
     }
 
-    public static void mgu(Atom x, Atom y, Substitution sub) {
+    public static boolean mgu(Atom x, Atom y, Substitution sub) {
         if (x.equals(y))
-            return;
+            return true;
 
         if (x.getSymbol().equals(y.getSymbol())) {
-            mgu(x.getArgs(), y.getArgs(), sub);
-            return;
+            return mgu(x.getArgs(), y.getArgs(), sub);
+            //return;
         }
 
-        sub.kill();
+        return false; //sub.kill();
     }
 
-    public static Substitution mgu(Literal x, Literal y, boolean sameSign) {
+    public static boolean mgu(Literal x, Literal y, boolean sameSign, Substitution sub) {
         if ((x.isPositive() == y.isPositive() && sameSign)
                 || (x.isPositive() != y.isPositive() && !sameSign)) {
-            Substitution sub = new Substitution();
-            mgu(x.getAtom(), y.getAtom(), sub);
-            if (!sub.isKilled() && sub.isWellFormed()) 
+            //Substitution sub = new Substitution();
+            if (mgu(x.getAtom(), y.getAtom(), sub) && sub.isWellFormed()) 
                 // ammetto solo sostituzioni ben formate
-                return sub;
+                return true;
         }
         
-        return null;
+        return false;
     }
     /*
      // if mgu == null --> non unificabili

@@ -210,17 +210,16 @@ public class Clause implements Comparable<Clause> {
     }
 
     public List<Literal> getMaximalLiterals(Ordering ord) {
-        if (maximalLits != null)
-            return maximalLits;
-
-        calculateMaximalLits(ord);
-        posMaximalLits = new ArrayList<>();
-        negMaximalLits = new ArrayList<>();
-        for (Literal l : maximalLits)
-            if (l.isPositive())
-                posMaximalLits.add(l);
-            else
-                negMaximalLits.add(l);
+        if (maximalLits == null) {
+            calculateMaximalLits(ord);
+            posMaximalLits = new ArrayList<>();
+            negMaximalLits = new ArrayList<>();
+            for (Literal l : maximalLits)
+                if (l.isPositive())
+                    posMaximalLits.add(l);
+                else
+                    negMaximalLits.add(l);
+        }
         return maximalLits;
     }
 
@@ -243,10 +242,14 @@ public class Clause implements Comparable<Clause> {
     }
 
     private void calculateFactors() {
-        factors = new LinkedHashSet<>(); // oppure LinkedHashSet<>(); che non ha il problema dell'incremento dei costi di TreeSet
+        factors = new LinkedHashSet<>(); 
+        
+        // DEBUG inizio //
+        System.out.println("I fattori di " + toString() + " sono:");
+        // DEBUG fine
 
         //Map<Variable, Term> theta = new HashMap<Variable, Term>();
-        Substitution substitution;
+        Substitution substitution = new Substitution();
 
         List<Literal> lits = new ArrayList<>();
 
@@ -262,45 +265,61 @@ public class Clause implements Comparable<Clause> {
                 // Look at the negative literals
                 lits.addAll(negLits);
 
-            for (int x = 0; x < lits.size(); x++)
+            for (int x = 0; x < lits.size(); x++) {
+                Literal litX = lits.get(x);
                 for (int y = x + 1; y < lits.size(); y++) {
-                    Literal litX = lits.get(x);
                     Literal litY = lits.get(y);
                     // initializzo la sostituzione
                     //theta.clear();
-                    //substitution.getAssignemnts().clear();
+                    substitution.clear();
 
+                    /* DEBUG inizio */
+                    System.out.println("\tvoglio unificare: " + litX + " con " + litY);
+                    /* DEBUG fine */
                     //Map<Variable, Term> substitution = unify(litX, litY, theta);
-                    substitution = InferenceSystem.mgu(litX, litY, true);
+                    //substitution = InferenceSystem.mgu(litX, litY, true, substitution);
 
-                    if (null != substitution) {
+                    if (InferenceSystem.mgu(litX, litY, true, substitution)) {
                         Clause nuova = this.applySubstitution(substitution);
-                        nuova.renameVariables();
-                        factors.add(nuova);
+                        /* DEBUG inizio */
+                        System.out.println("\te ottengo " + nuova + "\n\tda sub " + substitution.toString());
+                        /* DEBUG fine */
+                        if (!nuova.isTautology()) {
+                            nuova.renameVariables();
+                            factors.add(nuova);
+                        } else {
+                             /* DEBUG inizio */
+                            System.out.println("\ttautologia, quindi la cancello.");
+                            /* DEBUG fine */
+                        }
                     }
                 }
+            }
         }
         // DEBUG inizio //
-        //System.out.println("1:" + factors);
+        System.out.println(factors + "\n");
         // DEBUG fine
         // ??? devo trovare anche i fattori dei fattori? se lo faccio calcolo 2 volte gli stessi risolventi...
-        Set<Clause> aggiuntivi = new HashSet<>();
+        Set<Clause> aggiuntivi = new LinkedHashSet<>();
         for (Clause c : factors)
             aggiuntivi.addAll(c.getFactors());
         factors.addAll(aggiuntivi);
         // DEBUG inizio //
-        //System.out.println("2:" + factors);
+        System.out.println("più aggiunti anche i fattori dei sui fattori ricorsivamente\nottengo per " + toString() + "\n->" + factors + "\n");
         // DEBUG fine
     }
 
     private void calculateMaximalFactors(Ordering ord) {
         getMaximalLiterals(ord); // così se non già calcolati non da problemi
 
+        // DEBUG inizio //
+        System.out.println("I fattori MASSIMALI di " + toString() + " sono:");
+        // DEBUG fine
 
         maximalFactors = new LinkedHashSet<>(); // oppure LinkedHashSet<>(); che non ha il problema dell'incremento dei costi di TreeSet
 
         //Map<Variable, Term> theta = new HashMap<Variable, Term>();
-        Substitution substitution;
+        Substitution substitution = new Substitution();
 
         List<Literal> lits = new ArrayList<>();
 
@@ -316,34 +335,47 @@ public class Clause implements Comparable<Clause> {
                 // Look at the negative literals
                 lits.addAll(negMaximalLits);
 
-            for (int x = 0; x < lits.size(); x++)
+            for (int x = 0; x < lits.size(); x++) {
+                Literal litX = lits.get(x);
                 for (int y = x + 1; y < lits.size(); y++) {
-                    Literal litX = lits.get(x);
                     Literal litY = lits.get(y);
                     // initializzo la sostituzione
                     //theta.clear();
-                    //substitution.getAssignemnts().clear();
+                    substitution.clear();
 
+                    /* DEBUG inizio */
+                    System.out.println("\tvoglio unificare: " + litX + " con " + litY);
+                    /* DEBUG fine */
                     //Map<Variable, Term> substitution = unify(litX, litY, theta);
-                    substitution = InferenceSystem.mgu(litX, litY, true);
+                    //substitution = InferenceSystem.mgu(litX, litY, true);
 
-                    if (null != substitution && substitution.isWellFormed()) {
+                    if (InferenceSystem.mgu(litX, litY, true, substitution)) {
                         Clause nuova = this.applySubstitution(substitution);
-                        nuova.renameVariables();
-                        maximalFactors.add(nuova);
+                        /* DEBUG inizio */
+                        System.out.println("\te ottengo " + nuova + "\n\tda sub " + substitution.toString());
+                        /* DEBUG fine */
+                        if (!nuova.isTautology()) {
+                            nuova.renameVariables();
+                            maximalFactors.add(nuova);
+                        } else {
+                             /* DEBUG inizio */
+                            System.out.println("\ttautologia, quindi la cancello.");
+                            /* DEBUG fine */
+                        }
                     }
                 }
+            }
         }
         // DEBUG inizio //
-        //System.out.println("1:" + maximalFactors);
+        System.out.println(maximalFactors + "\n");
         // DEBUG fine
         // ??? devo trovare anche i fattori dei fattori?
-        Set<Clause> aggiuntivi = new HashSet<>();
+        Set<Clause> aggiuntivi = new LinkedHashSet<>();
         for (Clause c : maximalFactors)
             aggiuntivi.addAll(c.getMaximalFactors(ord));
         maximalFactors.addAll(aggiuntivi);
         // DEBUG inizio //
-        //System.out.println("2:" + maximalFactors);
+        System.out.println("più aggiunti anche i fattori dei sui fattori ricorsivamente\nottengo per " + toString() + "\n->" + maximalFactors + "\n");
         // DEBUG fine
     }
 
@@ -377,11 +409,11 @@ public class Clause implements Comparable<Clause> {
     }
 
     public String getMaximalFactorsString() {
-        StringBuilder sb = new StringBuilder("maximalFactors: ");
         if (maximalFactors == null)
             //calculateMaximalFactors();
             return "maximalFactors: non ancora calcolati.";
 
+        StringBuilder sb = new StringBuilder("maximalFactors: ");
         boolean flag = true;
         for (Clause c : maximalFactors)
             if (flag) {
@@ -396,7 +428,7 @@ public class Clause implements Comparable<Clause> {
         Set<Clause> resolvents = new LinkedHashSet<>(); // oppure LinkedHashSet<>(); che non ha il problema dell'incremento dei costi di TreeSet
 
         //Map<Variable, Term> theta = new HashMap<Variable, Term>();
-        Substitution substitution;
+        Substitution substitution = new Substitution();
 
         List<Literal> lits1, lits2;
 
@@ -420,9 +452,9 @@ public class Clause implements Comparable<Clause> {
                 for (int y = 0; y < lits2.size(); y++) {
                     Literal litY = lits2.get(y);
 
-                    substitution = InferenceSystem.mgu(litX, litY, false);
+                    substitution.clear();
 
-                    if (null != substitution) {
+                    if (InferenceSystem.mgu(litX, litY, false, substitution)) {
                         Set<Literal> set = new LinkedHashSet<>();
                         for (Literal l : literals) {
                             if (l.equals(litX))
@@ -466,7 +498,7 @@ public class Clause implements Comparable<Clause> {
         Set<Clause> resolvents = new LinkedHashSet<>(); // oppure LinkedHashSet<>(); che non ha il problema dell'incremento dei costi di TreeSet
 
         //Map<Variable, Term> theta = new HashMap<Variable, Term>();
-        Substitution substitution;
+        Substitution substitution = new Substitution();
 
         List<Literal> lits1, lits2;
 
@@ -490,9 +522,9 @@ public class Clause implements Comparable<Clause> {
                 for (int y = 0; y < lits2.size(); y++) {
                     Literal litY = lits2.get(y);
 
-                    substitution = InferenceSystem.mgu(litX, litY, false);
+                    substitution.clear();
 
-                    if (null != substitution) {
+                    if (InferenceSystem.mgu(litX, litY, false, substitution)) {
                         Set<Literal> set = new LinkedHashSet<>();
                         for (Literal l : literals) {
                             if (l.equals(litX))
@@ -518,8 +550,11 @@ public class Clause implements Comparable<Clause> {
     public Set<Clause> allTheOrderedResolvents(Clause othC, Ordering ord) {
         Set<Clause> resolvents = new LinkedHashSet<>();
 
+        // per essere sicuro che siano stati calcolati i letterali massimali
         getMaximalLiterals(ord);
         othC.getMaximalLiterals(ord);
+        /////////////////////////////////////////
+        
         resolvents.addAll(this.orderedResolvents(othC));
         for (Clause c : othC.getMaximalFactors(ord))
             resolvents.addAll(this.orderedResolvents(c));
@@ -534,10 +569,22 @@ public class Clause implements Comparable<Clause> {
 
     public void renameVariables() {
         long num = System.nanoTime();
-        Set<Literal> lNuovi = new LinkedHashSet<>();
-        for (Literal l : literals)
+        Set<Literal> lits = literals;
+        /*for (Literal l : literals)
             lNuovi.add(l.renameVariables(num));
         if (!lNuovi.equals(literals))
             literals = lNuovi;
+            */
+        posLits.clear();
+        negLits.clear();
+        literals = new LinkedHashSet<>(lits.size());
+        for (Literal l : lits)
+            literals.add(l.renameVariables(num));
+        for (Literal l : literals)
+            if (l.isPositive())
+                posLits.add(l);
+            else
+                negLits.add(l);
+                
     }
 }

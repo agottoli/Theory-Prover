@@ -134,12 +134,6 @@ public class Main {
         //c.getFactors();
         //List<Literal> maxLits = c.getMaximalLiterals(or);
         //c.getMaximalFactors(or);
-         System.out.println(System.nanoTime());
-System.out.println(System.nanoTime());
-System.out.println(System.nanoTime());
-System.out.println(System.nanoTime());System.out.println(System.nanoTime());
-System.out.println(System.nanoTime());
-System.out.println(System.nanoTime());
 
          Set<Clause> res = c.allTheResolvents(othC);
          Set<Clause> ordRes = c.allTheOrderedResolvents(othC, or);

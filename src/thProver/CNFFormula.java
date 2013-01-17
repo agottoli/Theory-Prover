@@ -82,7 +82,9 @@ public class CNFFormula {
     
     public boolean isConstant(String name) {
         Term t;
-        return ((t = terms.get(name)) != null && t instanceof Constant);
+        Term cos = new Constant(name);
+        int hC = cos.hashCode();
+        return ((t = terms.get(hC)) != null && t instanceof Constant);
     }
 
 /*

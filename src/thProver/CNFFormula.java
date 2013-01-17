@@ -3,7 +3,9 @@ package thProver;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.TreeSet;
@@ -16,9 +18,9 @@ public class CNFFormula {
     //private boolean tree;
     private HashMap<String, Integer> arities; // nome funzione o Predicato o variabile o costante, arietà
     //private HashMap<String, Constant> constants; // c.toString(), c 
-    private HashMap<String, Term> terms; // term.toString(), term
-    private HashMap<String, Atom> atoms; // atom.toString(), atom
-    private HashMap<String, Literal> literals;
+    private HashMap<Integer, Term> terms; // term.toString(), term
+    private HashMap<Integer, Atom> atoms; // atom.toString(), atom
+    private HashMap<Integer, Literal> literals;
     private List<Clause> clauses;
     private int nClausesAndSOS;
     private List<Clause> sos;
@@ -50,64 +52,91 @@ public class CNFFormula {
     
     public Constant addConstant(String key) {
         Term c;
-        if ((c = terms.get(key)) == null) {
-            c = new Constant(key);
-            terms.put(key, c);
-        }  
+        Term nuovo = new Constant(key);
+        int hC = nuovo.hashCode();
+        if ((c = terms.get(hC)) == null) { // hs)) == null) {
+            /* DEBUG inizio */
+            System.out.println(nuovo.toString() + " nuova costante");
+            /* DEBUG fine */
+            
+            c = nuovo; // new Constant(key);
+            terms.put(hC, c); // hc, c);
+        }
         return (Constant) c;
     }
-    
+/*    
     public Constant addConstant(Constant cost) {
         Term c;
-        if ((c = terms.get(cost.toString())) == null) {
+        int hC = cost.hashCode();
+        if ((c = terms.get(hC)) == null) { // hc)) == null) {
+            /* DEBUG inizio * /
+            System.out.println(cost.toString() + " nuova costante");
+            /* DEBUG fine * /
+            
             c = cost;
-            terms.put(cost.toString(), cost);
+            terms.put(hC, cost); // hc, cost);
         }  
         return (Constant) c;
     }
+*/
     
     public boolean isConstant(String name) {
         Term t;
         return ((t = terms.get(name)) != null && t instanceof Constant);
     }
-    
+
+/*
     public Variable addVariable(Variable var) {
         Term v;
-        if ((v = terms.get(var.toString())) == null) {
+        int hC = var.hashCode();
+        if ((v = terms.get(hC)) == null) {
             v = var;
-            terms.put(var.toString(), var);
+            terms.put(hC, var);
         }  
         return (Variable) v;
     }
-    
+*/    
     public Variable addVariable(String var) {
         Term v;
         String rinNewVar = var + "_" + nClausesAndSOS;
-        if ((v = terms.get(rinNewVar)) == null) {
-            v = new Variable(rinNewVar);
-            terms.put(rinNewVar, v);
+        Term nuovo = new Variable(rinNewVar);
+        int hC = nuovo.hashCode();
+        if ((v = terms.get(hC)) == null) {
+            /* DEBUG inizio */
+            System.out.println(var.toString() + " nuova variabile");
+            /* DEBUG fine */
+            
+            
+            v = nuovo; // new Variable(rinNewVar);
+            terms.put(hC, v);
         }  
         return (Variable) v;
     }
     
     public Function addFunction(Function fun) {
         Term f;
-        if ((f = terms.get(fun.toString())) == null) {
+        int hC = fun.hashCode();
+        if ((f = terms.get(hC)) == null) {
+            /* DEBUG inizio */
+            System.out.println(fun.toString() + " nuova funzione");
+            /* DEBUG fine */
+            
             f = fun;
-            terms.put(fun.toString(), fun);
+            terms.put(hC, fun);
         }  
         return (Function) f;
     }
     
     public Term addTerm(Term term) {
         Term t;
-        if ((t = terms.get(term.toString())) == null) {
+        int hC = term.hashCode();
+        if ((t = terms.get(hC)) == null) {
             /* DEBUG inizio */
             System.out.println(term.toString() + " nuovo termine");
             /* DEBUG fine */
             
             t = term;
-            terms.put(term.toString(), term);
+            terms.put(hC, term);
         } 
         /* DEBUG inizio */
         //else
@@ -119,18 +148,20 @@ public class CNFFormula {
     
     public Literal addLiteral(Literal lit) {
         Literal l;
-        if ((l = literals.get(lit.toString())) == null) {
+        int hC = lit.hashCode();
+        if ((l = literals.get(hC)) == null) {
             l = lit;
-            literals.put(lit.toString(), lit);
+            literals.put(hC, lit);
         }
         return l;
     }
     
     public Atom addAtom(Atom atom) {
         Atom a;
-        if ((a = atoms.get(atom.toString())) == null) {
+        int hC = atom.hashCode();
+        if ((a = atoms.get(hC)) == null) {
             a = atom;
-            atoms.put(atom.toString(), atom);
+            atoms.put(hC, atom);
         }
         return a;
     }

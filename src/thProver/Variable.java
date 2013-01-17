@@ -33,7 +33,10 @@ public class Variable implements Term {
         
     @Override
     public String toString() {
-        return symbol;
+        int i = symbol.indexOf("_");
+        String s = symbol.substring(0, i);
+        return s;
+        //return symbol;
     }   
 
     @Override

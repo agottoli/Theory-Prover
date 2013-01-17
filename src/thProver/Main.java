@@ -142,11 +142,23 @@ System.out.println(System.nanoTime());
 System.out.println(System.nanoTime());
 
          Set<Clause> res = c.allTheResolvents(othC);
+         Set<Clause> ordRes = c.allTheOrderedResolvents(othC, or);
         //System.out.println(maxLits.toString());
         //System.out.println(c.getFactorsString());
         //System.out.println(c.getMaximalFactorsString());
-        System.out.println("\n\n\n-------------------------" + res.toString() 
-                + "-------------------------\n\n\n");
+         String ris = "";
+        for (Clause riso : res) {
+            if (!riso.isTautology())
+                ris += riso.toString() + "\n";
+        }
+        ris += "\n-------------------------\n";
+        for (Clause riso : ordRes) {
+            if (!riso.isTautology())
+                ris += riso.toString() + "\n";
+        }
+        
+        System.out.println("\n\n\n-------------------------\n" + ris 
+                + "\n-------------------------\n\n\n");
         
         // prova trovare lista di letterali massimali
         //System.out.println("lits massimali: " + or.getMaximalLiterals(c));

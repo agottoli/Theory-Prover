@@ -236,7 +236,7 @@ public class Ordering {
             //if (b.contains(o)) {
             if ((count = b.count(o)) > 0) {
                 int countT;
-                if (count != 1 && (countT = a.count(o)) > count) {
+                if (count != 1 && (countT = a.count(o)) < count) {
                     count = countT;
                 }
                 a.removeElement(o, count); // non crea problemi perché non itero più sul ciclo

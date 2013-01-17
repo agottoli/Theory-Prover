@@ -91,9 +91,9 @@ void Consts():
 }
 {
 	( c = <SYMBOL> | c = <INTEGER> )
-        { f.addConstant(c.image); f.addArity(c.image, 1); }
+        { f.addConstant(c.image); f.addArity(c.image, 0); }
 	( <COMMA> ( c = <SYMBOL> | c = <INTEGER> )
-            { f.addConstant(c.image); f.addArity(c.image, 1); } )*
+            { f.addConstant(c.image); f.addArity(c.image, 0); } )*
 }
 
 // precedences specification
@@ -234,7 +234,7 @@ Term Term():
 
         {  if (noArgs) { // constant or variable
                 if (!f.isConstant(s.image)) {
-                    boolean ok = f.checkArity(s.image, 1);
+                    boolean ok = f.checkArity(s.image, 0);
                     if (!ok) {
                         throw new IllegalArgumentException("Errore di arietà: " + s.image + "\n");
                     }

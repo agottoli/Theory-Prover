@@ -108,7 +108,7 @@ public class CNFParser implements CNFParserConstants {
       jj_consume_token(-1);
       throw new ParseException();
     }
-          f.addConstant(c.image); f.addArity(c.image, 1);
+          f.addConstant(c.image); f.addArity(c.image, 0);
     label_1:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -132,7 +132,7 @@ public class CNFParser implements CNFParserConstants {
         jj_consume_token(-1);
         throw new ParseException();
       }
-              f.addConstant(c.image); f.addArity(c.image, 1);
+              f.addConstant(c.image); f.addArity(c.image, 0);
     }
   }
 
@@ -456,7 +456,7 @@ public class CNFParser implements CNFParserConstants {
     }
            if (noArgs) { // constant or variable
                 if (!f.isConstant(s.image)) {
-                    boolean ok = f.checkArity(s.image, 1);
+                    boolean ok = f.checkArity(s.image, 0);
                     if (!ok) {
                         {if (true) throw new IllegalArgumentException("Errore di ariet\u00e0: " + s.image + "\u005cn");}
                     }

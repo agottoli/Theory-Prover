@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -113,6 +115,10 @@ public class Clause implements Comparable<Clause> {
 
     public List<Literal> getNegativeLiterals() {
         return negLits;
+    }
+
+    public int size() {
+        return literals.size();
     }
 
     @Override
@@ -243,8 +249,8 @@ public class Clause implements Comparable<Clause> {
     }
 
     private void calculateFactors() {
-        factors = new LinkedHashSet<>(); 
-        
+        factors = new LinkedHashSet<>();
+
         // DEBUG inizio //
         //System.out.println("I fattori di " + toString() + " sono:");
         // DEBUG fine
@@ -280,21 +286,18 @@ public class Clause implements Comparable<Clause> {
                     //Map<Variable, Term> substitution = unify(litX, litY, theta);
                     //substitution = InferenceSystem.mgu(litX, litY, true, substitution);
 
-                    if (InferenceSystem.mgu(litX, litY, true, substitution)) {
+                    if (InferenceSystem.mgu(litX, litY, true, substitution, false)) {
                         long time = System.nanoTime();
                         substitution.renameVariables(time);
                         Clause nuova = this.applySubstitution(substitution, time);
                         /* DEBUG inizio */
                         //System.out.println("\te ottengo " + nuova + "\n\tda sub " + substitution.toString());
                         /* DEBUG fine */
-                        if (!nuova.isTautology()) {
+                        if (!nuova.isTautology())
                             //nuova.renameVariables();
-                            factors.add(nuova);
-                        //} else {
-                             /* DEBUG inizio */
-                            //System.out.println("\ttautologia, quindi la cancello.");
-                            /* DEBUG fine */
-                        }
+                            factors.add(nuova); //} else {
+                        /* DEBUG inizio */ //System.out.println("\ttautologia, quindi la cancello.");
+                        /* DEBUG fine */
                     }
                 }
             }
@@ -326,7 +329,7 @@ public class Clause implements Comparable<Clause> {
 
         List<Literal> maxLits = new ArrayList<>();
         List<Literal> lits = new ArrayList<>();
-        
+
         Set<Literal> maxAlreadySel = new LinkedHashSet<>(maximalLits);
 
         // provvisorio per mgu
@@ -347,18 +350,18 @@ public class Clause implements Comparable<Clause> {
 
             for (int x = 0; x < maxLits.size(); x++) {
                 Literal litX = maxLits.get(x);
-                
+
                 maxAlreadySel.add(litX); // mi permette di fare solo 1 volta tra 2 massimali :)
-                
+
                 for (int y = 0; y < lits.size(); y++) {
                     Literal litY = lits.get(y);
-                    
+
                     // se già presente vuol dire che litY è litX (se stesso)
                     // oppure che litY è un letterale massimale con cui ho
                     // già sicuramente unificato (o provato ad unificare)
                     if (maxAlreadySel.contains(litY))
                         continue;
-                    
+
                     // initializzo la sostituzione
                     //theta.clear();
                     substitution.clear();
@@ -369,22 +372,19 @@ public class Clause implements Comparable<Clause> {
                     //Map<Variable, Term> substitution = unify(litX, litY, theta);
                     //substitution = InferenceSystem.mgu(litX, litY, true);
 
-                    if (InferenceSystem.mgu(litX, litY, true, substitution)) {
+                    if (InferenceSystem.mgu(litX, litY, true, substitution, false)) {
                         long time = System.nanoTime();
                         substitution.renameVariables(time);
                         Clause nuova = this.applySubstitution(substitution, time);
-                        
+
                         /* DEBUG inizio */
                         //System.out.println("\te ottengo " + nuova + "\n\tda sub " + substitution.toString());
                         /* DEBUG fine */
-                        if (!nuova.isTautology()) {
+                        if (!nuova.isTautology())
                             //nuova.renameVariables();
-                            maximalFactors.add(nuova);
-                        //} else {
-                             /* DEBUG inizio */
-                            //System.out.println("\ttautologia, quindi la cancello.");
-                            /* DEBUG fine */
-                        }
+                            maximalFactors.add(nuova); //} else {
+                        /* DEBUG inizio */ //System.out.println("\ttautologia, quindi la cancello.");
+                        /* DEBUG fine */
                     }
                 }
             }
@@ -402,20 +402,16 @@ public class Clause implements Comparable<Clause> {
         // DEBUG fine
     }
 
-    public boolean subsumes(Clause othC) {
-        // DA FARE
-        return false;
-    }
-/*
-    public Clause applySubstitution(Substitution tau) {
-        Set<Literal> lits = new LinkedHashSet<>();
-        for (Literal l : literals)
-            lits.add(l.applySubstitution(tau));
-        if (lits.equals(literals))
-            return this;
-        return new Clause(lits);
-    }
-*/    
+    /*
+     public Clause applySubstitution(Substitution tau) {
+     Set<Literal> lits = new LinkedHashSet<>();
+     for (Literal l : literals)
+     lits.add(l.applySubstitution(tau));
+     if (lits.equals(literals))
+     return this;
+     return new Clause(lits);
+     }
+     */
     public Clause applySubstitution(Substitution tau, long time) {
         //long time = System.nanoTime();
         Set<Literal> lits = new LinkedHashSet<>();
@@ -431,7 +427,7 @@ public class Clause implements Comparable<Clause> {
             calculateFactors();
         if (factors.isEmpty())
             return "non ci sono fattori.";
-        
+
         StringBuilder sb = new StringBuilder();
         boolean flag = true;
         for (Clause c : factors)
@@ -449,7 +445,7 @@ public class Clause implements Comparable<Clause> {
             return "maximalFactors: non ancora calcolati.";
         if (maximalFactors.isEmpty())
             return "non ci sono fattori.";
-        
+
         StringBuilder sb = new StringBuilder();
         boolean flag = true;
         for (Clause c : maximalFactors)
@@ -491,7 +487,7 @@ public class Clause implements Comparable<Clause> {
 
                     substitution.clear();
 
-                    if (InferenceSystem.mgu(litX, litY, false, substitution)) {
+                    if (InferenceSystem.mgu(litX, litY, false, substitution, false)) {
                         Set<Literal> set = new LinkedHashSet<>();
                         long time = System.nanoTime();
                         substitution.renameVariables(time);
@@ -530,10 +526,10 @@ public class Clause implements Comparable<Clause> {
 
         return resolvents;
     }
-    
+
     public Set<Clause> orderedResolvents(Clause othC) {
         //getMaximalLiterals(ord); // così se non già calcolati non da problemi
-        
+
         Set<Clause> resolvents = new LinkedHashSet<>(); // oppure LinkedHashSet<>(); che non ha il problema dell'incremento dei costi di TreeSet
 
         //Map<Variable, Term> theta = new HashMap<Variable, Term>();
@@ -563,7 +559,7 @@ public class Clause implements Comparable<Clause> {
 
                     substitution.clear();
 
-                    if (InferenceSystem.mgu(litX, litY, false, substitution)) {
+                    if (InferenceSystem.mgu(litX, litY, false, substitution, false)) {
                         Set<Literal> set = new LinkedHashSet<>();
                         long time = System.nanoTime();
                         substitution.renameVariables(time);
@@ -595,7 +591,7 @@ public class Clause implements Comparable<Clause> {
         getMaximalLiterals(ord);
         othC.getMaximalLiterals(ord);
         /////////////////////////////////////////
-        
+
         resolvents.addAll(this.orderedResolvents(othC));
         for (Clause c : othC.getMaximalFactors(ord))
             resolvents.addAll(this.orderedResolvents(c));
@@ -612,10 +608,10 @@ public class Clause implements Comparable<Clause> {
         long num = System.nanoTime();
         Set<Literal> lits = literals;
         /*for (Literal l : literals)
-            lNuovi.add(l.renameVariables(num));
-        if (!lNuovi.equals(literals))
-            literals = lNuovi;
-            */
+         lNuovi.add(l.renameVariables(num));
+         if (!lNuovi.equals(literals))
+         literals = lNuovi;
+         */
         posLits.clear();
         negLits.clear();
         literals = new LinkedHashSet<>(lits.size());
@@ -626,6 +622,149 @@ public class Clause implements Comparable<Clause> {
                 posLits.add(l);
             else
                 negLits.add(l);
-                
+
+    }
+
+    public Substitution subsumes(Clause othC) {
+        boolean subsumes = false;
+
+        // Equality is not subsumption
+        if (!(this == othC))
+            // Ensure this has less literals total and that
+            // it is a subset of the other clauses positive and negative counts
+            if (this.literals.size() < othC.literals.size()
+                    && this.posLits.size() <= othC.posLits.size()
+                    && this.negLits.size() <= othC.negLits.size()) {
+
+                // PROVO SUSSUNZIONE PROPRIA
+                Map<String, List<Literal>> thisToTry = collectLikeLiterals(this.literals);
+                Map<String, List<Literal>> othCToTry = collectLikeLiterals(othC.literals);
+                // Ensure all like literals from this clause are a subset
+                // of the other clause.
+                if (othCToTry.keySet().containsAll(thisToTry.keySet())) {
+                    /*boolean isAPossSubset = true;*/
+                    // Ensure that each set of same named literals
+                    // from this clause is a subset of the other
+                    // clauses same named literals.
+                    /*
+                     for (String pk : thisToTry.keySet())
+                     if (thisToTry.get(pk).size() > othCToTry.get(pk).size()) {
+                     isAPossSubset = false;
+                     break;
+                     }
+                     if (isAPossSubset) {
+                     // At this point I know this this Clause's
+                     // literal/arity names are a subset of the
+                     // other clauses literal/arity names
+                     //subsumes = checkSubsumes(othC, thisToTry, othCToTry);
+                     //Substitution sub = new Substitution();
+                     //for (String key : thisToTry.keySet()) {*/
+                    return checkSub(thisToTry, othCToTry,
+                            new Substitution());
+
+                    /*
+                     // se arrivo qui vuol dire che nessun letterale
+                     // presente in litT unifica per la suss con uno in litO
+                     //return null;
+                     //}
+                     }*/
+                }
+            } else if (this.literals.size() == othC.literals.size()
+                    && this.posLits.size() == othC.posLits.size()
+                    && this.negLits.size() == othC.negLits.size()) {
+                // PROVO CON LA SUSSUNZIONE DI VARIANTI
+                // ?????
+            }
+
+        return null; //subsumes;
+    }
+
+    private Map<String, List<Literal>> collectLikeLiterals(Set<Literal> literals) {
+        Map<String, List<Literal>> likeLiterals = new LinkedHashMap<String, List<Literal>>();
+        for (Literal l : literals) {
+            // Want to ensure P(a, b) is considered different than P(a, b, c)
+            // i.e. consider an atom's arity P/#.
+            String literalName = (l.isPositive() ? "" : "~")
+                    + l.getAtom().getSymbol();
+
+            List<Literal> like = likeLiterals.get(literalName);
+            if (null == like) {
+                // è il primo letterale che incontro con questo segno e questo predicato
+                // allora creo la lista
+                like = new ArrayList<Literal>();
+                likeLiterals.put(literalName, like);
+            }
+            // inserisco il letterale a questa lista
+            like.add(l);
+        }
+        return likeLiterals;
+    }
+
+    public Substitution checkSub(
+            Map<String, List<Literal>> thisToTry,
+            Map<String, List<Literal>> othCToTry,
+            Substitution sigma) {
+
+        //boolean subsumes = false;
+
+        Substitution sub = sigma.copy();
+
+        Iterator<String> it = thisToTry.keySet().iterator();
+        if (it.hasNext()) {
+            String key = it.next();
+        //for (String key : thisToTry.keySet()) {
+            // che è più piccolo
+            List<Literal> litsT = thisToTry.get(key);
+            List<Literal> litsO = othCToTry.get(key);
+            
+            if (!litsT.isEmpty()) {
+                Literal lT = litsT.get(0);
+            //for (Literal lT : litsT) {
+                for (Literal lO : litsO) {
+                    Substitution copy = sub.copy();
+                    if (InferenceSystem.mgu(lT, lO, true, copy, true)) {
+                        // if sub.assignments.keySet() contains variabile di othC
+                        // allora non è un unificazione giusta
+                        // ????
+                        // OK, modifico l'mgu per la sussunzione così 
+                        // se gli passo true non mi fa gli assegnamenti
+                        //subsumes = true;//return sub; // subsumes = true;
+                        //break;
+
+                        // sub è stata aggiornata per continuare l'unificazione
+
+                        Map<String, List<Literal>> thisToTryCopy = new LinkedHashMap<>(thisToTry);
+                        List<Literal> get = thisToTryCopy.get(key);
+                        if (get.size() == 1)
+                            thisToTryCopy.remove(key);
+                        else
+                            get.remove(lT);
+
+                        //Map<String, List<Literal>> othCToTryCopy = new LinkedHashMap<>(othCToTry);
+                        //othCToTryCopy.remove(key);
+
+                        if (thisToTryCopy.isEmpty())
+                            return copy; // tutti i letterali in this unificano contemporaneamente
+
+                        //Substitution copy = sub.copy();
+                        Substitution nuova;
+                        nuova = checkSub(thisToTryCopy, othCToTry, copy);
+                        if (nuova != null)
+                            return nuova; // credo di aver unificato tutto
+                        
+                        // else prova con il prossimo lO
+                            
+                        // la copy è stata rovinata ma non c'è problema perché
+                        // si ricostruisce al prossimo passo
+                    }
+                }
+
+                // se arrivo qua non sono riuscito ad unificare con nessun lit0
+                return null;
+            }
+        }
+
+System.out.println("babbeo");
+        return sigma; // DA FARE     
     }
 }

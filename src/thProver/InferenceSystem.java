@@ -62,7 +62,8 @@ public class InferenceSystem {
     }
 
     // if mgu == null --> non unificabili
-    public static boolean mgu(Term x, Term y, Substitution sub) {
+    private static boolean mgu(Term x, Term y, Substitution sub, 
+            boolean forSubsumptionOrSemplification) {
         if (x.equals(y))
             return true;
 
@@ -85,13 +86,16 @@ public class InferenceSystem {
             sub.addAssignment((Variable) xSub, ySub);
             return true;
         }
-        if (ySub instanceof Variable) {
+        // NOTA: in caso di trovare l'mgu per la sussunzione non devo guarade 
+        //       questo caso 
+        if (!forSubsumptionOrSemplification && ySub instanceof Variable) {
             sub.addAssignment((Variable) ySub, xSub);
             return true;
         }
         if (xSub instanceof Function && ySub instanceof Function
                 && ((Function) xSub).getSymbol().equals(((Function) ySub).getSymbol())) {
-            return mgu(((Function) xSub).getArgs(), ((Function) ySub).getArgs(), sub);
+            return mgu(((Function) xSub).getArgs(), ((Function) ySub).getArgs(), sub,
+                    forSubsumptionOrSemplification);
             //return;
         }
 
@@ -99,7 +103,8 @@ public class InferenceSystem {
         return false; //sub.kill();
     }
 
-    public static boolean mgu(List<Term> x, List<Term> y, Substitution sub) {
+    public static boolean mgu(List<Term> x, List<Term> y, Substitution sub,
+            boolean forSubsumptionOrSemplification) {
         //if (sub.isKilled())
         //    return;
 
@@ -107,30 +112,33 @@ public class InferenceSystem {
         Iterator<Term> itY = y.iterator();
         while (itX.hasNext()) {
             //mgu(itX.next(), itY.next(), sub);
-            if (!mgu(itX.next(), itY.next(), sub))
+            if (!mgu(itX.next(), itY.next(), sub, forSubsumptionOrSemplification))
                 return false;
         }
         // tutti i termini sono unificabili
         return true;
     }
 
-    public static boolean mgu(Atom x, Atom y, Substitution sub) {
+    private static boolean mgu(Atom x, Atom y, Substitution sub, 
+            boolean forSubsumptionOrSemplification) {
         if (x.equals(y))
             return true;
 
         if (x.getSymbol().equals(y.getSymbol())) {
-            return mgu(x.getArgs(), y.getArgs(), sub);
+            return mgu(x.getArgs(), y.getArgs(), sub, forSubsumptionOrSemplification);
             //return;
         }
 
         return false; //sub.kill();
     }
 
-    public static boolean mgu(Literal x, Literal y, boolean sameSign, Substitution sub) {
+    public static boolean mgu(Literal x, Literal y, boolean sameSign, 
+            Substitution sub, boolean forSubsumptionOrSemplification) {
         if ((x.isPositive() == y.isPositive() && sameSign)
                 || (x.isPositive() != y.isPositive() && !sameSign)) {
             //Substitution sub = new Substitution();
-            if (mgu(x.getAtom(), y.getAtom(), sub) && sub.isWellFormed()) 
+            if (mgu(x.getAtom(), y.getAtom(), sub, forSubsumptionOrSemplification) 
+                    && sub.isWellFormed()) 
                 // ammetto solo sostituzioni ben formate
                 return true;
         }

@@ -103,7 +103,7 @@ public class MGUAndApplySubTest {
 
                     sb.append("\nMGU tra ");
                     sb.append(litX.toString()).append(" e ").append(litY.toString()).append(" è: ");
-                    if (InferenceSystem.mgu(litX, litY, true, sigma)) {
+                    if (InferenceSystem.mgu(litX, litY, true, sigma, false)) {
                         sb.append(sigma.toString());
                         long time = System.nanoTime();
                         sigma.renameVariables(time);

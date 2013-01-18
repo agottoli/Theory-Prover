@@ -40,25 +40,71 @@ public class InferenceSystem {
     public static Set<Clause> orderedFactorization(Clause c, Ordering ord) {
         return c.getMaximalFactors(ord);
     }
-    
-    public static void tautologyElimination(Clause c) {
-        return; // BOOOOOOOOO
+       
+    public static void tautologyElimination(List<Clause> clauses) {
+        for (Clause c : clauses) {
+            if (c.isTautology())
+                clauses.remove(c);
+        }
     }
     
-    public static void tautologyElimination(List<Clause> c) {
-        return; // BOOOOOOOOO
+    public static Clause semplificClause(Clause c, Clause sempl) {
+        return c.semplClaus(sempl);
     }
     
-    public static void semplificClause(Clause c, Clause sempl) {
-        // DA FARE
+    public static Set<Clause> semplificClause(Clause c, List<Clause> sempl) {
+        Set<Clause> nuove = new LinkedHashSet<>();
+        Set<Clause> semplificate = new LinkedHashSet<>();
+        for (Clause c2 : sempl) {
+            Clause nuova = c.semplClaus(c2);
+            if (nuova != null) {
+                nuove.add(nuova);
+                semplificate.add(c2);
+            }
+        }
+        if (semplificate.size() > 0) {
+            sempl.removeAll(semplificate);
+        }
+        
+        return nuove;
+                
     }
     
-    public static void subsumedBy(Clause c, List<Clause> clauses) {
-        // DA FARE
+    public static Clause semplificatedClause(Clause c, List<Clause> sempl) {
+        //Set<Clause> nuove = new LinkedHashSet<>();
+        for (Clause c1 : sempl) {
+            Clause nuova = c1.semplClaus(c);
+            if (nuova != null) {
+                //nuove.add(nuova);
+                return nuova;
+            }
+        }
+        
+        return null; //nuove;
+                
     }
     
-    public static void subsume(Clause c, List<Clause> clauses) {
-        // DA FARE
+    public static boolean subsumedBy(Clause c, List<Clause> clauses) {
+        // clauses <. c --> cancello c
+        for (Clause c1 : clauses) {
+            if (c1.subsumes(c) != null) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public static int subsumes(Clause c, List<Clause> clauses) {
+        // c <. clauses --> cancello clauses
+        // NOTA: modifica clauses ????
+        int numClausSuss = 0;
+        for (Clause c2 : clauses) {
+            if (c.subsumes(c2) != null) {
+                numClausSuss++;
+                clauses.remove(c2);
+            }
+        }
+        return numClausSuss;
     }
 
     // if mgu == null --> non unificabili

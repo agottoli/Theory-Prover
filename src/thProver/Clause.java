@@ -87,7 +87,12 @@ public class Clause implements Comparable<Clause> {
      */
 
     /**
-     * Adds a literal to this clause.
+     * Adds a literal to this clause. 
+     * (NOTA: solo il <b>parser</b> può usarlo perché è delicato visto che mi incasina:
+     * - i letterali massimali
+     * - i fattori e i fattori massimali
+     * - la stringa da stampare (risolta facilmente)
+     * ...
      *
      * @param literal the literal to add
      */
@@ -96,15 +101,17 @@ public class Clause implements Comparable<Clause> {
         literals.add(literal);
 
         // questo serve se uso Set perché non ammette oggetti ripetuti
-        if (nLiterals < literals.size())
+        if (nLiterals < literals.size()) {
             // è un nuovo letterale quindi lo devo aggiungere anche alle liste
             // dei letterali positivi e negativi
             if (literal.isPositive())
                 posLits.add(literal);
             else
                 negLits.add(literal);
+            string = null; // devo ricalcolarla
+        }
     }
-
+    
     public Set<Literal> getLiterals() {
         return literals;
     }
@@ -763,8 +770,37 @@ public class Clause implements Comparable<Clause> {
                 return null;
             }
         }
-
-System.out.println("babbeo");
-        return sigma; // DA FARE     
+        // se tutto va bene non arriva mai fino a qui
+        // perché ci sarà sempre almeno un elemento :)
+        return sigma;     
+    }
+    
+    public Clause semplClaus(Clause othC) {
+        if (this.literals.size() != 1)
+            return null; // infatti deve essere unitaria per applicare la regola
+        if (othC.literals.size() < 2)
+            return null;
+        
+        Literal l1 = literals.iterator().next();
+        List<Literal> ls2;
+        if (l1.isPositive())
+            ls2 = othC.negLits;
+        else
+            ls2 = othC.negLits;
+        Substitution sigma = new Substitution();
+        for (Literal l2 : ls2) {
+            sigma.clear();
+            if (InferenceSystem.mgu(l1, l2, false, sigma, true)) {
+                //othC.removeLiteral(l2);
+                // vista la mole di dati da cambiare è + conveniente
+                // creare una nuova Clausola e cancellare la vecchia
+                // piuttosto che modificare othC eliminando un letterale
+                // e aggiornare tutto!!!
+                Set<Literal> litsNuoviothC = new LinkedHashSet<>(othC.literals);
+                litsNuoviothC.remove(l2);
+                return new Clause(litsNuoviothC);
+            }
+        }
+        return null;
     }
 }

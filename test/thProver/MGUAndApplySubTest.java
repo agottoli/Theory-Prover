@@ -31,7 +31,7 @@ public class MGUAndApplySubTest {
                 + "prec: P>R>Q>ack>succ>per>piu>f>g>a>c>d>0\n"
                 + "weightVars: 1\n"
                 + "weights: P = 1; ack = 1; succ = 1; 0 = 1; a = 1\n"
-                + //"clauses: P(z,y) | ~P(x,g(u)) | P(x,g(x)) | ~P(u,v) | Q(b)";
+                + "clauses: P(z,y) | ~P(x,g(u)) | P(x,g(x)) | ~P(u,v) | Q(b)";
                 //"sos: Q(c)" +
                 //"clauses: P(ack(succ(x),succ(y))) | P(ack(x,ack(succ(x),y)))";
                 //"clauses: R(x) | ~P(f(0)) | R(a) | P(f(f(z))) | P(f(z)) \n Q(b)\n";
@@ -47,7 +47,7 @@ public class MGUAndApplySubTest {
                 // se ack>succ mul < e lex > (ok)
                 //"clauses: P(ack(succ(x),succ(y))) | P(ack(x,ack(succ(x),y)))";
                 // esempio trova tutti i risolventi
-                "clauses: ~P(x,y,u) | ~P(y,z,v) | ~P(x,v,w) | P(u,z,w) ; P(g(x,y),x,y) | P(v,y,y)";
+                //"clauses: ~P(x,y,u) | ~P(y,z,v) | ~P(x,v,w) | P(u,z,w) ; P(g(x,y),x,y) | P(v,y,y)";
 
         formulaReader = new StringReader(stringa);
 
@@ -97,7 +97,7 @@ public class MGUAndApplySubTest {
             List<Literal> lits = new ArrayList<>(c.getLiterals());
             for (int x = 0; x < lits.size(); x++) {
                 Literal litX = lits.get(x);
-                for (int y = x + 1; y < lits.size(); y++) {
+                for (int y = 0; y < lits.size(); y++) { // y = x + 1
                     Literal litY = lits.get(y);
                     sigma.clear();
 

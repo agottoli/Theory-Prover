@@ -27,8 +27,9 @@ public class OrderingLiteralsTest {
                     "const: a,b,0,c,d\n" +
                     "prec: P>R>Q>ack>succ>per>piu>f>g>a>c>d>0\n" +
                     "weightVars: 1\n" +
-                    "weights: P = 1; ack = 1; succ = 1; 0 = 1; a = 1\n" +
+                    "weights: P = 1; ack = 1; succ = 1; per = 1; piu = 1; f = 1; g = 1; 0 = 1; a = 1\n" +
                     //"clauses: P(z,y) | ~P(x,g(u)) | P(x,g(x)) | ~P(u,v) | Q(b)";
+                    "clauses: P(z,y) | P(x,g(x))";
                     //"sos: Q(c)" +
                     //"clauses: P(ack(succ(x),succ(y))) | P(ack(x,ack(succ(x),y)))";
                     //"clauses: R(x) | ~P(f(0)) | R(a) | P(f(f(z))) | P(f(z)) \n Q(b)\n";
@@ -44,7 +45,7 @@ public class OrderingLiteralsTest {
             // se ack>succ mul < e lex > (ok)
             //"clauses: P(ack(succ(x),succ(y))) | P(ack(x,ack(succ(x),y)))";
             // esempio trova tutti i risolventi
-            "clauses: ~P(x,y,u) | ~P(y,z,v) | ~P(x,v,w) | P(u,z,w) ; P(g(x,y),x,y)";
+            //"clauses: ~P(x,y,u) | ~P(y,z,v) | ~P(x,v,w) | P(u,z,w) ; P(g(x,y),x,y)";
             
             formulaReader = new StringReader(stringa);
 
@@ -70,7 +71,7 @@ public class OrderingLiteralsTest {
         // seleziono i primi 2 letterali dalla prima clausola
         Iterator<Clause> it = f.getClauses().iterator();
         Clause c = it.next();
-        Clause othC = it.next();
+        //Clause othC = it.next();
         Iterator<Literal> itL = c.getLiterals().iterator();
         Literal l1 = itL.next();
         Literal l2 = itL.next();

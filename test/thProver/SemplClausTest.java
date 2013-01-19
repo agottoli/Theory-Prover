@@ -29,6 +29,7 @@ public class SemplClausTest {
             // esempio dell'esercizio 4 del compito parziale
             //"Q(w) ; ~R(f(u)) | Q(f(u))";
                     "clauses: P(f(x)) ; Q(x,y) | P(r) | ~P(f(g(a)))";
+            
             formulaReader = new StringReader(stringa);
 
 

@@ -790,7 +790,7 @@ public class Clause implements Comparable<Clause> {
         Substitution sigma = new Substitution();
         for (Literal l2 : ls2) {
             sigma.clear();
-            if (InferenceSystem.mgu(l1, l2, false, sigma, true)) {
+            if (InferenceSystem.mgu(l1, l2, false, sigma, true)) {               
                 //othC.removeLiteral(l2);
                 // vista la mole di dati da cambiare è + conveniente
                 // creare una nuova Clausola e cancellare la vecchia

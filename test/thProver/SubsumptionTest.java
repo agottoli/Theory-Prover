@@ -27,9 +27,10 @@ public class SubsumptionTest {
             "const: a \n" + 
             // esempio trova tutti i risolventi
             //"clauses: ~P(x,y,u) | ~P(y,z,v) | ~P(x,v,w) | P(u,z,w) ; P(g(x,y),x,y)";
-            "clauses: ~P(x,y,u) | R(x) | ~P(y,z,v) | ~P(g(f(z),x),f(v),w) | P(u,z,w) ; R(y) | ~P(g(x,y),x,y) \n" +
-            // esempio dell'esercizio 4 del compito parziale
-            "Q(w) ; ~R(f(u)) | Q(f(u))";
+            //"clauses: ~P(x,y,u) | R(x) | ~P(y,z,v) | ~P(g(f(z),x),f(v),w) | P(u,z,w) ; R(y) | ~P(g(x,y),x,y) \n" +
+            // + esempio dell'esercizio 4 del compito parziale
+            //"Q(w) ; ~R(f(u)) | Q(f(u))";
+                    "clauses: P(x) | R(x,y) ; P(x) | R(z,w) | Q(z)";
             formulaReader = new StringReader(stringa);
 
 

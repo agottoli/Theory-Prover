@@ -62,6 +62,10 @@ public class Substitution {
     public void setAssignments(Map<Variable, Term> map) {
         assignments = map;
     }
+    
+    public boolean isEmpty() {
+        return assignments.isEmpty();
+    }
 
     @Override
     public boolean equals(Object o) {

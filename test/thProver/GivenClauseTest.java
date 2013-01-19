@@ -5,12 +5,8 @@
 package thProver;
 
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.Reader;
 import java.io.StringReader;
-import java.util.Iterator;
-import java.util.Scanner;
-import java.util.Set;
 import thProver.parser.CNFParser;
 import thProver.parser.ParseException;
 
@@ -18,21 +14,19 @@ import thProver.parser.ParseException;
  *
  * @author ale
  */
-public class AllTheResolventTest {
-
+public class GivenClauseTest {
+    
     public static void main(String[] args) throws ParseException, FileNotFoundException {
 
         /*
          * Read the formula
          */
         Reader formulaReader;
-            String stringa =                    
-                    "prec: L>P>R>f>g\n" +
-                    "weightVars: 1\n" +
-                    "weights: L = 1; P = 1; ack = 1; succ = 1; 0 = 1; g = 1; f = 1; a = 1\n" +
-            // esempio trova tutti i risolventi
-            //"clauses: ~P(x,y,u) | R(x) | ~P(y,z,v) | ~P(x,v,w) | P(u,z,w) ; ~R(y) | P(g(x,y),x,y)";
-            "clauses: P(z,y) | L(f(f(x,y),z)) ; L(f(x,f(y,z))) | ~P(x,g(x))";
+            String stringa =  
+                    "const: a,b,c \n" +
+                    "prec: ON>GREEN \n a>b>c \n" +
+                    "clauses: ON(a,b) ; ON(b,c) ; GREEN(a) ; ~GREEN(c) \n" +
+                    "~GREEN(x) | GREEN(y) | ~ON(x,y)";
             
             formulaReader = new StringReader(stringa);
 
@@ -47,7 +41,7 @@ public class AllTheResolventTest {
         //System.out.println(f.toString());
         //System.out.println(f.getTermsString());
         
-        System.out.println("PROVA TROVA TUTTI I RISOLVENTI DI UNA CLAUSOLA:");       
+        System.out.println("PROVA SE UNA CLAUSOLA SUSSUME UN ALTRA:");       
         /* ORDERING */
         Ordering or = new Ordering();        
         /* precedences */       
@@ -56,21 +50,26 @@ public class AllTheResolventTest {
         or.setWeightsKBO(f.getWeights(), f.getWeightVars());
         
         // seleziono le prime 2 clausole
-        Iterator<Clause> it = f.getClauses().iterator();
-        Clause c = it.next();
-        Clause othC = it.next();
-
-         Set<Clause> resolvents = c.allTheResolvents(othC);
-         
-        StringBuilder sb = new StringBuilder("Tutti i risolventi tra ");
-        sb.append(c.toString()).append(" e ").append(othC.toString()).append(" sono:\n");
-        for (Clause riso : resolvents) {
-            if (!riso.isTautology())
-                sb.append(riso.toString()).append(";\n");
+        //Iterator<Clause> it = f.getClauses().iterator();
+        //Clause c = it.next();
+        //Clause othC = it.next();
+        
+        
+        StringBuilder sb = new StringBuilder();
+        
+        GivenClauseProver prover = new GivenClauseProver(true, false, false, true, true);
+        Clause result = prover.satisfiable(f);
+        if (result == null)
+            sb.append("E` SODDISFACIBILE.");
+        else {
+            sb.append("E` INSODDISFACIBILE con prova:\n");
+            sb.append(result.getDOT());
+            
         }
+        
        
         System.out.println(sb.toString());
         
     }
-
-} 
+    
+}

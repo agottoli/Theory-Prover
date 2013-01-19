@@ -1,5 +1,7 @@
 package thProver;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -19,7 +21,7 @@ public class InferenceSystem {
         return c1.allTheOrderedResolvents(c2, ord);
     }
 
-    public static Set<Clause> resolution(Clause c1, List<Clause> selected, Ordering ord) {
+    public static Set<Clause> resolution(Clause c1, List<Clause> selected) {
         Set<Clause> resolvents = new LinkedHashSet<>();
         for (Clause c2 : selected)
             resolvents.addAll(c1.allTheResolvents(c2));
@@ -52,7 +54,7 @@ public class InferenceSystem {
         return c.semplClaus(sempl);
     }
 
-    public static Set<Clause> semplificClause(Clause c, List<Clause> sempl) {
+    public static Set<Clause> semplificClause(Clause c, Collection<Clause> sempl) {
         Set<Clause> nuove = new LinkedHashSet<>();
         Set<Clause> semplificate = new LinkedHashSet<>();
         for (Clause c2 : sempl) {
@@ -70,22 +72,29 @@ public class InferenceSystem {
 
     }
 
-    public static Clause semplificatedClause(Clause c, List<Clause> sempl) {
+    public static Clause semplificatedClause(Clause c, Collection<Clause> clauses) {
         //Set<Clause> nuove = new LinkedHashSet<>();
-        for (Clause c1 : sempl) {
+        Clause semplificata = null;
+        //Iterator<Clause> it = clauses.iterator();
+        //while (it.hasNext()) {
+        for (Clause c1 : clauses) {
             Clause nuova = c1.semplClaus(c);
             if (nuova != null) {
                 //nuove.add(nuova);
-                return nuova;
+                semplificata = nuova;
+                c = nuova; // così continua a cercare di semplificarla
+                //return nuova;
             }
         }
 
-        return null; //nuove;
+        return semplificata; //nuove;
 
     }
 
-    public static boolean subsumedBy(Clause c, List<Clause> clauses) {
+    public static boolean subsumedBy(Clause c, Collection<Clause> clauses) {
         // clauses <. c --> cancello c
+        //Iterator<Clause> it = clauses.iterator();
+        //while (it.hasNext()) {
         for (Clause c1 : clauses) {
             if (c1.subsumes(c) != null) {
                 return true;
@@ -94,11 +103,12 @@ public class InferenceSystem {
         return false;
     }
 
-    public static int subsumes(Clause c, List<Clause> clauses) {
+    public static int subsumes(Clause c, Collection<Clause> clauses) {
         // c <. clauses --> cancello clauses
         // NOTA: modifica clauses ????
         int numClausSuss = 0;
-        for (Clause c2 : clauses) {
+        List<Clause> copy = new ArrayList<>(clauses);
+        for (Clause c2 : copy) {
             if (c.subsumes(c2) != null) {
                 numClausSuss++;
                 clauses.remove(c2);

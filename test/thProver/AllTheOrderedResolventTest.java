@@ -25,12 +25,14 @@ public class AllTheOrderedResolventTest {
          */
         Reader formulaReader;
             String stringa = 
-                    "prec: P>R\n" +
+                    "prec: P>R>L>f>g\n" +
                     "weightVars: 1\n" +
-                    "weights: P = 1; ack = 1; succ = 1; 0 = 1; a = 1\n" +
+                    "weights: L = 1; P = 1; ack = 1; succ = 1; 0 = 1; g = 1; f = 1; a = 1\n" +
             // esempio trova tutti i risolventi
-            "clauses: ~P(x,y,u) | R(x) | ~P(y,z,v) | ~P(x,v,w) | P(u,z,w) ; ~R(y) | P(g(x,y),x,y)";
-            
+            //"clauses: ~P(x,y,u) | R(x) | ~P(y,z,v) | ~P(x,v,w) | P(u,z,w) ; ~R(y) | P(g(x,y),x,y)";
+            "clauses: P(z,y) | L(f(f(x,y),z)) ; L(f(x1,f(y1,z1))) | ~P(x1,g(x1))";
+                    
+                    
             formulaReader = new StringReader(stringa);
 
 

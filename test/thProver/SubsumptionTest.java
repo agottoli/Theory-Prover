@@ -30,7 +30,10 @@ public class SubsumptionTest {
             //"clauses: ~P(x,y,u) | R(x) | ~P(y,z,v) | ~P(g(f(z),x),f(v),w) | P(u,z,w) ; R(y) | ~P(g(x,y),x,y) \n" +
             // + esempio dell'esercizio 4 del compito parziale
             //"Q(w) ; ~R(f(u)) | Q(f(u))";
-                    "clauses: P(x) | R(x,y) ; P(x) | R(z,w) | Q(z)";
+                    //"clauses: P(x) | R(x,y) ; P(x) | R(z,w) | Q(z)";
+                    
+                    // prova sussunzione propria
+                    "clauses: P(x) | R(x,y) ; P(x1) | R(z1,w1)";
             formulaReader = new StringReader(stringa);
 
 

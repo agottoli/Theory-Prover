@@ -36,6 +36,8 @@ public class Clause implements Comparable<Clause> {
     private List<Literal> maximalLits;
     List<Literal> posMaximalLits;
     List<Literal> negMaximalLits;
+    // per ricavare la prova devo segnarmi da chi provengono (i padri)
+    List<Clause> parents;
 
     /**
      * Constructs an empty clause.
@@ -123,6 +125,19 @@ public class Clause implements Comparable<Clause> {
     public List<Literal> getNegativeLiterals() {
         return negLits;
     }
+    
+    public void setParents(List<Clause> par) {
+        parents = par;
+    }
+    
+    public void setParents(Clause par) {
+        parents = new ArrayList<>();
+        parents.add(par);
+    }
+    
+    public List<Clause> getParents() {
+        return parents;
+    }
 
     public int size() {
         return literals.size();
@@ -132,14 +147,16 @@ public class Clause implements Comparable<Clause> {
     public String toString() {
         if (string != null)
             return string;
+        
+        if (literals == null || literals.isEmpty())
+            return "[]";
 
         StringBuilder sb = new StringBuilder();
 
         for (Literal l : literals)
             sb.append(l.toString()).append(" | ");
 
-        if (!literals.isEmpty())
-            sb.replace(sb.length() - 3, sb.length(), "");
+        sb.replace(sb.length() - 3, sb.length(), "");
 
         return sb.toString();
     }
@@ -300,11 +317,13 @@ public class Clause implements Comparable<Clause> {
                         /* DEBUG inizio */
                         //System.out.println("\te ottengo " + nuova + "\n\tda sub " + substitution.toString());
                         /* DEBUG fine */
-                        if (!nuova.isTautology())
+                        if (!nuova.isTautology()) {
                             //nuova.renameVariables();
+                            nuova.setParents(this);
                             factors.add(nuova); //} else {
                         /* DEBUG inizio */ //System.out.println("\ttautologia, quindi la cancello.");
                         /* DEBUG fine */
+                        }
                     }
                 }
             }
@@ -389,6 +408,7 @@ public class Clause implements Comparable<Clause> {
                         /* DEBUG fine */
                         if (!nuova.isTautology())
                             //nuova.renameVariables();
+                            nuova.setParents(this);
                             maximalFactors.add(nuova); //} else {
                         /* DEBUG inizio */ //System.out.println("\ttautologia, quindi la cancello.");
                         /* DEBUG fine */
@@ -426,7 +446,7 @@ public class Clause implements Comparable<Clause> {
             lits.add(l.applySubstitution(tau, time));
         if (lits.equals(literals))
             return this;
-        return new Clause(lits);
+        return new Clause(lits); // ???? PARENTS
     }
 
     public String getFactorsString() {
@@ -510,6 +530,10 @@ public class Clause implements Comparable<Clause> {
                         }
 
                         Clause nuova = new Clause(set);
+                        List<Clause> p = new ArrayList<>();
+                        p.add(this);
+                        p.add(othC);
+                        nuova.setParents(p);
                         //nuova.renameVariables();
                         resolvents.add(nuova);
                     }
@@ -570,6 +594,9 @@ public class Clause implements Comparable<Clause> {
                         Set<Literal> set = new LinkedHashSet<>();
                         long time = System.nanoTime();
                         substitution.renameVariables(time);
+                        /* DEBUG inizio */
+                        System.out.println("sub: " + substitution);
+                        /* DEBUG fine */
                         for (Literal l : literals) {
                             if (l.equals(litX))
                                 continue;
@@ -582,6 +609,10 @@ public class Clause implements Comparable<Clause> {
                         }
 
                         Clause nuova = new Clause(set);
+                        List<Clause> p = new ArrayList<>();
+                        p.add(this);
+                        p.add(othC);
+                        nuova.setParents(p);
                         //nuova.renameVariables();
                         resolvents.add(nuova);
                     }
@@ -639,9 +670,9 @@ public class Clause implements Comparable<Clause> {
         if (!(this == othC))
             // Ensure this has less literals total and that
             // it is a subset of the other clauses positive and negative counts
-            if (this.literals.size() < othC.literals.size()
-                    && this.posLits.size() <= othC.posLits.size()
-                    && this.negLits.size() <= othC.negLits.size()) {
+            if (this.literals.size() < othC.literals.size() ) {
+                  //  && this.posLits.size() <= othC.posLits.size()
+                  //  && this.negLits.size() <= othC.negLits.size()) {
 
                 // PROVO SUSSUNZIONE PROPRIA
                 Map<String, List<Literal>> thisToTry = collectLikeLiterals(this.literals);
@@ -667,7 +698,7 @@ public class Clause implements Comparable<Clause> {
                      //Substitution sub = new Substitution();
                      //for (String key : thisToTry.keySet()) {*/
                     return checkSub(thisToTry, othCToTry,
-                            new Substitution());
+                            new Substitution(), false);
 
                     /*
                      // se arrivo qui vuol dire che nessun letterale
@@ -680,7 +711,14 @@ public class Clause implements Comparable<Clause> {
                     && this.posLits.size() == othC.posLits.size()
                     && this.negLits.size() == othC.negLits.size()) {
                 // PROVO CON LA SUSSUNZIONE DI VARIANTI
-                // ?????
+                Map<String, List<Literal>> thisToTry = collectLikeLiterals(this.literals);
+                Map<String, List<Literal>> othCToTry = collectLikeLiterals(othC.literals);
+                // Ensure all like literals from this clause are a subset
+                // of the other clause.
+                if (othCToTry.keySet().containsAll(thisToTry.keySet())) {
+                    return checkSub(thisToTry, othCToTry,
+                            new Substitution(), true);
+                }
             }
 
         return null; //subsumes;
@@ -710,7 +748,8 @@ public class Clause implements Comparable<Clause> {
     public Substitution checkSub(
             Map<String, List<Literal>> thisToTry,
             Map<String, List<Literal>> othCToTry,
-            Substitution sigma) {
+            Substitution sigma,
+            boolean isDiVarianti) {
 
         //boolean subsumes = false;
 
@@ -753,9 +792,12 @@ public class Clause implements Comparable<Clause> {
                         if (thisToTryCopy.isEmpty())
                             return copy; // tutti i letterali in this unificano contemporaneamente
 
+                        // non è vuota allora guardo che l'indice della variabile 
+                        // sia più piccolo ????
+                        
                         //Substitution copy = sub.copy();
                         Substitution nuova;
-                        nuova = checkSub(thisToTryCopy, othCToTry, copy);
+                        nuova = checkSub(thisToTryCopy, othCToTry, copy, isDiVarianti);
                         if (nuova != null)
                             return nuova; // credo di aver unificato tutto
                         
@@ -798,9 +840,40 @@ public class Clause implements Comparable<Clause> {
                 // e aggiornare tutto!!!
                 Set<Literal> litsNuoviothC = new LinkedHashSet<>(othC.literals);
                 litsNuoviothC.remove(l2);
-                return new Clause(litsNuoviothC);
+                Clause nuova = new Clause(litsNuoviothC);
+                List<Clause> p = new ArrayList<>();
+                p.add(this);
+                p.add(othC);
+                nuova.setParents(p);
+                return nuova;
             }
         }
         return null;
+    }
+    
+    public String getDOT() {
+        StringBuilder sb = new StringBuilder("digraph {\n");
+        sb.append(getDOT2());
+        sb.append("}\n");
+        return sb.toString();
+    }
+    
+    private String getDOT2() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("\t\"");
+        sb.append(this.toString());
+        sb.append("\" [shape=plaintext];\n");
+        
+        if (parents != null) {
+            for (Clause c : parents) {
+                sb.append("\t\"");
+                sb.append(c.toString());
+                sb.append("\" -> \"");
+                sb.append(this.toString());
+                sb.append("\";\n");
+                sb.append(c.getDOT2());
+            }
+        }
+        return sb.toString();
     }
 }

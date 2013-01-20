@@ -2,6 +2,7 @@ package thProver;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -79,23 +80,29 @@ public class Constant implements Term {
         return hash;
     }
 
+    // serve per la composizione di sostituzioni 
+    // e nell'mgu (per sostituire con la sostituzione 
+    // temporanea prima di cercare ulteriori assegnamenti)
     @Override
     public Term applySubstitution(Substitution tau) {
         return this;
     }
     
     @Override
-    public Term applySubstitution(Substitution tau, long time) {
+    public Term applySubstitution(Substitution tau, Map<String, Variable> vars, long time) {
         return this;
     }
 
+    // serve quando aggiungo un assegnamento alla sostituzione per aggiornare
+    // i valori a destra (da assegnare)
     @Override
     public Term applySubstitution(Variable var, Term ter) {
         return this;
     }
-
+/*
     @Override
     public Term renameVariables(long num) {
         return this;
     }
+*/
 }

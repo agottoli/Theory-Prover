@@ -37,7 +37,10 @@ public class Clause implements Comparable<Clause> {
     List<Literal> posMaximalLits;
     List<Literal> negMaximalLits;
     // per ricavare la prova devo segnarmi da chi provengono (i padri)
+    // e in che modo mi generano
     List<Clause> parents;
+    Substitution sub;
+    String rule;
 
     /**
      * Constructs an empty clause.
@@ -126,13 +129,31 @@ public class Clause implements Comparable<Clause> {
         return negLits;
     }
     
-    public void setParents(List<Clause> par) {
+    // per la risoluzione e semplificazione (2 padri)
+    public void setParentsRuleAndSub(List<Clause> par, boolean ris, 
+            boolean ordinata, Substitution sub) {
         parents = par;
+        if (ris) {
+            if (ordinata) {
+                this.rule = "ris. ord.";
+            } else {
+                this.rule = "ris.";
+            }
+        } else {
+            this.rule = "sempl. claus.";
+        }
+        this.sub = sub;
     }
     
-    public void setParents(Clause par) {
+    // per la fattorizzazione (1 padre)
+    public void setParentsRuleAndSub(Clause par, boolean ordinata, Substitution sub) {
         parents = new ArrayList<>();
         parents.add(par);
+        if (ordinata)
+            this.rule = "fatt. ord.";
+        else
+            this.rule = "fatt.";
+        this.sub = sub.copy();
     }
     
     public List<Clause> getParents() {
@@ -194,7 +215,7 @@ public class Clause implements Comparable<Clause> {
             Clause other = (Clause) obj;
             if (literals.size() != other.literals.size())
                 return false;
-            for (Literal l : literals)
+            /*for (Literal l : literals)
                 if (!other.literals.contains(l))
                     return false;
             // tutti i letterali sono presenti in other ma
@@ -202,8 +223,10 @@ public class Clause implements Comparable<Clause> {
             for (Literal l : other.literals)
                 if (!this.literals.contains(l))
                     return false;
-            // tutti i letterali sono in entrambe le clausole                            
-            return true;
+            // tutti i letterali sono in entrambe le clausole 
+            */
+            return literals.equals(other.literals);
+            //return true;
         }
 
         return false;
@@ -312,14 +335,14 @@ public class Clause implements Comparable<Clause> {
 
                     if (InferenceSystem.mgu(litX, litY, true, substitution, false)) {
                         long time = System.nanoTime();
-                        substitution.renameVariables(time);
-                        Clause nuova = this.applySubstitution(substitution, time);
+                        Map<String, Variable> renam = substitution.renameVariables(time);
+                        Clause nuova = this.applySubstitution(substitution, renam, time);
                         /* DEBUG inizio */
                         //System.out.println("\te ottengo " + nuova + "\n\tda sub " + substitution.toString());
                         /* DEBUG fine */
                         if (!nuova.isTautology()) {
                             //nuova.renameVariables();
-                            nuova.setParents(this);
+                            nuova.setParentsRuleAndSub(this, false, substitution);
                             factors.add(nuova); //} else {
                         /* DEBUG inizio */ //System.out.println("\ttautologia, quindi la cancello.");
                         /* DEBUG fine */
@@ -400,15 +423,15 @@ public class Clause implements Comparable<Clause> {
 
                     if (InferenceSystem.mgu(litX, litY, true, substitution, false)) {
                         long time = System.nanoTime();
-                        substitution.renameVariables(time);
-                        Clause nuova = this.applySubstitution(substitution, time);
+                        Map<String, Variable> renam = substitution.renameVariables(time);
+                        Clause nuova = this.applySubstitution(substitution, renam, time);
 
                         /* DEBUG inizio */
                         //System.out.println("\te ottengo " + nuova + "\n\tda sub " + substitution.toString());
                         /* DEBUG fine */
                         if (!nuova.isTautology())
                             //nuova.renameVariables();
-                            nuova.setParents(this);
+                            nuova.setParentsRuleAndSub(this, true, substitution);
                             maximalFactors.add(nuova); //} else {
                         /* DEBUG inizio */ //System.out.println("\ttautologia, quindi la cancello.");
                         /* DEBUG fine */
@@ -439,11 +462,12 @@ public class Clause implements Comparable<Clause> {
      return new Clause(lits);
      }
      */
-    public Clause applySubstitution(Substitution tau, long time) {
+    
+    public Clause applySubstitution(Substitution tau, Map<String, Variable> vars, long time) {
         //long time = System.nanoTime();
         Set<Literal> lits = new LinkedHashSet<>();
         for (Literal l : literals)
-            lits.add(l.applySubstitution(tau, time));
+            lits.add(l.applySubstitution(tau, vars, time));
         if (lits.equals(literals))
             return this;
         return new Clause(lits); // ???? PARENTS
@@ -517,23 +541,23 @@ public class Clause implements Comparable<Clause> {
                     if (InferenceSystem.mgu(litX, litY, false, substitution, false)) {
                         Set<Literal> set = new LinkedHashSet<>();
                         long time = System.nanoTime();
-                        substitution.renameVariables(time);
+                        Map<String, Variable> renam = substitution.renameVariables(time);
                         for (Literal l : literals) {
                             if (l.equals(litX))
                                 continue;
-                            set.add(l.applySubstitution(substitution, time));
+                            set.add(l.applySubstitution(substitution, renam, time));
                         }
                         for (Literal l : othC.literals) {
                             if (l.equals(litY))
                                 continue;
-                            set.add(l.applySubstitution(substitution, time));
+                            set.add(l.applySubstitution(substitution, renam, time));
                         }
 
                         Clause nuova = new Clause(set);
                         List<Clause> p = new ArrayList<>();
                         p.add(this);
                         p.add(othC);
-                        nuova.setParents(p);
+                        nuova.setParentsRuleAndSub(p, true, false, substitution);
                         //nuova.renameVariables();
                         resolvents.add(nuova);
                     }
@@ -593,26 +617,26 @@ public class Clause implements Comparable<Clause> {
                     if (InferenceSystem.mgu(litX, litY, false, substitution, false)) {
                         Set<Literal> set = new LinkedHashSet<>();
                         long time = System.nanoTime();
-                        substitution.renameVariables(time);
+                        Map<String, Variable> renam = substitution.renameVariables(time);
                         /* DEBUG inizio */
                         System.out.println("sub: " + substitution);
                         /* DEBUG fine */
                         for (Literal l : literals) {
                             if (l.equals(litX))
                                 continue;
-                            set.add(l.applySubstitution(substitution, time));
+                            set.add(l.applySubstitution(substitution, renam, time));
                         }
                         for (Literal l : othC.literals) {
                             if (l.equals(litY))
                                 continue;
-                            set.add(l.applySubstitution(substitution, time));
+                            set.add(l.applySubstitution(substitution, renam, time));
                         }
 
                         Clause nuova = new Clause(set);
                         List<Clause> p = new ArrayList<>();
                         p.add(this);
                         p.add(othC);
-                        nuova.setParents(p);
+                        nuova.setParentsRuleAndSub(p, true, true, substitution);
                         //nuova.renameVariables();
                         resolvents.add(nuova);
                     }
@@ -641,7 +665,7 @@ public class Clause implements Comparable<Clause> {
 
         return resolvents;
     }
-
+/*
     public void renameVariables() {
         long num = System.nanoTime();
         Set<Literal> lits = literals;
@@ -649,7 +673,7 @@ public class Clause implements Comparable<Clause> {
          lNuovi.add(l.renameVariables(num));
          if (!lNuovi.equals(literals))
          literals = lNuovi;
-         */
+         * /
         posLits.clear();
         negLits.clear();
         literals = new LinkedHashSet<>(lits.size());
@@ -662,7 +686,7 @@ public class Clause implements Comparable<Clause> {
                 negLits.add(l);
 
     }
-
+*/
     public Substitution subsumes(Clause othC) {
         boolean subsumes = false;
 
@@ -844,7 +868,7 @@ public class Clause implements Comparable<Clause> {
                 List<Clause> p = new ArrayList<>();
                 p.add(this);
                 p.add(othC);
-                nuova.setParents(p);
+                nuova.setParentsRuleAndSub(p, false, false, sigma);
                 return nuova;
             }
         }
@@ -853,6 +877,8 @@ public class Clause implements Comparable<Clause> {
     
     public String getDOT() {
         StringBuilder sb = new StringBuilder("digraph {\n");
+        sb.append("\tnode [shape=plaintext];\n");
+        sb.append("\tedge [color=gray];\n");
         sb.append(getDOT2());
         sb.append("}\n");
         return sb.toString();
@@ -860,17 +886,27 @@ public class Clause implements Comparable<Clause> {
     
     private String getDOT2() {
         StringBuilder sb = new StringBuilder();
-        sb.append("\t\"");
+        /*sb.append("\t\"");
         sb.append(this.toString());
-        sb.append("\" [shape=plaintext];\n");
+        sb.append("\" [shape=plaintext];\n");*/
         
         if (parents != null) {
+            boolean primo = true;
             for (Clause c : parents) {
                 sb.append("\t\"");
                 sb.append(c.toString());
                 sb.append("\" -> \"");
                 sb.append(this.toString());
-                sb.append("\";\n");
+                sb.append("\" ");
+                if (primo) {
+                    sb.append("[label=\"");
+                    sb.append(rule);
+                    sb.append("\n");
+                    sb.append(sub.toString());
+                    sb.append("\"]");
+                    primo = false;
+                }
+                sb.append(";\n");
                 sb.append(c.getDOT2());
             }
         }

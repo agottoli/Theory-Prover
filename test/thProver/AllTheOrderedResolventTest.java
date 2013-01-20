@@ -30,7 +30,9 @@ public class AllTheOrderedResolventTest {
                     "weights: L = 1; P = 1; ack = 1; succ = 1; 0 = 1; g = 1; f = 1; a = 1\n" +
             // esempio trova tutti i risolventi
             //"clauses: ~P(x,y,u) | R(x) | ~P(y,z,v) | ~P(x,v,w) | P(u,z,w) ; ~R(y) | P(g(x,y),x,y)";
-            "clauses: P(z,y) | L(f(f(x,y),z)) ; L(f(x1,f(y1,z1))) | ~P(x1,g(x1))";
+            //"clauses: P(z,y) | L(f(f(x,y),z)) ; L(f(x,f(y,z))) | ~P(x,g(x))";
+                    // prova rename
+                    "clauses: P(x,g(y)) | L(f(f(x,y),z)) ;  L(f(x,f(y,z))) | ~P(y,x)";
                     
                     
             formulaReader = new StringReader(stringa);

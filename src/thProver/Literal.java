@@ -2,7 +2,9 @@ package thProver;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -113,26 +115,26 @@ public class Literal {
             ms.addElement(new Atom("Bottom"));
         return ms;
     }
-    
+    /*
     public Literal applySubstitution(Substitution tau) {
         Atom a = atom.applySubstitution(tau);
         if (a.equals(atom))
             return this;
         return new Literal(positive, a);
-    }
+    }*/
     
-    public Literal applySubstitution(Substitution tau, long time) {
-        Atom a = atom.applySubstitution(tau, time);
+    public Literal applySubstitution(Substitution tau, Map<String, Variable> vars, long time) {
+        Atom a = atom.applySubstitution(tau, vars, time);
         if (a.equals(atom))
             return this;
         return new Literal(positive, a);
     }
-    
+/*    
     public Literal renameVariables(long num) {
         Atom a = atom.renameVariables(num);
         if (a.equals(atom))
             return this;
         return new Literal(positive, a);
     }
-
+*/
 }

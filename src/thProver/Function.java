@@ -2,6 +2,7 @@ package thProver;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -134,6 +135,9 @@ public class Function implements Term {
         return args.size();
     }
 
+    // serve per la composizione di sostituzioni 
+    // e nell'mgu (per sostituire con la sostituzione 
+    // temporanea prima di cercare ulteriori assegnamenti)
     @Override
     public Term applySubstitution(Substitution tau) {
         List<Term> argsNuovi = new ArrayList<>();
@@ -146,16 +150,18 @@ public class Function implements Term {
     }
     
     @Override
-    public Term applySubstitution(Substitution tau, long time) {
+    public Term applySubstitution(Substitution tau, Map<String, Variable> vars, long time) {
         List<Term> argsNuovi = new ArrayList<>();
         for (Term te : args)
-            argsNuovi.add(te.applySubstitution(tau, time));
+            argsNuovi.add(te.applySubstitution(tau, vars, time));
         if (argsNuovi.equals(args))
             return this;
         return new Function(getSymbol(), argsNuovi);
 
     }
     
+    // serve quando aggiungo un assegnamento alla sostituzione per aggiornare
+    // i valori a destra (da assegnare)
     @Override
     public Term applySubstitution(Variable var, Term ter) {
         List<Term> argsNuovi = new ArrayList<>();
@@ -166,7 +172,7 @@ public class Function implements Term {
         return new Function(getSymbol(), argsNuovi);
 
     }
-
+/*
     @Override
     public Term renameVariables(long num) {
         List<Term> argsNuovi = new ArrayList<>();
@@ -176,4 +182,5 @@ public class Function implements Term {
             return this;
         return new Function(getSymbol(), argsNuovi);
     }
+*/
 }

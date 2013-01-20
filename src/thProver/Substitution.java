@@ -4,7 +4,10 @@
  */
 package thProver;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -99,11 +102,11 @@ public class Substitution {
         Map<Variable, Term> assignmentsCopy = new LinkedHashMap<>();
         assignmentsCopy.putAll(assignments);
 
-        /* apply tau to all terms in sigma */
+        // apply tau to all terms in sigma * /
         for (Variable var : assignmentsCopy.keySet()) {
             Term t = assignmentsCopy.get(var);
             Term tnuovo = t.applySubstitution(tau);
-            /* if after the substitution the term equals his variable delete the assignment */
+            // if after the substitution the term equals his variable delete the assignment * /
             if (tnuovo.equals(var)) {
                 // sicuramente è una variabile e della forma x <- x
                 assignments.remove(var);
@@ -116,12 +119,14 @@ public class Substitution {
                 assignments.put(var, tnuovo);
         }
 
-        /* add tau's assignments */
+        // add tau's assignments * /
         for (Variable var : tau.assignments.keySet())
-            /* ... only if not already in original substitution */
+            // ... only if not already in original substitution * /
             if (!assignmentsCopy.containsKey(var))
                 assignments.put(var, tau.assignments.get(var));
     }
+    
+    
     /*
      // qua creo nuovi termini e non guardo se già ci sono
      // quindi posso introdurre termini doppi
@@ -195,18 +200,117 @@ public class Substitution {
     }
     
     public boolean isWellFormed() {
-        // DA MIGLIORARE
-        Substitution copia = this.copy();
+        // DA MIGLIORARE ma giusta di sicuro
+        /*Substitution copia = this.copy();
         copia.compose(this);
-        return copia.equals(this);
+        return copia.equals(this);*/
+        
+        // dovrei fare Dom(sustituzione) intersezione Ran(sostituzione) = vuoto
+        Collection<Term> val = assignments.values();
+        for (Term t : val) {
+            if (!isWellFormed2(t))
+                return false;
+        }
+        
+        // nessun conflitto trovato
+        return true;
     }
     
-    public void renameVariables(long time) {
-        Map<Variable, Term> temp = assignments;
+    private boolean isWellFormed2(Term term) {
+        if (term instanceof Constant)
+            return true;
+        if (term instanceof Variable) {
+            return !(assignments.containsKey((Variable) term));
+        }
+        // è per forza una funzione
+        for (Term arg : ((Function) term).getArgs()) {
+            if (!isWellFormed2(arg))
+                return false;
+        }
+        // nessun conflitto
+        return true;
+    }
+    
+    public Map<String, Variable> renameVariables(long time) {
+        /*Map<Variable, Term> temp = assignments;
         assignments = new LinkedHashMap<>(temp.size());
         for (Variable key : temp.keySet()) {
             Term el = temp.get(key).renameVariables(time);
             assignments.put(key, el);
+        }*/
+        
+        // EXPERIMENTAL PER RISOLVERE
+        // x_0 <- y_1 ; x_1 <- g(y_0) ==> x_0 <- y_time ; x_1 <- g(y_time)
+        Map<Variable, Term> temp = assignments;
+        assignments = new LinkedHashMap<>(temp.size());
+        Map<String, Variable> vars = new LinkedHashMap<>();
+        Term t;
+        for (Variable key : temp.keySet()) {
+            Term el = temp.get(key);
+            if (el instanceof Constant) {
+                t = el;
+            } else if (el instanceof Function) {
+                t = renameVariables((Function) el, vars, time);
+            } else {
+                // variabile
+                t = checkPresence4NewName(vars, (Variable) el, time);
+            }
+            assignments.put(key, t);
         }
+        
+        return vars;
     }
-}
+    
+    private Term renameVariables(Function f, Map<String, Variable> vars, long time) {
+        Term t;
+        List<Term> nuoviArgs = new ArrayList<>();
+        for (Term arg : f.getArgs()) {
+            if (arg instanceof Constant) {
+                t = arg;
+            } else if (arg instanceof Function) {
+                t = renameVariables((Function) arg, vars, time);
+            } else {
+                // è una variabile e devo controllarla
+                t = checkPresence4NewName(vars, (Variable) arg, time);
+            }
+            nuoviArgs.add(t);
+        }
+        
+        return new Function(f.getSymbol(), nuoviArgs);
+    }
+    
+    private Variable checkPresence4NewName( 
+            Map<String, Variable> vars, Variable var, long time) {
+        
+        String symVar = var.getSymbol();
+        int index = symVar.lastIndexOf('_');
+        String s = symVar.substring(0, index);
+        Variable get;
+        boolean flag = true;
+        do {
+            if ((get = vars.get(s)) == null) {
+                // devo aggiungere quella variabile
+                vars.put(s, var);
+                flag = false;
+            } else {
+                // c'è già la variabile e allora devo controllare se sono la stessa
+                if (get.equals(var)) {
+                    // stesso nome e stessa variabile
+                    flag = false;
+                } else {
+                    // stesso nome ma time diverso ==> devo distinguerle
+                    // aumento il nome, ma devo essere certo che non ce ne sia 
+                    // già un'altra
+                    s += "'";
+                    // rifaccio il ciclo
+                }
+            }
+        } while (flag);
+        /* si può fare senza generarne di uguali? PROVERO' */
+        //if (get == null) {
+            return new Variable(s + "_" + time);
+        //} else {
+        //    return get;
+        //}
+    }
+ }

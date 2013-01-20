@@ -10,6 +10,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import thProver.parser.CNFParser;
 import thProver.parser.ParseException;
@@ -106,8 +107,8 @@ public class MGUAndApplySubTest {
                     if (InferenceSystem.mgu(litX, litY, true, sigma, false)) {
                         sb.append(sigma.toString());
                         long time = System.nanoTime();
-                        sigma.renameVariables(time);
-                        sb.append(" e ottengo ").append(c.applySubstitution(sigma, time));
+                        Map<String, Variable> renam = sigma.renameVariables(time);
+                        sb.append(" e ottengo ").append(c.applySubstitution(sigma, renam, time));
                     } else
                         sb.append(" non esiste.");
                 }

@@ -1,0 +1,14 @@
+digraph {
+	node [shape=plaintext];
+	edge [color=gray];
+	"GREEN(c)" -> "[]" [label="ris. ord.\n{ }"];
+	"GREEN(b)" -> "GREEN(c)" [label="sempl. claus.\n{ }"];
+	"GREEN(a)" -> "GREEN(b)" [label="sempl. claus.\n{ }"];
+	"~GREEN(a) | GREEN(b)" -> "GREEN(b)" ;
+	"~GREEN(x) | GREEN(y) | ~ON(x,y)" -> "~GREEN(a) | GREEN(b)" [label="ris. ord.\n{ x <- a, y <- b }"];
+	"ON(a,b)" -> "~GREEN(a) | GREEN(b)" ;
+	"~GREEN(b) | GREEN(c)" -> "GREEN(c)" ;
+	"~GREEN(x) | GREEN(y) | ~ON(x,y)" -> "~GREEN(b) | GREEN(c)" [label="ris. ord.\n{ x <- b, y <- c }"];
+	"ON(b,c)" -> "~GREEN(b) | GREEN(c)" ;
+	"~GREEN(c)" -> "[]" ;
+}

@@ -7,6 +7,7 @@ package thProver;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -189,7 +190,7 @@ public class Atom {
     int getNArgs() {
         return args.size();
     }
-    
+/*    
     public Atom applySubstitution(Substitution tau) {
         List<Term> argsNuovi = new ArrayList<>();
         for (Term te : args)
@@ -198,16 +199,16 @@ public class Atom {
             return this;
         return new Atom(symbol, argsNuovi);
     }
-    
-    public Atom applySubstitution(Substitution tau, long time) {
+*/   
+    public Atom applySubstitution(Substitution tau, Map<String, Variable> vars, long time) {
         List<Term> argsNuovi = new ArrayList<>();
         for (Term te : args)
-            argsNuovi.add(te.applySubstitution(tau, time));
+            argsNuovi.add(te.applySubstitution(tau, vars, time));
         if (argsNuovi.equals(args))
             return this;
         return new Atom(symbol, argsNuovi);
     }
-    
+/*    
     public Atom renameVariables(long num) {
         List<Term> argsNuovi = new ArrayList<>();
         for (Term te : args)
@@ -216,4 +217,5 @@ public class Atom {
             return this;
         return new Atom(symbol, argsNuovi);
     }
+*/
 }

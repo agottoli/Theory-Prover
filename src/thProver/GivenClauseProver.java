@@ -32,14 +32,14 @@ public class GivenClauseProver {
     private boolean useOrdering;
     
     public GivenClauseProver(boolean aLaE, boolean sos, boolean kbo, 
-            boolean multiSet, boolean uOr) {
+            boolean multiSet, boolean uOr, Ordering ord) {
         this.aLaE = aLaE;
         this.sos = sos;
         this.kbo = kbo;
         this.multiSet = multiSet;
         To_Select = new TreeSet<>();
         Selected = new ArrayList<>();
-        ord = new Ordering();
+        this.ord = ord;
         useOrdering = uOr;
     }
     
@@ -66,9 +66,14 @@ public class GivenClauseProver {
         
         // setto l'ordinamento
         ord.setPrecedence(f.getPrecedences(), f.getNPrec());
-        if (kbo)
-            ord.setWeightsKBO(f.getWeights(), f.getWeightVars());
-        ord.setKBOrdering();
+        ord.setWeightsKBO(f.getWeights(), f.getWeightVars());
+        if (kbo) {
+            ord.setKBOrdering();
+        } else if (multiSet) {
+            ord.setMultiSetOrdering();
+        } else {
+            ord.setLexicographicOrdering();
+        }
         
         // given clause cicle
         while (!To_Select.isEmpty()) {

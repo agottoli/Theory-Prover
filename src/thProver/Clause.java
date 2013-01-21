@@ -877,6 +877,7 @@ public class Clause implements Comparable<Clause> {
     
     public String getDOT() {
         StringBuilder sb = new StringBuilder("digraph {\n");
+        sb.append("\tnodesep=\"1.5\"; ranksep=2;\n");
         sb.append("\tnode [shape=plaintext];\n");
         sb.append("\tedge [color=gray];\n");
         sb.append(getDOT2());
@@ -899,11 +900,11 @@ public class Clause implements Comparable<Clause> {
                 sb.append(this.toString());
                 sb.append("\" ");
                 if (primo) {
-                    sb.append("[label=\"");
+                    sb.append("[labelfontcolor=black,labelfontsize=\"12\",headlabel=\"");
                     sb.append(rule);
-                    sb.append("\n");
+                    sb.append("\\n");
                     sb.append(sub.toString());
-                    sb.append("\"]");
+                    sb.append("\",labeldistance=\"6\"]");
                     primo = false;
                 }
                 sb.append(";\n");

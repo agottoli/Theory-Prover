@@ -1,14 +1,15 @@
 digraph {
+	nodesep="1.5"; ranksep=2;
 	node [shape=plaintext];
 	edge [color=gray];
-	"GREEN(c)" -> "[]" [label="ris. ord.\n{ }"];
-	"GREEN(b)" -> "GREEN(c)" [label="sempl. claus.\n{ }"];
-	"GREEN(a)" -> "GREEN(b)" [label="sempl. claus.\n{ }"];
+	"GREEN(c)" -> "[]" [labelfontcolor=black,labelfontsize="12",label="ris. ord.\n{ }",labeldistance="6"];
+	"GREEN(b)" -> "GREEN(c)" [labelfontcolor=black,labelfontsize="12",label="sempl. claus.\n{ }",labeldistance="6"];
+	"GREEN(a)" -> "GREEN(b)" [labelfontcolor=black,labelfontsize="12",label="sempl. claus.\n{ }",labeldistance="6"];
 	"~GREEN(a) | GREEN(b)" -> "GREEN(b)" ;
-	"~GREEN(x) | GREEN(y) | ~ON(x,y)" -> "~GREEN(a) | GREEN(b)" [label="ris. ord.\n{ x <- a, y <- b }"];
+	"~GREEN(x) | GREEN(y) | ~ON(x,y)" -> "~GREEN(a) | GREEN(b)" [labelfontcolor=black,labelfontsize="12",label="ris. ord.\n{ x <- a, y <- b }",labeldistance="6"];
 	"ON(a,b)" -> "~GREEN(a) | GREEN(b)" ;
 	"~GREEN(b) | GREEN(c)" -> "GREEN(c)" ;
-	"~GREEN(x) | GREEN(y) | ~ON(x,y)" -> "~GREEN(b) | GREEN(c)" [label="ris. ord.\n{ x <- b, y <- c }"];
+	"~GREEN(x) | GREEN(y) | ~ON(x,y)" -> "~GREEN(b) | GREEN(c)" [labelfontcolor=black,labelfontsize="12",label="ris. ord.\n{ x <- b, y <- c }",labeldistance="6"];
 	"ON(b,c)" -> "~GREEN(b) | GREEN(c)" ;
 	"~GREEN(c)" -> "[]" ;
 }

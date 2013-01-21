@@ -211,7 +211,7 @@ public class InferenceSystem {
                     Set<Variable> keys = sub.getAssignments().keySet();
                     Iterator<Variable> itV = keys.iterator();
                     String sym = itV.next().getSymbol();
-                    int index = sym.indexOf('_');
+                    int index = sym.lastIndexOf('_');
                     int daConfrontare = Integer.parseInt(sym.substring(index + 1));
                     /* DEBUG inizio */
                     //System.err.print("la sostituzione da controllare è: " + sub.toString());
@@ -219,7 +219,7 @@ public class InferenceSystem {
                     /* DEBUG fine */
                     while (itV.hasNext()) {
                         String sym2 = itV.next().getSymbol();
-                        int index2 = sym2.indexOf('_');
+                        int index2 = sym2.lastIndexOf('_');
                         int daConfrontare2 = Integer.parseInt(sym2.substring(index2 + 1));
                         if (daConfrontare2 != daConfrontare) {
                             /* DEBUG inizio */

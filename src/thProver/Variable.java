@@ -124,7 +124,7 @@ public class Variable implements Term {
 /*    
     @Override
     public Term renameVariables(long num) {
-        int i = symbol.indexOf("_");
+        int i = symbol.lastIndexOf("_");
         String s = symbol.substring(0, i+1) + num;
         return new Variable(s);
     }

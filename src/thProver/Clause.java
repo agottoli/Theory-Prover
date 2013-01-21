@@ -721,6 +721,14 @@ public class Clause implements Comparable<Clause> {
                      //subsumes = checkSubsumes(othC, thisToTry, othCToTry);
                      //Substitution sub = new Substitution();
                      //for (String key : thisToTry.keySet()) {*/
+                    /* DEBUG inizio */
+                    System.out.println("this: " + this.toString() + " sussume othC: "
+                            + othC + "?");
+                    if (this.toString().equals("~product(multiplicative_identity,multiplicative_identity,additive_identity)")
+                            && 
+                            othC.toString().equals("~product(X,X,additive_identity) | ~greater_than_0(X)"))
+                        System.out.print("eccolo");
+                    /* DEBUG fine */
                     return checkSub(thisToTry, othCToTry,
                             new Substitution(), false);
 
@@ -792,6 +800,12 @@ public class Clause implements Comparable<Clause> {
             //for (Literal lT : litsT) {
                 for (Literal lO : litsO) {
                     Substitution copy = sub.copy();
+                    /* DEBUG inizio */
+                    System.out.println("errore: mgu tra ("+ lT + " e " + lO + " )");
+                    /* DEBUG fine */
+                    if (lT.toString().equals("~product(X_7,X_7,additive_identity)"))
+                            //&& lO.toString().equals("product(Y_8,X_8,Z_8)product(Y_8,X_8,Z_8)"))
+                        System.out.print("eccoci");
                     if (InferenceSystem.mgu(lT, lO, true, copy, true)) {
                         // if sub.assignments.keySet() contains variabile di othC
                         // allora non è un unificazione giusta

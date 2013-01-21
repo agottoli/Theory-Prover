@@ -23,47 +23,43 @@ public interface CNFParserTptpConstants {
   /** RegularExpression Id. */
   int DOT = 11;
   /** RegularExpression Id. */
-  int LOWER_NAME = 12;
+  int LOWER_WORD = 12;
   /** RegularExpression Id. */
-  int UPPER_NAME = 13;
+  int UPPER_WORD = 13;
   /** RegularExpression Id. */
-  int LOWER_WORD = 14;
+  int SINGLE_QUOTED = 14;
   /** RegularExpression Id. */
-  int UPPER_WORD = 15;
+  int LOWER_ALFA = 15;
   /** RegularExpression Id. */
-  int SINGLE_QUOTED = 16;
+  int UPPER_ALFA = 16;
   /** RegularExpression Id. */
-  int LOWER_ALFA = 17;
+  int DOLLAR_LOWER_ALFA = 17;
   /** RegularExpression Id. */
-  int UPPER_ALFA = 18;
+  int DOLLAR_UPPER_ALFA = 18;
   /** RegularExpression Id. */
-  int DOLLAR_LOWER_ALFA = 19;
+  int ALFA_NUMERIC = 19;
   /** RegularExpression Id. */
-  int DOLLAR_UPPER_ALFA = 20;
+  int DEF_SYS = 20;
   /** RegularExpression Id. */
-  int ALFA_NUMERIC = 21;
+  int UNDERSCORE = 21;
   /** RegularExpression Id. */
-  int DEF_SYS = 22;
+  int SINGLE_QUOTE = 22;
   /** RegularExpression Id. */
-  int UNDERSCORE = 23;
+  int SQ_CHAR = 23;
   /** RegularExpression Id. */
-  int SINGLE_QUOTE = 24;
+  int INTEGER = 24;
   /** RegularExpression Id. */
-  int SQ_CHAR = 25;
+  int SIGNED_INTEGER = 25;
   /** RegularExpression Id. */
-  int INTEGER = 26;
+  int DECIMAL = 26;
   /** RegularExpression Id. */
-  int SIGNED_INTEGER = 27;
+  int SIGN = 27;
   /** RegularExpression Id. */
-  int DECIMAL = 28;
+  int NUMERIC = 28;
   /** RegularExpression Id. */
-  int SIGN = 29;
+  int ZERO_NUMERIC = 29;
   /** RegularExpression Id. */
-  int NUMERIC = 30;
-  /** RegularExpression Id. */
-  int ZERO_NUMERIC = 31;
-  /** RegularExpression Id. */
-  int NON_ZERO_NUMERIC = 32;
+  int NON_ZERO_NUMERIC = 30;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -82,8 +78,6 @@ public interface CNFParserTptpConstants {
     "\"(\"",
     "\")\"",
     "\".\"",
-    "<LOWER_NAME>",
-    "<UPPER_NAME>",
     "<LOWER_WORD>",
     "<UPPER_WORD>",
     "<SINGLE_QUOTED>",

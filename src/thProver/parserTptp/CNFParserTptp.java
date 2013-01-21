@@ -31,7 +31,7 @@ public class CNFParserTptp implements CNFParserTptpConstants {
     label_1:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case LOWER_NAME:
+      case LOWER_WORD:
         ;
         break;
       default:
@@ -49,13 +49,13 @@ public class CNFParserTptp implements CNFParserTptpConstants {
     Literal l;
     Token cnf;
     Token role;
-    cnf = jj_consume_token(LOWER_NAME);
+    cnf = jj_consume_token(LOWER_WORD);
                          if (!cnf.image.equals("cnf"))
                             {if (true) throw new ParseException("una clausola deve cominciare con cnf.");}
     jj_consume_token(LPAR);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case LOWER_NAME:
-      jj_consume_token(LOWER_NAME);
+    case LOWER_WORD:
+      jj_consume_token(LOWER_WORD);
       break;
     case SINGLE_QUOTED:
       jj_consume_token(SINGLE_QUOTED);
@@ -69,7 +69,7 @@ public class CNFParserTptp implements CNFParserTptpConstants {
       throw new ParseException();
     }
     jj_consume_token(COMMA);
-    role = jj_consume_token(LOWER_NAME);
+    role = jj_consume_token(LOWER_WORD);
     jj_consume_token(COMMA);
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case LPAR:
@@ -93,7 +93,7 @@ public class CNFParserTptp implements CNFParserTptpConstants {
       jj_consume_token(RPAR);
       break;
     case NOT:
-    case LOWER_NAME:
+    case LOWER_WORD:
     case SINGLE_QUOTED:
       l = Literal();
                                c.addLiteral(l);
@@ -149,8 +149,8 @@ public class CNFParserTptp implements CNFParserTptpConstants {
     List<Term> terms = null;
     Token p;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case LOWER_NAME:
-      p = jj_consume_token(LOWER_NAME);
+    case LOWER_WORD:
+      p = jj_consume_token(LOWER_WORD);
       break;
     case SINGLE_QUOTED:
       p = jj_consume_token(SINGLE_QUOTED);
@@ -215,11 +215,11 @@ public class CNFParserTptp implements CNFParserTptpConstants {
     Term t;
     List<Term> terms = null;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-    case LOWER_NAME:
+    case LOWER_WORD:
     case SINGLE_QUOTED:
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
-      case LOWER_NAME:
-        s = jj_consume_token(LOWER_NAME);
+      case LOWER_WORD:
+        s = jj_consume_token(LOWER_WORD);
         break;
       case SINGLE_QUOTED:
         s = jj_consume_token(SINGLE_QUOTED);
@@ -241,8 +241,8 @@ public class CNFParserTptp implements CNFParserTptpConstants {
         ;
       }
       break;
-    case UPPER_NAME:
-      s = jj_consume_token(UPPER_NAME);
+    case UPPER_WORD:
+      s = jj_consume_token(UPPER_WORD);
                                       variabile = true;
       break;
     default:
@@ -281,16 +281,11 @@ public class CNFParserTptp implements CNFParserTptpConstants {
   static private int jj_gen;
   static final private int[] jj_la1 = new int[12];
   static private int[] jj_la1_0;
-  static private int[] jj_la1_1;
   static {
       jj_la1_init_0();
-      jj_la1_init_1();
    }
    private static void jj_la1_init_0() {
-      jj_la1_0 = new int[] {0x1000,0x4011000,0x40,0x40,0x11280,0x80,0x11000,0x200,0x100,0x11000,0x200,0x13000,};
-   }
-   private static void jj_la1_init_1() {
-      jj_la1_1 = new int[] {0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,0x0,};
+      jj_la1_0 = new int[] {0x1000,0x1005000,0x40,0x40,0x5280,0x80,0x5000,0x200,0x100,0x5000,0x200,0x7000,};
    }
 
   /** Constructor with InputStream. */
@@ -428,7 +423,7 @@ public class CNFParserTptp implements CNFParserTptpConstants {
   /** Generate ParseException. */
   static public ParseException generateParseException() {
     jj_expentries.clear();
-    boolean[] la1tokens = new boolean[33];
+    boolean[] la1tokens = new boolean[31];
     if (jj_kind >= 0) {
       la1tokens[jj_kind] = true;
       jj_kind = -1;
@@ -439,13 +434,10 @@ public class CNFParserTptp implements CNFParserTptpConstants {
           if ((jj_la1_0[i] & (1<<j)) != 0) {
             la1tokens[j] = true;
           }
-          if ((jj_la1_1[i] & (1<<j)) != 0) {
-            la1tokens[32+j] = true;
-          }
         }
       }
     }
-    for (int i = 0; i < 33; i++) {
+    for (int i = 0; i < 31; i++) {
       if (la1tokens[i]) {
         jj_expentry = new int[1];
         jj_expentry[0] = i;

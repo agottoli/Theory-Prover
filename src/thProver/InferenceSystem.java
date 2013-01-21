@@ -60,6 +60,10 @@ public class InferenceSystem {
         for (Clause c2 : sempl) {
             Clause nuova = c.semplClaus(c2);
             if (nuova != null) {
+                /* DEBUG inizio */
+                System.out.println("contr. INDIETRO");
+                System.out.println(c2 + " semplificata da " + c + " e diventa = " + nuova);
+                /* DEBUG fine */
                 nuove.add(nuova);
                 semplificate.add(c2);
             }
@@ -81,6 +85,10 @@ public class InferenceSystem {
             Clause nuova = c1.semplClaus(c);
             if (nuova != null) {
                 //nuove.add(nuova);
+                /* DEBUG inizio */
+                System.out.println("contr. AVANTI");
+                System.out.println(c1 + " semplifica " + c + " e diventa = " + nuova);
+                /* DEBUG fine */
                 semplificata = nuova;
                 c = nuova; // così continua a cercare di semplificarla
                 //return nuova;
@@ -97,6 +105,10 @@ public class InferenceSystem {
         //while (it.hasNext()) {
         for (Clause c1 : clauses) {
             if (c1.subsumes(c) != null) {
+                /* DEBUG inizio */
+                System.out.println("contr. AVANTI");
+                System.out.println(c1 + " sussume " + c);
+                /* DEBUG fine */
                 return true;
             }
         }
@@ -110,6 +122,10 @@ public class InferenceSystem {
         List<Clause> copy = new ArrayList<>(clauses);
         for (Clause c2 : copy) {
             if (c.subsumes(c2) != null) {
+                /* DEBUG inizio */
+                System.out.println("contr. INDIETRO");
+                System.out.println(c2 + " sussunta da " + c);
+                /* DEBUG fine */
                 numClausSuss++;
                 clauses.remove(c2);
             }
@@ -146,6 +162,10 @@ public class InferenceSystem {
         else
             ySub = y.applySubstitution(sub);
 
+        // NOTA: possono essere diventati = dopo l'assegnamento
+        if (xSub.equals(ySub))
+            return true;
+        
         if (xSub instanceof Variable) {
             sub.addAssignment((Variable) xSub, ySub);
             return true;
@@ -212,7 +232,10 @@ public class InferenceSystem {
                     Iterator<Variable> itV = keys.iterator();
                     String sym = itV.next().getSymbol();
                     int index = sym.lastIndexOf('_');
-                    int daConfrontare = Integer.parseInt(sym.substring(index + 1));
+                    /* DEBUG inizio */
+                    //System.out.println("sym variabile che non ha _: " + sym);
+                    /* DEBUG fine */
+                    long daConfrontare = Long.parseLong(sym.substring(index + 1));
                     /* DEBUG inizio */
                     //System.err.print("la sostituzione da controllare è: " + sub.toString());
                     //System.err.println("CONTROLLO PER LA SUSSUNZIONE O SEMPLIFICAZIONE: daConfrontare: " + daConfrontare);
@@ -220,7 +243,7 @@ public class InferenceSystem {
                     while (itV.hasNext()) {
                         String sym2 = itV.next().getSymbol();
                         int index2 = sym2.lastIndexOf('_');
-                        int daConfrontare2 = Integer.parseInt(sym2.substring(index2 + 1));
+                        long daConfrontare2 = Long.parseLong(sym2.substring(index2 + 1));
                         if (daConfrontare2 != daConfrontare) {
                             /* DEBUG inizio */
                             //System.err.println(" NON valida :(");

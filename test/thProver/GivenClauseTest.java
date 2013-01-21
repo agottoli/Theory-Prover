@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package thProver;
 
 import java.awt.image.BufferedImage;
@@ -9,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
@@ -55,20 +52,26 @@ public class GivenClauseTest {
          + "| greater(cardinality_at_time(sk1(B,A),B),zero) )).\n";
          */
 
+                //"cnf(no_one_hates_everyone,axiom,( ~ hates(X,agatha) | ~ hates(X,butler) | ~ hates(X,charles) )).";
 
-
-
+        String folder = "/home/ale/ProveMarchi/";
+        //String fileName = "ALG002-1.p"; // non termina
+        //String fileName = "PUZ001-3.p"; // soddisfacibile
+        //String fileName = "MGT031-1.p"; // non si può per =
+        String fileName = "PUZ023-1.p"; // INSODD
 
         // parserizzo l'input
         CNFFormula f = null;
         try {
-            formulaReader = new StringReader(stringa);
+            //formulaReader = new StringReader(stringa);
+            formulaReader = new FileReader(folder+fileName);
             CNFParser parser = new CNFParser(formulaReader);
             parser.Start();
             f = parser.getCNFFormula();
         } catch (thProver.parser.ParseException pe) {
             try {
-                formulaReader = new StringReader(stringa);
+                //formulaReader = new StringReader(stringa);
+                formulaReader = new FileReader(folder+fileName);
                 CNFParserTptp parser = new CNFParserTptp(formulaReader);
                 parser.Start();
                 f = parser.getCNFFormula();
@@ -105,15 +108,16 @@ public class GivenClauseTest {
         else {
             sb.append("E` INSODDISFACIBILE con prova:\n");
             grafo = result.getDOT();
-            //sb.append(grafo);
+            sb.append(grafo);
+            
             try {
-                FileOutputStream file = new FileOutputStream("DOTfile/file.txt");
+                FileOutputStream file = new FileOutputStream("DOTfile/"+fileName);
                 PrintStream Output = new PrintStream(file);
                 Output.println(grafo);
             } catch (IOException e) {
                 System.out.println("Errore: " + e);
             }
-            String cmd = "dot -Tjpg DOTfile/file.txt -O";
+            String cmd = "dot -Tjpg DOTfile/"+ fileName +"-O";
             Runtime run = Runtime.getRuntime();
             Process pr = null;
             try {
@@ -126,18 +130,22 @@ public class GivenClauseTest {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            /*
-             BufferedReader buf = new BufferedReader(
-             new InputStreamReader(pr.getInputStream()));
-             String line = "";
-             try {
-             while ((line = buf.readLine()) != null) {
-             System.out.println(line);
-             }
-             } catch (IOException e) {
-             e.printStackTrace();
-             }
-             */
+            Picture p = new Picture("DOTfile/" + fileName + ".jpg");
+            //p.show();
+            //sb.append(grafo);
+            
+        }
+
+
+        System.out.println(sb.toString());
+        
+        /*try {
+            System.in.read();
+        } catch (IOException ioe) {
+            
+        }*/
+
+        /*
             try {
                 // the line that reads the image file
                 BufferedImage image = ImageIO.read(new File("DOTfile/file.txt.jpg"));
@@ -147,11 +155,8 @@ public class GivenClauseTest {
                 // log the exception
                 // re-throw if desired
             }
-        }
-
-
-        System.out.println(sb.toString());
-
+            */
 
     }
 }
+

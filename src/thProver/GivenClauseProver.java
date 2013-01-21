@@ -177,6 +177,7 @@ public class GivenClauseProver {
     }
 
     public Set<Clause> backwardContraction(Clause given) {
+        System.out.println("given da errore: " + given);
         int numSuss = InferenceSystem.subsumes(given, Selected);
         if (!aLaE)
             numSuss += InferenceSystem.subsumes(given, To_Select);

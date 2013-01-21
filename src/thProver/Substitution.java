@@ -43,6 +43,10 @@ public class Substitution {
      * @param t the term to assign
      */
     public void addAssignment(Variable v, Term t) {
+        /*if (v.equals(t)) {
+            // sono diventati uguali dopo l'assegnamento
+            return;
+        }*/
         if (assignments.containsKey(v))
             throw new IllegalArgumentException("Substitution: " + v
                     + " ha già un assegnamento.");

@@ -28,25 +28,25 @@ public class CNFParserTptp {
 PARSER_END(CNFParserTptp)
 
 SKIP:  
-{ " " 
-| "\t" 
-| "\n" 
-| "\r" 
-| <"%" (~["\n","\r"])* ("\n" | "\r" | "\r\n")?>  // used to skip comment, see http://www.cs.utsa.edu/~danlo/teaching/cs4713/lecture/node16.html for more details
+{ <" "> 
+| <"\t"> 
+| <"\n"> 
+| <"\r"> 
+| <"#" (~["\n","\r"])* ("\n" | "\r" | "\r\n")?>  // used to skip comment, see http://www.cs.utsa.edu/~danlo/teaching/cs4713/lecture/node16.html for more details
                                                  // and this discussion for <EOF> problem http://www.java-forums.org/advanced-java/44981-single-line-comments-javacc.html
 }
  
         
 
-<*>TOKEN: {<VLINE:             "|">
-        |   <NOT:               "~">
+<*>TOKEN: {<VLINE: "|">
+        |   <NOT: "~">
 | <COMMA: ",">
 | <LPAR: "(">
 | <RPAR: ")">
 | <DOT: ".">
 
-| <LOWER_NAME: ((<LOWER_WORD>)+ ( <UNDERSCORE> (<LOWER_WORD>)+ )* ) >
-| <UPPER_NAME: ((<UPPER_WORD>)+ ( <UNDERSCORE> (<UPPER_WORD>)+ )* ) >
+//| <LOWER_NAME: ((<LOWER_WORD>)+ ( <UNDERSCORE> (<LOWER_WORD>)+ )* ) >
+//| <UPPER_NAME: ((<UPPER_WORD>)+ ( <UNDERSCORE> (<UPPER_WORD>)+ )* ) >
 
         |   <LOWER_WORD:        ( <LOWER_ALFA> | <DOLLAR_LOWER_ALFA> ) (<ALFA_NUMERIC>)* >
         |   <UPPER_WORD:        ( <UPPER_ALFA> | <DOLLAR_UPPER_ALFA> ) (<ALFA_NUMERIC>)* >
@@ -92,10 +92,10 @@ void Clause():
     Token role;
 }
 {
-    cnf = <LOWER_NAME> { if (!cnf.image.equals("cnf")) 
+    cnf = <LOWER_WORD> { if (!cnf.image.equals("cnf")) 
                             throw new ParseException("una clausola deve cominciare con cnf."); }
-    <LPAR> ( <LOWER_NAME> | <SINGLE_QUOTED> | <INTEGER> ) <COMMA> 
-           role = <LOWER_NAME> <COMMA>
+    <LPAR> ( <LOWER_WORD> | <SINGLE_QUOTED> | <INTEGER> ) <COMMA> 
+           role = <LOWER_WORD> <COMMA>
            (
            ( <LPAR>   l = Literal() { c.addLiteral(l); }
                     ( <VLINE> l = Literal() { c.addLiteral(l); } )* <RPAR> )
@@ -133,7 +133,7 @@ Atom Atom():
     Token p;
 }
 {
-    ( p = <LOWER_NAME> | p = <SINGLE_QUOTED> )
+    ( p = <LOWER_WORD> | p = <SINGLE_QUOTED> )
         [ <LPAR> terms = Terms() <RPAR> ]
 
         { boolean ok;
@@ -173,9 +173,9 @@ Term Term():
 {
 
             (
-              ( ( s = <LOWER_NAME> | s = <SINGLE_QUOTED> )
+              ( ( s = <LOWER_WORD> | s = <SINGLE_QUOTED> )
                   [ { noArgs = false; } <LPAR> terms = Terms() <RPAR> ] ) 
-               | ( s = <UPPER_NAME> { variabile = true; } )
+               | ( s = <UPPER_WORD> { variabile = true; } )
             )
 
 

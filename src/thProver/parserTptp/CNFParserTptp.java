@@ -120,7 +120,7 @@ public class CNFParserTptp implements CNFParserTptpConstants {
     jj_consume_token(RPAR);
     jj_consume_token(DOT);
           if (role.image.equals("negated_conjecture")) {
-             f.addClause(c); // f.addSOS(c);
+             f.addSOS(c);
           } else {
              f.addClause(c);
           }

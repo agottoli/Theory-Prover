@@ -32,7 +32,7 @@ SKIP:
 | <"\n">
 | <"\r">
 | <"\t">
-| <"#"(~["\n"])* "\n"> // comment
+| <"#" (~["\n","\r"])* ("\n" | "\r" | "\r\n")?>  // comment
 }
 
 TOKEN:
@@ -156,7 +156,7 @@ void Clauses():
 // a clause
 Clause Clause():
 {
-    Clause c = new Clause();
+    Clause c = new Clause(f.getClauseIndex());
     Literal l;
 }
 {

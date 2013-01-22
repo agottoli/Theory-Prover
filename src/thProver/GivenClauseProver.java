@@ -177,13 +177,14 @@ public class GivenClauseProver {
     }
 
     public Set<Clause> backwardContraction(Clause given) {
-        System.out.println("given da errore: " + given);
+        //System.out.println("given da errore: " + given);
         int numSuss = InferenceSystem.subsumes(given, Selected);
         if (!aLaE)
             numSuss += InferenceSystem.subsumes(given, To_Select);
         /* DEBUG inizio */
-        System.out.println("numero clausole sussunte in backwardContraction: "
-                + numSuss);
+        if (numSuss != 0)
+            System.out.println(given + " -> ha sussunto "
+                + numSuss + " clausole in backward.");
         /* DEBUG fine */
         
         Set<Clause> sempl = InferenceSystem.semplificClause(given, Selected);

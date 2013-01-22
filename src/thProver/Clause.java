@@ -18,6 +18,7 @@ import java.util.Set;
  */
 public class Clause implements Comparable<Clause> {
 
+    long indiceClausola;
     // NOTA : meglio mettere Set<Literal> perché non ci interessa l'ordine
     Set<Literal> literals; // perché non interessa l'ordine e se ho due letterali uguali me ne tiene solo uno
     // per velocizzare le operazioni mi divido i letterali positivi dai negativi
@@ -41,18 +42,20 @@ public class Clause implements Comparable<Clause> {
     List<Clause> parents;
     Substitution sub;
     String rule;
+    boolean visitato = false;
 
     /**
      * Constructs an empty clause.
      */
-    public Clause() {
+    public Clause(long index) {
         literals = new LinkedHashSet<>();
         posLits = new ArrayList<>();
         negLits = new ArrayList<>();
+        indiceClausola = index;
     }
 
-    public Clause(Set<Literal> lits) {
-        this();
+    public Clause(Set<Literal> lits, long index) {
+        this(index);
         literals = lits;
         for (Literal l : literals)
             if (l.isPositive())
@@ -63,8 +66,8 @@ public class Clause implements Comparable<Clause> {
 
     // per quando creo una clausola da una regola di espansione
     // C or L  -L or D --> C or D
-    public Clause(List<Literal> lits1, List<Literal> lits2) {
-        this();
+    public Clause(List<Literal> lits1, List<Literal> lits2, long index) {
+        this(index);
         literals.addAll(lits1);
         literals.addAll(lits2);
         for (Literal l : literals)
@@ -470,7 +473,7 @@ public class Clause implements Comparable<Clause> {
             lits.add(l.applySubstitution(tau, vars, time));
         if (lits.equals(literals))
             return this;
-        return new Clause(lits); // ???? PARENTS
+        return new Clause(lits, time); // ???? PARENTS? no lo fa dopo nel metodo che l'ha chiamato
     }
 
     public String getFactorsString() {
@@ -553,7 +556,7 @@ public class Clause implements Comparable<Clause> {
                             set.add(l.applySubstitution(substitution, renam, time));
                         }
 
-                        Clause nuova = new Clause(set);
+                        Clause nuova = new Clause(set, time);
                         List<Clause> p = new ArrayList<>();
                         p.add(this);
                         p.add(othC);
@@ -632,7 +635,7 @@ public class Clause implements Comparable<Clause> {
                             set.add(l.applySubstitution(substitution, renam, time));
                         }
 
-                        Clause nuova = new Clause(set);
+                        Clause nuova = new Clause(set, time);
                         List<Clause> p = new ArrayList<>();
                         p.add(this);
                         p.add(othC);
@@ -722,12 +725,12 @@ public class Clause implements Comparable<Clause> {
                      //Substitution sub = new Substitution();
                      //for (String key : thisToTry.keySet()) {*/
                     /* DEBUG inizio */
-                    System.out.println("this: " + this.toString() + " sussume othC: "
-                            + othC + "?");
-                    if (this.toString().equals("~product(multiplicative_identity,multiplicative_identity,additive_identity)")
-                            && 
-                            othC.toString().equals("~product(X,X,additive_identity) | ~greater_than_0(X)"))
-                        System.out.print("eccolo");
+                    //System.out.println("this: " + this.toString() + " sussume othC: "
+                    //        + othC + "?");
+                    //if (this.toString().equals("~product(multiplicative_identity,multiplicative_identity,additive_identity)")
+                    //        && 
+                    //        othC.toString().equals("~product(X,X,additive_identity) | ~greater_than_0(X)"))
+                    //    System.out.print("eccolo");
                     /* DEBUG fine */
                     return checkSub(thisToTry, othCToTry,
                             new Substitution(), false);
@@ -801,11 +804,11 @@ public class Clause implements Comparable<Clause> {
                 for (Literal lO : litsO) {
                     Substitution copy = sub.copy();
                     /* DEBUG inizio */
-                    System.out.println("errore: mgu tra ("+ lT + " e " + lO + " )");
-                    /* DEBUG fine */
-                    if (lT.toString().equals("~product(X_7,X_7,additive_identity)"))
+                    //System.out.println("errore: mgu tra ("+ lT + " e " + lO + " )");
+                    //if (lT.toString().equals("~product(X_7,X_7,additive_identity)"))
                             //&& lO.toString().equals("product(Y_8,X_8,Z_8)product(Y_8,X_8,Z_8)"))
-                        System.out.print("eccoci");
+                    //    System.out.print("eccoci");
+                    /* DEBUG fine */
                     if (InferenceSystem.mgu(lT, lO, true, copy, true)) {
                         // if sub.assignments.keySet() contains variabile di othC
                         // allora non è un unificazione giusta
@@ -878,7 +881,7 @@ public class Clause implements Comparable<Clause> {
                 // e aggiornare tutto!!!
                 Set<Literal> litsNuoviothC = new LinkedHashSet<>(othC.literals);
                 litsNuoviothC.remove(l2);
-                Clause nuova = new Clause(litsNuoviothC);
+                Clause nuova = new Clause(litsNuoviothC, indice);
                 List<Clause> p = new ArrayList<>();
                 p.add(this);
                 p.add(othC);
@@ -896,10 +899,17 @@ public class Clause implements Comparable<Clause> {
         sb.append("\tedge [color=gray];\n");
         sb.append(getDOT2());
         sb.append("}\n");
+        
+        // risistemo il campo visitato nel caso di una seconda chiamata
+        resetVisitato();
         return sb.toString();
     }
     
     private String getDOT2() {
+        if (visitato)
+            return "";
+        
+        visitato = true;
         StringBuilder sb = new StringBuilder();
         /*sb.append("\t\"");
         sb.append(this.toString());
@@ -926,5 +936,18 @@ public class Clause implements Comparable<Clause> {
             }
         }
         return sb.toString();
+    }
+    
+    public void resetVisitato() {
+        if (!visitato)
+            return;
+        
+        visitato = false;
+        
+        if (parents != null) {
+            for (Clause c : parents) {
+                c.resetVisitato();
+            }
+        }
     }
 }

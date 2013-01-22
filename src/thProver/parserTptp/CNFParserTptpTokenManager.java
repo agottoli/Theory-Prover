@@ -97,7 +97,7 @@ static private int jjMoveNfa_0(int startState, int curPos)
                      jjAddStates(4, 5);
                   else if (curChar == 39)
                      jjCheckNAdd(10);
-                  else if (curChar == 35)
+                  else if (curChar == 37)
                   {
                      if (kind > 5)
                         kind = 5;

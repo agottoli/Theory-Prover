@@ -22,7 +22,7 @@ public class CNFFormula {
     private HashMap<Integer, Atom> atoms; // atom.toString(), atom
     private HashMap<Integer, Literal> literals;
     private List<Clause> clauses;
-    private int nClausesAndSOS;
+    private long nClausesAndSOS;
     private List<Clause> sos;
     
     private List<List<String>> precedences;
@@ -178,6 +178,10 @@ public class CNFFormula {
         nClausesAndSOS++;
     }
     
+    public long getClauseIndex() {
+        return nClausesAndSOS;
+    }
+    
     public boolean checkArity(String name, int nArgs) {
         Integer n;
         if ((n = arities.get(name)) == null) {
@@ -325,7 +329,7 @@ public class CNFFormula {
         return weightVars;
     }
     
-    public int getNumClausesAndSOS() {
+    public long getNumClausesAndSOS() {
         return nClausesAndSOS;
     }
 }

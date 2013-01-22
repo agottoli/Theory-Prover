@@ -59,16 +59,24 @@ public class GivenClauseTest {
         //String fileName = "PUZ001-3.p"; // soddisfacibile
         //String fileName = "MGT031-1.p"; // non si può per =
         String fileName = "PUZ023-1.p"; // INSODD
+        //String fileName = "PUZ014-1.p"; // INSODD
+        //String fileName = "PLA001-1.p"; // non termina
+        //String fileName = "PLA031-1.008.p"; // 
+        
+        boolean tptpFormat = true;
 
         // parserizzo l'input
         CNFFormula f = null;
+        if (!tptpFormat) {
         try {
-            //formulaReader = new StringReader(stringa);
+            formulaReader = new StringReader(stringa);
             formulaReader = new FileReader(folder+fileName);
             CNFParser parser = new CNFParser(formulaReader);
             parser.Start();
             f = parser.getCNFFormula();
         } catch (thProver.parser.ParseException pe) {
+        }
+        } else {
             try {
                 //formulaReader = new StringReader(stringa);
                 formulaReader = new FileReader(folder+fileName);
@@ -117,7 +125,7 @@ public class GivenClauseTest {
             } catch (IOException e) {
                 System.out.println("Errore: " + e);
             }
-            String cmd = "dot -Tjpg DOTfile/"+ fileName +"-O";
+            String cmd = "dot -Tjpg DOTfile/"+ fileName +" -O";
             Runtime run = Runtime.getRuntime();
             Process pr = null;
             try {

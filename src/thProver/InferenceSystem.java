@@ -12,6 +12,11 @@ import java.util.Set;
  * @author ale
  */
 public class InferenceSystem {
+    
+    long nClauses = 0;
+    public InferenceSystem(long l) {
+        nClauses = l;
+    }
 
     public static Set<Clause> resolution(Clause c1, Clause c2) {
         return c1.allTheResolvents(c2);
@@ -61,8 +66,8 @@ public class InferenceSystem {
             Clause nuova = c.semplClaus(c2);
             if (nuova != null) {
                 /* DEBUG inizio */
-                System.out.println("contr. INDIETRO");
-                System.out.println(c2 + " semplificata da " + c + " e diventa = " + nuova);
+                //System.out.println("contr. INDIETRO");
+                //System.out.println(c2 + " semplificata da " + c + " e diventa = " + nuova);
                 /* DEBUG fine */
                 nuove.add(nuova);
                 semplificate.add(c2);
@@ -86,8 +91,8 @@ public class InferenceSystem {
             if (nuova != null) {
                 //nuove.add(nuova);
                 /* DEBUG inizio */
-                System.out.println("contr. AVANTI");
-                System.out.println(c1 + " semplifica " + c + " e diventa = " + nuova);
+                //System.out.println("contr. AVANTI");
+                //System.out.println(c1 + " semplifica " + c + " e diventa = " + nuova);
                 /* DEBUG fine */
                 semplificata = nuova;
                 c = nuova; // così continua a cercare di semplificarla
@@ -106,8 +111,8 @@ public class InferenceSystem {
         for (Clause c1 : clauses) {
             if (c1.subsumes(c) != null) {
                 /* DEBUG inizio */
-                System.out.println("contr. AVANTI");
-                System.out.println(c1 + " sussume " + c);
+                //System.out.println("contr. AVANTI");
+                //System.out.println(c1 + " sussume " + c);
                 /* DEBUG fine */
                 return true;
             }
@@ -123,8 +128,8 @@ public class InferenceSystem {
         for (Clause c2 : copy) {
             if (c.subsumes(c2) != null) {
                 /* DEBUG inizio */
-                System.out.println("contr. INDIETRO");
-                System.out.println(c2 + " sussunta da " + c);
+                //System.out.println("contr. INDIETRO");
+                //System.out.println(c2 + " sussunta da " + c);
                 /* DEBUG fine */
                 numClausSuss++;
                 clauses.remove(c2);
@@ -261,6 +266,12 @@ public class InferenceSystem {
         }
 
         return false;
+    }
+    
+    public long getAndIncrementnClauses() {
+        long l = nClauses;
+        nClauses++;
+        return l;
     }
     /*
      // if mgu == null --> non unificabili

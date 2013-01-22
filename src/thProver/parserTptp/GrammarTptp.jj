@@ -32,7 +32,7 @@ SKIP:
 | <"\t"> 
 | <"\n"> 
 | <"\r"> 
-| <"#" (~["\n","\r"])* ("\n" | "\r" | "\r\n")?>  // used to skip comment, see http://www.cs.utsa.edu/~danlo/teaching/cs4713/lecture/node16.html for more details
+| <"%" (~["\n","\r"])* ("\n" | "\r" | "\r\n")?>  // used to skip comment, see http://www.cs.utsa.edu/~danlo/teaching/cs4713/lecture/node16.html for more details
                                                  // and this discussion for <EOF> problem http://www.java-forums.org/advanced-java/44981-single-line-comments-javacc.html
 }
  
@@ -86,7 +86,7 @@ void Start():
 // a clause
 void Clause():
 {
-    Clause c = new Clause();
+    Clause c = new Clause(f.getClauseIndex());
     Literal l;
     Token cnf;
     Token role;
@@ -106,7 +106,7 @@ void Clause():
 	
 
         { if (role.image.equals("negated_conjecture")) {
-             f.addClause(c); // f.addSOS(c);
+             f.addSOS(c);
           } else {
              f.addClause(c);
           }

@@ -139,12 +139,12 @@ public class Clause implements Comparable<Clause> {
         parents = par;
         if (ris) {
             if (ordinata) {
-                this.rule = "ris. ord.";
+                this.rule = "Risoluzione Ordinata";
             } else {
-                this.rule = "ris.";
+                this.rule = "Risoluzione Binaria";
             }
         } else {
-            this.rule = "sempl. claus.";
+            this.rule = "Semplificazione Clausale";
         }
         this.sub = sub;
     }
@@ -154,9 +154,9 @@ public class Clause implements Comparable<Clause> {
         parents = new ArrayList<>();
         parents.add(par);
         if (ordinata)
-            this.rule = "fatt. ord.";
+            this.rule = "Fattorizzazione Ordinata";
         else
-            this.rule = "fatt.";
+            this.rule = "Fattorizzazione";
         this.sub = sub.copy();
     }
     
@@ -549,14 +549,14 @@ public class Clause implements Comparable<Clause> {
                         Map<String, Variable> renam = substitution.renameVariables(time);
                         
                         /* DEBUG inizio */
-                        System.out.println("risolvente tra " + this + " e " + othC);
-                        System.out.println("subOrig: " + subOriginale);
-                        System.out.println("subRen: " + substitution);
-                        try {
+                        //System.out.println("risolvente tra " + this + " e " + othC);
+                        //System.out.println("subOrig: " + subOriginale);
+                        //System.out.println("subRen: " + substitution);
+                        /*try {
                             System.in.read();
                         } catch (IOException ioe) {
                             
-                        }
+                        }*/
                         /* DEBUG fine */
                         
                         for (Literal l : literals) {
@@ -638,14 +638,14 @@ public class Clause implements Comparable<Clause> {
                         Map<String, Variable> renam = substitution.renameVariables(time);
                         
                         /* DEBUG inizio */
-                        System.out.println("risolvente tra " + this + " e " + othC);
-                        System.out.println("subOrig: " + subOriginale);
-                        System.out.println("subRen: " + substitution);
-                        try {
+                        //System.out.println("risolvente tra " + this + " e " + othC);
+                        //System.out.println("subOrig: " + subOriginale);
+                        //System.out.println("subRen: " + substitution);
+                        /*try {
                             System.in.read();
                         } catch (IOException ioe) {
                             
-                        }
+                        }*/
                         /* DEBUG fine */
                         
                         for (Literal l : literals) {
@@ -778,19 +778,19 @@ public class Clause implements Comparable<Clause> {
                 if (this.indiceClausola < othC.indiceClausola 
                         && othCToTry.keySet().containsAll(thisToTry.keySet())) {
                     /* DEBUG inizio */
-                    System.out.println("sussunzione propria?: " + this + " e "+ othC);
+                    //System.out.println("sussunzione propria?: " + this + " e "+ othC);
                     Substitution temp = checkSub(thisToTry, othCToTry,
                                         new Substitution(), true);
-                    if (temp != null) {
-                        System.out.println("Sì, con " + temp);
-                    } else {
-                        System.out.println("No");
-                    }
-                    try {
+                    //if (temp != null) {
+                    //    System.out.println("Sì, con " + temp);
+                    //} else {
+                    //    System.out.println("No");
+                    //}
+                    /*try {
                         System.in.read();
                     } catch (IOException io) {
                         
-                    }
+                    }*/
                     return temp;
                     /* DEBUG fine */
                     //return checkSub(thisToTry, othCToTry,

@@ -116,8 +116,8 @@ public class InferenceSystem {
         for (Clause c1 : clauses) {
             if (c1.subsumes(c) != null) {
                 /* DEBUG inizio */
-                System.out.println("contr. AVANTI");
-                System.out.println(c1 + " sussume " + c);
+                //System.out.println("contr. AVANTI");
+                //System.out.println(c1 + " sussume " + c);
                 /* DEBUG fine */
                 return true;
             }
@@ -133,20 +133,19 @@ public class InferenceSystem {
         for (Clause c2 : copy) {
             if (c.subsumes(c2) != null) {
                 /* DEBUG inizio */
-                System.out.println("contr. INDIETRO");
-                System.out.println(c2 + " sussunta da " + c);
+                //System.out.println("contr. INDIETRO");
+                //System.out.println(c2 + " sussunta da " + c);
                 /* DEBUG fine */
                 numClausSuss++;
                 clauses.remove(c2);
             }
         }
         /* DEBUG inizio */
-        System.out.println("Sussunte: " + numClausSuss);
-        try {
-            System.in.read();
-        } catch (IOException ioe) {
-            
-        }
+        //System.out.println("Sussunte: " + numClausSuss);
+        //try {
+        //    System.in.read();
+        //} catch (IOException ioe) {    
+        //}
         /* DEBUG fine */
         return numClausSuss;
     }

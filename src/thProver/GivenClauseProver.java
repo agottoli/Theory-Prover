@@ -21,7 +21,7 @@ import java.util.TreeSet;
  */
 public class GivenClauseProver {
 
-    TreeSet<Clause> To_Select; // ???? PriorityQueue vs TreeSet (vs SortedSet)
+    PriorityQueue<Clause> To_Select; // ???? PriorityQueue vs TreeSet (vs SortedSet)
     List<Clause> Selected;
     private Ordering ord;
     private final boolean aLaE, sos, kbo, multiSet;
@@ -29,23 +29,25 @@ public class GivenClauseProver {
     IndexingClauses index;
     private long elapsedTime;
     private long startTime;
-    private double timeout = -1;
+    private double timeout; // = -1;
+    private boolean timeoutWhitoutResponse = false;
     private boolean useOrdering;
 
     public GivenClauseProver(boolean aLaE, boolean sos, boolean kbo,
-            boolean multiSet, boolean uOr, Ordering ord) {
+            boolean multiSet, boolean uOr, Ordering ord, int limit) {
         this.aLaE = aLaE;
         this.sos = sos;
         this.kbo = kbo;
         this.multiSet = multiSet;
-        To_Select = new TreeSet<>();
+        To_Select = new PriorityQueue<>();//TreeSet<>();
         Selected = new ArrayList<>();
         this.ord = ord;
         useOrdering = uOr;
+        timeout = limit;
     }
 
-    public void setTimeOut(int minuti) {
-        timeout = minuti * 60.0;
+    public void setTimeOut(int seconds) {
+        timeout = seconds;
     }
 
     /**
@@ -56,6 +58,7 @@ public class GivenClauseProver {
      * @return null è soddisfacibile la clausola vuota è insoddisfacibile
      */
     public Clause satisfiable(CNFFormula f) {
+        timeoutWhitoutResponse = false;
         generated = 0;
         deleted = 0;
 
@@ -89,9 +92,9 @@ public class GivenClauseProver {
         while (!To_Select.isEmpty()) {
 
             // extract given clause and find her factors
-            Clause given = To_Select.pollFirst(); //remove();
+            Clause given = To_Select.remove(); //.pollFirst(); //remove();
             /* DEBUG inizio */
-            System.out.println("Estraggo " + given);
+            //System.out.println("Estraggo " + given);
             /* DEBUG fine */
 
             if (aLaE) {
@@ -126,7 +129,7 @@ public class GivenClauseProver {
             // diventa
 
             /* DEBUG inizio */
-            System.out.println("Cominicio la risoluzione...");
+            //System.out.println("Cominicio la risoluzione...");
             /* DEBUG fine */
 
             Set<Clause> alfa;
@@ -136,18 +139,19 @@ public class GivenClauseProver {
                 alfa = InferenceSystem.resolution(given, Selected, index);
 
             /* DEBUG inizio */
-            System.out.println("ho generato " + alfa.size() + " risolventi.\n"
-                    + alfa.toString());
+            //System.out.println("ho generato " + alfa.size() + " risolventi.\n"
+            //        + alfa.toString());
             /* DEBUG fine */
 
             Set<Clause> betaprimo = new LinkedHashSet();
             Set<Clause> copy = new LinkedHashSet(alfa);
             for (Clause alfai : copy) {
                 if (alfai.isEmpty()) {
-                    elapsedTime = System.nanoTime();
+                    elapsedTime = System.nanoTime() - startTime;
                     /* DEBUG inizio */
-                    System.out.println("trovata la clausola vuota.");
+                    //System.out.println("trovata la clausola vuota.");
                     /* DEBUG fine */
+                    System.out.print(info());
                     return alfai; // insoddisfacibile NOTA: se ritorno alfai potrei generare la prova :)
                 }
                 Clause alfaiSempl;
@@ -155,7 +159,7 @@ public class GivenClauseProver {
                     deleted++;
                     alfa.remove(alfai);
                     /* DEBUG inizio */
-                    System.out.println("clausola sussunta.");
+                    //System.out.println("clausola sussunta.");
                     /* DEBUG fine */
                     continue;
                 } else {
@@ -166,18 +170,18 @@ public class GivenClauseProver {
                         alfa.remove(alfai);
                         alfa.add(alfaiSempl);
                         /* DEBUG inizio */
-                        System.out.println("clausola semplificata.");
+                        //System.out.println("clausola semplificata.");
                         /* DEBUG fine */
                     }
                 }
 
                 if (!aLaE) {
                     //betaprimo.addAll(new HashSet<Clause>());
-                    betaprimo.addAll(backwardContraction(given));
+                    betaprimo.addAll(backwardContraction(alfaiSempl));
                     // la backwardContraction deve calcolare i fattori delle beta
                     /* DEBUG inizio */
-                    System.out.println("dalla backward ho generato: "
-                            + betaprimo.size() + " clausole.");
+                    //System.out.println("dalla backward ho generato: "
+                    //        + betaprimo.size() + " clausole.");
                     /* DEBUG fine */
                 }
 
@@ -185,8 +189,12 @@ public class GivenClauseProver {
 
             elapsedTime = System.nanoTime() - startTime;
 
-            if (timeout > 0 && elapsedTime / 1000000000.0 > timeout)
-                return null;
+            if (timeout > 0 && elapsedTime / 1000000000.0 > timeout) {
+                //System.out.print(info());
+                //return null;
+                timeoutWhitoutResponse = true;
+                break;
+            }
 
             To_Select.addAll(alfa);
             if (betaprimo != null && !betaprimo.isEmpty())
@@ -195,15 +203,16 @@ public class GivenClauseProver {
             Selected.add(given);
 
             /* DEBUG inizio */
-            System.out.println("fine di questa iterazione.");
-            try {
+            //System.out.println("fine di questa iterazione.");
+            /*try {
                 System.in.read();
             } catch (IOException ioe) {
-            }
+            }*/
             /* DEBUG fine */
         }
-
-        return null; //true; // DA FARE
+        
+        System.out.print(info());
+        return null; //true; 
     }
 
     /**
@@ -235,13 +244,23 @@ public class GivenClauseProver {
 
     public Set<Clause> backwardContraction(Clause given) {
         //System.out.println("given da errore: " + given);
+        /* DEBUG inizio */
+        //int selSize = Selected.size();
+        //int toSelSize = To_Select.size();
+        /* DEBUG fine */
         int numSuss = InferenceSystem.subsumes(given, Selected);
         if (!aLaE)
             numSuss += InferenceSystem.subsumes(given, To_Select);
+        deleted += numSuss;
         /* DEBUG inizio */
-        if (numSuss != 0)
-            System.out.println(given + " -> ha sussunto "
-                    + numSuss + " clausole in backward.");
+        //if (numSuss == 40)
+        //    System.out.println("eccolo");
+        //if (numSuss != 0) {
+        //    System.out.println("selSize: " + selSize + " -> " + Selected.size());
+        //    System.out.println("toSelSize: " + toSelSize + " -> " + To_Select.size());
+        //    System.out.println(given + " -> ha sussunto "
+        //            + numSuss + " clausole in backward.");
+        //}
         /* DEBUG fine */
 
         Set<Clause> sempl = InferenceSystem.semplificClause(given, Selected, index);
@@ -251,5 +270,18 @@ public class GivenClauseProver {
         }
 
         return sempl;
+    }
+    
+    public String info() {
+        StringBuilder sb = new StringBuilder("finish with: ");
+        
+        sb.append(generated).append(" clauses generated, ");
+        sb.append(deleted).append(" clauses subsumed, ");
+        sb.append("in ");sb.append(elapsedTime/1000000000.0).append(" seconds ");
+        if (timeoutWhitoutResponse)
+            sb.append("(out of time limit)");
+        sb.append(".\n");
+        
+        return sb.toString();
     }
 }

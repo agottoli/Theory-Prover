@@ -75,7 +75,10 @@ public class AllTheOrderedResolventTest {
 
             String tipo = or.getTipeOrdering();
             sb.append("\nPer ordinamento ").append(tipo);
-            Set<Clause> resolvents = c.allTheOrderedResolvents(othC, or);
+            // nuovo inizio
+        IndexingClauses indexingC = new IndexingClauses(f.getNumClausesAndSOS());
+        // nuovo fine
+            Set<Clause> resolvents = c.allTheOrderedResolvents(othC, or, indexingC);
             sb.append("\nTutti i risolventi massimali tra ");
             sb.append(c.toString()).append(" e ").append(othC.toString()).append(" sono:\n");
             for (Clause riso : resolvents) {

@@ -84,9 +84,13 @@ public class AllTheMaximalFactorsTest {
             
             sb.append("\nPer ordinamento ").append(tipo);
             
+            // nuovo inizio
+        IndexingClauses indexingC = new IndexingClauses(f.getNumClausesAndSOS());
+        // nuovo fine
+            
             for (Clause c : f.getClauses()) {
                 sb.append("\n-------\nTutti i fattori massimali di " + c.toString() + " sono:\n");
-                c.getMaximalFactors(or);
+                c.getMaximalFactors(or, indexingC);
                 sb.append(c.getMaximalFactorsString());
             }
             

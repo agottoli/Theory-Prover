@@ -100,9 +100,13 @@ public class CopiaSicurezza {
         //c.getFactors();
         //List<Literal> maxLits = c.getMaximalLiterals(or);
         //c.getMaximalFactors(or);
+        
+        // nuovo inizio
+        IndexingClauses indexingC = new IndexingClauses(f.getNumClausesAndSOS());
+        // nuovo fine
 
-         Set<Clause> res = c.allTheResolvents(othC);
-         Set<Clause> ordRes = c.allTheOrderedResolvents(othC, or);
+         Set<Clause> res = c.allTheResolvents(othC, indexingC);
+         Set<Clause> ordRes = c.allTheOrderedResolvents(othC, or, indexingC);
         //System.out.println(maxLits.toString());
         //System.out.println(c.getFactorsString());
         //System.out.println(c.getMaximalFactorsString());

@@ -47,6 +47,10 @@ public class SemplClausTest {
         
         StringBuilder sb = new StringBuilder();
         
+        // nuovo inizio
+        IndexingClauses indexingC = new IndexingClauses(f.getNumClausesAndSOS());
+        // nuovo fine
+        
         for (Clause c : f.getClauses()) {
             for (Clause othC : f.getClauses()) {
                 
@@ -55,7 +59,7 @@ public class SemplClausTest {
                 sb.append("\nLa clausola ");
                 sb.append(c.toString());
                 Clause semplificata;
-                if ((semplificata = c.semplClaus(othC)) == null)
+                if ((semplificata = c.semplClaus(othC, indexingC)) == null)
                     sb.append(" NON");
                 sb.append(" semplifica ");
                 sb.append(othC.toString());

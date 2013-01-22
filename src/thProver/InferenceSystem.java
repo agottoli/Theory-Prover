@@ -1,5 +1,6 @@
 package thProver;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -12,58 +13,61 @@ import java.util.Set;
  * @author ale
  */
 public class InferenceSystem {
-    
-    long nClauses = 0;
-    public InferenceSystem(long l) {
-        nClauses = l;
+
+
+    public static Set<Clause> orderedResolution(Clause c1, Clause c2, Ordering ord
+            , IndexingClauses indexingC) {
+        return c1.allTheOrderedResolvents(c2, ord, indexingC);
     }
 
-    public static Set<Clause> resolution(Clause c1, Clause c2) {
-        return c1.allTheResolvents(c2);
-    }
-
-    public static Set<Clause> orderedResolution(Clause c1, Clause c2, Ordering ord) {
-        return c1.allTheOrderedResolvents(c2, ord);
-    }
-
-    public static Set<Clause> resolution(Clause c1, List<Clause> selected) {
+    public static Set<Clause> resolution(Clause c1, List<Clause> selected
+            , IndexingClauses indexingC) {
         Set<Clause> resolvents = new LinkedHashSet<>();
         for (Clause c2 : selected)
-            resolvents.addAll(c1.allTheResolvents(c2));
+            resolvents.addAll(c1.allTheResolvents(c2, indexingC));
         return resolvents;
     }
 
-    public static Set<Clause> orderedResolution(Clause c1, List<Clause> selected, Ordering ord) {
+    public static Set<Clause> orderedResolution(Clause c1, List<Clause> selected, Ordering ord
+            , IndexingClauses indexingC) {
         Set<Clause> resolvents = new LinkedHashSet<>();
         for (Clause c2 : selected)
-            resolvents.addAll(c1.allTheOrderedResolvents(c2, ord));
+            resolvents.addAll(c1.allTheOrderedResolvents(c2, ord, indexingC));
         return resolvents;
     }
 
-    public static Set<Clause> factorization(Clause c) {
-        return c.getFactors();
+    public static Set<Clause> factorization(Clause c
+            , IndexingClauses indexingC) {
+        return c.getFactors(indexingC);
     }
 
-    public static Set<Clause> orderedFactorization(Clause c, Ordering ord) {
-        return c.getMaximalFactors(ord);
+    public static Set<Clause> orderedFactorization(Clause c, Ordering ord
+            , IndexingClauses indexingC) {
+        return c.getMaximalFactors(ord, indexingC);
     }
 
-    public static void tautologyElimination(List<Clause> clauses) {
+    public static int tautologyElimination(List<Clause> clauses) {
+        int nElim = 0;
         for (Clause c : clauses) {
-            if (c.isTautology())
+            if (c.isTautology()) {
                 clauses.remove(c);
+                nElim++;
+            }
         }
+        return nElim;
     }
 
-    public static Clause semplificClause(Clause c, Clause sempl) {
-        return c.semplClaus(sempl);
+    public static Clause semplificClause(Clause c, Clause sempl
+            , IndexingClauses indexingC) {
+        return c.semplClaus(sempl, indexingC);
     }
 
-    public static Set<Clause> semplificClause(Clause c, Collection<Clause> sempl) {
+    public static Set<Clause> semplificClause(Clause c, Collection<Clause> sempl
+            , IndexingClauses indexingC) {
         Set<Clause> nuove = new LinkedHashSet<>();
         Set<Clause> semplificate = new LinkedHashSet<>();
         for (Clause c2 : sempl) {
-            Clause nuova = c.semplClaus(c2);
+            Clause nuova = c.semplClaus(c2, indexingC);
             if (nuova != null) {
                 /* DEBUG inizio */
                 //System.out.println("contr. INDIETRO");
@@ -81,13 +85,14 @@ public class InferenceSystem {
 
     }
 
-    public static Clause semplificatedClause(Clause c, Collection<Clause> clauses) {
+    public static Clause semplificatedClause(Clause c, Collection<Clause> clauses
+            , IndexingClauses indexingC) {
         //Set<Clause> nuove = new LinkedHashSet<>();
         Clause semplificata = null;
         //Iterator<Clause> it = clauses.iterator();
         //while (it.hasNext()) {
         for (Clause c1 : clauses) {
-            Clause nuova = c1.semplClaus(c);
+            Clause nuova = c1.semplClaus(c, indexingC);
             if (nuova != null) {
                 //nuove.add(nuova);
                 /* DEBUG inizio */
@@ -111,8 +116,8 @@ public class InferenceSystem {
         for (Clause c1 : clauses) {
             if (c1.subsumes(c) != null) {
                 /* DEBUG inizio */
-                //System.out.println("contr. AVANTI");
-                //System.out.println(c1 + " sussume " + c);
+                System.out.println("contr. AVANTI");
+                System.out.println(c1 + " sussume " + c);
                 /* DEBUG fine */
                 return true;
             }
@@ -128,13 +133,21 @@ public class InferenceSystem {
         for (Clause c2 : copy) {
             if (c.subsumes(c2) != null) {
                 /* DEBUG inizio */
-                //System.out.println("contr. INDIETRO");
-                //System.out.println(c2 + " sussunta da " + c);
+                System.out.println("contr. INDIETRO");
+                System.out.println(c2 + " sussunta da " + c);
                 /* DEBUG fine */
                 numClausSuss++;
                 clauses.remove(c2);
             }
         }
+        /* DEBUG inizio */
+        System.out.println("Sussunte: " + numClausSuss);
+        try {
+            System.in.read();
+        } catch (IOException ioe) {
+            
+        }
+        /* DEBUG fine */
         return numClausSuss;
     }
 
@@ -268,11 +281,6 @@ public class InferenceSystem {
         return false;
     }
     
-    public long getAndIncrementnClauses() {
-        long l = nClauses;
-        nClauses++;
-        return l;
-    }
     /*
      // if mgu == null --> non unificabili
      public static Substitution mgu(Term x, Term y) {

@@ -60,7 +60,10 @@ public class AllTheResolventTest {
         Clause c = it.next();
         Clause othC = it.next();
 
-         Set<Clause> resolvents = c.allTheResolvents(othC);
+        // nuovo inizio
+        IndexingClauses indexingC = new IndexingClauses(f.getNumClausesAndSOS());
+        // nuovo fine
+         Set<Clause> resolvents = c.allTheResolvents(othC, indexingC);
          
         StringBuilder sb = new StringBuilder("Tutti i risolventi tra ");
         sb.append(c.toString()).append(" e ").append(othC.toString()).append(" sono:\n");

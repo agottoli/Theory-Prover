@@ -128,7 +128,8 @@ public class Variable implements Term {
         String s = symbol.substring(0, i+1) + num;
         return new Variable(s);
     }
-*/    
+*/  
+    // serve solo se metto il toString che non stampa gli indici
     private Variable checkPresence4NewName( 
             Map<String, Variable> vars, long time) {
         

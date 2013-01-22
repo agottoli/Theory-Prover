@@ -1,5 +1,6 @@
 package thProver;
 
+import java.io.IOException;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -284,21 +285,21 @@ public class Clause implements Comparable<Clause> {
         maximalLits = ord.getMaximalLiterals(this);
     }
 
-    public Set<Clause> getFactors() {
+    public Set<Clause> getFactors(IndexingClauses indexingC) {
         if (factors == null)
-            calculateFactors();
+            calculateFactors(indexingC);
 
         return factors; //=
     }
 
-    public Set<Clause> getMaximalFactors(Ordering ord) {
+    public Set<Clause> getMaximalFactors(Ordering ord, IndexingClauses indexingC) {
         if (maximalFactors == null)
-            calculateMaximalFactors(ord);
+            calculateMaximalFactors(ord, indexingC);
 
         return maximalFactors; //=
     }
 
-    private void calculateFactors() {
+    private void calculateFactors(IndexingClauses indexingC) {
         factors = new LinkedHashSet<>();
 
         // DEBUG inizio //
@@ -337,7 +338,7 @@ public class Clause implements Comparable<Clause> {
                     //substitution = InferenceSystem.mgu(litX, litY, true, substitution);
 
                     if (InferenceSystem.mgu(litX, litY, true, substitution, false)) {
-                        long time = System.nanoTime();
+                        long time = indexingC.getIndexAndIncrement(); //long time = System.nanoTime();
                         Map<String, Variable> renam = substitution.renameVariables(time);
                         Clause nuova = this.applySubstitution(substitution, renam, time);
                         /* DEBUG inizio */
@@ -360,14 +361,14 @@ public class Clause implements Comparable<Clause> {
         // ??? devo trovare anche i fattori dei fattori? se lo faccio calcolo 2 volte gli stessi risolventi...
         Set<Clause> aggiuntivi = new LinkedHashSet<>();
         for (Clause c : factors)
-            aggiuntivi.addAll(c.getFactors());
+            aggiuntivi.addAll(c.getFactors(indexingC));
         factors.addAll(aggiuntivi);
         // DEBUG inizio //
         //System.out.println("più aggiunti anche i fattori dei sui fattori ricorsivamente\nottengo per " + toString() + "\n->" + factors + "\n");
         // DEBUG fine
     }
 
-    private void calculateMaximalFactors(Ordering ord) {
+    private void calculateMaximalFactors(Ordering ord, IndexingClauses indexingC) {
         getMaximalLiterals(ord); // così se non già calcolati non da problemi
 
         // DEBUG inizio //
@@ -425,7 +426,7 @@ public class Clause implements Comparable<Clause> {
                     //substitution = InferenceSystem.mgu(litX, litY, true);
 
                     if (InferenceSystem.mgu(litX, litY, true, substitution, false)) {
-                        long time = System.nanoTime();
+                        long time = indexingC.getIndexAndIncrement(); //long time = System.nanoTime();
                         Map<String, Variable> renam = substitution.renameVariables(time);
                         Clause nuova = this.applySubstitution(substitution, renam, time);
 
@@ -448,7 +449,7 @@ public class Clause implements Comparable<Clause> {
         // ??? devo trovare anche i fattori dei fattori?
         Set<Clause> aggiuntivi = new LinkedHashSet<>();
         for (Clause c : maximalFactors)
-            aggiuntivi.addAll(c.getMaximalFactors(ord));
+            aggiuntivi.addAll(c.getMaximalFactors(ord, indexingC));
         maximalFactors.addAll(aggiuntivi);
         // DEBUG inizio //
         //System.out.println("più aggiunti anche i fattori dei sui fattori ricorsivamente\nottengo per " + toString() + "\n->" + maximalFactors + "\n");
@@ -478,7 +479,7 @@ public class Clause implements Comparable<Clause> {
 
     public String getFactorsString() {
         if (factors == null)
-            calculateFactors();
+            return "i fattori sono ancora da calcolare."; //calculateFactors();
         if (factors.isEmpty())
             return "non ci sono fattori.";
 
@@ -511,7 +512,7 @@ public class Clause implements Comparable<Clause> {
         return sb.toString();
     }
 
-    public Set<Clause> resolvents(Clause othC) {
+    public Set<Clause> resolvents(Clause othC, IndexingClauses indexingC) {
         Set<Clause> resolvents = new LinkedHashSet<>(); // oppure LinkedHashSet<>(); che non ha il problema dell'incremento dei costi di TreeSet
 
         //Map<Variable, Term> theta = new HashMap<Variable, Term>();
@@ -543,8 +544,21 @@ public class Clause implements Comparable<Clause> {
 
                     if (InferenceSystem.mgu(litX, litY, false, substitution, false)) {
                         Set<Literal> set = new LinkedHashSet<>();
-                        long time = System.nanoTime();
+                        long time = indexingC.getIndexAndIncrement(); //long time = System.nanoTime();
+                        Substitution subOriginale = substitution.copy(); 
                         Map<String, Variable> renam = substitution.renameVariables(time);
+                        
+                        /* DEBUG inizio */
+                        System.out.println("risolvente tra " + this + " e " + othC);
+                        System.out.println("subOrig: " + subOriginale);
+                        System.out.println("subRen: " + substitution);
+                        try {
+                            System.in.read();
+                        } catch (IOException ioe) {
+                            
+                        }
+                        /* DEBUG fine */
+                        
                         for (Literal l : literals) {
                             if (l.equals(litX))
                                 continue;
@@ -560,7 +574,7 @@ public class Clause implements Comparable<Clause> {
                         List<Clause> p = new ArrayList<>();
                         p.add(this);
                         p.add(othC);
-                        nuova.setParentsRuleAndSub(p, true, false, substitution);
+                        nuova.setParentsRuleAndSub(p, true, false, subOriginale);//substitution);
                         //nuova.renameVariables();
                         resolvents.add(nuova);
                     }
@@ -570,22 +584,22 @@ public class Clause implements Comparable<Clause> {
         return resolvents;
     }
 
-    public Set<Clause> allTheResolvents(Clause othC) {
+    public Set<Clause> allTheResolvents(Clause othC, IndexingClauses indexingC) {
         Set<Clause> resolvents = new LinkedHashSet<>();
 
-        resolvents.addAll(this.resolvents(othC));
-        for (Clause c : othC.getFactors())
-            resolvents.addAll(this.resolvents(c));
-        for (Clause c : getFactors())
-            resolvents.addAll(c.resolvents(othC));
-        for (Clause c1 : getFactors())
-            for (Clause c2 : othC.getFactors())
-                resolvents.addAll(c1.resolvents(c2));
+        resolvents.addAll(this.resolvents(othC, indexingC));
+        for (Clause c : othC.getFactors(indexingC))
+            resolvents.addAll(this.resolvents(c, indexingC));
+        for (Clause c : getFactors(indexingC))
+            resolvents.addAll(c.resolvents(othC, indexingC));
+        for (Clause c1 : getFactors(indexingC))
+            for (Clause c2 : othC.getFactors(indexingC))
+                resolvents.addAll(c1.resolvents(c2, indexingC));
 
         return resolvents;
     }
 
-    public Set<Clause> orderedResolvents(Clause othC) {
+    public Set<Clause> orderedResolvents(Clause othC, IndexingClauses indexingC) {
         //getMaximalLiterals(ord); // così se non già calcolati non da problemi
 
         Set<Clause> resolvents = new LinkedHashSet<>(); // oppure LinkedHashSet<>(); che non ha il problema dell'incremento dei costi di TreeSet
@@ -619,11 +633,21 @@ public class Clause implements Comparable<Clause> {
 
                     if (InferenceSystem.mgu(litX, litY, false, substitution, false)) {
                         Set<Literal> set = new LinkedHashSet<>();
-                        long time = System.nanoTime();
+                        long time = indexingC.getIndexAndIncrement(); //long time = System.nanoTime();
+                        Substitution subOriginale = substitution.copy();                     
                         Map<String, Variable> renam = substitution.renameVariables(time);
+                        
                         /* DEBUG inizio */
-                        System.out.println("sub: " + substitution);
+                        System.out.println("risolvente tra " + this + " e " + othC);
+                        System.out.println("subOrig: " + subOriginale);
+                        System.out.println("subRen: " + substitution);
+                        try {
+                            System.in.read();
+                        } catch (IOException ioe) {
+                            
+                        }
                         /* DEBUG fine */
+                        
                         for (Literal l : literals) {
                             if (l.equals(litX))
                                 continue;
@@ -639,7 +663,7 @@ public class Clause implements Comparable<Clause> {
                         List<Clause> p = new ArrayList<>();
                         p.add(this);
                         p.add(othC);
-                        nuova.setParentsRuleAndSub(p, true, true, substitution);
+                        nuova.setParentsRuleAndSub(p, true, true, subOriginale); //substitution);
                         //nuova.renameVariables();
                         resolvents.add(nuova);
                     }
@@ -649,7 +673,8 @@ public class Clause implements Comparable<Clause> {
         return resolvents;
     }
 
-    public Set<Clause> allTheOrderedResolvents(Clause othC, Ordering ord) {
+    public Set<Clause> allTheOrderedResolvents(Clause othC, Ordering ord
+            , IndexingClauses indexingC) {
         Set<Clause> resolvents = new LinkedHashSet<>();
 
         // per essere sicuro che siano stati calcolati i letterali massimali
@@ -657,14 +682,14 @@ public class Clause implements Comparable<Clause> {
         othC.getMaximalLiterals(ord);
         /////////////////////////////////////////
 
-        resolvents.addAll(this.orderedResolvents(othC));
-        for (Clause c : othC.getMaximalFactors(ord))
-            resolvents.addAll(this.orderedResolvents(c));
-        for (Clause c : getMaximalFactors(ord))
-            resolvents.addAll(c.orderedResolvents(othC));
-        for (Clause c1 : getMaximalFactors(ord))
-            for (Clause c2 : othC.getMaximalFactors(ord))
-                resolvents.addAll(c1.orderedResolvents(c2));
+        resolvents.addAll(this.orderedResolvents(othC, indexingC));
+        for (Clause c : othC.getMaximalFactors(ord, indexingC))
+            resolvents.addAll(this.orderedResolvents(c, indexingC));
+        for (Clause c : getMaximalFactors(ord, indexingC))
+            resolvents.addAll(c.orderedResolvents(othC, indexingC));
+        for (Clause c1 : getMaximalFactors(ord, indexingC))
+            for (Clause c2 : othC.getMaximalFactors(ord, indexingC))
+                resolvents.addAll(c1.orderedResolvents(c2, indexingC));
 
         return resolvents;
     }
@@ -750,9 +775,26 @@ public class Clause implements Comparable<Clause> {
                 Map<String, List<Literal>> othCToTry = collectLikeLiterals(othC.literals);
                 // Ensure all like literals from this clause are a subset
                 // of the other clause.
-                if (othCToTry.keySet().containsAll(thisToTry.keySet())) {
-                    return checkSub(thisToTry, othCToTry,
-                            new Substitution(), true);
+                if (this.indiceClausola < othC.indiceClausola 
+                        && othCToTry.keySet().containsAll(thisToTry.keySet())) {
+                    /* DEBUG inizio */
+                    System.out.println("sussunzione propria?: " + this + " e "+ othC);
+                    Substitution temp = checkSub(thisToTry, othCToTry,
+                                        new Substitution(), true);
+                    if (temp != null) {
+                        System.out.println("Sì, con " + temp);
+                    } else {
+                        System.out.println("No");
+                    }
+                    try {
+                        System.in.read();
+                    } catch (IOException io) {
+                        
+                    }
+                    return temp;
+                    /* DEBUG fine */
+                    //return checkSub(thisToTry, othCToTry,
+                    //        new Substitution(), true);
                 }
             }
 
@@ -858,7 +900,7 @@ public class Clause implements Comparable<Clause> {
         return sigma;     
     }
     
-    public Clause semplClaus(Clause othC) {
+    public Clause semplClaus(Clause othC, IndexingClauses indexingC) {
         if (this.literals.size() != 1)
             return null; // infatti deve essere unitaria per applicare la regola
         if (othC.literals.size() < 2)
@@ -881,7 +923,7 @@ public class Clause implements Comparable<Clause> {
                 // e aggiornare tutto!!!
                 Set<Literal> litsNuoviothC = new LinkedHashSet<>(othC.literals);
                 litsNuoviothC.remove(l2);
-                Clause nuova = new Clause(litsNuoviothC, indice);
+                Clause nuova = new Clause(litsNuoviothC, indexingC.getIndexAndIncrement());
                 List<Clause> p = new ArrayList<>();
                 p.add(this);
                 p.add(othC);

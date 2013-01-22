@@ -45,7 +45,7 @@ public class CNFParserTptp implements CNFParserTptpConstants {
 
 // a clause
   static final public void Clause() throws ParseException {
-    Clause c = new Clause();
+    Clause c = new Clause(f.getClauseIndex());
     Literal l;
     Token cnf;
     Token role;

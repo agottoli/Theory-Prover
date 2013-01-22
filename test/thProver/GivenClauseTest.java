@@ -52,7 +52,7 @@ public class GivenClauseTest {
          + "| greater(cardinality_at_time(sk1(B,A),B),zero) )).\n";
          */
 
-                //"cnf(no_one_hates_everyone,axiom,( ~ hates(X,agatha) | ~ hates(X,butler) | ~ hates(X,charles) )).";
+        //"cnf(no_one_hates_everyone,axiom,( ~ hates(X,agatha) | ~ hates(X,butler) | ~ hates(X,charles) )).";
 
         String folder = "/home/ale/ProveMarchi/";
         //String fileName = "ALG002-1.p"; // non termina
@@ -62,24 +62,25 @@ public class GivenClauseTest {
         //String fileName = "PUZ014-1.p"; // INSODD
         //String fileName = "PLA001-1.p"; // non termina
         //String fileName = "PLA031-1.008.p"; // 
-        
+
         boolean tptpFormat = true;
 
         // parserizzo l'input
         CNFFormula f = null;
         if (!tptpFormat) {
-        try {
-            formulaReader = new StringReader(stringa);
-            formulaReader = new FileReader(folder+fileName);
-            CNFParser parser = new CNFParser(formulaReader);
-            parser.Start();
-            f = parser.getCNFFormula();
-        } catch (thProver.parser.ParseException pe) {
-        }
+            try {
+                formulaReader = new StringReader(stringa);
+                //formulaReader = new FileReader(folder+fileName);
+                CNFParser parser = new CNFParser(formulaReader);
+                parser.Start();
+                f = parser.getCNFFormula();
+            } catch (thProver.parser.ParseException pe) {
+                System.out.println(pe);
+            }
         } else {
             try {
-                //formulaReader = new StringReader(stringa);
-                formulaReader = new FileReader(folder+fileName);
+                formulaReader = new StringReader(stringa);
+                //formulaReader = new FileReader(folder+fileName);
                 CNFParserTptp parser = new CNFParserTptp(formulaReader);
                 parser.Start();
                 f = parser.getCNFFormula();
@@ -117,15 +118,15 @@ public class GivenClauseTest {
             sb.append("E` INSODDISFACIBILE con prova:\n");
             grafo = result.getDOT();
             sb.append(grafo);
-            
+
             try {
-                FileOutputStream file = new FileOutputStream("DOTfile/"+fileName);
+                FileOutputStream file = new FileOutputStream("DOTfile/" + fileName);
                 PrintStream Output = new PrintStream(file);
                 Output.println(grafo);
             } catch (IOException e) {
                 System.out.println("Errore: " + e);
             }
-            String cmd = "dot -Tjpg DOTfile/"+ fileName +" -O";
+            String cmd = "dot -Tjpg DOTfile/" + fileName + " -O";
             Runtime run = Runtime.getRuntime();
             Process pr = null;
             try {
@@ -141,30 +142,29 @@ public class GivenClauseTest {
             Picture p = new Picture("DOTfile/" + fileName + ".jpg");
             //p.show();
             //sb.append(grafo);
-            
+
         }
 
 
         System.out.println(sb.toString());
-        
+
         /*try {
-            System.in.read();
-        } catch (IOException ioe) {
+         System.in.read();
+         } catch (IOException ioe) {
             
-        }*/
+         }*/
 
         /*
-            try {
-                // the line that reads the image file
-                BufferedImage image = ImageIO.read(new File("DOTfile/file.txt.jpg"));
-                // work with the image here ...
-                //image.
-            } catch (IOException e) {
-                // log the exception
-                // re-throw if desired
-            }
-            */
+         try {
+         // the line that reads the image file
+         BufferedImage image = ImageIO.read(new File("DOTfile/file.txt.jpg"));
+         // work with the image here ...
+         //image.
+         } catch (IOException e) {
+         // log the exception
+         // re-throw if desired
+         }
+         */
 
     }
 }
-

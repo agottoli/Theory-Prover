@@ -12,6 +12,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
+import thProver.CNFFormula;
+import thProver.Clause;
+import thProver.IndexingClauses;
+import thProver.Ordering;
 
 /**
  * Ragionamento Automatico, I semestre, Anno Accademico 2012-2013
@@ -135,9 +139,12 @@ public class Main {
         //List<Literal> maxLits = c.getMaximalLiterals(or);
         //c.getMaximalFactors(or);
 
+        // nuovo inizio
+        IndexingClauses indexingC = new IndexingClauses(f.getNumClausesAndSOS());
+        // nuovo fine
 
-         Set<Clause> res = c.allTheResolvents(othC);
-         Set<Clause> ordRes = c.allTheOrderedResolvents(othC, or);
+         Set<Clause> res = c.allTheResolvents(othC, indexingC);
+         Set<Clause> ordRes = c.allTheOrderedResolvents(othC, or, indexingC);
         //System.out.println(maxLits.toString());
         //System.out.println(c.getFactorsString());
         //System.out.println(c.getMaximalFactorsString());

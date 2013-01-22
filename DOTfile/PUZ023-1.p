@@ -2,27 +2,15 @@ digraph {
 	nodesep="1.5"; ranksep=2;
 	node [shape=plaintext];
 	edge [color=gray];
-	"an_answer(b_and_c_liars)" -> "[]" [labelfontcolor=black,labelfontsize="12",headlabel="ris. ord.\n{ X_21 <- b_and_c_liars }",labeldistance="6"];
-	"a_truth(liar(c))" -> "an_answer(b_and_c_liars)" [labelfontcolor=black,labelfontsize="12",headlabel="sempl. claus.\n{ }",labeldistance="6"];
-	"~a_truth(truthteller(c))" -> "a_truth(liar(c))" [labelfontcolor=black,labelfontsize="12",headlabel="ris. ord.\n{ }",labeldistance="6"];
-	"~a_truth(truthteller(c)) | an_answer(b_liar_and_c_truthteller)" -> "~a_truth(truthteller(c))" [labelfontcolor=black,labelfontsize="12",headlabel="ris. ord.\n{ X_21 <- b_liar_and_c_truthteller }",labeldistance="6"];
-	"a_truth(liar(b))" -> "~a_truth(truthteller(c)) | an_answer(b_liar_and_c_truthteller)" [labelfontcolor=black,labelfontsize="12",headlabel="sempl. claus.\n{ }",labeldistance="6"];
-	"~a_truth(truthteller(b))" -> "a_truth(liar(b))" [labelfontcolor=black,labelfontsize="12",headlabel="ris. ord.\n{ }",labeldistance="6"];
-	"~a_truth(truthteller(b)) | an_answer(b_and_c_truthtellers)" -> "~a_truth(truthteller(b))" [labelfontcolor=black,labelfontsize="12",headlabel="ris. ord.\n{ X_21 <- b_and_c_truthtellers }",labeldistance="6"];
-	"~a_truth(truthteller(b)) | a_truth(truthteller(c))" -> "~a_truth(truthteller(b)) | an_answer(b_and_c_truthtellers)" [labelfontcolor=black,labelfontsize="12",headlabel="ris. ord.\n{ }",labeldistance="6"];
-	"~a_truth(truthteller(b)) | ~a_truth(liar(c))" -> "~a_truth(truthteller(b)) | a_truth(truthteller(c))" [labelfontcolor=black,labelfontsize="12",headlabel="ris. ord.\n{ X_0 <- c }",labeldistance="6"];
-	"~an_answer(X_21)" -> "~a_truth(truthteller(b)) | ~a_truth(liar(c))" [labelfontcolor=black,labelfontsize="12",headlabel="ris. ord.\n{ X_21 <- b_truthteller_and_c_liar }",labeldistance="6"];
-	"~a_truth(truthteller(b)) | ~a_truth(liar(c)) | an_answer(b_truthteller_and_c_liar)" -> "~a_truth(truthteller(b)) | ~a_truth(liar(c))" ;
-	"a_truth(truthteller(X_0)) | a_truth(liar(X_0))" -> "~a_truth(truthteller(b)) | a_truth(truthteller(c))" ;
-	"~a_truth(truthteller(b)) | ~a_truth(truthteller(c)) | an_answer(b_and_c_truthtellers)" -> "~a_truth(truthteller(b)) | an_answer(b_and_c_truthtellers)" ;
-	"~an_answer(X_21)" -> "~a_truth(truthteller(b))" ;
-	"a_truth(truthteller(X_0)) | a_truth(liar(X_0))" -> "a_truth(liar(b))" ;
-	"~a_truth(liar(b)) | ~a_truth(truthteller(c)) | an_answer(b_liar_and_c_truthteller)" -> "~a_truth(truthteller(c)) | an_answer(b_liar_and_c_truthteller)" ;
-	"~an_answer(X_21)" -> "~a_truth(truthteller(c))" ;
-	"a_truth(truthteller(X_0)) | a_truth(liar(X_0))" -> "a_truth(liar(c))" ;
-	"~a_truth(liar(c)) | an_answer(b_and_c_liars)" -> "an_answer(b_and_c_liars)" ;
-	"a_truth(liar(b))" -> "~a_truth(liar(c)) | an_answer(b_and_c_liars)" [labelfontcolor=black,labelfontsize="12",headlabel="sempl. claus.\n{ }",labeldistance="6"];
-	"~a_truth(liar(b)) | ~a_truth(liar(c)) | an_answer(b_and_c_liars)" -> "~a_truth(liar(c)) | an_answer(b_and_c_liars)" ;
-	"~an_answer(X_21)" -> "[]" ;
+	"green(c)" -> "[]" [labelfontcolor=black,labelfontsize="12",headlabel="ris. ord.\n{ }",labeldistance="6"];
+	"green(b)" -> "green(c)" [labelfontcolor=black,labelfontsize="12",headlabel="sempl. claus.\n{ }",labeldistance="6"];
+	"green(a)" -> "green(b)" [labelfontcolor=black,labelfontsize="12",headlabel="sempl. claus.\n{ }",labeldistance="6"];
+	"~green(a) | green(b)" -> "green(b)" ;
+	"~green(X_4) | green(Y_4) | ~on(X_4,Y_4)" -> "~green(a) | green(b)" [labelfontcolor=black,labelfontsize="12",headlabel="ris. ord.\n{ X_4 <- a, Y_4 <- b }",labeldistance="6"];
+	"on(a,b)" -> "~green(a) | green(b)" ;
+	"~green(b) | green(c)" -> "green(c)" ;
+	"~green(X_4) | green(Y_4) | ~on(X_4,Y_4)" -> "~green(b) | green(c)" [labelfontcolor=black,labelfontsize="12",headlabel="ris. ord.\n{ X_4 <- b, Y_4 <- c }",labeldistance="6"];
+	"on(b,c)" -> "~green(b) | green(c)" ;
+	"~green(c)" -> "[]" ;
 }
 

@@ -283,6 +283,7 @@ public class Substitution {
         return new Function(f.getSymbol(), nuoviArgs);
     }
     
+    // serve solo se metto il toString che non stampa gli indici
     private Variable checkPresence4NewName( 
             Map<String, Variable> vars, Variable var, long time) {
         

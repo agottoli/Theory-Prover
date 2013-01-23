@@ -80,9 +80,10 @@ public class GivenClauseTest {
 
             if (interactive) {
                 stringa = startInteractive();
+                System.out.println(stringa);
             }
 
-            String folder = "";//"/home/ale/NetBeansProjects/RA/Test.Ciclo.Clausola.Data/";
+            //String folder = "";//"/home/ale/NetBeansProjects/RA/Test.Ciclo.Clausola.Data/";
             //fileName =
             //        "tptp.file/ALG002-1.p"; // non termina (insodd)
             //"tptp.file/PUZ001-3.p"; // soddisfacibile
@@ -109,7 +110,7 @@ public class GivenClauseTest {
                         formulaReader = new StringReader(stringa);
                     } else {
                         System.out.println("Reading file " + fileName + "...");
-                        formulaReader = new FileReader(folder + fileName);
+                        formulaReader = new FileReader(fileName);
                     }
                     CNFParser parser = new CNFParser(formulaReader);
                     parser.Start();
@@ -128,7 +129,7 @@ public class GivenClauseTest {
                         formulaReader = new StringReader(stringa);
                     } else {
                         //System.out.println("Reading file " + fileName + "...");
-                        formulaReader = new FileReader(folder + fileName);
+                        formulaReader = new FileReader(fileName);
                     }
                     CNFParserTptp parser = new CNFParserTptp(formulaReader);
                     parser.Start();
@@ -148,6 +149,13 @@ public class GivenClauseTest {
             /* ORDERING */
             Ordering or = new Ordering();
             /* precedences */
+            boolean useStandard = false;
+            if (f.getPrecedences().isEmpty() && tptp) {
+                // con tptp non c'è specificato un ordinamento allora
+                // ne scelgo uno io standard
+                or.setUseOrdStandard(true);
+                useStandard = true;
+            }
             or.setPrecedence(f.getPrecedences(), f.getNPrec());
             /* set KBO */
             or.setWeightsKBO(f.getWeights(), f.getWeightVars());
@@ -166,6 +174,10 @@ public class GivenClauseTest {
                 strb.append("à la Otter");
             if (useOrdering) {
                 strb.append(" with");
+                if (useStandard)
+                    strb.append(" 'standard'");
+                else
+                    strb.append(" 'user specified'");
                 if (kbo) {
                     strb.append(" kbo");
                 } else if (multiset) {
@@ -186,17 +198,30 @@ public class GivenClauseTest {
             
             Clause result = prover.satisfiable(f);
 
-            if (result == null)
-                sb.append("E` SODDISFACIBILE.");
-            else {
-                sb.append("E` INSODDISFACIBILE con prova:\n");
+            if (result == null) {
+                sb.append("E` SODDISFACIBILE.\n");
+                System.out.print(sb.toString());
+            } else {
+                sb.append("E` INSODDISFACIBILE, stampare la prova? [y,n]: ");
                 grafo = result.getDOT();
-                sb.append(grafo);
+                //sb.append(grafo);
+                System.out.print(sb.toString());
 
+          
+           
+            Scanner stdin = new Scanner(System.in);
+            String stamp = stdin.nextLine();
+            if (stamp.equalsIgnoreCase("yes") || stamp.equalsIgnoreCase("y"))
+                System.out.println(grafo);
+            
+            System.out.print("\nUsare 'dot' per esportare un immagine del grafo della prova? [y,n]: ");
+            stamp = stdin.nextLine();
+            if (stamp.equalsIgnoreCase("yes") || stamp.equalsIgnoreCase("y")) {
+                exportDot(fileName, grafo);
             }
-
-
-            System.out.println(sb.toString());
+            stdin.close();
+            
+            }
         }
     }
 
@@ -268,6 +293,7 @@ public class GivenClauseTest {
         }
 
         System.out.println("Please, insert the formula (? for help)");
+        sb.append("clauses: ");
 
         while (true) {
             line = stdin.nextLine();
@@ -290,35 +316,46 @@ public class GivenClauseTest {
             sb.append(line).append('\n');
         }
 
+        stdin.close();
+        
         return sb.toString();
     }
 
-    public void exportDot(String folder, String fileName, String grafo) {
+    public static void exportDot(String fileName, String grafo) {
+        if (fileName == null) {
+            // iterativo
+            fileName = "input.txt";
+        }
         int index = fileName.lastIndexOf('.'); 
         String fileNameNoExt = fileName.substring(0, index);
         
         try {
-            FileOutputStream file = new FileOutputStream(folder + fileNameNoExt + ".dot");
+            FileOutputStream file = new FileOutputStream(fileNameNoExt + ".dot");
             PrintStream output = new PrintStream(file);
             output.println(grafo);
         } catch (IOException e) {
             System.out.println("Errore: " + e);
         }
         
-        String cmd = "dot -Tjpg " + folder + fileNameNoExt + ".dot" + " -O";
+        String cmd = "dot -Tjpg " + fileNameNoExt + ".dot" + " -O";
         Runtime run = Runtime.getRuntime();
         Process pr = null;
         try {
             pr = run.exec(cmd);
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            System.out.println("Errore nell'esportazione, 'dot' potrebbe non "
+                    + "essere installato. Il file sorgente del grafo è "
+                    + "visualizzabile in " + fileNameNoExt + ".dot");
         }
         try {
             pr.waitFor();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        //Picture p = new Picture(folder + fileNameNoExt + ".dot" + ".jpg");
+        
+        System.out.println("Grafo esportato in "+ fileNameNoExt + ".dot.jpg");
+        //Picture p = new Picture(fileNameNoExt + ".dot" + ".jpg");
         //p.show();
         //sb.append(grafo);
     }

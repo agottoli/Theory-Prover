@@ -108,8 +108,11 @@ public class GivenClauseProver {
                 // oppure essere semplicemente sopravvissuta non c'è problema
 
                 Set<Clause> betaprimo = backwardContraction(given);
-                if (betaprimo != null && !betaprimo.isEmpty())
+                if (!betaprimo.isEmpty()) {
                     To_Select.addAll(betaprimo);
+                    generated += betaprimo.size();
+                    deleted += betaprimo.size();
+                }
             } else {
                 // à la Otter devo lo stesso controllare che non sia una tautologia
                 // e in realtà serve solo per le clausole di ingresso perché le 
@@ -142,6 +145,7 @@ public class GivenClauseProver {
             //System.out.println("ho generato " + alfa.size() + " risolventi.\n"
             //        + alfa.toString());
             /* DEBUG fine */
+            generated += alfa.size();
 
             Set<Clause> betaprimo = new LinkedHashSet();
             Set<Clause> copy = new LinkedHashSet(alfa);
@@ -169,6 +173,8 @@ public class GivenClauseProver {
                     if (alfai != alfaiSempl) {
                         alfa.remove(alfai);
                         alfa.add(alfaiSempl);
+                        //deleted++; già conteggiato in forwardContraction
+                        //generated++; come sopra
                         /* DEBUG inizio */
                         //System.out.println("clausola semplificata.");
                         /* DEBUG fine */
@@ -177,7 +183,10 @@ public class GivenClauseProver {
 
                 if (!aLaE) {
                     //betaprimo.addAll(new HashSet<Clause>());
-                    betaprimo.addAll(backwardContraction(alfaiSempl));
+                    Set<Clause> betaprimoAdd = backwardContraction(alfaiSempl);
+                    generated += betaprimoAdd.size();
+                    deleted += betaprimoAdd.size();
+                    betaprimo.addAll(betaprimoAdd);
                     // la backwardContraction deve calcolare i fattori delle beta
                     /* DEBUG inizio */
                     //System.out.println("dalla backward ho generato: "
@@ -197,7 +206,7 @@ public class GivenClauseProver {
             }
 
             To_Select.addAll(alfa);
-            if (betaprimo != null && !betaprimo.isEmpty())
+            if (!betaprimo.isEmpty())
                 To_Select.addAll(betaprimo);
 
             Selected.add(given);
@@ -229,13 +238,24 @@ public class GivenClauseProver {
         if (!aLaE && InferenceSystem.subsumedBy(given, To_Select))
             return null;
         Clause sempl = InferenceSystem.semplificatedClause(given, Selected, index);
-        if (sempl != null)
+        boolean flagForCount = false;
+        if (sempl != null) {
+            // cancello given e aggiungo sempl --> deleted++ generated++
+            deleted++;
+            generated++;
+            flagForCount = true;
             given = sempl; // DA SISTEMARE LE IDEE
-
+        }
         if (!aLaE) {
             sempl = InferenceSystem.semplificatedClause(given, To_Select, index);
-            if (sempl != null)
+            if (sempl != null) {
+                // come prima ma non so se ho già contato...
+                if (!flagForCount) {
+                    deleted++;
+                    generated++;
+                }
                 given = sempl;
+            }
         }
 
         return given;
@@ -277,9 +297,9 @@ public class GivenClauseProver {
         
         sb.append(generated).append(" clauses generated, ");
         sb.append(deleted).append(" clauses subsumed, ");
-        sb.append("in ");sb.append(elapsedTime/1000000000.0).append(" seconds ");
+        sb.append("in ");sb.append(elapsedTime/1000000000.0).append(" seconds");
         if (timeoutWhitoutResponse)
-            sb.append("(out of time limit)");
+            sb.append(" (out of time limit)");
         sb.append(".\n");
         
         return sb.toString();

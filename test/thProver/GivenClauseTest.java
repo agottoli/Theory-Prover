@@ -110,7 +110,7 @@ public class GivenClauseTest {
 
         StringBuilder sb = new StringBuilder();
         String grafo = null;
-        GivenClauseProver prover = new GivenClauseProver(true, false, false, true, true, or);
+        GivenClauseProver prover = new GivenClauseProver(true, false, false, true, true, or, -1);
         Clause result = prover.satisfiable(f);
         if (result == null)
             sb.append("E` SODDISFACIBILE.");

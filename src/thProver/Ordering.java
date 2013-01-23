@@ -18,6 +18,10 @@ public class Ordering {
     private List<List<String>> prec;
     private int nPrec;
     private boolean kbo;
+    // in caso di non inserimento di pesi in kbo e di precedenze
+    // usare un'ordinamento standard?
+    private boolean useOrdStandard = false;
+    private int standardWeight = 1;
     
     /* solo per Ordinamento ricorsivo a cammini o lessicografico */
     private boolean statusMultiSet; // a cammini
@@ -37,6 +41,9 @@ public class Ordering {
         countB = new HashMap<>();
     }
     
+    public void setUseOrdStandard(boolean o) {
+        useOrdStandard = o;
+    }
     
     public void setPrecedence(List<List<String>> prec, int nPrec) {
         this.prec = prec;
@@ -44,6 +51,18 @@ public class Ordering {
     }
 
     public boolean isGreaterInPrecedence(String a, String b) {
+        //////// EXPERIMENTAL //////////
+        if (useOrdStandard) {
+            if (a.equals("Top"))
+                return false;
+            if (b.equals("Bottom") && !a.equals("Bottom"))
+                return true; // perché a non può essere Top
+            if (a.compareTo(b) < 0)
+                return true;
+            return false;
+        }
+        ////////////////////////////////
+        
         if (prec == null || prec.isEmpty())
             return false;
         for (List<String> ls : prec) {
@@ -402,7 +421,12 @@ public class Ordering {
                 } else {
                     symB = ((Term) b).getSymbol();
                 }
-                if (arity == 1 && weightFunction.get(symA) == 0 
+                if (arity == 1 
+                        && 
+                        (
+                        (useOrdStandard && standardWeight == 0) 
+                        || (weightFunction.get(symA) != null && weightFunction.get(symA) == 0) 
+                        ) 
                         && b instanceof Variable
                         && checkFnToXKBO(a, (Variable) b)) {
                     // KBO2a
@@ -444,6 +468,11 @@ public class Ordering {
             List<Term> args = ((Atom) t).getArgs();
             for (Term term : args)
                 argsWeight += weight(term, isA);
+            /// EXPERIMENTAL ///
+            if (useOrdStandard) {
+                return standardWeight + argsWeight;
+            }
+            ////////////////////
             return weightFunction.get(((Atom) t).getSymbol()) + argsWeight;
         } else
         if (t instanceof Function) {
@@ -451,6 +480,11 @@ public class Ordering {
             List<Term> args = ((Function) t).getArgs();
             for (Term term : args)
                 argsWeight += weight(term, isA);
+            /// EXPERIMENTAL ///
+            if (useOrdStandard) {
+                return standardWeight + argsWeight;
+            }
+            ////////////////////
             return weightFunction.get(((Function) t).getSymbol()) + argsWeight;
         } else
         
@@ -474,10 +508,20 @@ public class Ordering {
                     errCountVars = true;
                 }    
             }
+            /// EXPERIMENTAL ///
+            if (useOrdStandard) {
+                return standardWeight;
+            }
+            ////////////////////
             return weightVars;
         }
          
         // Costanti :)
+        /// EXPERIMENTAL ///
+            if (useOrdStandard) {
+                return standardWeight;
+            }
+            ////////////////////
         return weightFunction.get(((Term) t).getSymbol());
      
     }

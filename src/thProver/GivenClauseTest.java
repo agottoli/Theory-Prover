@@ -57,8 +57,8 @@ public class GivenClauseTest {
                 fileName = a;
             }
 
-            if (fileName == null && !interactive) {
-                System.out.println("Please, specify a file name or -i");
+            if (fileName == null && !interactive && !gui) {
+                System.out.println("Please, specify a file name or -i or -gui");
                 printUsage();
                 System.exit(2);
             }
@@ -229,7 +229,7 @@ public class GivenClauseTest {
 
     private static void printUsage() {
         System.out.println(
-                "Usage: ThProver [-gui] [-i | <filename>] [-ans] [-sos] [-lex | -mul | -kbo] [-E] [-limit<secs>]\n\n"
+                "Usage: ThProver [-gui | -i | <filename>] [-ans] [-sos] [-lex | -mul | -kbo] [-E] [-limit<secs>]\n\n"
                 + "\t-gui\tstart graphical user interface mode\n"
                 + "\t-i\tstart interactive mode\n"
                 + "\t-ans\tdetect answer clause\n"

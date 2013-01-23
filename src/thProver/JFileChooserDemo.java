@@ -114,10 +114,11 @@ public class JFileChooserDemo extends javax.swing.JFrame {
         useStandardOrderingButton = new javax.swing.JRadioButtonMenuItem();
         otherOptionsMenu = new javax.swing.JMenu();
         sosButton = new javax.swing.JCheckBoxMenuItem();
-        jCheckBoxMenuItem2 = new javax.swing.JCheckBoxMenuItem();
+        answerLiteralButton = new javax.swing.JCheckBoxMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Given Clause Cicle");
+        setPreferredSize(new java.awt.Dimension(465, 400));
         setResizable(false);
 
         inserText.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -216,14 +217,12 @@ public class JFileChooserDemo extends javax.swing.JFrame {
 
         aLaOtterButton.setSelected(true);
         aLaOtterButton.setText("à la Otter");
-        aLaOtterButton.setActionCommand("à la Otter");
         aLaOtterButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 setALaOtterButtonActionPerformed(evt);
             }
         });
         modeMenu.add(aLaOtterButton);
-        aLaOtterButton.getAccessibleContext().setAccessibleName("à la Otter");
 
         aLaEButton.setText("à la E");
         aLaEButton.addActionListener(new java.awt.event.ActionListener() {
@@ -333,9 +332,13 @@ public class JFileChooserDemo extends javax.swing.JFrame {
         });
         otherOptionsMenu.add(sosButton);
 
-        jCheckBoxMenuItem2.setSelected(true);
-        jCheckBoxMenuItem2.setText("jCheckBoxMenuItem2");
-        otherOptionsMenu.add(jCheckBoxMenuItem2);
+        answerLiteralButton.setText("use answer literal");
+        answerLiteralButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                answerLiteralButtonActionPerformed(evt);
+            }
+        });
+        otherOptionsMenu.add(answerLiteralButton);
 
         jMenuBar1.add(otherOptionsMenu);
 
@@ -355,7 +358,7 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 441, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(inserText, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -382,7 +385,7 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 .addComponent(satText)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(44, Short.MAX_VALUE))
+                .addContainerGap(48, Short.MAX_VALUE))
         );
 
         pack();
@@ -400,8 +403,8 @@ public class JFileChooserDemo extends javax.swing.JFrame {
             if (startButton.getText().equals(START_BUTTON_INIT)
                     || startButton.getText().equals(START_BUTTON_SAT)) {
                 
-                if (grafoText.isVisible())
-                    resetInterface();
+                //if (grafoText.isVisible())
+                //    resetInterface();
                 //else
                 // Ingrandisco la Finestra
                 //setSize(getWidth(), getHeight() + AUMENTO_DIM);
@@ -411,6 +414,7 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 modeMenu.setEnabled(false);
                 orderingTypeMenu.setEnabled(false);
                 precedencesAndWeightsTypeMenu.setEnabled(false);
+                otherOptionsMenu.setEnabled(false);
                 grafoText.setVisible(true);
                 startButton.setText("Abort");
                 jProgressBar1.setVisible(true);
@@ -430,8 +434,11 @@ public class JFileChooserDemo extends javax.swing.JFrame {
 
                 fileMenu.setEnabled(true);
                 modeMenu.setEnabled(true);
+                orderingTypeMenu.setEnabled(false);
+                precedencesAndWeightsTypeMenu.setEnabled(false);
+                otherOptionsMenu.setEnabled(true);
                 log.setEditable(true);
-                startButton.setText(START_BUTTON_INIT);
+                //startButton.setText(START_BUTTON_INIT);
                 String canc = " CANCELLATO DALL'UTENTE";
 
                 //jProgressBar1.setIndeterminate(false);
@@ -440,8 +447,12 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 if (ccText.isVisible()) {
                     ccText.setText(ccText.getText() + canc);
                     jProgressBar1.setVisible(false);
-                } else
+                    jProgressBar1.setEnabled(false);
+                    startButton.setText(START_BUTTON_SAT);
+                } else {
                     grafoText.setText(grafoText.getText() + canc);
+                    startButton.setText(START_BUTTON_INIT);
+                }
             }
 
 	}//GEN-LAST:event_startButtonActionPerformed
@@ -554,6 +565,7 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                     modeMenu.setEnabled(false);
                     orderingTypeMenu.setEnabled(false);
                     precedencesAndWeightsTypeMenu.setEnabled(false);
+                    otherOptionsMenu.setEnabled(false);
                 }
             }
 	}//GEN-LAST:event_logKeyPressed
@@ -594,6 +606,13 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 aLaEButton.setSelected(false);
             } else
                 aLaOtterButton.setSelected(true);
+            
+            if (ccText.isVisible()) {
+                ccText.setVisible(false);
+                ccText.setText(CC_TEXT_INIT);
+                satText.setVisible(false);
+                satText.setText(SAT_TEXT_INIT);
+            }
         }//GEN-LAST:event_setALaOtterButtonActionPerformed
 
         private void setALaEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setALaEActionPerformed
@@ -602,6 +621,13 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 aLaE = true;
             } else
                 aLaEButton.setSelected(true);
+            
+            if (ccText.isVisible()) {
+                ccText.setVisible(false);
+                ccText.setText(CC_TEXT_INIT);
+                satText.setVisible(false);
+                satText.setText(SAT_TEXT_INIT);
+            }
         }//GEN-LAST:event_setALaEActionPerformed
 
     private void setLexicographicOrdering(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setLexicographicOrdering
@@ -615,6 +641,13 @@ public class JFileChooserDemo extends javax.swing.JFrame {
             precedencesAndWeightsTypeMenu.setEnabled(true);
         } else
             lexicographicButton.setSelected(true);
+        
+        if (ccText.isVisible()) {
+                ccText.setVisible(false);
+                ccText.setText(CC_TEXT_INIT);
+                satText.setVisible(false);
+                satText.setText(SAT_TEXT_INIT);
+            }
     }//GEN-LAST:event_setLexicographicOrdering
 
     private void setMultiSetOrdering(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setMultiSetOrdering
@@ -628,6 +661,13 @@ public class JFileChooserDemo extends javax.swing.JFrame {
             precedencesAndWeightsTypeMenu.setEnabled(true);
         } else
             multisetButton.setSelected(true);
+        
+        if (ccText.isVisible()) {
+                ccText.setVisible(false);
+                ccText.setText(CC_TEXT_INIT);
+                satText.setVisible(false);
+                satText.setText(SAT_TEXT_INIT);
+            }
     }//GEN-LAST:event_setMultiSetOrdering
 
     private void orderingAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_orderingAncestorAdded
@@ -645,6 +685,13 @@ public class JFileChooserDemo extends javax.swing.JFrame {
             precedencesAndWeightsTypeMenu.setEnabled(true);
         } else
             knuthBendixButton.setSelected(true);
+        
+        if (ccText.isVisible()) {
+                ccText.setVisible(false);
+                ccText.setText(CC_TEXT_INIT);
+                satText.setVisible(false);
+                satText.setText(SAT_TEXT_INIT);
+            }
     }//GEN-LAST:event_setKnuthBendixOrdering
 
     private void setNoOrdering(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setNoOrdering
@@ -658,6 +705,13 @@ public class JFileChooserDemo extends javax.swing.JFrame {
             precedencesAndWeightsTypeMenu.setEnabled(false);
         } else
             noOrderingButton.setSelected(true);
+        
+        if (ccText.isVisible()) {
+                ccText.setVisible(false);
+                ccText.setText(CC_TEXT_INIT);
+                satText.setVisible(false);
+                satText.setText(SAT_TEXT_INIT);
+            }
     }//GEN-LAST:event_setNoOrdering
 
     private void precedencesAndWeightsTypeMenuAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_precedencesAndWeightsTypeMenuAncestorAdded
@@ -671,6 +725,13 @@ public class JFileChooserDemo extends javax.swing.JFrame {
             useStandardOrderingButton.setSelected(true);
             useStandard = true;
         }
+        
+        if (ccText.isVisible()) {
+                ccText.setVisible(false);
+                ccText.setText(CC_TEXT_INIT);
+                satText.setVisible(false);
+                satText.setText(SAT_TEXT_INIT);
+            }
     }//GEN-LAST:event_setStandardOrdering
 
     private void setUseUserDefinedOrdering(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setUseUserDefinedOrdering
@@ -680,6 +741,13 @@ public class JFileChooserDemo extends javax.swing.JFrame {
             useUserDefinedOrderingButton.setSelected(true);
             useStandard = false;
         }
+        
+        if (ccText.isVisible()) {
+                ccText.setVisible(false);
+                ccText.setText(CC_TEXT_INIT);
+                satText.setVisible(false);
+                satText.setText(SAT_TEXT_INIT);
+            }
     }//GEN-LAST:event_setUseUserDefinedOrdering
 
     private void otherOptionsMenuAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_otherOptionsMenuAncestorAdded
@@ -687,18 +755,36 @@ public class JFileChooserDemo extends javax.swing.JFrame {
     }//GEN-LAST:event_otherOptionsMenuAncestorAdded
 
     private void sosActionPerformer(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sosActionPerformer
-        // TODO add your handling code here:
+        sos = sosButton.isSelected();
+        
+        if (ccText.isVisible()) {
+                ccText.setVisible(false);
+                ccText.setText(CC_TEXT_INIT);
+                satText.setVisible(false);
+                satText.setText(SAT_TEXT_INIT);
+            }
     }//GEN-LAST:event_sosActionPerformer
+
+    private void answerLiteralButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_answerLiteralButtonActionPerformed
+        answerLiteral = answerLiteralButton.isSelected();
+        
+        if (ccText.isVisible()) {
+                ccText.setVisible(false);
+                ccText.setText(CC_TEXT_INIT);
+                satText.setVisible(false);
+                satText.setText(SAT_TEXT_INIT);
+            }
+    }//GEN-LAST:event_answerLiteralButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButtonMenuItem aLaEButton;
     private javax.swing.JRadioButtonMenuItem aLaOtterButton;
+    private javax.swing.JCheckBoxMenuItem answerLiteralButton;
     private javax.swing.JLabel ccText;
     private javax.swing.JFileChooser fc;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JLabel grafoText;
     private javax.swing.JLabel inserText;
-    private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -731,9 +817,17 @@ public class JFileChooserDemo extends javax.swing.JFrame {
         satText.setText(SAT_TEXT_INIT);
 
         startButton.setText(START_BUTTON_INIT);
+        faseParsing = true;
+        //interactive = true;
         //startButton.setEnabled(false);
 
         saveItem.setEnabled(false);
+        
+        modeMenu.setEnabled(false);
+        orderingTypeMenu.setEnabled(false);
+        precedencesAndWeightsTypeMenu.setEnabled(false);
+        otherOptionsMenu.setEnabled(false);        
+        
         jProgressBar1.setEnabled(false);
         //jProgressBar1.setIndeterminate(false);
         jProgressBar1.setValue(0);
@@ -767,7 +861,7 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 //try {
 
                 //Object[] clausole = null; //= Parser.analisiAndCostrGrafo(formula, orderedResolution.isSelected());
-
+                tptp = false;
                 /* PARSING inizio */
                 if (!tptp) {
                     try {
@@ -792,7 +886,14 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 }
                 if (tptp) {
                     try {
-
+                        if (!interactive) {
+                            try {
+                                formulaReader = new FileReader(file);
+                            } catch (FileNotFoundException ex) {
+                            }
+                        } else {
+                            formulaReader = new StringReader(formula);
+                        }
                         CNFParserTptp parser = new CNFParserTptp(formulaReader);
                         parser.Start();
                         f = parser.getCNFFormula();
@@ -806,7 +907,7 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 jProgressBar1.setStringPainted(false);
                 /* PARSING fine */
                 if (f == null) {
-                    grafoText.setText(grafoText.getText() + " INTERROTTO (errore nella stringa)");
+                    grafoText.setText(grafoText.getText() + " INTERROTTO (errore di parsing)");
                     startButton.setText(START_BUTTON_INIT);
                     fileMenu.setEnabled(true);
 
@@ -875,6 +976,7 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 
                 ccText.setVisible(true);
                 jProgressBar1.setVisible(true);
+                jProgressBar1.setEnabled(true);
 
                 /* SATISFIABILITY inizio */
                 /* ORDERING */
@@ -1001,6 +1103,7 @@ public class JFileChooserDemo extends javax.swing.JFrame {
             orderingTypeMenu.setEnabled(true);
             if (useOrdering)
                 precedencesAndWeightsTypeMenu.setEnabled(true);
+            otherOptionsMenu.setEnabled(true);
             log.setEditable(true);
             jProgressBar1.setEnabled(false);
 

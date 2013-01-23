@@ -21,7 +21,7 @@ public class Ordering {
     // in caso di non inserimento di pesi in kbo e di precedenze
     // usare un'ordinamento standard?
     private boolean useOrdStandard = false;
-    private int standardWeight = 1;
+    private int standardWeight = 1; // peso standard per tutto in kbo
     
     /* solo per Ordinamento ricorsivo a cammini o lessicografico */
     private boolean statusMultiSet; // a cammini

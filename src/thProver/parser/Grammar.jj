@@ -1,3 +1,4 @@
+options { STATIC = false; }
 PARSER_BEGIN(CNFParser)
 package thProver.parser;
 

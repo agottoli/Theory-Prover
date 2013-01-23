@@ -29,23 +29,15 @@ public class GivenClauseTest {
     private static boolean kbo = false;
     private static boolean multiset = false;
     private static boolean useOrdering = false;
+    private static boolean useStandard = false;
     private static boolean aLaE = false;
     private static boolean tptp = false;
     private static int limit = -1;//Integer.MAX_VALUE;
+    private static boolean gui = false;
 
     public static void main(String[] args) throws FileNotFoundException {
 
-        boolean gui = false;
-        if (gui) {
-            java.awt.EventQueue.invokeLater(
-                    new Runnable() {
-                        @Override
-                        public void run() {
-                            new JFileChooserDemo().setVisible(true);
-                        }
-                    });
-        } else {
-
+        
             /*
              * Read and process command line arguments
              */
@@ -70,6 +62,17 @@ public class GivenClauseTest {
                 printUsage();
                 System.exit(2);
             }
+            
+
+        if (gui) {
+            java.awt.EventQueue.invokeLater(
+                    new Runnable() {
+                        @Override
+                        public void run() {
+                            new JFileChooserDemo().setVisible(true);
+                        }
+                    });
+        } else {
 
             /*
              * Read the formula
@@ -149,7 +152,6 @@ public class GivenClauseTest {
             /* ORDERING */
             Ordering or = new Ordering();
             /* precedences */
-            boolean useStandard = false;
             if (f.getPrecedences().isEmpty() && tptp) {
                 // con tptp non c'è specificato un ordinamento allora
                 // ne scelgo uno io standard
@@ -227,7 +229,8 @@ public class GivenClauseTest {
 
     private static void printUsage() {
         System.out.println(
-                "Usage: ThProver [-i | <filename>] [-ans] [-sos] [-lex | -mul | -kbo] [-E] [-limit<secs>]\n\n"
+                "Usage: ThProver [-gui] [-i | <filename>] [-ans] [-sos] [-lex | -mul | -kbo] [-E] [-limit<secs>]\n\n"
+                + "\t-gui\tstart graphical user interface mode\n"
                 + "\t-i\tstart interactive mode\n"
                 + "\t-ans\tdetect answer clause\n"
                 + "\t-sos\tuse Set-of-Support strategy\n"
@@ -244,6 +247,8 @@ public class GivenClauseTest {
             answerLiteral = true;
         } else if (o.equals("-i")) {
             interactive = true;
+        } else if (o.equals("-gui")) {
+            gui = true;
         } else if (o.equals("-sos")) {
             sos = true;
         } else if (o.equals("-lex")) {

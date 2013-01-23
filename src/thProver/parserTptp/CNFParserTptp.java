@@ -27,7 +27,7 @@ public class CNFParserTptp implements CNFParserTptpConstants {
 /*
 * Productions
 */
-  static final public void Start() throws ParseException {
+  final public void Start() throws ParseException {
     label_1:
     while (true) {
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -44,7 +44,7 @@ public class CNFParserTptp implements CNFParserTptpConstants {
   }
 
 // a clause
-  static final public void Clause() throws ParseException {
+  final public void Clause() throws ParseException {
     Clause c = new Clause(f.getClauseIndex());
     Literal l;
     Token cnf;
@@ -127,7 +127,7 @@ public class CNFParserTptp implements CNFParserTptpConstants {
   }
 
 // a literal
-  static final public Literal Literal() throws ParseException {
+  final public Literal Literal() throws ParseException {
     boolean pos = true;
     Atom a;
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -144,7 +144,7 @@ public class CNFParserTptp implements CNFParserTptpConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public Atom Atom() throws ParseException {
+  final public Atom Atom() throws ParseException {
     Atom a;
     List<Term> terms = null;
     Token p;
@@ -185,7 +185,7 @@ public class CNFParserTptp implements CNFParserTptpConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public List<Term> Terms() throws ParseException {
+  final public List<Term> Terms() throws ParseException {
     List<Term> tl = new LinkedList<Term>();
     Term t;
     t = Term();
@@ -208,7 +208,7 @@ public class CNFParserTptp implements CNFParserTptpConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static final public Term Term() throws ParseException {
+  final public Term Term() throws ParseException {
     boolean noArgs = true;
     boolean variabile = false;
     Token s;
@@ -269,17 +269,16 @@ public class CNFParserTptp implements CNFParserTptpConstants {
     throw new Error("Missing return statement in function");
   }
 
-  static private boolean jj_initialized_once = false;
   /** Generated Token Manager. */
-  static public CNFParserTptpTokenManager token_source;
-  static SimpleCharStream jj_input_stream;
+  public CNFParserTptpTokenManager token_source;
+  SimpleCharStream jj_input_stream;
   /** Current token. */
-  static public Token token;
+  public Token token;
   /** Next token. */
-  static public Token jj_nt;
-  static private int jj_ntk;
-  static private int jj_gen;
-  static final private int[] jj_la1 = new int[12];
+  public Token jj_nt;
+  private int jj_ntk;
+  private int jj_gen;
+  final private int[] jj_la1 = new int[12];
   static private int[] jj_la1_0;
   static {
       jj_la1_init_0();
@@ -294,13 +293,6 @@ public class CNFParserTptp implements CNFParserTptpConstants {
   }
   /** Constructor with InputStream and supplied encoding */
   public CNFParserTptp(java.io.InputStream stream, String encoding) {
-    if (jj_initialized_once) {
-      System.out.println("ERROR: Second call to constructor of static parser.  ");
-      System.out.println("       You must either use ReInit() or set the JavaCC option STATIC to false");
-      System.out.println("       during parser generation.");
-      throw new Error();
-    }
-    jj_initialized_once = true;
     try { jj_input_stream = new SimpleCharStream(stream, encoding, 1, 1); } catch(java.io.UnsupportedEncodingException e) { throw new RuntimeException(e); }
     token_source = new CNFParserTptpTokenManager(jj_input_stream);
     token = new Token();
@@ -310,11 +302,11 @@ public class CNFParserTptp implements CNFParserTptpConstants {
   }
 
   /** Reinitialise. */
-  static public void ReInit(java.io.InputStream stream) {
+  public void ReInit(java.io.InputStream stream) {
      ReInit(stream, null);
   }
   /** Reinitialise. */
-  static public void ReInit(java.io.InputStream stream, String encoding) {
+  public void ReInit(java.io.InputStream stream, String encoding) {
     try { jj_input_stream.ReInit(stream, encoding, 1, 1); } catch(java.io.UnsupportedEncodingException e) { throw new RuntimeException(e); }
     token_source.ReInit(jj_input_stream);
     token = new Token();
@@ -325,13 +317,6 @@ public class CNFParserTptp implements CNFParserTptpConstants {
 
   /** Constructor. */
   public CNFParserTptp(java.io.Reader stream) {
-    if (jj_initialized_once) {
-      System.out.println("ERROR: Second call to constructor of static parser. ");
-      System.out.println("       You must either use ReInit() or set the JavaCC option STATIC to false");
-      System.out.println("       during parser generation.");
-      throw new Error();
-    }
-    jj_initialized_once = true;
     jj_input_stream = new SimpleCharStream(stream, 1, 1);
     token_source = new CNFParserTptpTokenManager(jj_input_stream);
     token = new Token();
@@ -341,7 +326,7 @@ public class CNFParserTptp implements CNFParserTptpConstants {
   }
 
   /** Reinitialise. */
-  static public void ReInit(java.io.Reader stream) {
+  public void ReInit(java.io.Reader stream) {
     jj_input_stream.ReInit(stream, 1, 1);
     token_source.ReInit(jj_input_stream);
     token = new Token();
@@ -352,13 +337,6 @@ public class CNFParserTptp implements CNFParserTptpConstants {
 
   /** Constructor with generated Token Manager. */
   public CNFParserTptp(CNFParserTptpTokenManager tm) {
-    if (jj_initialized_once) {
-      System.out.println("ERROR: Second call to constructor of static parser. ");
-      System.out.println("       You must either use ReInit() or set the JavaCC option STATIC to false");
-      System.out.println("       during parser generation.");
-      throw new Error();
-    }
-    jj_initialized_once = true;
     token_source = tm;
     token = new Token();
     jj_ntk = -1;
@@ -375,7 +353,7 @@ public class CNFParserTptp implements CNFParserTptpConstants {
     for (int i = 0; i < 12; i++) jj_la1[i] = -1;
   }
 
-  static private Token jj_consume_token(int kind) throws ParseException {
+  private Token jj_consume_token(int kind) throws ParseException {
     Token oldToken;
     if ((oldToken = token).next != null) token = token.next;
     else token = token.next = token_source.getNextToken();
@@ -391,7 +369,7 @@ public class CNFParserTptp implements CNFParserTptpConstants {
 
 
 /** Get the next Token. */
-  static final public Token getNextToken() {
+  final public Token getNextToken() {
     if (token.next != null) token = token.next;
     else token = token.next = token_source.getNextToken();
     jj_ntk = -1;
@@ -400,7 +378,7 @@ public class CNFParserTptp implements CNFParserTptpConstants {
   }
 
 /** Get the specific Token. */
-  static final public Token getToken(int index) {
+  final public Token getToken(int index) {
     Token t = token;
     for (int i = 0; i < index; i++) {
       if (t.next != null) t = t.next;
@@ -409,19 +387,19 @@ public class CNFParserTptp implements CNFParserTptpConstants {
     return t;
   }
 
-  static private int jj_ntk() {
+  private int jj_ntk() {
     if ((jj_nt=token.next) == null)
       return (jj_ntk = (token.next=token_source.getNextToken()).kind);
     else
       return (jj_ntk = jj_nt.kind);
   }
 
-  static private java.util.List<int[]> jj_expentries = new java.util.ArrayList<int[]>();
-  static private int[] jj_expentry;
-  static private int jj_kind = -1;
+  private java.util.List<int[]> jj_expentries = new java.util.ArrayList<int[]>();
+  private int[] jj_expentry;
+  private int jj_kind = -1;
 
   /** Generate ParseException. */
-  static public ParseException generateParseException() {
+  public ParseException generateParseException() {
     jj_expentries.clear();
     boolean[] la1tokens = new boolean[31];
     if (jj_kind >= 0) {
@@ -452,11 +430,11 @@ public class CNFParserTptp implements CNFParserTptpConstants {
   }
 
   /** Enable tracing. */
-  static final public void enable_tracing() {
+  final public void enable_tracing() {
   }
 
   /** Disable tracing. */
-  static final public void disable_tracing() {
+  final public void disable_tracing() {
   }
 
 }

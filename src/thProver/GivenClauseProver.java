@@ -304,4 +304,8 @@ public class GivenClauseProver {
         
         return sb.toString();
     }
+    
+    public long getElapsedTime() {
+        return elapsedTime;
+    }
 }

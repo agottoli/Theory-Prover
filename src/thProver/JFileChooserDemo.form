@@ -42,48 +42,62 @@
         <Menu class="javax.swing.JMenu" name="modeMenu">
           <Properties>
             <Property name="text" type="java.lang.String" value="Mode"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="ancestorAdded" listener="javax.swing.event.AncestorListener" parameters="javax.swing.event.AncestorEvent" handler="modeMenuAncestorAdded"/>
           </Events>
           <SubComponents>
-            <MenuItem class="javax.swing.JRadioButtonMenuItem" name="orderedResolution">
+            <MenuItem class="javax.swing.JRadioButtonMenuItem" name="aLaOtterButton">
               <Properties>
                 <Property name="selected" type="boolean" value="true"/>
-                <Property name="text" type="java.lang.String" value="Ordered Resolution"/>
+                <Property name="text" type="java.lang.String" value="&#xe0; la Otter"/>
+                <Property name="actionCommand" type="java.lang.String" value="&#xe0; la Otter"/>
               </Properties>
+              <AccessibilityProperties>
+                <Property name="AccessibleContext.accessibleName" type="java.lang.String" value="&#xe0; la Otter"/>
+              </AccessibilityProperties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="orderedResolutionActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="setALaOtterButtonActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JRadioButtonMenuItem" name="binaryResolution">
+            <MenuItem class="javax.swing.JRadioButtonMenuItem" name="aLaEButton">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Binary Resolution"/>
+                <Property name="text" type="java.lang.String" value="&#xe0; la E"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="binaryResolutionActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="setALaEActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
         </Menu>
-        <Menu class="javax.swing.JMenu" name="orderingType">
+        <Menu class="javax.swing.JMenu" name="orderingTypeMenu">
           <Properties>
             <Property name="text" type="java.lang.String" value="Ordering Type"/>
+            <Property name="enabled" type="boolean" value="false"/>
           </Properties>
           <Events>
             <EventHandler event="ancestorAdded" listener="javax.swing.event.AncestorListener" parameters="javax.swing.event.AncestorEvent" handler="orderingAncestorAdded"/>
           </Events>
           <SubComponents>
-            <MenuItem class="javax.swing.JRadioButtonMenuItem" name="lexicographic">
+            <MenuItem class="javax.swing.JRadioButtonMenuItem" name="noOrderingButton">
               <Properties>
                 <Property name="selected" type="boolean" value="true"/>
+                <Property name="text" type="java.lang.String" value="no ordering"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="setNoOrdering"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JRadioButtonMenuItem" name="lexicographicButton">
+              <Properties>
                 <Property name="text" type="java.lang.String" value="lexicographic"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="setLexicographicOrdering"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JRadioButtonMenuItem" name="multiset">
+            <MenuItem class="javax.swing.JRadioButtonMenuItem" name="multisetButton">
               <Properties>
                 <Property name="text" type="java.lang.String" value="multiset"/>
               </Properties>
@@ -91,7 +105,7 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="setMultiSetOrdering"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JRadioButtonMenuItem" name="knuthBendix">
+            <MenuItem class="javax.swing.JRadioButtonMenuItem" name="knuthBendixButton">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Knuth-Bendix"/>
               </Properties>
@@ -101,12 +115,65 @@
             </MenuItem>
           </SubComponents>
         </Menu>
+        <Menu class="javax.swing.JMenu" name="precedencesAndWeightsTypeMenu">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Precedences and Weights"/>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
+          <Events>
+            <EventHandler event="ancestorAdded" listener="javax.swing.event.AncestorListener" parameters="javax.swing.event.AncestorEvent" handler="precedencesAndWeightsTypeMenuAncestorAdded"/>
+          </Events>
+          <SubComponents>
+            <MenuItem class="javax.swing.JRadioButtonMenuItem" name="useUserDefinedOrderingButton">
+              <Properties>
+                <Property name="selected" type="boolean" value="true"/>
+                <Property name="text" type="java.lang.String" value="user defined precedences and weights"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="setUseUserDefinedOrdering"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JRadioButtonMenuItem" name="useStandardOrderingButton">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="standard precendence and weight"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="setStandardOrdering"/>
+              </Events>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
+        <Menu class="javax.swing.JMenu" name="otherOptionsMenu">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Options"/>
+            <Property name="enabled" type="boolean" value="false"/>
+          </Properties>
+          <Events>
+            <EventHandler event="ancestorAdded" listener="javax.swing.event.AncestorListener" parameters="javax.swing.event.AncestorEvent" handler="otherOptionsMenuAncestorAdded"/>
+          </Events>
+          <SubComponents>
+            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="sosButton">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="use set of support strategy"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="sosActionPerformer"/>
+              </Events>
+            </MenuItem>
+            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="jCheckBoxMenuItem2">
+              <Properties>
+                <Property name="selected" type="boolean" value="true"/>
+                <Property name="text" type="java.lang.String" value="jCheckBoxMenuItem2"/>
+              </Properties>
+            </MenuItem>
+          </SubComponents>
+        </Menu>
       </SubComponents>
     </Menu>
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
-    <Property name="title" type="java.lang.String" value="SAT per Teoria delle Liste"/>
+    <Property name="title" type="java.lang.String" value="Given Clause Cicle"/>
     <Property name="resizable" type="boolean" value="false"/>
   </Properties>
   <SyntheticProperties>
@@ -173,7 +240,7 @@
               <Component id="satText" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="jProgressBar1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="28" max="32767" attributes="0"/>
+              <EmptySpace pref="44" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -268,6 +335,7 @@
         </Property>
         <Property name="enabled" type="boolean" value="false"/>
         <Property name="focusable" type="boolean" value="false"/>
+        <Property name="indeterminate" type="boolean" value="true"/>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_InitCodePre" type="java.lang.String" value="jProgressBar1.setVisible(false);"/>

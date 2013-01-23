@@ -17,10 +17,10 @@ public class CNFParserTptpTokenManager implements CNFParserTptpConstants
 {
 
   /** Debug output. */
-  public static  java.io.PrintStream debugStream = System.out;
+  public  java.io.PrintStream debugStream = System.out;
   /** Set debug output. */
-  public static  void setDebugStream(java.io.PrintStream ds) { debugStream = ds; }
-private static final int jjStopStringLiteralDfa_0(int pos, long active0)
+  public  void setDebugStream(java.io.PrintStream ds) { debugStream = ds; }
+private final int jjStopStringLiteralDfa_0(int pos, long active0)
 {
    switch (pos)
    {
@@ -28,17 +28,17 @@ private static final int jjStopStringLiteralDfa_0(int pos, long active0)
          return -1;
    }
 }
-private static final int jjStartNfa_0(int pos, long active0)
+private final int jjStartNfa_0(int pos, long active0)
 {
    return jjMoveNfa_0(jjStopStringLiteralDfa_0(pos, active0), pos + 1);
 }
-static private int jjStopAtPos(int pos, int kind)
+private int jjStopAtPos(int pos, int kind)
 {
    jjmatchedKind = kind;
    jjmatchedPos = pos;
    return pos + 1;
 }
-static private int jjMoveStringLiteralDfa0_0()
+private int jjMoveStringLiteralDfa0_0()
 {
    switch(curChar)
    {
@@ -61,7 +61,7 @@ static private int jjMoveStringLiteralDfa0_0()
 static final long[] jjbitVec0 = {
    0x0L, 0x0L, 0xffffffffffffffffL, 0xffffffffffffffffL
 };
-static private int jjMoveNfa_0(int startState, int curPos)
+private int jjMoveNfa_0(int startState, int curPos)
 {
    int startsAt = 0;
    jjnewStateCnt = 26;
@@ -346,14 +346,14 @@ static final long[] jjtoToken = {
 static final long[] jjtoSkip = {
    0x3eL, 
 };
-static protected SimpleCharStream input_stream;
-static private final int[] jjrounds = new int[26];
-static private final int[] jjstateSet = new int[52];
-static protected char curChar;
+protected SimpleCharStream input_stream;
+private final int[] jjrounds = new int[26];
+private final int[] jjstateSet = new int[52];
+protected char curChar;
 /** Constructor. */
 public CNFParserTptpTokenManager(SimpleCharStream stream){
-   if (input_stream != null)
-      throw new TokenMgrError("ERROR: Second call to constructor of static lexer. You must use ReInit() to initialize the static variables.", TokenMgrError.STATIC_LEXER_ERROR);
+   if (SimpleCharStream.staticFlag)
+      throw new Error("ERROR: Cannot use a static CharStream class with a non-static lexical analyzer.");
    input_stream = stream;
 }
 
@@ -364,14 +364,14 @@ public CNFParserTptpTokenManager(SimpleCharStream stream, int lexState){
 }
 
 /** Reinitialise parser. */
-static public void ReInit(SimpleCharStream stream)
+public void ReInit(SimpleCharStream stream)
 {
    jjmatchedPos = jjnewStateCnt = 0;
    curLexState = defaultLexState;
    input_stream = stream;
    ReInitRounds();
 }
-static private void ReInitRounds()
+private void ReInitRounds()
 {
    int i;
    jjround = 0x80000001;
@@ -380,14 +380,14 @@ static private void ReInitRounds()
 }
 
 /** Reinitialise parser. */
-static public void ReInit(SimpleCharStream stream, int lexState)
+public void ReInit(SimpleCharStream stream, int lexState)
 {
    ReInit(stream);
    SwitchTo(lexState);
 }
 
 /** Switch to specified lex state. */
-static public void SwitchTo(int lexState)
+public void SwitchTo(int lexState)
 {
    if (lexState >= 1 || lexState < 0)
       throw new TokenMgrError("Error: Ignoring invalid lexical state : " + lexState + ". State unchanged.", TokenMgrError.INVALID_LEXICAL_STATE);
@@ -395,7 +395,7 @@ static public void SwitchTo(int lexState)
       curLexState = lexState;
 }
 
-static protected Token jjFillToken()
+protected Token jjFillToken()
 {
    final Token t;
    final String curTokenImage;
@@ -419,15 +419,15 @@ static protected Token jjFillToken()
    return t;
 }
 
-static int curLexState = 0;
-static int defaultLexState = 0;
-static int jjnewStateCnt;
-static int jjround;
-static int jjmatchedPos;
-static int jjmatchedKind;
+int curLexState = 0;
+int defaultLexState = 0;
+int jjnewStateCnt;
+int jjround;
+int jjmatchedPos;
+int jjmatchedKind;
 
 /** Get the next Token. */
-public static Token getNextToken() 
+public Token getNextToken() 
 {
   Token matchedToken;
   int curPos = 0;
@@ -491,7 +491,7 @@ public static Token getNextToken()
   }
 }
 
-static private void jjCheckNAdd(int state)
+private void jjCheckNAdd(int state)
 {
    if (jjrounds[state] != jjround)
    {
@@ -499,19 +499,19 @@ static private void jjCheckNAdd(int state)
       jjrounds[state] = jjround;
    }
 }
-static private void jjAddStates(int start, int end)
+private void jjAddStates(int start, int end)
 {
    do {
       jjstateSet[jjnewStateCnt++] = jjnextStates[start];
    } while (start++ != end);
 }
-static private void jjCheckNAddTwoStates(int state1, int state2)
+private void jjCheckNAddTwoStates(int state1, int state2)
 {
    jjCheckNAdd(state1);
    jjCheckNAdd(state2);
 }
 
-static private void jjCheckNAddStates(int start, int end)
+private void jjCheckNAddStates(int start, int end)
 {
    do {
       jjCheckNAdd(jjnextStates[start]);

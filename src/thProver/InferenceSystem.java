@@ -23,16 +23,32 @@ public class InferenceSystem {
     public static Set<Clause> resolution(Clause c1, List<Clause> selected
             , IndexingClauses indexingC) {
         Set<Clause> resolvents = new LinkedHashSet<>();
-        for (Clause c2 : selected)
-            resolvents.addAll(c1.allTheResolvents(c2, indexingC));
+        for (Clause c2 : selected) {
+            // resolvents.addAll(c1.allTheResolvents(c2, indexingC));
+            // siccome i risolventi devono avere come padri la clausola data
+            // e una clausola in usable, non posso usare il metodo
+            // allTheResolvent perché mi trova anche i fattori e mi fa la
+            // risoluzione anche su di essi quindi uso la semplice risoluzione
+            resolvents.addAll(c1.resolvents(c2, indexingC));
+        }
         return resolvents;
     }
 
     public static Set<Clause> orderedResolution(Clause c1, List<Clause> selected, Ordering ord
             , IndexingClauses indexingC) {
         Set<Clause> resolvents = new LinkedHashSet<>();
-        for (Clause c2 : selected)
-            resolvents.addAll(c1.allTheOrderedResolvents(c2, ord, indexingC));
+        c1.getMaximalLiterals(ord);
+        for (Clause c2 : selected) {
+            // resolvents.addAll(c1.allTheOrderedResolvents(c2, ord, indexingC));
+            // siccome i risolventi devono avere come padri la clausola data
+            // e una clausola in usable, non posso usare il metodo
+            // allTheResolvent perché mi trova anche i fattori e mi fa la
+            // risoluzione anche su di essi quindi uso la semplice risoluzione
+            
+            // devo però prima trovare i letterali massimali
+            c2.getMaximalLiterals(ord);
+            resolvents.addAll(c1.orderedResolvents(c2, indexingC));
+        }
         return resolvents;
     }
 

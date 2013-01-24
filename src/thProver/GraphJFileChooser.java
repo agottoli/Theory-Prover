@@ -60,8 +60,14 @@ public class GraphJFileChooser extends javax.swing.JFrame {
         fc.setFileFilter(filter);
         log.setText(grafo);
         this.prover = prover;
-        this.dir = dir;
-        this.name = name;
+        if (dir == null)
+            this.dir = ".";
+        else
+            this.dir = dir;
+        if (name == null)
+            this.name = "input.txt";
+        else
+            this.name = name;
         setLocationRelativeTo(null); // mette al centro 
         //PropertyChangeSupport pcs = new PropertyChangeSupport(stop);
 /*		fc = new JFileChooserDemo();

@@ -194,8 +194,11 @@ public class Clause implements Comparable<Clause> {
     @Override
     public int compareTo(Clause c) {
         int diff = symbolsNumber() - c.symbolsNumber();
-        if (diff == 0 && !equals(c))
-            return -1; // keep consistency with equals()
+        if (diff == 0 && !equals(c)) {
+            //return -1; // keep consistency with equals()
+            return (int)(this.indiceClausola - c.indiceClausola); 
+            // così sceglie la clausola più vecchia in caso di peso =
+        }
         return diff;
     }
 

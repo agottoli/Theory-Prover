@@ -140,11 +140,18 @@ public class GivenClauseProver {
             /* DEBUG fine */
 
             Set<Clause> alfa;
-            if (useOrdering)
-                alfa = InferenceSystem.orderedResolution(given, Selected, ord, index);
-            else
-                alfa = InferenceSystem.resolution(given, Selected, index);
-
+            if (useOrdering) {
+                // la fattorizzazione si fa prima o dopo la risoluzione
+                // devo scoprire però su cosa devo farla
+                // ipotesi 1 = solo su given
+                // ipotesi 2 = anche sui risultati
+                // suppongo la prima :)
+                alfa = InferenceSystem.orderedFactorization(given, ord, index);
+                alfa.addAll(InferenceSystem.orderedResolution(given, Selected, ord, index));
+            } else {
+                alfa = InferenceSystem.factorization(given, index);
+                alfa.addAll(InferenceSystem.resolution(given, Selected, index));
+            }
             /* DEBUG inizio */
             //System.out.println("ho generato " + alfa.size() + " risolventi.\n"
             //        + alfa.toString());

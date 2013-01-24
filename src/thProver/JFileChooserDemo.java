@@ -499,13 +499,26 @@ public class JFileChooserDemo extends javax.swing.JFrame {
 
                 //try {
                 file = fc.getSelectedFile();
+                StringBuilder sb = new StringBuilder();
+                try {
+                    BufferedReader br = new BufferedReader(new FileReader(file));
+                    String line;
+                    while ((line = br.readLine()) != null)
+                        sb.append(line).append("\n");
+                } catch (FileNotFoundException fnfe) {
+                } catch (IOException ioe) {
+                }
+                
                 //in = new BufferedReader(new FileReader(file));
                 //formula = formulaReader.toString();
                 //formula = in.readLine();
                 //if (formula.length() < 50000)
                 //    log.setText(formula);
                 //else
-                log.setText("Formula caricata da file: " + file);
+                if (sb.length() < 50000)
+                    log.setText(sb.toString());
+                else
+                    log.setText("Formula caricata da file: " + file);
                 //log.setEditable(false);
                 interactive = false;
                 saveItem.setEnabled(false);
@@ -583,13 +596,13 @@ public class JFileChooserDemo extends javax.swing.JFrame {
 
 	private void logKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_logKeyPressed
             if (evt != null && log.isEditable()) {
-                if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+                /*if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
                     evt.setKeyCode(java.awt.event.KeyEvent.CHAR_UNDEFINED);
 
                     // NOTA: si può far premere il pulsante SAT
                     if (startButton.isEnabled())
                         startButton.doClick();
-                } else {
+                } else {*/
                     if (log.getText().startsWith("Formula caricata da file:"))
                         log.setText("");
                     formula = log.getText();
@@ -597,7 +610,7 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                         resetInterface();
                         //setSize(getWidth(), getHeight() - AUMENTO_DIM);
                     }
-                }
+                /*}*/
                 interactive = true;
                 if (modeMenu.isEnabled()) {
                     modeMenu.setEnabled(false);
@@ -847,14 +860,13 @@ public class JFileChooserDemo extends javax.swing.JFrame {
 
     private void showGraphProveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showGraphProveButtonActionPerformed
         // esporto il grafo in dot aprendo una finestra per salvarlo
-        System.out.println(file.getAbsolutePath());
-        //System.out.println(file.getPath());
-        System.out.println(file.getName());
-        System.out.println(file.getParent());
-        //prover.exportDot(file.getAbsolutePath(), grafo);
         //java.awt.EventQueue.invokeLater(new Runnable() {
          //   public void run() {
-         GraphJFileChooser gjf = new GraphJFileChooser(prover, grafo, file.getParent(), file.getName());
+        GraphJFileChooser gjf;
+        if (interactive)
+            gjf = new GraphJFileChooser(prover, grafo, null, "input.txt");
+         else
+            gjf = new GraphJFileChooser(prover, grafo, file.getParent(), file.getName());
          //gjf.setFields(grafo, file.getParent(), file.getName());
          gjf.setVisible(true);
          

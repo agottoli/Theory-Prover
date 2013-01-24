@@ -4,7 +4,10 @@
  */
 package thProver;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -32,6 +35,7 @@ public class GivenClauseProver {
     private double timeout; // = -1;
     private boolean timeoutWhitoutResponse = false;
     private boolean useOrdering;
+    private boolean stop = false;
 
     public GivenClauseProver(boolean aLaE, boolean sos, boolean kbo,
             boolean multiSet, boolean uOr, Ordering ord, int limit) {
@@ -204,6 +208,9 @@ public class GivenClauseProver {
                 timeoutWhitoutResponse = true;
                 break;
             }
+            
+            if (stop)
+                break;
 
             To_Select.addAll(alfa);
             if (!betaprimo.isEmpty())
@@ -300,6 +307,8 @@ public class GivenClauseProver {
         sb.append("in ");sb.append(elapsedTime/1000000000.0).append(" seconds");
         if (timeoutWhitoutResponse)
             sb.append(" (out of time limit)");
+        if (stop)
+            sb.append(" (user stop)");
         sb.append(".\n");
         
         return sb.toString();
@@ -307,5 +316,69 @@ public class GivenClauseProver {
     
     public long getElapsedTime() {
         return elapsedTime;
+    }
+    
+    public void stop() {
+        stop = true;
+    }
+    
+    public boolean isStopped() {
+        return stop;
+    }
+    
+    public String getFiends(Clause c) {
+        return c.getDOT();
+    }
+    
+    public void exportDot(String dir, String name, String grafo) {
+        if (name == null) {
+            // interactive mode
+            name = "input.txt";
+        }
+        if (dir == null) {
+            dir = ".";
+        }
+        int index = name.lastIndexOf('.'); 
+        String nameNoExt;
+        if (index == -1) {
+            // il carattere . non 'è nel nome del file
+            nameNoExt = name;
+        } else {
+           nameNoExt = name.substring(0, index);
+        }
+        
+        try {
+            FileOutputStream file = new FileOutputStream(dir + "/" 
+                    + nameNoExt + ".dot");
+            PrintStream output = new PrintStream(file);
+            output.println(grafo);
+        } catch (IOException e) {
+            System.out.println("Errore: " + e);
+        }
+        
+        String cmd = "dot -Tjpg " 
+                    + dir + "/" 
+                    + nameNoExt + ".dot" + " -o" + dir + "/" 
+                    + nameNoExt + ".jpg";
+        Runtime run = Runtime.getRuntime();
+        Process pr = null;
+        try {
+            pr = run.exec(cmd);
+        } catch (IOException e) {
+            //e.printStackTrace();
+            System.out.println("Errore nell'esportazione, 'dot' potrebbe non "
+                    + "essere installato. Il file sorgente del grafo è "
+                    + "visualizzabile in " + dir + "/" + nameNoExt + ".dot");
+        }
+        try {
+            pr.waitFor();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        
+        System.out.println("Grafo esportato in "+  dir + "/" + nameNoExt + ".jpg");
+        //Picture p = new Picture(fileNameNoExt + ".dot" + ".jpg");
+        //p.show();
+        //sb.append(grafo);
     }
 }

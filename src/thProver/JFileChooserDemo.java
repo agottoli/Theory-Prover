@@ -50,6 +50,7 @@ public class JFileChooserDemo extends javax.swing.JFrame {
     private File file;
     //private boolean useFile = false; // c'è già interactive...
     private Reader formulaReader;
+    private GivenClauseProver prover;
     private boolean answerLiteral = false;
     private boolean interactive = true;
     private boolean sos = false;
@@ -60,9 +61,10 @@ public class JFileChooserDemo extends javax.swing.JFrame {
     private boolean aLaE = false;
     private boolean tptp = false;
     private int limit = -1;//Integer.MAX_VALUE;
-    private boolean gui = false;
+    //private boolean gui = false;
     private boolean faseParsing = true;
     private CNFFormula f = null;
+    private String grafo = null;
 
     /**
      * Creates new form JFileChooser
@@ -97,6 +99,7 @@ public class JFileChooserDemo extends javax.swing.JFrame {
         ccText = new javax.swing.JLabel();
         satText = new javax.swing.JLabel();
         jProgressBar1 = new javax.swing.JProgressBar();
+        showGraphProveButton = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openItem = new javax.swing.JMenuItem();
@@ -118,7 +121,7 @@ public class JFileChooserDemo extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Given Clause Cicle");
-        setPreferredSize(new java.awt.Dimension(465, 400));
+        setPreferredSize(new java.awt.Dimension(465, 370));
         setResizable(false);
 
         inserText.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -154,6 +157,11 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 startButtonActionPerformed(evt);
             }
         });
+        startButton.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                startButtonKeyPressed(evt);
+            }
+        });
 
         grafoText.setVisible(false);
         grafoText.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
@@ -172,6 +180,20 @@ public class JFileChooserDemo extends javax.swing.JFrame {
         jProgressBar1.setEnabled(false);
         jProgressBar1.setFocusable(false);
         jProgressBar1.setIndeterminate(true);
+
+        showGraphProveButton.setText("show graph prove");
+        showGraphProveButton.setEnabled(false);
+        showGraphProveButton.setVisible(false);
+        showGraphProveButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                showGraphProveButtonActionPerformed(evt);
+            }
+        });
+        showGraphProveButton.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                showGraphProveButtonKeyPressed(evt);
+            }
+        });
 
         fileMenu.setText("File");
         fileMenu.addAncestorListener(new javax.swing.event.AncestorListener() {
@@ -358,7 +380,7 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 441, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(inserText, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -366,11 +388,14 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                                     .addComponent(ccText)
                                     .addComponent(satText))
                                 .addGap(0, 0, Short.MAX_VALUE)))
-                        .addContainerGap())))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(showGraphProveButton)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(inserText, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -385,7 +410,9 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 .addComponent(satText)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(48, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(showGraphProveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -402,7 +429,7 @@ public class JFileChooserDemo extends javax.swing.JFrame {
 	private void startButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_startButtonActionPerformed
             if (startButton.getText().equals(START_BUTTON_INIT)
                     || startButton.getText().equals(START_BUTTON_SAT)) {
-                
+
                 //if (grafoText.isVisible())
                 //    resetInterface();
                 //else
@@ -426,18 +453,26 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 myT = new Thread(new MyThread());
                 myT.start();
             } else {
-                myT.stop();
-                myT = null;
+                //myT.stop();
+                if (myT != null) {
+                    if (!faseParsing && prover != null) {
+                        prover.stop();
+                        //prover = null; // no altrimenti non riesco più a ricevere lo stop e da errore
+                    }
+                    myT = null;
+                }
+
 
                 //avan.interrupt();
                 //stop = true;
 
-                fileMenu.setEnabled(true);
-                modeMenu.setEnabled(true);
-                orderingTypeMenu.setEnabled(false);
-                precedencesAndWeightsTypeMenu.setEnabled(false);
-                otherOptionsMenu.setEnabled(true);
-                log.setEditable(true);
+                //fileMenu.setEnabled(true);
+                //modeMenu.setEnabled(true);
+                //orderingTypeMenu.setEnabled(true);
+                //if (useOrdering)
+                //    precedencesAndWeightsTypeMenu.setEnabled(false);
+                //otherOptionsMenu.setEnabled(true);
+                //log.setEditable(true);
                 //startButton.setText(START_BUTTON_INIT);
                 String canc = " CANCELLATO DALL'UTENTE";
 
@@ -463,28 +498,31 @@ public class JFileChooserDemo extends javax.swing.JFrame {
             if (returnVal == JFileChooser.APPROVE_OPTION) {
 
                 //try {
-                    file = fc.getSelectedFile();
-                    //in = new BufferedReader(new FileReader(file));
-                    //formula = formulaReader.toString();
-                    //formula = in.readLine();
-                    //if (formula.length() < 50000)
-                    //    log.setText(formula);
-                    //else
-                    log.setText("Formula caricata da file: " + file);
-                    //log.setEditable(false);
-                    interactive = false;
+                file = fc.getSelectedFile();
+                //in = new BufferedReader(new FileReader(file));
+                //formula = formulaReader.toString();
+                //formula = in.readLine();
+                //if (formula.length() < 50000)
+                //    log.setText(formula);
+                //else
+                log.setText("Formula caricata da file: " + file);
+                //log.setEditable(false);
+                interactive = false;
+                saveItem.setEnabled(false);
 
                 //} catch (IOException ex) {
                 //}
 
                 if (log.getText().length() > 0) {
                     startButton.setEnabled(true);
-                    saveItem.setEnabled(true);
+                    //saveItem.setEnabled(true);
                 }
                 if (grafoText.isVisible()) {
                     resetInterface();
                     //setSize(getWidth(), getHeight() - AUMENTO_DIM);
                 }
+
+                startButton.requestFocus();
 
             }
 
@@ -589,7 +627,8 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 saveItem.setEnabled(false);
             } else {
                 startButton.setEnabled(true);
-                saveItem.setEnabled(true);
+                if (interactive)
+                    saveItem.setEnabled(true);
             }
 	}//GEN-LAST:event_logPropertyChange
 
@@ -606,12 +645,14 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 aLaEButton.setSelected(false);
             } else
                 aLaOtterButton.setSelected(true);
-            
+
             if (ccText.isVisible()) {
                 ccText.setVisible(false);
                 ccText.setText(CC_TEXT_INIT);
                 satText.setVisible(false);
                 satText.setText(SAT_TEXT_INIT);
+                showGraphProveButton.setVisible(false);
+                showGraphProveButton.setEnabled(false);
             }
         }//GEN-LAST:event_setALaOtterButtonActionPerformed
 
@@ -621,12 +662,14 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 aLaE = true;
             } else
                 aLaEButton.setSelected(true);
-            
+
             if (ccText.isVisible()) {
                 ccText.setVisible(false);
                 ccText.setText(CC_TEXT_INIT);
                 satText.setVisible(false);
                 satText.setText(SAT_TEXT_INIT);
+                showGraphProveButton.setVisible(false);
+                showGraphProveButton.setEnabled(false);
             }
         }//GEN-LAST:event_setALaEActionPerformed
 
@@ -641,13 +684,15 @@ public class JFileChooserDemo extends javax.swing.JFrame {
             precedencesAndWeightsTypeMenu.setEnabled(true);
         } else
             lexicographicButton.setSelected(true);
-        
+
         if (ccText.isVisible()) {
-                ccText.setVisible(false);
-                ccText.setText(CC_TEXT_INIT);
-                satText.setVisible(false);
-                satText.setText(SAT_TEXT_INIT);
-            }
+            ccText.setVisible(false);
+            ccText.setText(CC_TEXT_INIT);
+            satText.setVisible(false);
+            satText.setText(SAT_TEXT_INIT);
+            showGraphProveButton.setVisible(false);
+            showGraphProveButton.setEnabled(false);
+        }
     }//GEN-LAST:event_setLexicographicOrdering
 
     private void setMultiSetOrdering(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setMultiSetOrdering
@@ -661,13 +706,15 @@ public class JFileChooserDemo extends javax.swing.JFrame {
             precedencesAndWeightsTypeMenu.setEnabled(true);
         } else
             multisetButton.setSelected(true);
-        
+
         if (ccText.isVisible()) {
-                ccText.setVisible(false);
-                ccText.setText(CC_TEXT_INIT);
-                satText.setVisible(false);
-                satText.setText(SAT_TEXT_INIT);
-            }
+            ccText.setVisible(false);
+            ccText.setText(CC_TEXT_INIT);
+            satText.setVisible(false);
+            satText.setText(SAT_TEXT_INIT);
+            showGraphProveButton.setVisible(false);
+            showGraphProveButton.setEnabled(false);
+        }
     }//GEN-LAST:event_setMultiSetOrdering
 
     private void orderingAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_orderingAncestorAdded
@@ -685,13 +732,15 @@ public class JFileChooserDemo extends javax.swing.JFrame {
             precedencesAndWeightsTypeMenu.setEnabled(true);
         } else
             knuthBendixButton.setSelected(true);
-        
+
         if (ccText.isVisible()) {
-                ccText.setVisible(false);
-                ccText.setText(CC_TEXT_INIT);
-                satText.setVisible(false);
-                satText.setText(SAT_TEXT_INIT);
-            }
+            ccText.setVisible(false);
+            ccText.setText(CC_TEXT_INIT);
+            satText.setVisible(false);
+            satText.setText(SAT_TEXT_INIT);
+            showGraphProveButton.setVisible(false);
+            showGraphProveButton.setEnabled(false);
+        }
     }//GEN-LAST:event_setKnuthBendixOrdering
 
     private void setNoOrdering(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setNoOrdering
@@ -705,13 +754,15 @@ public class JFileChooserDemo extends javax.swing.JFrame {
             precedencesAndWeightsTypeMenu.setEnabled(false);
         } else
             noOrderingButton.setSelected(true);
-        
+
         if (ccText.isVisible()) {
-                ccText.setVisible(false);
-                ccText.setText(CC_TEXT_INIT);
-                satText.setVisible(false);
-                satText.setText(SAT_TEXT_INIT);
-            }
+            ccText.setVisible(false);
+            ccText.setText(CC_TEXT_INIT);
+            satText.setVisible(false);
+            satText.setText(SAT_TEXT_INIT);
+            showGraphProveButton.setVisible(false);
+            showGraphProveButton.setEnabled(false);
+        }
     }//GEN-LAST:event_setNoOrdering
 
     private void precedencesAndWeightsTypeMenuAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_precedencesAndWeightsTypeMenuAncestorAdded
@@ -725,13 +776,15 @@ public class JFileChooserDemo extends javax.swing.JFrame {
             useStandardOrderingButton.setSelected(true);
             useStandard = true;
         }
-        
+
         if (ccText.isVisible()) {
-                ccText.setVisible(false);
-                ccText.setText(CC_TEXT_INIT);
-                satText.setVisible(false);
-                satText.setText(SAT_TEXT_INIT);
-            }
+            ccText.setVisible(false);
+            ccText.setText(CC_TEXT_INIT);
+            satText.setVisible(false);
+            satText.setText(SAT_TEXT_INIT);
+            showGraphProveButton.setVisible(false);
+            showGraphProveButton.setEnabled(false);
+        }
     }//GEN-LAST:event_setStandardOrdering
 
     private void setUseUserDefinedOrdering(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setUseUserDefinedOrdering
@@ -741,13 +794,15 @@ public class JFileChooserDemo extends javax.swing.JFrame {
             useUserDefinedOrderingButton.setSelected(true);
             useStandard = false;
         }
-        
+
         if (ccText.isVisible()) {
-                ccText.setVisible(false);
-                ccText.setText(CC_TEXT_INIT);
-                satText.setVisible(false);
-                satText.setText(SAT_TEXT_INIT);
-            }
+            ccText.setVisible(false);
+            ccText.setText(CC_TEXT_INIT);
+            satText.setVisible(false);
+            satText.setText(SAT_TEXT_INIT);
+            showGraphProveButton.setVisible(false);
+            showGraphProveButton.setEnabled(false);
+        }
     }//GEN-LAST:event_setUseUserDefinedOrdering
 
     private void otherOptionsMenuAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_otherOptionsMenuAncestorAdded
@@ -756,25 +811,66 @@ public class JFileChooserDemo extends javax.swing.JFrame {
 
     private void sosActionPerformer(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sosActionPerformer
         sos = sosButton.isSelected();
-        
+
         if (ccText.isVisible()) {
-                ccText.setVisible(false);
-                ccText.setText(CC_TEXT_INIT);
-                satText.setVisible(false);
-                satText.setText(SAT_TEXT_INIT);
-            }
+            ccText.setVisible(false);
+            ccText.setText(CC_TEXT_INIT);
+            satText.setVisible(false);
+            satText.setText(SAT_TEXT_INIT);
+            showGraphProveButton.setVisible(false);
+            showGraphProveButton.setEnabled(false);
+        }
     }//GEN-LAST:event_sosActionPerformer
 
     private void answerLiteralButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_answerLiteralButtonActionPerformed
         answerLiteral = answerLiteralButton.isSelected();
-        
+
         if (ccText.isVisible()) {
-                ccText.setVisible(false);
-                ccText.setText(CC_TEXT_INIT);
-                satText.setVisible(false);
-                satText.setText(SAT_TEXT_INIT);
-            }
+            ccText.setVisible(false);
+            ccText.setText(CC_TEXT_INIT);
+            satText.setVisible(false);
+            satText.setText(SAT_TEXT_INIT);
+            showGraphProveButton.setVisible(false);
+            showGraphProveButton.setEnabled(false);
+        }
     }//GEN-LAST:event_answerLiteralButtonActionPerformed
+
+    private void startButtonKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_startButtonKeyPressed
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            evt.setKeyCode(java.awt.event.KeyEvent.CHAR_UNDEFINED);
+
+            // NOTA: si può far premere il pulsante SAT
+            if (startButton.isEnabled())
+                startButton.doClick();
+        }
+    }//GEN-LAST:event_startButtonKeyPressed
+
+    private void showGraphProveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showGraphProveButtonActionPerformed
+        // esporto il grafo in dot aprendo una finestra per salvarlo
+        System.out.println(file.getAbsolutePath());
+        //System.out.println(file.getPath());
+        System.out.println(file.getName());
+        System.out.println(file.getParent());
+        //prover.exportDot(file.getAbsolutePath(), grafo);
+        //java.awt.EventQueue.invokeLater(new Runnable() {
+         //   public void run() {
+         GraphJFileChooser gjf = new GraphJFileChooser(prover, grafo, file.getParent(), file.getName());
+         //gjf.setFields(grafo, file.getParent(), file.getName());
+         gjf.setVisible(true);
+         
+         //   }
+        //});
+    }//GEN-LAST:event_showGraphProveButtonActionPerformed
+
+    private void showGraphProveButtonKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_showGraphProveButtonKeyPressed
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+            evt.setKeyCode(java.awt.event.KeyEvent.CHAR_UNDEFINED);
+
+            // NOTA: si può far premere il pulsante SAT
+            if (showGraphProveButton.isEnabled())
+                showGraphProveButton.doClick();
+        }
+    }//GEN-LAST:event_showGraphProveButtonKeyPressed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButtonMenuItem aLaEButton;
@@ -800,6 +896,7 @@ public class JFileChooserDemo extends javax.swing.JFrame {
     private javax.swing.JMenu precedencesAndWeightsTypeMenu;
     private javax.swing.JLabel satText;
     private javax.swing.JMenuItem saveItem;
+    private javax.swing.JButton showGraphProveButton;
     private javax.swing.JCheckBoxMenuItem sosButton;
     private javax.swing.JButton startButton;
     private javax.swing.JRadioButtonMenuItem useStandardOrderingButton;
@@ -811,6 +908,8 @@ public class JFileChooserDemo extends javax.swing.JFrame {
         ccText.setVisible(false);
         satText.setVisible(false);
         jProgressBar1.setVisible(false);
+        showGraphProveButton.setVisible(false);
+        showGraphProveButton.setEnabled(false);
 
         grafoText.setText(GRAFO_TEXT_INIT);
         ccText.setText(CC_TEXT_INIT);
@@ -822,12 +921,12 @@ public class JFileChooserDemo extends javax.swing.JFrame {
         //startButton.setEnabled(false);
 
         saveItem.setEnabled(false);
-        
+
         modeMenu.setEnabled(false);
         orderingTypeMenu.setEnabled(false);
         precedencesAndWeightsTypeMenu.setEnabled(false);
-        otherOptionsMenu.setEnabled(false);        
-        
+        otherOptionsMenu.setEnabled(false);
+
         jProgressBar1.setEnabled(false);
         //jProgressBar1.setIndeterminate(false);
         jProgressBar1.setValue(0);
@@ -838,7 +937,6 @@ public class JFileChooserDemo extends javax.swing.JFrame {
      */
     private class MyThread implements Runnable, PropertyChangeListener {
 
-        
         //public Boolean killati = false;
         /**
          * Computazione avviata
@@ -851,7 +949,7 @@ public class JFileChooserDemo extends javax.swing.JFrame {
             pcs.addPropertyChangeListener(this);
 
             if (faseParsing) {
-                
+
                 //stop = false;
                 //avan = new Thread(new Avanzamento());
                 //avan.start();
@@ -902,7 +1000,7 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                         System.out.println("Errore di parsing.");
                     }
                 }
-                
+
                 jProgressBar1.setVisible(false);
                 jProgressBar1.setStringPainted(false);
                 /* PARSING fine */
@@ -940,8 +1038,8 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                     // statistiche di parsing
                     System.out.println(f.getNumClausesAndSOS() + " clauses.");
 
-                    grafoText.setText(grafoText.getText() + " COMPLETATO (" 
-                            + formatoTime(time) + ") trovate " 
+                    grafoText.setText(grafoText.getText() + " COMPLETATO ("
+                            + formatoTime(time) + ") trovate "
                             + f.getNumClausesAndSOS() + " clauses.");
 
                     //System.out.println("uguaglianze: " + clausole[0].toString());
@@ -969,11 +1067,13 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                     //modeMenu.setEnabled(true);
                     //orderingTypeMenu.setEnabled(true);
                     //precedencesAndWeightsTypeMenu.setEnabled(true);
-                    
+
                 }
-                
+
             } else {
-                
+
+                ccText.setText(CC_TEXT_INIT);
+                satText.setText(SAT_TEXT_INIT);
                 ccText.setVisible(true);
                 jProgressBar1.setVisible(true);
                 jProgressBar1.setEnabled(true);
@@ -982,21 +1082,21 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 /* ORDERING */
                 Ordering or = new Ordering();
                 /* precedences */
-                boolean useStandard = false;
-                if (f.getPrecedences().isEmpty() && tptp) {
-                    // con tptp non c'è specificato un ordinamento allora
-                    // ne scelgo uno io standard
-                    or.setUseOrdStandard(true);
-                    useStandard = true;
-                }
+                //boolean useStandard = false;
+                //if (f.getPrecedences().isEmpty() && tptp) {
+                // con tptp non c'è specificato un ordinamento allora
+                // ne scelgo uno io standard
+                or.setUseOrdStandard(true);
+                //    useStandard = true;
+                //}
                 or.setPrecedence(f.getPrecedences(), f.getNPrec());
                 /* set KBO */
                 or.setWeightsKBO(f.getWeights(), f.getWeightVars());
 
 
 
-                String grafo = null;
-                GivenClauseProver prover = new GivenClauseProver(aLaE, sos, kbo,
+                grafo = null;
+                prover = new GivenClauseProver(aLaE, sos, kbo,
                         multiset, useOrdering, or, limit);
 
                 System.out.println("Starting satisfiability proving...");
@@ -1068,16 +1168,21 @@ public class JFileChooserDemo extends javax.swing.JFrame {
 
                 //System.out.println("Algoritmo di Chiusura di Congruenza completato.");
                 //time = (fine - inizio);// / 1000;
-                ccText.setText(ccText.getText() + " COMPLETATA (" + formatoTime(time) + ")");
+                if (!prover.isStopped()) {
+                    ccText.setText(ccText.getText() + " COMPLETATA (" + formatoTime(time) + ")");
 
-                satText.setVisible(true);
+                    satText.setVisible(true);
 
-                if (result == null) { //if (soddisfacibile) {
-                    System.out.println("E` SODDISFACIBILE.");
-                    satText.setText(satText.getText() + " SODDISFACIBILE");
-                } else {
-                    System.out.println("E` INSODDISFACIBILE.");
-                    satText.setText(satText.getText() + " INSODDISFACIBILE");
+                    if (result == null) { //if (soddisfacibile) {
+                        System.out.println("E` SODDISFACIBILE.");
+                        satText.setText(satText.getText() + " SODDISFACIBILE");
+                    } else {
+                        System.out.println("E` INSODDISFACIBILE.");
+                        satText.setText(satText.getText() + " INSODDISFACIBILE");
+                        grafo = result.getDOT();
+                        showGraphProveButton.setVisible(true);
+                        showGraphProveButton.setEnabled(true);
+                    }
                 }
 
                 jProgressBar1.setVisible(false);
@@ -1133,44 +1238,44 @@ public class JFileChooserDemo extends javax.swing.JFrame {
             return;
         }
     }
-/*
-    private class Avanzamento implements Runnable {
+    /*
+     private class Avanzamento implements Runnable {
 
-        /* *
-         * Computazione avviata
-         * /
-        @Override
-        public void run() {
-            int progress = 0;
-            int newProgress = 0;
-            int timeSleep = 700;
-            //Initialize progress property.
-            jProgressBar1.setValue(0);
-            //jProgressBar1.setF
-            jProgressBar1.setStringPainted(true);
-            while (progress < 100 && !stop) {
-                //Sleep for up to one second.
-                try {
-                    Thread.sleep(timeSleep);
+     /* *
+     * Computazione avviata
+     * /
+     @Override
+     public void run() {
+     int progress = 0;
+     int newProgress = 0;
+     int timeSleep = 700;
+     //Initialize progress property.
+     jProgressBar1.setValue(0);
+     //jProgressBar1.setF
+     jProgressBar1.setStringPainted(true);
+     while (progress < 100 && !stop) {
+     //Sleep for up to one second.
+     try {
+     Thread.sleep(timeSleep);
 
-                    //DEBUG
-                    //System.out.println("AVANZAMENTO ANCORA IN ESECUZIONE");
+     //DEBUG
+     //System.out.println("AVANZAMENTO ANCORA IN ESECUZIONE");
 
-                } catch (InterruptedException ignore) {
-                    //System.err.println("INTERRUPTED");
-                    break;
-                }
-                / *
-                 if ((newProgress = Parser.avanzamento * 100 / formula.length()) == progress)
-                 timeSleep += 300;
-                 else {
-                 progress = newProgress;
-                 jProgressBar1.setValue(Math.min(progress, 100));
-                 timeSleep = Math.max(700, timeSleep - 300);
-                 }
-                 * /
-            }
-        }
-    }
-    */
+     } catch (InterruptedException ignore) {
+     //System.err.println("INTERRUPTED");
+     break;
+     }
+     / *
+     if ((newProgress = Parser.avanzamento * 100 / formula.length()) == progress)
+     timeSleep += 300;
+     else {
+     progress = newProgress;
+     jProgressBar1.setValue(Math.min(progress, 100));
+     timeSleep = Math.max(700, timeSleep - 300);
+     }
+     * /
+     }
+     }
+     }
+     */
 }

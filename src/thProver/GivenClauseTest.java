@@ -107,13 +107,15 @@ public class GivenClauseTest {
 
             // parserizzo l'input
             CNFFormula f = null;
+            File file = null;
             if (!tptp) {
                 try {
                     if (interactive) {
                         formulaReader = new StringReader(stringa);
                     } else {
                         System.out.println("Reading file " + fileName + "...");
-                        formulaReader = new FileReader(fileName);
+                        file = new File(fileName);
+                        formulaReader = new FileReader(file);
                     }
                     CNFParser parser = new CNFParser(formulaReader);
                     parser.Start();
@@ -152,12 +154,12 @@ public class GivenClauseTest {
             /* ORDERING */
             Ordering or = new Ordering();
             /* precedences */
-            if (f.getPrecedences().isEmpty() && tptp) {
+            //if (f.getPrecedences().isEmpty() && tptp) {
                 // con tptp non c'è specificato un ordinamento allora
                 // ne scelgo uno io standard
-                or.setUseOrdStandard(true);
-                useStandard = true;
-            }
+                or.setUseOrdStandard(useStandard);
+            //    useStandard = true;
+            //}
             or.setPrecedence(f.getPrecedences(), f.getNPrec());
             /* set KBO */
             or.setWeightsKBO(f.getWeights(), f.getWeightVars());
@@ -219,7 +221,13 @@ public class GivenClauseTest {
             System.out.print("\nUsare 'dot' per esportare un immagine del grafo della prova? [y,n]: ");
             stamp = stdin.nextLine();
             if (stamp.equalsIgnoreCase("yes") || stamp.equalsIgnoreCase("y")) {
-                exportDot(fileName, grafo);
+                String dir = null;
+                String name = null;
+                if (file != null) {
+                    dir = file.getParent();
+                    name = file.getName();
+                }
+                prover.exportDot(dir, name, grafo);
             }
             stdin.close();
             
@@ -229,7 +237,7 @@ public class GivenClauseTest {
 
     private static void printUsage() {
         System.out.println(
-                "Usage: ThProver [-gui | -i | <filename>] [-ans] [-sos] [-lex | -mul | -kbo] [-E] [-limit<secs>]\n\n"
+                "Usage: ThProver [-gui | -i | <filename>] [-ans] [-sos] [(-lex | -mul | -kbo) [-userP | -standardP]] [-E] [-limit<secs>]\n\n"
                 + "\t-gui\tstart graphical user interface mode\n"
                 + "\t-i\tstart interactive mode\n"
                 + "\t-ans\tdetect answer clause\n"
@@ -237,6 +245,8 @@ public class GivenClauseTest {
                 + "\t-lex\tuse lexicographic ordering (default no ordering is used)\n"
                 + "\t-mul\tuse multiset ordering (default no ordering is used)\n"
                 + "\t-kbo\tuse knuth-bendix ordering (default no ordering is used)\n"
+                + "\t-userP\tuse user defined precedences and weights (default)\n"
+                + "\t-standardP\tuse a standard precedences and weights defined in class Ordering\n"
                 + "\t-E\tuse à la E version of the given clause loop (defaulf use à la Otter)\n"
                 //+ "\t-tptp\tthe input file is in TPTP cnf format\n"
                 + "\t-limit<secs>\tspecify a time limit - in seconds\n");
@@ -260,6 +270,10 @@ public class GivenClauseTest {
         } else if (o.equals("-kbo")) {
             useOrdering = true;
             kbo = true;
+        } else if (o.equals("-userP")) {
+            useStandard = false;
+        } else if (o.equals("-standardP")) {
+            useStandard = true;
         } else if (o.equals("-E")) {
             aLaE = true;
         //} else if (o.equals("-tptp")) {
@@ -326,42 +340,5 @@ public class GivenClauseTest {
         return sb.toString();
     }
 
-    public static void exportDot(String fileName, String grafo) {
-        if (fileName == null) {
-            // iterativo
-            fileName = "input.txt";
-        }
-        int index = fileName.lastIndexOf('.'); 
-        String fileNameNoExt = fileName.substring(0, index);
-        
-        try {
-            FileOutputStream file = new FileOutputStream(fileNameNoExt + ".dot");
-            PrintStream output = new PrintStream(file);
-            output.println(grafo);
-        } catch (IOException e) {
-            System.out.println("Errore: " + e);
-        }
-        
-        String cmd = "dot -Tjpg " + fileNameNoExt + ".dot" + " -O";
-        Runtime run = Runtime.getRuntime();
-        Process pr = null;
-        try {
-            pr = run.exec(cmd);
-        } catch (IOException e) {
-            //e.printStackTrace();
-            System.out.println("Errore nell'esportazione, 'dot' potrebbe non "
-                    + "essere installato. Il file sorgente del grafo è "
-                    + "visualizzabile in " + fileNameNoExt + ".dot");
-        }
-        try {
-            pr.waitFor();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        
-        System.out.println("Grafo esportato in "+ fileNameNoExt + ".dot.jpg");
-        //Picture p = new Picture(fileNameNoExt + ".dot" + ".jpg");
-        //p.show();
-        //sb.append(grafo);
-    }
+    
 }

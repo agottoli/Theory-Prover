@@ -80,7 +80,7 @@ public class GivenClauseProver {
         deleted = 0;
 
         nCIniziali = f.getNumClausesAndSOS();
-        System.out.println("-->" + nCIniziali);
+        //System.out.println("-->" + nCIniziali);
 
         index = new IndexingClauses(nCIniziali);
 
@@ -214,8 +214,8 @@ public class GivenClauseProver {
                 }
             }
             /* DEBUG inizio */
-            System.out.println("ho generato " + alfa.size() + " risolventi.\n"
-                    + alfa.toString());
+            //System.out.println("ho generato " + alfa.size() + " risolventi.\n"
+            //        + alfa.toString());
             /* DEBUG fine */
             if (!alfa.isEmpty()) {
                 generated += alfa.size();

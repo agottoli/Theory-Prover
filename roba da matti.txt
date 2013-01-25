@@ -1,0 +1,56 @@
+5 clauses.
+Starting satisfiability proving...
+à la Otter with no ordering
+-->5
+ho generato 0 risolventi.
+[]
+ho generato 0 risolventi.
+[]
+ho generato 0 risolventi.
+[]
+ho generato 0 risolventi.
+[]
+ho generato 4 risolventi.
+[GREEN(y_5) | ~ON(a,y_5), ~GREEN(x_6) | ~ON(x_6,c), ~GREEN(a) | GREEN(b), ~GREEN(b) | GREEN(c)]
+ho generato 1 risolventi.
+[GREEN(y_10) | ~ON(b,y_10)]
+ho generato 4 risolventi.
+[~GREEN(b), ~GREEN(b) | GREEN(y_12) | ~ON(c,y_12), GREEN(c) | ~GREEN(x_13) | ~ON(x_13,b), GREEN(c)]
+ho generato 2 risolventi.
+[~GREEN(x_16) | ~ON(x_16,b), []]
+/* info */
+5 clauses from parsing, 
+13 clauses generated, 
+3 clauses subsumed, 
+5 clauses in To_Select, 
+7 clauses in Selected, 
+in 0.024151261 seconds.
+E` INSODDISFACIBILE.
+Starting satisfiability proving...
+à la Otter with no ordering
+-->5
+ho generato 0 risolventi.
+[]
+ho generato 0 risolventi.
+[]
+ho generato 0 risolventi.
+[]
+ho generato 0 risolventi.
+[]
+eccolo: ~GREEN(x_0) | GREEN(y_0) | ~ON(x_0,y_0)
+ho generato 5 risolventi.
+[GREEN(y_5) | ~ON(a,y_5), ~GREEN(x_6) | ~ON(x_6,c), ~GREEN(b) | GREEN(c), GREEN(b), ~GREEN(a) | GREEN(b)]
+ho generato 1 risolventi.
+[GREEN(y_10) | ~ON(b,y_10)]
+ho generato 5 risolventi.
+[~GREEN(b), GREEN(c) | ~GREEN(x_13) | ~ON(x_13,b), GREEN(c), GREEN(y_12) | ~ON(c,y_12), ~GREEN(b) | GREEN(y_12) | ~ON(c,y_12)]
+ho generato 2 risolventi.
+[~GREEN(x_16) | ~ON(x_16,b), []]
+/* info */
+5 clauses from parsing, 
+15 clauses generated, 
+3 clauses subsumed, 
+5 clauses in To_Select, 
+7 clauses in Selected, 
+in 0.027648618 seconds.
+E` INSODDISFACIBILE.

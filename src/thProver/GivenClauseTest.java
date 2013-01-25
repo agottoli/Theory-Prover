@@ -175,7 +175,7 @@ public class GivenClauseTest {
             or.setWeightsKBO(f.getWeights(), f.getWeightVars());
 
             /* DEBUG inizio */
-            System.out.println(f.getPrecedences().toString());
+            //System.out.println(f.getPrecedences().toString());
             /* DEBUG fine */
 
             

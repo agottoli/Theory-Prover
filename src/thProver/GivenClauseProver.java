@@ -414,10 +414,10 @@ public class GivenClauseProver {
         return c.getDOT();
     }
 
-    public void exportDot(String dir, String name, String grafo) {
+    public void exportDot(String dir, String name, String format, String grafo) {
         if (name == null) {
             // interactive mode
-            name = "input.txt";
+            name = "input." + format;
         }
         if (dir == null) {
             dir = ".";
@@ -449,8 +449,8 @@ public class GivenClauseProver {
 
         
         // così non ho problemi degli spazi nel nome del file :)
-        String[] cmd = {"dot", "-Tjpg", dir + "/" + nameNoExt + ".dot",
-                "-o", dir + "/" + nameNoExt + ".jpg"};
+        String[] cmd = {"dot", "-T" + format, dir + "/" + nameNoExt + ".dot",
+                "-o", dir + "/" + name};
         
         Runtime run = Runtime.getRuntime();
         Process pr = null;
@@ -468,7 +468,7 @@ public class GivenClauseProver {
             e.printStackTrace();
         }
 
-        System.out.println("Grafo esportato in " + dir + "/" + nameNoExt + ".jpg");
+        System.out.println("Grafo esportato in " + dir + "/" + name);
         //Picture p = new Picture(fileNameNoExt + ".dot" + ".jpg");
         //p.show();
         //sb.append(grafo);

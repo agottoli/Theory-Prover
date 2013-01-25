@@ -243,7 +243,7 @@ public class GivenClauseTest {
                         dir = file.getParent();
                         name = file.getName();
                     }
-                    prover.exportDot(dir, name, grafo);
+                    prover.exportDot(dir, name, "jpg", grafo);
                 }
                 stdin.close();
 

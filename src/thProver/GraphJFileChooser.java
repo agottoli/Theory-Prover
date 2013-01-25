@@ -56,8 +56,6 @@ public class GraphJFileChooser extends javax.swing.JFrame {
      */
     public GraphJFileChooser(GivenClauseProver prover, String grafo, String dir, String name) {
         initComponents();
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("DOT file", ".dot");
-        fc.setFileFilter(filter);
         log.setText(grafo);
         this.prover = prover;
         if (dir == null)
@@ -96,10 +94,9 @@ public class GraphJFileChooser extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         saveItem = new javax.swing.JMenuItem();
-        exportDot = new javax.swing.JMenuItem();
-        modeMenu = new javax.swing.JMenu();
-        aLaOtterButton = new javax.swing.JRadioButtonMenuItem();
-        aLaEButton = new javax.swing.JRadioButtonMenuItem();
+        exportDot2Jpg = new javax.swing.JMenuItem();
+        exportDot2Ps = new javax.swing.JMenuItem();
+        exportDot2Pdf = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Dot Graph Prove");
@@ -150,46 +147,31 @@ public class GraphJFileChooser extends javax.swing.JFrame {
         });
         fileMenu.add(saveItem);
 
-        exportDot.setText("Export to .jpg");
-        exportDot.addActionListener(new java.awt.event.ActionListener() {
+        exportDot2Jpg.setText("Export to .jpg");
+        exportDot2Jpg.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                exportDotActionPerformed(evt);
+                exportDot2JpgActionPerformed(evt);
             }
         });
-        fileMenu.add(exportDot);
+        fileMenu.add(exportDot2Jpg);
+
+        exportDot2Ps.setText("Export to .ps");
+        exportDot2Ps.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportDot2PsActionPerformed(evt);
+            }
+        });
+        fileMenu.add(exportDot2Ps);
+
+        exportDot2Pdf.setText("Export to .pdf");
+        exportDot2Pdf.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exportDot2PdfActionPerformed(evt);
+            }
+        });
+        fileMenu.add(exportDot2Pdf);
 
         jMenuBar1.add(fileMenu);
-
-        modeMenu.setText("Mode");
-        modeMenu.setEnabled(false);
-        modeMenu.addAncestorListener(new javax.swing.event.AncestorListener() {
-            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
-                modeMenuAncestorAdded(evt);
-            }
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
-            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
-            }
-        });
-
-        aLaOtterButton.setSelected(true);
-        aLaOtterButton.setText("à la Otter");
-        aLaOtterButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                setALaOtterButtonActionPerformed(evt);
-            }
-        });
-        modeMenu.add(aLaOtterButton);
-
-        aLaEButton.setText("à la E");
-        aLaEButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                setALaEActionPerformed(evt);
-            }
-        });
-        modeMenu.add(aLaEButton);
-
-        jMenuBar1.add(modeMenu);
 
         setJMenuBar(jMenuBar1);
 
@@ -212,7 +194,7 @@ public class GraphJFileChooser extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(inserText, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 256, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 264, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -234,6 +216,8 @@ public class GraphJFileChooser extends javax.swing.JFrame {
                 nameNoExt = name.substring(0, index);
             File file = new File(dir + "/" + nameNoExt + ".dot");
             fc.setSelectedFile(file);
+            FileNameExtensionFilter filter = new FileNameExtensionFilter("DOT file", ".dot", ".DOT");
+            fc.setFileFilter(filter);     
 
             int returnVal = fc.showSaveDialog(GraphJFileChooser.this);
             if (returnVal == JFileChooser.APPROVE_OPTION) {
@@ -303,24 +287,16 @@ public class GraphJFileChooser extends javax.swing.JFrame {
 	private void logPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_logPropertyChange
 	}//GEN-LAST:event_logPropertyChange
 
-        private void modeMenuAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_modeMenuAncestorAdded
-            // do nothing
-        }//GEN-LAST:event_modeMenuAncestorAdded
-
-        private void setALaOtterButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setALaOtterButtonActionPerformed
-        }//GEN-LAST:event_setALaOtterButtonActionPerformed
-
-        private void setALaEActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setALaEActionPerformed
-        }//GEN-LAST:event_setALaEActionPerformed
-
-    private void exportDotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportDotActionPerformed
-        String nameNoExt = name;
+        public void exportDot2Format(String format) {
+            //if (format == null || format == "")
+            //    format = "jpg";
+            String nameNoExt = name;
         int index = name.lastIndexOf('.');
         if (index != -1)
             nameNoExt = name.substring(0, index);
-        File file = new File(dir + "/" + nameNoExt + ".jpg");
+        File file = new File(dir + "/" + nameNoExt + "." + format);
         fc.setSelectedFile(file);
-
+        
         int returnVal = fc.showSaveDialog(GraphJFileChooser.this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             //BufferedWriter out = null;
@@ -368,21 +344,39 @@ public class GraphJFileChooser extends javax.swing.JFrame {
                 //    } catch (IOException ex) {
                 //    }
                 //}
-                prover.exportDot(file.getParent(), file.getName(), log.getText());
+                prover.exportDot(file.getParent(), file.getName(), format, log.getText());
             }
+    }
         }
-    }//GEN-LAST:event_exportDotActionPerformed
+        
+    private void exportDot2JpgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportDot2JpgActionPerformed
+        FileNameExtensionFilter filterJpg = new FileNameExtensionFilter("Image JPG", ".jpg", ".JPG", ".jpeg", ".JPEG");
+        fc.setFileFilter(filterJpg);
+        exportDot2Format("jpg");
+    }//GEN-LAST:event_exportDot2JpgActionPerformed
+
+    private void exportDot2PsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportDot2PsActionPerformed
+        FileNameExtensionFilter filterPS = new FileNameExtensionFilter("PS file", ".ps", ".PS");
+        fc.setFileFilter(filterPS);
+        exportDot2Format("ps");
+    }//GEN-LAST:event_exportDot2PsActionPerformed
+
+    private void exportDot2PdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportDot2PdfActionPerformed
+        FileNameExtensionFilter filterPDF = new FileNameExtensionFilter("PDF file", ".pdf", ".PDF");  
+        fc.setFileFilter(filterPDF);
+        exportDot2Format("pdf");
+    }//GEN-LAST:event_exportDot2PdfActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JRadioButtonMenuItem aLaEButton;
-    private javax.swing.JRadioButtonMenuItem aLaOtterButton;
-    private javax.swing.JMenuItem exportDot;
+    private javax.swing.JMenuItem exportDot2Jpg;
+    private javax.swing.JMenuItem exportDot2Pdf;
+    private javax.swing.JMenuItem exportDot2Ps;
     private javax.swing.JFileChooser fc;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JLabel inserText;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea log;
-    private javax.swing.JMenu modeMenu;
     private javax.swing.JMenuItem saveItem;
     // End of variables declaration//GEN-END:variables
 }

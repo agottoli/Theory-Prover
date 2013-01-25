@@ -29,40 +29,28 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="saveItemActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="exportDot">
+            <MenuItem class="javax.swing.JMenuItem" name="exportDot2Jpg">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Export to .jpg"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="exportDotActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="exportDot2JpgActionPerformed"/>
               </Events>
             </MenuItem>
-          </SubComponents>
-        </Menu>
-        <Menu class="javax.swing.JMenu" name="modeMenu">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Mode"/>
-            <Property name="enabled" type="boolean" value="false"/>
-          </Properties>
-          <Events>
-            <EventHandler event="ancestorAdded" listener="javax.swing.event.AncestorListener" parameters="javax.swing.event.AncestorEvent" handler="modeMenuAncestorAdded"/>
-          </Events>
-          <SubComponents>
-            <MenuItem class="javax.swing.JRadioButtonMenuItem" name="aLaOtterButton">
+            <MenuItem class="javax.swing.JMenuItem" name="exportDot2Ps">
               <Properties>
-                <Property name="selected" type="boolean" value="true"/>
-                <Property name="text" type="java.lang.String" value="&#xe0; la Otter"/>
+                <Property name="text" type="java.lang.String" value="Export to .ps"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="setALaOtterButtonActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="exportDot2PsActionPerformed"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JRadioButtonMenuItem" name="aLaEButton">
+            <MenuItem class="javax.swing.JMenuItem" name="exportDot2Pdf">
               <Properties>
-                <Property name="text" type="java.lang.String" value="&#xe0; la E"/>
+                <Property name="text" type="java.lang.String" value="Export to .pdf"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="setALaEActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="exportDot2PdfActionPerformed"/>
               </Events>
             </MenuItem>
           </SubComponents>
@@ -112,7 +100,7 @@
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="inserText" min="-2" pref="22" max="-2" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
-              <Component id="jScrollPane1" pref="260" max="32767" attributes="0"/>
+              <Component id="jScrollPane1" pref="264" max="32767" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>

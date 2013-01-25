@@ -197,10 +197,10 @@ public class JFileChooserDemo extends javax.swing.JFrame {
 
         fileMenu.setText("File");
         fileMenu.addAncestorListener(new javax.swing.event.AncestorListener() {
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 fileMenuAncestorAdded(evt);
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
@@ -228,10 +228,10 @@ public class JFileChooserDemo extends javax.swing.JFrame {
         modeMenu.setText("Mode");
         modeMenu.setEnabled(false);
         modeMenu.addAncestorListener(new javax.swing.event.AncestorListener() {
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 modeMenuAncestorAdded(evt);
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
@@ -259,10 +259,10 @@ public class JFileChooserDemo extends javax.swing.JFrame {
         orderingTypeMenu.setText("Ordering Type");
         orderingTypeMenu.setEnabled(false);
         orderingTypeMenu.addAncestorListener(new javax.swing.event.AncestorListener() {
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 orderingAncestorAdded(evt);
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
@@ -306,10 +306,10 @@ public class JFileChooserDemo extends javax.swing.JFrame {
         precedencesAndWeightsTypeMenu.setText("Precedences and Weights");
         precedencesAndWeightsTypeMenu.setEnabled(false);
         precedencesAndWeightsTypeMenu.addAncestorListener(new javax.swing.event.AncestorListener() {
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 precedencesAndWeightsTypeMenuAncestorAdded(evt);
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
@@ -337,10 +337,10 @@ public class JFileChooserDemo extends javax.swing.JFrame {
         otherOptionsMenu.setText("Options");
         otherOptionsMenu.setEnabled(false);
         otherOptionsMenu.addAncestorListener(new javax.swing.event.AncestorListener() {
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 otherOptionsMenuAncestorAdded(evt);
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
@@ -410,9 +410,9 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 .addComponent(satText)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
                 .addComponent(showGraphProveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         pack();

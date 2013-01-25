@@ -50,16 +50,56 @@ public class Ordering {
         this.nPrec = nPrec;
     }
 
-    public boolean isGreaterInPrecedence(String a, String b) {
+    public boolean isGreaterInPrecedence(String a, String b, Object objA, Object objB) {
         //////// EXPERIMENTAL //////////
         if (useOrdStandard) {
+            if (objA instanceof Variable)
+                return false; // le variabili sono le ultime
+            if (objB instanceof Variable) {// adesso a not var
+                //if (objA instanceof Atom &&
+                //        (a.equals("Top") || a.equals("Bottom")) )
+                //    return false;
+                //return true;
+                // non si può dire che è più grande di una variabile
+                return false;
+            }
+            if (objA instanceof Constant) {
+                if (objB instanceof Constant)
+                    return a.compareTo(b) < 0;
+                else if (objB instanceof Function)
+                    return false;
+                else // Atom (può capitare?)
+                    return b.equals("Top") || b.equals("Bottom");
+            }
+            if (objA instanceof Function) {
+                if (objB instanceof Constant)
+                    return true;
+                else if (objB instanceof Function)
+                    return a.compareTo(b) < 0;
+                else // Atom (può capitare)
+                    return b.equals("Top") || b.equals("Bottom");
+            }
+            // objA sicuramente è un atomo
             if (a.equals("Top"))
                 return false;
-            if (b.equals("Bottom") && !a.equals("Bottom"))
-                return true; // perché a non può essere Top
-            if (a.compareTo(b) < 0)
+            if (a.equals("Bottom")) {
+                if (objB instanceof Atom) {
+                    if (b.equals("Top"))
+                        return true;
+                    return false;
+                }
+                return false;
+            }
+            // objA non è un atomo Top o Bottom
+            if (objB instanceof Constant || objB instanceof Function)
                 return true;
-            return false;
+            // anche objB è un atomo
+            if (b.equals("Bottom") || b.equals("Top"))
+                return true; // perché a non può essere Top o Bottom
+            // entrambi atomi non Top o Bottom
+            return a.compareTo(b) < 0;
+                //return true;
+            //return false;
         }
         ////////////////////////////////
         
@@ -225,7 +265,7 @@ public class Ordering {
                 return true;
             }
 
-        } else if (isGreaterInPrecedence(sA, sB)) {
+        } else if (isGreaterInPrecedence(sA, sB, a, b)) {
             // caso 2
 
             List<Term> argsB;
@@ -325,7 +365,7 @@ public class Ordering {
         for (int i = 0; i < lits.length; i++)
             if (lits[i] != null)
                 for (int j = i + 1; j < lits.length; j++)
-                    if (lits[j] != null)
+                    if (lits[j] != null) {
                         if (isGreater(lits[i], lits[j])) {
                             // DEBUG inizio //
                             //System.out.println(lits[i].toString() + " > " + lits[j].toString()
@@ -345,8 +385,8 @@ public class Ordering {
                             //System.out.println(lits[i].toString() + " # " + lits[j].toString()
                             //        + " quindi li lascio.");
                             // DEBUG fine //
-        
-        List<Literal> maxLits = new ArrayList<>();
+                    }
+        List<Literal> maxLits = new ArrayList<>(lits.length);
         for (int i = 0; i < lits.length; i++) {
             if (lits[i] != null)
                 maxLits.add((Literal) lits[i]);
@@ -445,7 +485,7 @@ public class Ordering {
 
                     return isGreaterLex(argsA, argsB) != -1; // KBO usa Lex
                     
-                } else if (isGreaterInPrecedence(symA, symB)) {
+                } else if (isGreaterInPrecedence(symA, symB, a, b)) {
                     // KBO2b
                     return true;
                 } else {

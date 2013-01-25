@@ -30,6 +30,13 @@ public class InferenceSystem {
             // allTheResolvent perché mi trova anche i fattori e mi fa la
             // risoluzione anche su di essi quindi uso la semplice risoluzione
             resolvents.addAll(c1.resolvents(c2, indexingC));
+            /* DEBUG inizio */
+            /*for (Clause cla : resolvents) {
+                if (cla.toString().equals("GREEN(b)")) {
+                    System.out.println("eccolo: " + c1.toString() + " + " + c2.toString());
+                }
+            }*/
+            /* DEBUG fine */
         }
         return resolvents;
     }
@@ -48,17 +55,76 @@ public class InferenceSystem {
             // devo però prima trovare i letterali massimali
             c2.getMaximalLiterals(ord);
             resolvents.addAll(c1.orderedResolvents(c2, indexingC));
+            /* DEBUG inizio */
+            //for (Clause cla : resolvents) {
+            //    if (cla.toString().equals("GREEN(b)")) {
+            //        System.out.println("eccolo: " + c1.toString() + " + " + c2.toString());
+            //    }
+            //}
+            /* DEBUG fine */
+        }
+        return resolvents;
+    }
+    
+    public static Set<Clause> resolutionAll(Clause c1, List<Clause> selected
+            , IndexingClauses indexingC) {
+        Set<Clause> resolvents = new LinkedHashSet<>();
+        for (Clause c2 : selected) {
+            resolvents.addAll(c1.allTheResolvents(c2, indexingC));
+            // siccome i risolventi devono avere come padri la clausola data
+            // e una clausola in usable, non posso usare il metodo
+            // allTheResolvent perché mi trova anche i fattori e mi fa la
+            // risoluzione anche su di essi quindi uso la semplice risoluzione
+            //resolvents.addAll(c1.resolvents(c2, indexingC));
+        }
+        return resolvents;
+    }
+    
+    public static Set<Clause> orderedResolutionAll(Clause c1, List<Clause> selected, Ordering ord
+            , IndexingClauses indexingC) {
+        Set<Clause> resolvents = new LinkedHashSet<>();
+        //c1.getMaximalLiterals(ord);
+        for (Clause c2 : selected) {
+             resolvents.addAll(c1.allTheOrderedResolvents(c2, ord, indexingC));
+            // siccome i risolventi devono avere come padri la clausola data
+            // e una clausola in usable, non posso usare il metodo
+            // allTheResolvent perché mi trova anche i fattori e mi fa la
+            // risoluzione anche su di essi quindi uso la semplice risoluzione
+            
+            // devo però prima trovare i letterali massimali
+            //c2.getMaximalLiterals(ord);
+            //resolvents.addAll(c1.orderedResolvents(c2, indexingC));
         }
         return resolvents;
     }
 
     public static Set<Clause> factorization(Clause c
             , IndexingClauses indexingC) {
+        /* DEBUG inizio */
+        /*if (c.toString().equals("~GREEN(x_0) | GREEN(y_0) | ~ON(x_0,y_0)"))
+            System.out.println("eccolo: " + c.toString());
+        Set<Clause> res = c.getFactors(indexingC);
+            for (Clause cla : res) {
+                if (cla.toString().equals("GREEN(b)")) {
+                    System.out.println("eccolo: " + c.toString());
+                }
+            }
+        return res;*/
+        /* DEBUG fine */
         return c.getFactors(indexingC);
     }
 
     public static Set<Clause> orderedFactorization(Clause c, Ordering ord
             , IndexingClauses indexingC) {
+        /* DEBUG inizio */
+        //Set<Clause> res = c.getMaximalFactors(ord, indexingC);
+        //    for (Clause cla : res) {
+        //        if (cla.toString().equals("GREEN(b)")) {
+        //            System.out.println("eccolo: " + c.toString());
+        //        }
+        //    }
+        //return res;
+            /* DEBUG fine */
         return c.getMaximalFactors(ord, indexingC);
     }
 

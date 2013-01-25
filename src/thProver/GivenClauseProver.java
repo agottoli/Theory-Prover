@@ -36,6 +36,9 @@ public class GivenClauseProver {
     private boolean timeoutWhitoutResponse = false;
     private boolean useOrdering;
     private boolean stop = false;
+    private boolean testAll = false;
+    private long nCIniziali;
+    //private boolean gui = false;
 
     public GivenClauseProver(boolean aLaE, boolean sos, boolean kbo,
             boolean multiSet, boolean uOr, Ordering ord, int limit) {
@@ -50,9 +53,19 @@ public class GivenClauseProver {
         timeout = limit;
     }
 
+    public GivenClauseProver(boolean aLaE, boolean sos, boolean kbo,
+            boolean multiSet, boolean uOr, Ordering ord, int limit, boolean testAll) {
+        this(aLaE, sos, kbo, multiSet, uOr, ord, limit);
+        this.testAll = testAll;
+    }
+
     public void setTimeOut(int seconds) {
         timeout = seconds;
     }
+    
+    //public void setGui(boolean gui) {
+    //    this.gui = gui;
+    //}
 
     /**
      * Se ritorno una clausola è sicuramente quella vuota e posso anche
@@ -66,18 +79,34 @@ public class GivenClauseProver {
         generated = 0;
         deleted = 0;
 
-        long nCIniziali = f.getNumClausesAndSOS();
+        nCIniziali = f.getNumClausesAndSOS();
+        System.out.println("-->" + nCIniziali);
 
         index = new IndexingClauses(nCIniziali);
 
-
-
-        To_Select.addAll(f.getSOS());
-        if (sos && !f.getSOS().isEmpty()) {
-            Selected.addAll(f.getClauses());
-        } else {
-            To_Select.addAll(f.getClauses());
-        }
+        // per non rovinare f per ulteriori chiamate
+        /*if (!gui) {*/ // non serve più per il reset...
+            To_Select.addAll(f.getSOS());
+            if (sos && !f.getSOS().isEmpty()) {
+                Selected.addAll(f.getClauses());
+            } else {
+                To_Select.addAll(f.getClauses());
+            }
+        /*} else {
+            // riutilizzo le clausole allora devo copiarle
+            for (Clause cla : f.getSOS()) {
+                To_Select.add(cla.lazyCopy());
+            }
+            if (sos && !f.getSOS().isEmpty()) {
+                for (Clause cla : f.getClauses()) {
+                    Selected.add(cla.lazyCopy());
+                }
+            } else {
+                for (Clause cla : f.getClauses()) {
+                    To_Select.add(cla.lazyCopy());
+                }
+            }
+        }*/
 
         // setto l'ordinamento
         ord.setPrecedence(f.getPrecedences(), f.getNPrec());
@@ -89,6 +118,8 @@ public class GivenClauseProver {
         } else {
             ord.setLexicographicOrdering();
         }
+        
+        Set<Clause> alfa = new LinkedHashSet<>();
 
         startTime = System.nanoTime();
 
@@ -99,6 +130,8 @@ public class GivenClauseProver {
             Clause given = To_Select.remove(); //.pollFirst(); //remove();
             /* DEBUG inizio */
             //System.out.println("Estraggo " + given);
+            //if (given.indiceClausola == 0)
+            //    System.out.println("eccolo all'occhio");
             /* DEBUG fine */
 
             if (aLaE) {
@@ -113,6 +146,10 @@ public class GivenClauseProver {
 
                 Set<Clause> betaprimo = backwardContraction(given);
                 if (!betaprimo.isEmpty()) {
+                    // aggiungo clausole in To_Select
+                    // lo faccio solo se a la E 
+                    // quindi non c'è il problema che poi le uso per semplificare o sussumere
+                    // le alfai (perché lo farò solo con a la Otter) :)
                     To_Select.addAll(betaprimo);
                     generated += betaprimo.size();
                     deleted += betaprimo.size();
@@ -139,73 +176,115 @@ public class GivenClauseProver {
             //System.out.println("Cominicio la risoluzione...");
             /* DEBUG fine */
 
-            Set<Clause> alfa;
+            //Set<Clause> alfa = new LinkedHashSet<>();
+            alfa.clear();
             if (useOrdering) {
-                // la fattorizzazione si fa prima o dopo la risoluzione
-                // devo scoprire però su cosa devo farla
-                // ipotesi 1 = solo su given
-                // ipotesi 2 = anche sui risultati
-                // suppongo la prima :)
-                alfa = InferenceSystem.orderedFactorization(given, ord, index);
-                alfa.addAll(InferenceSystem.orderedResolution(given, Selected, ord, index));
+                if (testAll) {
+                    alfa.addAll(InferenceSystem.orderedResolutionAll(given, Selected, ord, index));
+                } else {
+                    // la fattorizzazione si fa prima o dopo la risoluzione
+                    // devo scoprire però su cosa devo farla
+                    // ipotesi 1 = solo su given
+                    // ipotesi 2 = anche sui risultati
+                    // suppongo la prima :)
+                    // NOTA:
+                    // alfa = InferenceSystem.orderedFactorization(given, ord, index));
+                    // la riga sopra mi ha fatto veramente uscire pazzo perché 
+                    // non capivo il motivo di trovarmi con i fattori cambiati 
+                    // dopo la risoluzione...
+                    // infatti restituivo proprio il collegamento ai fattori e 
+                    // non un nuovo set e poi aggiungendo i risolventi mi si
+                    // aggiungevano anche come fattori della clausola data
+                    // SEI UN BABBEO :)
+                    // in resolution all non dava problemi perché mi dava un
+                    // set nuovo di trica...
+                    alfa.addAll(InferenceSystem.orderedFactorization(given, ord, index));
+                    alfa.addAll(InferenceSystem.orderedResolution(given, Selected, ord, index));
+                }
             } else {
-                alfa = InferenceSystem.factorization(given, index);
-                alfa.addAll(InferenceSystem.resolution(given, Selected, index));
+                if (testAll) {
+                    alfa.addAll(InferenceSystem.resolutionAll(given, Selected, index));
+                } else {
+                    alfa.addAll(InferenceSystem.factorization(given, index));
+                    alfa.addAll(InferenceSystem.resolution(given, Selected, index));
+                    /* DEBUG inizio */
+                    //if (given.indiceClausola == 0)
+                    //    System.out.println("factors: " +given.factors);
+                    /* DEBUG fine */
+                }
             }
             /* DEBUG inizio */
-            //System.out.println("ho generato " + alfa.size() + " risolventi.\n"
-            //        + alfa.toString());
+            System.out.println("ho generato " + alfa.size() + " risolventi.\n"
+                    + alfa.toString());
             /* DEBUG fine */
-            generated += alfa.size();
+            if (!alfa.isEmpty()) {
+                generated += alfa.size();
 
-            Set<Clause> betaprimo = new LinkedHashSet();
-            Set<Clause> copy = new LinkedHashSet(alfa);
-            for (Clause alfai : copy) {
-                if (alfai.isEmpty()) {
-                    elapsedTime = System.nanoTime() - startTime;
-                    /* DEBUG inizio */
-                    //System.out.println("trovata la clausola vuota.");
-                    /* DEBUG fine */
-                    System.out.print(info());
-                    return alfai; // insoddisfacibile NOTA: se ritorno alfai potrei generare la prova :)
-                }
-                Clause alfaiSempl;
-                if ((alfaiSempl = forwardContraction(alfai)) == null) {
-                    deleted++;
-                    alfa.remove(alfai);
-                    /* DEBUG inizio */
-                    //System.out.println("clausola sussunta.");
-                    /* DEBUG fine */
-                    continue;
-                } else {
-                    // alfai potrebbe essere stato semplificato
-                    // è un problema? Sì, da alfa devo cancellare alfai ed
-                    // inserire alfaiSempl
-                    if (alfai != alfaiSempl) {
-                        alfa.remove(alfai);
-                        alfa.add(alfaiSempl);
-                        //deleted++; già conteggiato in forwardContraction
-                        //generated++; come sopra
+                Set<Clause> betaprimo = new LinkedHashSet();
+                Set<Clause> copy = new LinkedHashSet(alfa);
+                for (Clause alfai : copy) {
+                    if (alfai.isEmpty()) {
+                        elapsedTime = System.nanoTime() - startTime;
                         /* DEBUG inizio */
-                        //System.out.println("clausola semplificata.");
-                        /* DEBUG fine */
+                        //System.out.println("trovata la clausola vuota.");
+                    /* DEBUG fine */
+                        System.out.print(info());
+                        Selected.add(given); // per non perdermi una clausola 
+                        return alfai; // insoddisfacibile NOTA: se ritorno alfai potrei generare la prova :)
                     }
+                    Clause alfaiSempl;
+                    if ((alfaiSempl = forwardContraction(alfai)) == null) {
+                        deleted++;
+                        alfa.remove(alfai);
+                        /* DEBUG inizio */
+                        //System.out.println("clausola sussunta.");
+                    /* DEBUG fine */
+                        continue;
+                    } else {
+                        // alfai potrebbe essere stato semplificato
+                        // è un problema? Sì, da alfa devo cancellare alfai ed
+                        // inserire alfaiSempl
+                        if (alfai != alfaiSempl) {
+                            alfa.remove(alfai);
+                            alfa.add(alfaiSempl);
+                            //deleted++; già conteggiato in forwardContraction
+                            //generated++; come sopra
+                        /* DEBUG inizio */
+                            //System.out.println("clausola semplificata.");
+                        /* DEBUG fine */
+                        }
+                    }
+
+                    if (!aLaE) {
+                        //betaprimo.addAll(new HashSet<Clause>());
+                        Set<Clause> betaprimoAdd = backwardContraction(alfaiSempl);
+                        // qui invece non posso aggiungere subito a To_Select
+                        // perché siamo in Otter allora uso un
+                        //generated += betaprimoAdd.size();
+                        //deleted += betaprimoAdd.size();
+                        betaprimo.addAll(betaprimoAdd);
+                        // la backwardContraction deve calcolare i fattori delle beta
+                    /* DEBUG inizio */
+                        //System.out.println("dalla backward ho generato: "
+                        //        + betaprimo.size() + " clausole.");
+                    /* DEBUG fine */
+                    }
+
                 }
 
-                if (!aLaE) {
-                    //betaprimo.addAll(new HashSet<Clause>());
-                    Set<Clause> betaprimoAdd = backwardContraction(alfaiSempl);
-                    generated += betaprimoAdd.size();
-                    deleted += betaprimoAdd.size();
-                    betaprimo.addAll(betaprimoAdd);
-                    // la backwardContraction deve calcolare i fattori delle beta
-                    /* DEBUG inizio */
-                    //System.out.println("dalla backward ho generato: "
-                    //        + betaprimo.size() + " clausole.");
-                    /* DEBUG fine */
+                To_Select.addAll(alfa);
+                if (!betaprimo.isEmpty()) {
+                    To_Select.addAll(betaprimo);
+                    // se metto qui la conta non conta le eventuali clausole uguali
+                    // generate nella backward (se vogio contarle dovrò farlo in 
+                    // betaprimoAdd)
+                    generated += betaprimo.size();
+                    deleted += betaprimo.size();
                 }
 
             }
+
+            Selected.add(given);
 
             elapsedTime = System.nanoTime() - startTime;
 
@@ -215,25 +294,19 @@ public class GivenClauseProver {
                 timeoutWhitoutResponse = true;
                 break;
             }
-            
+
             if (stop)
                 break;
-
-            To_Select.addAll(alfa);
-            if (!betaprimo.isEmpty())
-                To_Select.addAll(betaprimo);
-
-            Selected.add(given);
 
             /* DEBUG inizio */
             //System.out.println("fine di questa iterazione.");
             /*try {
-                System.in.read();
-            } catch (IOException ioe) {
-            }*/
+             System.in.read();
+             } catch (IOException ioe) {
+             }*/
             /* DEBUG fine */
         }
-        
+
         System.out.print(info());
         return null; //true; 
     }
@@ -305,38 +378,42 @@ public class GivenClauseProver {
 
         return sempl;
     }
-    
+
     public String info() {
-        StringBuilder sb = new StringBuilder("finish with: ");
+        StringBuilder sb = new StringBuilder("/* info */\n"); //finish with: ");
         
-        sb.append(generated).append(" clauses generated, ");
-        sb.append(deleted).append(" clauses subsumed, ");
-        sb.append("in ");sb.append(elapsedTime/1000000000.0).append(" seconds");
+        sb.append(nCIniziali).append(" clauses from parsing, \n");
+        sb.append(generated).append(" clauses generated, \n");
+        sb.append(deleted).append(" clauses subsumed, \n");
+        sb.append(To_Select.size()).append(" clauses in To_Select, \n");
+        sb.append(Selected.size()).append(" clauses in Selected, \n");
+        sb.append("in ");
+        sb.append(elapsedTime / 1000000000.0).append(" seconds");
         if (timeoutWhitoutResponse)
             sb.append(" (out of time limit)");
         if (stop)
             sb.append(" (user stop)");
         sb.append(".\n");
-        
+
         return sb.toString();
     }
-    
+
     public long getElapsedTime() {
         return elapsedTime;
     }
-    
+
     public void stop() {
         stop = true;
     }
-    
+
     public boolean isStopped() {
         return stop;
     }
-    
+
     public String getFiends(Clause c) {
         return c.getDOT();
     }
-    
+
     public void exportDot(String dir, String name, String grafo) {
         if (name == null) {
             // interactive mode
@@ -345,28 +422,28 @@ public class GivenClauseProver {
         if (dir == null) {
             dir = ".";
         }
-        int index = name.lastIndexOf('.'); 
+        int index = name.lastIndexOf('.');
         String nameNoExt;
         if (index == -1) {
             // il carattere . non 'è nel nome del file
             nameNoExt = name;
         } else {
-           nameNoExt = name.substring(0, index);
+            nameNoExt = name.substring(0, index);
         }
-        
+
         try {
-            FileOutputStream file = new FileOutputStream(dir + "/" 
+            FileOutputStream file = new FileOutputStream(dir + "/"
                     + nameNoExt + ".dot");
             PrintStream output = new PrintStream(file);
             output.println(grafo);
         } catch (IOException e) {
             System.out.println("Errore: " + e);
         }
-        
-        String cmd = "dot -Tjpg " 
-                    + dir + "/" 
-                    + nameNoExt + ".dot" + " -o" + dir + "/" 
-                    + nameNoExt + ".jpg";
+
+        String cmd = "dot -Tjpg \""
+                + dir + "/"
+                + nameNoExt + ".dot\"" + " -o \"" + dir + "/"
+                + nameNoExt + ".jpg\"";
         Runtime run = Runtime.getRuntime();
         Process pr = null;
         try {
@@ -382,8 +459,8 @@ public class GivenClauseProver {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        
-        System.out.println("Grafo esportato in "+  dir + "/" + nameNoExt + ".jpg");
+
+        System.out.println("Grafo esportato in " + dir + "/" + nameNoExt + ".jpg");
         //Picture p = new Picture(fileNameNoExt + ".dot" + ".jpg");
         //p.show();
         //sb.append(grafo);

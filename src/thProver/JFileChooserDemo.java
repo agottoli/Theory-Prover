@@ -197,10 +197,10 @@ public class JFileChooserDemo extends javax.swing.JFrame {
 
         fileMenu.setText("File");
         fileMenu.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 fileMenuAncestorAdded(evt);
-            }
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
@@ -228,10 +228,10 @@ public class JFileChooserDemo extends javax.swing.JFrame {
         modeMenu.setText("Mode");
         modeMenu.setEnabled(false);
         modeMenu.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 modeMenuAncestorAdded(evt);
-            }
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
@@ -259,10 +259,10 @@ public class JFileChooserDemo extends javax.swing.JFrame {
         orderingTypeMenu.setText("Ordering Type");
         orderingTypeMenu.setEnabled(false);
         orderingTypeMenu.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 orderingAncestorAdded(evt);
-            }
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
@@ -306,10 +306,10 @@ public class JFileChooserDemo extends javax.swing.JFrame {
         precedencesAndWeightsTypeMenu.setText("Precedences and Weights");
         precedencesAndWeightsTypeMenu.setEnabled(false);
         precedencesAndWeightsTypeMenu.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 precedencesAndWeightsTypeMenuAncestorAdded(evt);
-            }
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
@@ -337,10 +337,10 @@ public class JFileChooserDemo extends javax.swing.JFrame {
         otherOptionsMenu.setText("Options");
         otherOptionsMenu.setEnabled(false);
         otherOptionsMenu.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 otherOptionsMenuAncestorAdded(evt);
-            }
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
@@ -410,9 +410,9 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 .addComponent(satText)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                 .addComponent(showGraphProveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         pack();
@@ -508,7 +508,7 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 } catch (FileNotFoundException fnfe) {
                 } catch (IOException ioe) {
                 }
-                
+
                 //in = new BufferedReader(new FileReader(file));
                 //formula = formulaReader.toString();
                 //formula = in.readLine();
@@ -597,19 +597,19 @@ public class JFileChooserDemo extends javax.swing.JFrame {
 	private void logKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_logKeyPressed
             if (evt != null && log.isEditable()) {
                 /*if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
-                    evt.setKeyCode(java.awt.event.KeyEvent.CHAR_UNDEFINED);
+                 evt.setKeyCode(java.awt.event.KeyEvent.CHAR_UNDEFINED);
 
-                    // NOTA: si può far premere il pulsante SAT
-                    if (startButton.isEnabled())
-                        startButton.doClick();
-                } else {*/
-                    if (log.getText().startsWith("Formula caricata da file:"))
-                        log.setText("");
-                    formula = log.getText();
-                    if (grafoText.isVisible()) {
-                        resetInterface();
-                        //setSize(getWidth(), getHeight() - AUMENTO_DIM);
-                    }
+                 // NOTA: si può far premere il pulsante SAT
+                 if (startButton.isEnabled())
+                 startButton.doClick();
+                 } else {*/
+                if (log.getText().startsWith("Formula caricata da file:"))
+                    log.setText("");
+                formula = log.getText();
+                if (grafoText.isVisible()) {
+                    resetInterface();
+                    //setSize(getWidth(), getHeight() - AUMENTO_DIM);
+                }
                 /*}*/
                 interactive = true;
                 if (modeMenu.isEnabled()) {
@@ -785,9 +785,9 @@ public class JFileChooserDemo extends javax.swing.JFrame {
     private void setStandardOrdering(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setStandardOrdering
         if (useStandardOrderingButton.isSelected()) {
             useUserDefinedOrderingButton.setSelected(false);
+            useStandard = true;
         } else {
             useStandardOrderingButton.setSelected(true);
-            useStandard = true;
         }
 
         if (ccText.isVisible()) {
@@ -803,9 +803,9 @@ public class JFileChooserDemo extends javax.swing.JFrame {
     private void setUseUserDefinedOrdering(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setUseUserDefinedOrdering
         if (useUserDefinedOrderingButton.isSelected()) {
             useStandardOrderingButton.setSelected(false);
+            useStandard = false;
         } else {
             useUserDefinedOrderingButton.setSelected(true);
-            useStandard = false;
         }
 
         if (ccText.isVisible()) {
@@ -861,16 +861,16 @@ public class JFileChooserDemo extends javax.swing.JFrame {
     private void showGraphProveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_showGraphProveButtonActionPerformed
         // esporto il grafo in dot aprendo una finestra per salvarlo
         //java.awt.EventQueue.invokeLater(new Runnable() {
-         //   public void run() {
+        //   public void run() {
         GraphJFileChooser gjf;
         if (interactive)
             gjf = new GraphJFileChooser(prover, grafo, ".", "input.txt");
-         else
+        else
             gjf = new GraphJFileChooser(prover, grafo, file.getParent(), file.getName());
-         //gjf.setFields(grafo, file.getParent(), file.getName());
-         gjf.setVisible(true);
-         
-         //   }
+        //gjf.setFields(grafo, file.getParent(), file.getName());
+        gjf.setVisible(true);
+
+        //   }
         //});
     }//GEN-LAST:event_showGraphProveButtonActionPerformed
 
@@ -883,7 +883,6 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 showGraphProveButton.doClick();
         }
     }//GEN-LAST:event_showGraphProveButtonKeyPressed
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButtonMenuItem aLaEButton;
     private javax.swing.JRadioButtonMenuItem aLaOtterButton;
@@ -986,6 +985,8 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                         CNFParser parser = new CNFParser(formulaReader);
                         parser.Start();
                         f = parser.getCNFFormula();
+                        if (!useUserDefinedOrderingButton.isEnabled())
+                            useUserDefinedOrderingButton.setEnabled(true);
                     } catch (thProver.parser.ParseException pe) {
                         //System.out.println(pe);
                         tptp = true;
@@ -1098,7 +1099,7 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 //if (f.getPrecedences().isEmpty() && tptp) {
                 // con tptp non c'è specificato un ordinamento allora
                 // ne scelgo uno io standard
-                or.setUseOrdStandard(true);
+                or.setUseOrdStandard(useStandard);
                 //    useStandard = true;
                 //}
                 or.setPrecedence(f.getPrecedences(), f.getNPrec());
@@ -1110,6 +1111,9 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 grafo = null;
                 prover = new GivenClauseProver(aLaE, sos, kbo,
                         multiset, useOrdering, or, limit);
+                // siccome sono nella gui c'è la possibilità di riutilizzare
+                // le clausole in f, quindi devo fare la lazyCopy
+                //prover.setGui(true);
 
                 System.out.println("Starting satisfiability proving...");
                 StringBuilder strb = new StringBuilder();
@@ -1218,8 +1222,17 @@ public class JFileChooserDemo extends javax.swing.JFrame {
             fileMenu.setEnabled(true);
             modeMenu.setEnabled(true);
             orderingTypeMenu.setEnabled(true);
-            if (useOrdering)
+            if (useOrdering) {
                 precedencesAndWeightsTypeMenu.setEnabled(true);
+                if (tptp) {
+                    // se è tptp allora 
+                    // l'utente non ha definito una precedenza
+                    useUserDefinedOrderingButton.setEnabled(false);
+                    useUserDefinedOrderingButton.setSelected(false);
+                    useStandardOrderingButton.setSelected(true);
+                    useStandard = true;
+                }
+            }
             otherOptionsMenu.setEnabled(true);
             log.setEditable(true);
             jProgressBar1.setEnabled(false);

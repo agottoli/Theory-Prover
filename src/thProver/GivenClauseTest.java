@@ -34,35 +34,43 @@ public class GivenClauseTest {
     private static boolean tptp = false;
     private static int limit = -1;//Integer.MAX_VALUE;
     private static boolean gui = false;
+    private static boolean vAll = false;
 
     public static void main(String[] args) throws FileNotFoundException {
 
-        
-            /*
-             * Read and process command line arguments
-             */
-            if (args.length == 0) {
-                printUsage();
-                System.exit(1);
+        /*boolean v2 = false;
+        String[] arrayT = {"prover",
+            "-gui",
+            //"-kbo",
+            "-usP",
+            "/home/ale/NetBeansProjects/RA/Test.Ciclo.Clausola.Data/esempi.miei/blocks.txt"
+        };
+        args = arrayT;*/
+        /*
+         * Read and process command line arguments
+         */
+        if (args.length == 0) {
+            printUsage();
+            System.exit(1);
+        }
+
+        String fileName = null;
+        for (String a : args) {
+            if (a.startsWith("-")) {
+                // it's an option
+                processOption(a);
+                continue;
             }
 
-            String fileName = null;
-            for (String a : args) {
-                if (a.startsWith("-")) {
-                    // it's an option
-                    processOption(a);
-                    continue;
-                }
+            fileName = a;
+        }
 
-                fileName = a;
-            }
+        if (fileName == null && !interactive && !gui) {
+            System.out.println("Please, specify a file name or -i or -gui");
+            printUsage();
+            System.exit(2);
+        }
 
-            if (fileName == null && !interactive && !gui) {
-                System.out.println("Please, specify a file name or -i or -gui");
-                printUsage();
-                System.exit(2);
-            }
-            
 
         if (gui) {
             java.awt.EventQueue.invokeLater(
@@ -123,9 +131,11 @@ public class GivenClauseTest {
                 } catch (thProver.parser.ParseException pe) {
                     //System.out.println(pe);
                     tptp = true;
+                    useStandard = true;
                 } catch (thProver.parser.TokenMgrError tme) {
                     //System.out.println(pe);
                     tptp = true;
+                    useStandard = true;
                 }
             }
             if (tptp) {
@@ -147,7 +157,7 @@ public class GivenClauseTest {
 
             if (f == null)
                 return;
-            
+
             // statistiche di parsing
             System.out.println(f.getNumClausesAndSOS() + " clauses.");
 
@@ -155,23 +165,26 @@ public class GivenClauseTest {
             Ordering or = new Ordering();
             /* precedences */
             //if (f.getPrecedences().isEmpty() && tptp) {
-                // con tptp non c'è specificato un ordinamento allora
-                // ne scelgo uno io standard
-                or.setUseOrdStandard(useStandard);
+            // con tptp non c'è specificato un ordinamento allora
+            // ne scelgo uno io standard
+            or.setUseOrdStandard(useStandard);
             //    useStandard = true;
             //}
             or.setPrecedence(f.getPrecedences(), f.getNPrec());
             /* set KBO */
             or.setWeightsKBO(f.getWeights(), f.getWeightVars());
 
+            /* DEBUG inizio */
+            System.out.println(f.getPrecedences().toString());
+            /* DEBUG fine */
 
-            StringBuilder sb = new StringBuilder();
+            
             String grafo = null;
             GivenClauseProver prover = new GivenClauseProver(aLaE, sos, kbo,
-                    multiset, useOrdering, or, limit);
+                    multiset, useOrdering, or, limit, vAll);
+
+            StringBuilder strb = new StringBuilder("Starting satisfiability proving... ");
             
-            System.out.println("Starting satisfiability proving...");
-            StringBuilder strb = new StringBuilder();
             if (aLaE)
                 strb.append("à la E");
             else
@@ -196,13 +209,16 @@ public class GivenClauseTest {
             if (sos) {
                 strb.append(" and set of support strategy");
             }
-                
-  
-            System.out.println(strb.toString());
-            
-            Clause result = prover.satisfiable(f);
 
+
+            System.out.println(strb.toString());
+
+            Clause result = prover.satisfiable(f);
+            
+            StringBuilder sb = new StringBuilder();
+          
             if (result == null) {
+                
                 sb.append("E` SODDISFACIBILE.\n");
                 System.out.print(sb.toString());
             } else {
@@ -211,33 +227,33 @@ public class GivenClauseTest {
                 //sb.append(grafo);
                 System.out.print(sb.toString());
 
-          
-           
-            Scanner stdin = new Scanner(System.in);
-            String stamp = stdin.nextLine();
-            if (stamp.equalsIgnoreCase("yes") || stamp.equalsIgnoreCase("y"))
-                System.out.println(grafo);
-            
-            System.out.print("\nUsare 'dot' per esportare un immagine del grafo della prova? [y,n]: ");
-            stamp = stdin.nextLine();
-            if (stamp.equalsIgnoreCase("yes") || stamp.equalsIgnoreCase("y")) {
-                String dir = null;
-                String name = null;
-                if (file != null) {
-                    dir = file.getParent();
-                    name = file.getName();
+
+
+                Scanner stdin = new Scanner(System.in);
+                String stamp = stdin.nextLine();
+                if (stamp.equalsIgnoreCase("yes") || stamp.equalsIgnoreCase("y"))
+                    System.out.println(grafo);
+
+                System.out.print("\nUsare 'dot' per esportare un immagine del grafo della prova? [y,n]: ");
+                stamp = stdin.nextLine();
+                if (stamp.equalsIgnoreCase("yes") || stamp.equalsIgnoreCase("y")) {
+                    String dir = null;
+                    String name = null;
+                    if (file != null) {
+                        dir = file.getParent();
+                        name = file.getName();
+                    }
+                    prover.exportDot(dir, name, grafo);
                 }
-                prover.exportDot(dir, name, grafo);
-            }
-            stdin.close();
-            
+                stdin.close();
+
             }
         }
     }
 
     private static void printUsage() {
         System.out.println(
-                "Usage: ThProver [-gui | -i | <filename>] [-ans] [-sos] [(-lex | -mul | -kbo) [-userP | -standardP]] [-E] [-limit<secs>]\n\n"
+                "Usage: ThProver [-gui | -i | <filename>] [-ans] [-sos] [(-lex | -mul | -kbo) [-usP | -stP]] [-E] [-limit<secs>] [-vAll]\n\n"
                 + "\t-gui\tstart graphical user interface mode\n"
                 + "\t-i\tstart interactive mode\n"
                 + "\t-ans\tdetect answer clause\n"
@@ -245,11 +261,14 @@ public class GivenClauseTest {
                 + "\t-lex\tuse lexicographic ordering (default no ordering is used)\n"
                 + "\t-mul\tuse multiset ordering (default no ordering is used)\n"
                 + "\t-kbo\tuse knuth-bendix ordering (default no ordering is used)\n"
-                + "\t-userP\tuse user defined precedences and weights (default)\n"
-                + "\t-standardP\tuse a standard precedences and weights defined in class Ordering\n"
+                + "\t-usP\tuse user defined precedences and weights\n"
+                + "\t\tif an ordering type is specified (default in not tptp syntax)\n"
+                + "\t-stP\tuse a standard precedences and weights defined in class Ordering "
+                + "\t\tif an ordering type is specified (default in tptp syntax)\n"
                 + "\t-E\tuse à la E version of the given clause loop (defaulf use à la Otter)\n"
                 //+ "\t-tptp\tthe input file is in TPTP cnf format\n"
-                + "\t-limit<secs>\tspecify a time limit - in seconds\n");
+                + "\t-limit<secs>\tspecify a time limit - in seconds\n"
+                + "\t-vAll\tversione sperimentale\n");
     }
 
     private static void processOption(String o) {
@@ -264,22 +283,26 @@ public class GivenClauseTest {
         } else if (o.equals("-lex")) {
             useOrdering = true;
             multiset = false;
+            kbo = false; // lo è già di default
         } else if (o.equals("-mul")) {
             useOrdering = true;
             multiset = true;
+            kbo = false; // lo è già di default
         } else if (o.equals("-kbo")) {
             useOrdering = true;
             kbo = true;
-        } else if (o.equals("-userP")) {
+        } else if (o.equals("-usP")) {
             useStandard = false;
-        } else if (o.equals("-standardP")) {
+        } else if (o.equals("-stP")) {
             useStandard = true;
         } else if (o.equals("-E")) {
             aLaE = true;
-        //} else if (o.equals("-tptp")) {
-        //    tptp = true;
+            //} else if (o.equals("-tptp")) {
+            //    tptp = true;
         } else if (o.startsWith("-limit")) {
             limit = new Integer(o.substring(6));
+        } else if (o.equals("-vAll")) {
+            vAll = true;
         }
     }
 
@@ -336,9 +359,7 @@ public class GivenClauseTest {
         }
 
         stdin.close();
-        
+
         return sb.toString();
     }
-
-    
 }

@@ -31,6 +31,11 @@ public class CNFFormula {
     // weight for KBO
     private HashMap<String, Integer> weights;
     private int weightVars;
+    
+    // permette di resettare i parametri delle clausole se è già stata chiamata
+    // una satisfiabile nel prover
+    private boolean primoUsoSOS = true;
+    private boolean primoUsoClauses = true;
 
     /* questi sotto si faranno nel prover */
     //private TreeSet<Clause> To_Select_tree; //clauses; poll() <-- ritorna e rimuove la testa
@@ -283,10 +288,22 @@ public class CNFFormula {
     }
     
     public List<Clause> getClauses() {
+        if (!primoUsoClauses) {
+            for (Clause c : clauses)
+                c.resetForOtherOrdering();
+        }
+        primoUsoClauses = false;
+        
         return clauses;
     }
     
     public List<Clause> getSOS() {
+        if (!primoUsoSOS) {
+            for (Clause c : sos)
+                c.resetForOtherOrdering();
+        }
+        primoUsoSOS = false;
+        
         return sos;
     }
     

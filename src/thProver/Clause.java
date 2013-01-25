@@ -580,6 +580,10 @@ public class Clause implements Comparable<Clause> {
                         nuova.setParentsRuleAndSub(p, true, false, subOriginale);//substitution);
                         //nuova.renameVariables();
                         resolvents.add(nuova);
+                        /* DEBUG inizio */
+                        //if (indiceClausola == 0)
+                        //    System.out.println("factors: " + factors);
+                        /* DEBUG fine */
                     }
                 }
             }
@@ -995,4 +999,21 @@ public class Clause implements Comparable<Clause> {
             }
         }
     }
+    
+    public void resetForOtherOrdering() {
+        //factors = null; // non serve e poi velocizzo le volte dopo perché
+        //                   non vedo ricalcolarli
+        maximalFactors = null;
+        maximalLits = null;
+        posMaximalLits = null;
+        negMaximalLits = null;
+    }
+    
+/*  // uso il reset che costa meno  
+    public Clause lazyCopy() {
+        // non copia i letterali, ma solo fa una nuova clausola con i dati
+        // princpali della clausola (quelli che ha alla creazione)
+        return new Clause(literals, indiceClausola);
+    }
+    */
 }

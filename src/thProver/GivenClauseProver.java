@@ -440,10 +440,18 @@ public class GivenClauseProver {
             System.out.println("Errore: " + e);
         }
 
-        String cmd = "dot -Tjpg \""
+        
+        /*String cmd = "dot -Tjpg "
                 + dir + "/"
-                + nameNoExt + ".dot\"" + " -o \"" + dir + "/"
-                + nameNoExt + ".jpg\"";
+                + nameNoExt + ".dot" + " -o " + dir + "/"
+                + nameNoExt + ".jpg";
+        */
+
+        
+        // così non ho problemi degli spazi nel nome del file :)
+        String[] cmd = {"dot", "-Tjpg", dir + "/" + nameNoExt + ".dot",
+                "-o", dir + "/" + nameNoExt + ".jpg"};
+        
         Runtime run = Runtime.getRuntime();
         Process pr = null;
         try {

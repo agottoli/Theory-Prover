@@ -234,7 +234,8 @@ public class InferenceSystem {
 
     // if mgu == null --> non unificabili
     private static boolean mgu(Term x, Term y, Substitution sub,
-            boolean forSubsumptionOrSemplification) {
+            boolean forSubsumptionOrSemplification) 
+            throws IllegalArgumentException {
         if (x.equals(y))
             return true;
 
@@ -260,7 +261,7 @@ public class InferenceSystem {
             ySub = y;
         else
             ySub = y.applySubstitution(sub);
-
+        
         // NOTA: possono essere diventati = dopo l'assegnamento
         if (xSub.equals(ySub))
             return true;
@@ -287,7 +288,8 @@ public class InferenceSystem {
     }
 
     public static boolean mgu(List<Term> x, List<Term> y, Substitution sub,
-            boolean forSubsumptionOrSemplification) {
+            boolean forSubsumptionOrSemplification) 
+            throws IllegalArgumentException {
         //if (sub.isKilled())
         //    return;
 
@@ -303,7 +305,8 @@ public class InferenceSystem {
     }
 
     private static boolean mgu(Atom x, Atom y, Substitution sub,
-            boolean forSubsumptionOrSemplification) {
+            boolean forSubsumptionOrSemplification) 
+            throws IllegalArgumentException {
         if (x.equals(y))
             return true;
 
@@ -320,42 +323,51 @@ public class InferenceSystem {
         if ((x.isPositive() == y.isPositive() && sameSign)
                 || (x.isPositive() != y.isPositive() && !sameSign)) {
             //Substitution sub = new Substitution();
-            if (mgu(x.getAtom(), y.getAtom(), sub, forSubsumptionOrSemplification)
-                    && sub.isWellFormed()) {
-                // ammetto solo sostituzioni ben formate
+            try { 
+                
+                if (mgu(x.getAtom(), y.getAtom(), sub, forSubsumptionOrSemplification)
+                        && sub.isWellFormed()) {
+                    // ammetto solo sostituzioni ben formate
 
-                // devo però controllare anche di non aver assegnato le variabili
-                // di l2...
-                if (forSubsumptionOrSemplification && !sub.isEmpty()) {
-                    Set<Variable> keys = sub.getAssignments().keySet();
-                    Iterator<Variable> itV = keys.iterator();
-                    String sym = itV.next().getSymbol();
-                    int index = sym.lastIndexOf('_');
-                    /* DEBUG inizio */
-                    //System.out.println("sym variabile che non ha _: " + sym);
-                    /* DEBUG fine */
-                    long daConfrontare = Long.parseLong(sym.substring(index + 1));
-                    /* DEBUG inizio */
-                    //System.err.print("la sostituzione da controllare è: " + sub.toString());
-                    //System.err.println("CONTROLLO PER LA SUSSUNZIONE O SEMPLIFICAZIONE: daConfrontare: " + daConfrontare);
-                    /* DEBUG fine */
-                    while (itV.hasNext()) {
-                        String sym2 = itV.next().getSymbol();
-                        int index2 = sym2.lastIndexOf('_');
-                        long daConfrontare2 = Long.parseLong(sym2.substring(index2 + 1));
-                        if (daConfrontare2 != daConfrontare) {
-                            /* DEBUG inizio */
-                            //System.err.println(" NON valida :(");
-                            /* DEBUG fine */
-                            return false; // non è una sostituzione valida
+                    // devo però controllare anche di non aver assegnato le variabili
+                    // di l2...
+                    if (forSubsumptionOrSemplification && !sub.isEmpty()) {
+                        Set<Variable> keys = sub.getAssignments().keySet();
+                        Iterator<Variable> itV = keys.iterator();
+                        String sym = itV.next().getSymbol();
+                        int index = sym.lastIndexOf('_');
+                        /* DEBUG inizio */
+                        //System.out.println("sym variabile che non ha _: " + sym);
+                        /* DEBUG fine */
+                        long daConfrontare = Long.parseLong(sym.substring(index + 1));
+                        /* DEBUG inizio */
+                        //System.err.print("la sostituzione da controllare è: " + sub.toString());
+                        //System.err.println("CONTROLLO PER LA SUSSUNZIONE O SEMPLIFICAZIONE: daConfrontare: " + daConfrontare);
+                        /* DEBUG fine */
+                        while (itV.hasNext()) {
+                            String sym2 = itV.next().getSymbol();
+                            int index2 = sym2.lastIndexOf('_');
+                            long daConfrontare2 = Long.parseLong(sym2.substring(index2 + 1));
+                            if (daConfrontare2 != daConfrontare) {
+                                /* DEBUG inizio */
+                                //System.err.println(" NON valida :(");
+                                /* DEBUG fine */
+                                return false; // non è una sostituzione valida
+                            }
                         }
+                        /* DEBUG inizio */
+                        //System.err.println(" valida :)");
+                        /* DEBUG fine */
                     }
-                    /* DEBUG inizio */
-                    //System.err.println(" valida :)");
-                    /* DEBUG fine */
+
+                    return true;
                 }
 
-                return true;
+            } catch (IllegalArgumentException ie) {
+                /*System.out.println("Errore mgu tra:\n\t" + x.toString() + "\ne\n\t" 
+                        + y.toString() + "\n\nsub: " + sub.toString());*/
+                return false;
+
             }
         }
 

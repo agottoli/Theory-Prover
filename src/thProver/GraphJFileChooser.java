@@ -267,6 +267,8 @@ public class GraphJFileChooser extends javax.swing.JFrame {
                         }
                     }
             }
+            
+            fc.removeChoosableFileFilter(filter);
 
 	}//GEN-LAST:event_saveItemActionPerformed
 
@@ -353,18 +355,21 @@ public class GraphJFileChooser extends javax.swing.JFrame {
         FileNameExtensionFilter filterJpg = new FileNameExtensionFilter("Image JPG", ".jpg", ".JPG", ".jpeg", ".JPEG");
         fc.setFileFilter(filterJpg);
         exportDot2Format("jpg");
+        fc.removeChoosableFileFilter(filterJpg);
     }//GEN-LAST:event_exportDot2JpgActionPerformed
 
     private void exportDot2PsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportDot2PsActionPerformed
         FileNameExtensionFilter filterPS = new FileNameExtensionFilter("PS file", ".ps", ".PS");
         fc.setFileFilter(filterPS);
         exportDot2Format("ps");
+        fc.removeChoosableFileFilter(filterPS);
     }//GEN-LAST:event_exportDot2PsActionPerformed
 
     private void exportDot2PdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportDot2PdfActionPerformed
         FileNameExtensionFilter filterPDF = new FileNameExtensionFilter("PDF file", ".pdf", ".PDF");  
         fc.setFileFilter(filterPDF);
         exportDot2Format("pdf");
+        fc.removeChoosableFileFilter(filterPDF);
     }//GEN-LAST:event_exportDot2PdfActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -1,0 +1,16 @@
+~c_in(c_Pair(V_U'_2291,V_U_2291,t_a,t_a),v_r,tc_prod(t_a,t_a)) 
+| c_in(c_Pair(v_xa(V_U'_2291,V_U_2291,V_U_2291),v_xa(V_U_2291,v_xa(V_U'_2291,V_U_2291,V_U_2291),V_W_2291),t_a,t_a),v_r,tc_prod(t_a,t_a)) 
+| ~c_in(c_Pair(V_U_2291,V_W_2291,t_a,t_a),v_r,tc_prod(t_a,t_a)) 
+
+
+e 
+
+
+
+~c_in(c_Pair(v_y,V_U_2533,t_a,t_a),v_r,tc_prod(t_a,t_a)) 
+| c_in(c_Pair(v_xa(v_y,V_U_2533,v_z),v_xa(V_U_2533,v_xa(v_y,V_U_2533,v_z),V_W_2533),t_a,t_a),v_r,tc_prod(t_a,t_a)) 
+| ~c_in(c_Pair(V_U_2533,V_W_2533,t_a,t_a),v_r,tc_prod(t_a,t_a))
+
+
+quando si tratta di sussunzione o semplificazione questo caso è bastardo
+infatti finisce nell'eccezione di settare 2 valori ala stessa variabile :)

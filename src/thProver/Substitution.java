@@ -42,14 +42,16 @@ public class Substitution {
      * @param varSymbol the variable symbol
      * @param t the term to assign
      */
-    public void addAssignment(Variable v, Term t) {
+    public void addAssignment(Variable v, Term t) throws IllegalArgumentException {
         /*if (v.equals(t)) {
             // sono diventati uguali dopo l'assegnamento
             return;
         }*/
-        if (assignments.containsKey(v))
+        if (assignments.containsKey(v)) {
+            //System.out.println();
             throw new IllegalArgumentException("Substitution: " + v
                     + " ha già un assegnamento.");
+        }
 
         for (Variable var : assignments.keySet()) {
             Term term = assignments.get(var);

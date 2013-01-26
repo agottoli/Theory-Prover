@@ -38,14 +38,17 @@ public class GivenClauseTest {
 
     public static void main(String[] args) throws FileNotFoundException {
 
-        /*boolean v2 = false;
-        String[] arrayT = {"prover",
+        /**/
+        String[] arrayT = new String[]{"prover",
             "-gui",
             //"-kbo",
-            "-usP",
-            "/home/ale/NetBeansProjects/RA/Test.Ciclo.Clausola.Data/esempi.miei/blocks.txt"
+            //"-usP",
+            "-sos",
+            "/home/ale/NetBeansProjects/RA/Test.Ciclo.Clausola.Data/tptp.altro/COL123-2.p"
         };
-        args = arrayT;*/
+        args = arrayT;
+        /**/
+        
         /*
          * Read and process command line arguments
          */
@@ -237,13 +240,39 @@ public class GivenClauseTest {
                 System.out.print("\nUsare 'dot' per esportare un immagine del grafo della prova? [y,n]: ");
                 stamp = stdin.nextLine();
                 if (stamp.equalsIgnoreCase("yes") || stamp.equalsIgnoreCase("y")) {
+                    System.out.print("\nSelezionare il formato di esportazione: [1=jpg, 2=ps, 3=pdf]: ");
+                    boolean flag = true;
+                    String format = null;
+                    while (flag) {
+                        stamp = stdin.nextLine();
+                        if (stamp.equals("1") || stamp.equals("jpg")) {
+                            flag = false;
+                            format = "jpg";
+                        } else if (stamp.equals("2") || stamp.equals("ps")) {
+                            flag = false;
+                            format = "ps";
+                        } else if (stamp.equals("3") || stamp.equals("pdf")) {
+                            flag = false;
+                            format = "pdf";
+                        } else {
+                            System.out.print("Scelta non corretta, digitare 1, 2 o 3: ");
+                        }
+                    }
                     String dir = null;
-                    String name = null;
+                    String name;
+                    String nameNoExt = null;
                     if (file != null) {
                         dir = file.getParent();
                         name = file.getName();
+                        int index = name.lastIndexOf('.');
+                        if (index == -1) {
+                            // il carattere . non 'è nel nome del file
+                            nameNoExt = name;
+                        } else {
+                            nameNoExt = name.substring(0, index);
+                        }
                     }
-                    prover.exportDot(dir, name, "jpg", grafo);
+                    prover.exportDot(dir, nameNoExt + "." + format, format, grafo);
                 }
                 stdin.close();
 

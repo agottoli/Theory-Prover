@@ -437,7 +437,9 @@ public class GivenClauseProver {
             PrintStream output = new PrintStream(file);
             output.println(grafo);
         } catch (IOException e) {
-            System.out.println("Errore: " + e);
+            System.out.println("Errore: non si ha permessi di scrittura nella"
+                    + "cartella " + dir);
+            return;
         }
 
         
@@ -449,7 +451,7 @@ public class GivenClauseProver {
 
         
         // così non ho problemi degli spazi nel nome del file :)
-        String[] cmd = {"dot", "-T" + format, dir + "/" + nameNoExt + ".dot",
+        String[] cmd = new String[]{"dot", "-T" + format, dir + "/" + nameNoExt + ".dot",
                 "-o", dir + "/" + name};
         
         Runtime run = Runtime.getRuntime();
@@ -461,11 +463,16 @@ public class GivenClauseProver {
             System.out.println("Errore nell'esportazione, 'dot' potrebbe non "
                     + "essere installato. Il file sorgente del grafo è "
                     + "visualizzabile in " + dir + "/" + nameNoExt + ".dot");
+            return;
         }
+        
         try {
             pr.waitFor();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+            System.out.println("Errore: 'dot' è terminato in modo inatteso. "
+                    + "Il grafo potrebbe non essersi salvato correttamente.");
+            return;
         }
 
         System.out.println("Grafo esportato in " + dir + "/" + name);

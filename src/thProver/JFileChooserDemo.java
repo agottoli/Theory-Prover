@@ -100,6 +100,8 @@ public class JFileChooserDemo extends javax.swing.JFrame {
         satText = new javax.swing.JLabel();
         jProgressBar1 = new javax.swing.JProgressBar();
         showGraphProveButton = new javax.swing.JButton();
+        limitBox = new javax.swing.JCheckBox();
+        limitValue = new javax.swing.JFormattedTextField();
         jMenuBar1 = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openItem = new javax.swing.JMenuItem();
@@ -192,6 +194,22 @@ public class JFileChooserDemo extends javax.swing.JFrame {
         showGraphProveButton.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 showGraphProveButtonKeyPressed(evt);
+            }
+        });
+
+        limitBox.setText("set time limit (secs)");
+        limitBox.setEnabled(false);
+        limitBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                limitBoxActionPerformed(evt);
+            }
+        });
+
+        limitValue.setText("300");
+        limitValue.setEnabled(false);
+        limitValue.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                limitValueKeyReleased(evt);
             }
         });
 
@@ -374,13 +392,16 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(304, 304, 304)
+                        .addComponent(limitBox)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(limitValue, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(140, 140, 140)
                         .addComponent(startButton, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(37, 37, 37))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 441, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(inserText, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -401,7 +422,10 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(startButton)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(startButton)
+                    .addComponent(limitBox)
+                    .addComponent(limitValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(13, 13, 13)
                 .addComponent(grafoText)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -410,9 +434,9 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 .addComponent(satText)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 14, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
                 .addComponent(showGraphProveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
 
         pack();
@@ -442,6 +466,8 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 orderingTypeMenu.setEnabled(false);
                 precedencesAndWeightsTypeMenu.setEnabled(false);
                 otherOptionsMenu.setEnabled(false);
+                limitBox.setEnabled(false);
+                limitValue.setEnabled(false);
                 grafoText.setVisible(true);
                 startButton.setText("Abort");
                 jProgressBar1.setVisible(true);
@@ -617,6 +643,8 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                     orderingTypeMenu.setEnabled(false);
                     precedencesAndWeightsTypeMenu.setEnabled(false);
                     otherOptionsMenu.setEnabled(false);
+                    limitBox.setEnabled(false);
+                    limitValue.setEnabled(false);
                 }
             }
 	}//GEN-LAST:event_logKeyPressed
@@ -883,6 +911,35 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 showGraphProveButton.doClick();
         }
     }//GEN-LAST:event_showGraphProveButtonKeyPressed
+
+    private void limitBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_limitBoxActionPerformed
+        if (limitBox.isSelected()) {
+            limit = Integer.parseInt(limitValue.getText());  
+        } else {
+            limit = -1;
+        }
+    }//GEN-LAST:event_limitBoxActionPerformed
+
+    private void limitValueKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_limitValueKeyReleased
+        if (limitValue.getText().length() != 0) {
+            try {
+                int i = Integer.parseInt(limitValue.getText());
+                if (i > 0) {
+                    // posso settare il limite
+                    limitBox.setEnabled(true);
+                }
+            } catch (NumberFormatException nfe) {
+                limitBox.setSelected(false);
+                limitBox.setEnabled(false);
+                limit = -1;
+            }
+        } else {
+            limitBox.setSelected(false);
+            limitBox.setEnabled(false);
+            limit = -1;
+        }
+    }//GEN-LAST:event_limitValueKeyReleased
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButtonMenuItem aLaEButton;
     private javax.swing.JRadioButtonMenuItem aLaOtterButton;
@@ -897,6 +954,8 @@ public class JFileChooserDemo extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JRadioButtonMenuItem knuthBendixButton;
     private javax.swing.JRadioButtonMenuItem lexicographicButton;
+    private javax.swing.JCheckBox limitBox;
+    private javax.swing.JFormattedTextField limitValue;
     private javax.swing.JTextArea log;
     private javax.swing.JMenu modeMenu;
     private javax.swing.JRadioButtonMenuItem multisetButton;
@@ -937,6 +996,9 @@ public class JFileChooserDemo extends javax.swing.JFrame {
         orderingTypeMenu.setEnabled(false);
         precedencesAndWeightsTypeMenu.setEnabled(false);
         otherOptionsMenu.setEnabled(false);
+        //limitBox.setSelected(false);
+        limitBox.setEnabled(false);
+        limitValue.setEnabled(false);
 
         jProgressBar1.setEnabled(false);
         //jProgressBar1.setIndeterminate(false);
@@ -1234,6 +1296,8 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 }
             }
             otherOptionsMenu.setEnabled(true);
+            limitBox.setEnabled(true);
+            limitValue.setEnabled(true);
             log.setEditable(true);
             jProgressBar1.setEnabled(false);
 

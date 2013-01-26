@@ -41,7 +41,7 @@ public class Clause implements Comparable<Clause> {
     // per ricavare la prova devo segnarmi da chi provengono (i padri)
     // e in che modo mi generano
     List<Clause> parents;
-    Substitution sub;
+    Substitution substitutionFrom;
     String rule;
     boolean visitato = false;
 
@@ -146,7 +146,7 @@ public class Clause implements Comparable<Clause> {
         } else {
             this.rule = "Semplificazione Clausale";
         }
-        this.sub = sub;
+        this.substitutionFrom = sub;
     }
     
     // per la fattorizzazione (1 padre)
@@ -157,7 +157,7 @@ public class Clause implements Comparable<Clause> {
             this.rule = "Fattorizzazione Ordinata";
         else
             this.rule = "Fattorizzazione";
-        this.sub = sub.copy();
+        this.substitutionFrom = sub.copy();
     }
     
     public List<Clause> getParents() {
@@ -722,8 +722,10 @@ public class Clause implements Comparable<Clause> {
 
     }
 */
+    /****************** SUSSUNZIONE MIA inizio *********************/
+    
     public Substitution subsumes(Clause othC) {
-        boolean subsumes = false;
+        //boolean subsumes = false;
 
         // Equality is not subsumption
         if (!(this == othC))
@@ -757,6 +759,7 @@ public class Clause implements Comparable<Clause> {
                      //Substitution sub = new Substitution();
                      //for (String key : thisToTry.keySet()) {*/
                     /* DEBUG inizio */
+                    //if (this.indiceClausola == 2533 || othC.indiceClausola == 2533)
                     //System.out.println("this: " + this.toString() + " sussume othC: "
                     //        + othC + "?");
                     //if (this.toString().equals("~product(multiplicative_identity,multiplicative_identity,additive_identity)")
@@ -785,6 +788,7 @@ public class Clause implements Comparable<Clause> {
                 if (this.indiceClausola < othC.indiceClausola 
                         && othCToTry.keySet().containsAll(thisToTry.keySet())) {
                     /* DEBUG inizio */
+                    //if (this.indiceClausola == 2291 && othC.indiceClausola == 2533)
                     //System.out.println("sussunzione propria?: " + this + " e "+ othC);
                     Substitution temp = checkSub(thisToTry, othCToTry,
                                         new Substitution(), true);
@@ -907,6 +911,16 @@ public class Clause implements Comparable<Clause> {
         return sigma;     
     }
     
+    /****************** SUSSUNZIONE MIA fine *********************/
+    
+    /************* SUSSUNZIONE Chang-Lee pag. 95 *****************/
+    // return  Substitution (mia) boolean (libro)
+    public boolean subsumesChangLee(Clause othC) {
+        return false;
+    }
+    /************** SUSSUNZIONE Chang-Lee fine *******************/
+    
+    
     public Clause semplClaus(Clause othC, IndexingClauses indexingC) {
         if (this.literals.size() != 1)
             return null; // infatti deve essere unitaria per applicare la regola
@@ -976,7 +990,7 @@ public class Clause implements Comparable<Clause> {
                     sb.append("[labelfontcolor=black,labelfontsize=\"12\",headlabel=\"");
                     sb.append(rule);
                     sb.append("\\n");
-                    sb.append(sub.toString());
+                    sb.append(substitutionFrom.toString());
                     sb.append("\",labeldistance=\"6\"]");
                     primo = false;
                 }

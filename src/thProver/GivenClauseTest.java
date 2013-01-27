@@ -35,6 +35,7 @@ public class GivenClauseTest {
     private static int limit = -1;//Integer.MAX_VALUE;
     private static boolean gui = false;
     private static boolean vAll = false;
+    private static boolean test = false;
 
     public static void main(String[] args) throws FileNotFoundException {
 
@@ -233,18 +234,24 @@ public class GivenClauseTest {
 
 
                 Scanner stdin = new Scanner(System.in);
-                String stamp = "n"; // stdin.nextLine();
+                String stamp = "n"; 
+                if (!test)
+                    stamp = stdin.nextLine();
                 if (stamp.equalsIgnoreCase("yes") || stamp.equalsIgnoreCase("y"))
                     System.out.println(grafo);
 
                 System.out.print("\nUsare 'dot' per esportare un immagine del grafo della prova? [y,n]: ");
-                stamp = "y"; //stdin.nextLine();
+                stamp = "y"; 
+                if (!test)
+                    stamp = stdin.nextLine();
                 if (stamp.equalsIgnoreCase("yes") || stamp.equalsIgnoreCase("y")) {
                     System.out.print("\nSelezionare il formato di esportazione: [1=jpg, 2=ps, 3=pdf]: ");
                     boolean flag = true;
                     String format = null;
                     while (flag) {
-                        stamp = "3"; //stdin.nextLine();
+                        stamp = "3"; 
+                        if (!test)
+                            stamp = stdin.nextLine();
                         if (stamp.equals("1") || stamp.equals("jpg")) {
                             flag = false;
                             format = "jpg";
@@ -355,6 +362,8 @@ public class GivenClauseTest {
             limit = new Integer(o.substring(6));
         } else if (o.equals("-vAll")) {
             vAll = true;
+        } else if (o.equals("-test")) {
+            test = true;
         }
     }
 

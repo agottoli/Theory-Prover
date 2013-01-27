@@ -1,0 +1,88 @@
+Reading file RNG039-2.p...
+74 clauses.
+Starting satisfiability proving... à la Otter with no ordering
+/* info */
+74 clauses from parsing, 
+17858 clauses generated, 
+6871 clauses subsumed, 
+10445 clauses in To_Select, 
+610 clauses in Selected, 
+in 302.860659105 seconds (out of time limit).
+E` SODDISFACIBILE.
+Reading file RNG039-2.p...
+74 clauses.
+Starting satisfiability proving... à la Otter with 'standard' lexicographic ordering
+/* info */
+74 clauses from parsing, 
+22783 clauses generated, 
+10436 clauses subsumed, 
+10479 clauses in To_Select, 
+1926 clauses in Selected, 
+in 307.823700563 seconds (out of time limit).
+E` SODDISFACIBILE.
+Reading file RNG039-2.p...
+74 clauses.
+Starting satisfiability proving... à la Otter with 'standard' multiset ordering
+/* info */
+74 clauses from parsing, 
+20040 clauses generated, 
+8464 clauses subsumed, 
+9986 clauses in To_Select, 
+1664 clauses in Selected, 
+in 300.938354045 seconds (out of time limit).
+E` SODDISFACIBILE.
+Reading file RNG039-2.p...
+74 clauses.
+Starting satisfiability proving... à la Otter with 'standard' kbo ordering
+/* info */
+74 clauses from parsing, 
+27908 clauses generated, 
+16945 clauses subsumed, 
+9412 clauses in To_Select, 
+1623 clauses in Selected, 
+in 300.050684667 seconds (out of time limit).
+E` SODDISFACIBILE.
+Reading file RNG039-2.p...
+74 clauses.
+Starting satisfiability proving... à la Otter with no ordering and set of support strategy
+/* info */
+74 clauses from parsing, 
+23540 clauses generated, 
+9995 clauses subsumed, 
+12335 clauses in To_Select, 
+1226 clauses in Selected, 
+in 300.022649607 seconds (out of time limit).
+E` SODDISFACIBILE.
+Reading file RNG039-2.p...
+74 clauses.
+Starting satisfiability proving... à la Otter with 'standard' lexicographic ordering and set of support strategy
+/* info */
+74 clauses from parsing, 
+16920 clauses generated, 
+4375 clauses subsumed, 
+10758 clauses in To_Select, 
+1859 clauses in Selected, 
+in 300.110220937 seconds (out of time limit).
+E` SODDISFACIBILE.
+Reading file RNG039-2.p...
+74 clauses.
+Starting satisfiability proving... à la Otter with 'standard' multiset ordering and set of support strategy
+/* info */
+74 clauses from parsing, 
+16057 clauses generated, 
+3538 clauses subsumed, 
+10775 clauses in To_Select, 
+1817 clauses in Selected, 
+in 300.251829179 seconds (out of time limit).
+E` SODDISFACIBILE.
+Reading file RNG039-2.p...
+74 clauses.
+Starting satisfiability proving... à la Otter with 'standard' kbo ordering and set of support strategy
+/* info */
+74 clauses from parsing, 
+37720 clauses generated, 
+26481 clauses subsumed, 
+8249 clauses in To_Select, 
+2955 clauses in Selected, 
+in 300.589189805 seconds (out of time limit).
+E` SODDISFACIBILE.

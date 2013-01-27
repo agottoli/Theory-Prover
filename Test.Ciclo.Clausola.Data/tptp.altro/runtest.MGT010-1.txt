@@ -1,0 +1,88 @@
+Reading file MGT010-1.p...
+19 clauses.
+Starting satisfiability proving... à la Otter with no ordering
+/* info */
+19 clauses from parsing, 
+145005 clauses generated, 
+141401 clauses subsumed, 
+3055 clauses in To_Select, 
+562 clauses in Selected, 
+in 300.512109888 seconds (out of time limit).
+E` SODDISFACIBILE.
+Reading file MGT010-1.p...
+19 clauses.
+Starting satisfiability proving... à la Otter with 'standard' lexicographic ordering
+/* info */
+19 clauses from parsing, 
+92986 clauses generated, 
+89327 clauses subsumed, 
+3060 clauses in To_Select, 
+617 clauses in Selected, 
+in 301.041740024 seconds (out of time limit).
+E` SODDISFACIBILE.
+Reading file MGT010-1.p...
+19 clauses.
+Starting satisfiability proving... à la Otter with 'standard' multiset ordering
+/* info */
+19 clauses from parsing, 
+76245 clauses generated, 
+72445 clauses subsumed, 
+3252 clauses in To_Select, 
+566 clauses in Selected, 
+in 305.570558596 seconds (out of time limit).
+E` SODDISFACIBILE.
+Reading file MGT010-1.p...
+19 clauses.
+Starting satisfiability proving... à la Otter with 'standard' kbo ordering
+/* info */
+19 clauses from parsing, 
+21143 clauses generated, 
+15374 clauses subsumed, 
+4800 clauses in To_Select, 
+988 clauses in Selected, 
+in 300.013001799 seconds (out of time limit).
+E` SODDISFACIBILE.
+Reading file MGT010-1.p...
+19 clauses.
+Starting satisfiability proving... à la Otter with no ordering and set of support strategy
+/* info */
+19 clauses from parsing, 
+87555 clauses generated, 
+83401 clauses subsumed, 
+3618 clauses in To_Select, 
+548 clauses in Selected, 
+in 300.127753474 seconds (out of time limit).
+E` SODDISFACIBILE.
+Reading file MGT010-1.p...
+19 clauses.
+Starting satisfiability proving... à la Otter with 'standard' lexicographic ordering and set of support strategy
+/* info */
+19 clauses from parsing, 
+90017 clauses generated, 
+86850 clauses subsumed, 
+2578 clauses in To_Select, 
+607 clauses in Selected, 
+in 330.044271696 seconds (out of time limit).
+E` SODDISFACIBILE.
+Reading file MGT010-1.p...
+19 clauses.
+Starting satisfiability proving... à la Otter with 'standard' multiset ordering and set of support strategy
+/* info */
+19 clauses from parsing, 
+75982 clauses generated, 
+72120 clauses subsumed, 
+3298 clauses in To_Select, 
+562 clauses in Selected, 
+in 302.069502562 seconds (out of time limit).
+E` SODDISFACIBILE.
+Reading file MGT010-1.p...
+19 clauses.
+Starting satisfiability proving... à la Otter with 'standard' kbo ordering and set of support strategy
+/* info */
+19 clauses from parsing, 
+16402 clauses generated, 
+10850 clauses subsumed, 
+4854 clauses in To_Select, 
+717 clauses in Selected, 
+in 322.286351505 seconds (out of time limit).
+E` SODDISFACIBILE.

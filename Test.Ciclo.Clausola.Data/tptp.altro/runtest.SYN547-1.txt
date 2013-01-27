@@ -1,0 +1,88 @@
+Reading file SYN547-1.p...
+484 clauses.
+Starting satisfiability proving... à la Otter with no ordering
+/* info */
+484 clauses from parsing, 
+33162 clauses generated, 
+22584 clauses subsumed, 
+9442 clauses in To_Select, 
+1620 clauses in Selected, 
+in 300.225966797 seconds (out of time limit).
+E` SODDISFACIBILE.
+Reading file SYN547-1.p...
+484 clauses.
+Starting satisfiability proving... à la Otter with 'standard' lexicographic ordering
+/* info */
+484 clauses from parsing, 
+39312 clauses generated, 
+29418 clauses subsumed, 
+7395 clauses in To_Select, 
+2981 clauses in Selected, 
+in 300.296063357 seconds (out of time limit).
+E` SODDISFACIBILE.
+Reading file SYN547-1.p...
+484 clauses.
+Starting satisfiability proving... à la Otter with 'standard' multiset ordering
+/* info */
+484 clauses from parsing, 
+39431 clauses generated, 
+29459 clauses subsumed, 
+7472 clauses in To_Select, 
+2982 clauses in Selected, 
+in 303.734167597 seconds (out of time limit).
+E` SODDISFACIBILE.
+Reading file SYN547-1.p...
+484 clauses.
+Starting satisfiability proving... à la Otter with 'standard' kbo ordering
+/* info */
+484 clauses from parsing, 
+35836 clauses generated, 
+27142 clauses subsumed, 
+6634 clauses in To_Select, 
+2544 clauses in Selected, 
+in 309.950343344 seconds (out of time limit).
+E` SODDISFACIBILE.
+Reading file SYN547-1.p...
+484 clauses.
+Starting satisfiability proving... à la Otter with no ordering and set of support strategy
+/* info */
+484 clauses from parsing, 
+33502 clauses generated, 
+22887 clauses subsumed, 
+9475 clauses in To_Select, 
+1624 clauses in Selected, 
+in 300.406840498 seconds (out of time limit).
+E` SODDISFACIBILE.
+Reading file SYN547-1.p...
+484 clauses.
+Starting satisfiability proving... à la Otter with 'standard' lexicographic ordering and set of support strategy
+/* info */
+484 clauses from parsing, 
+38987 clauses generated, 
+29221 clauses subsumed, 
+7270 clauses in To_Select, 
+2978 clauses in Selected, 
+in 300.019978663 seconds (out of time limit).
+E` SODDISFACIBILE.
+Reading file SYN547-1.p...
+484 clauses.
+Starting satisfiability proving... à la Otter with 'standard' multiset ordering and set of support strategy
+/* info */
+484 clauses from parsing, 
+39076 clauses generated, 
+29246 clauses subsumed, 
+7333 clauses in To_Select, 
+2979 clauses in Selected, 
+in 300.127375212 seconds (out of time limit).
+E` SODDISFACIBILE.
+Reading file SYN547-1.p...
+484 clauses.
+Starting satisfiability proving... à la Otter with 'standard' kbo ordering and set of support strategy
+/* info */
+484 clauses from parsing, 
+35836 clauses generated, 
+27142 clauses subsumed, 
+6634 clauses in To_Select, 
+2544 clauses in Selected, 
+in 308.488316017 seconds (out of time limit).
+E` SODDISFACIBILE.

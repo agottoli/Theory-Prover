@@ -1,0 +1,90 @@
+Reading file ALG002-1.p...
+14 clauses.
+Starting satisfiability proving... à la Otter with no ordering
+/* info */
+14 clauses from parsing, 
+26709 clauses generated, 
+14749 clauses subsumed, 
+10953 clauses in To_Select, 
+1000 clauses in Selected, 
+in 300.304104461 seconds (out of time limit).
+E` SODDISFACIBILE.
+Reading file ALG002-1.p...
+14 clauses.
+Starting satisfiability proving... à la Otter with 'standard' lexicographic ordering
+/* info */
+14 clauses from parsing, 
+32641 clauses generated, 
+22172 clauses subsumed, 
+9748 clauses in To_Select, 
+735 clauses in Selected, 
+in 301.84345161 seconds (out of time limit).
+E` SODDISFACIBILE.
+Reading file ALG002-1.p...
+14 clauses.
+Starting satisfiability proving... à la Otter with 'standard' multiset ordering
+/* info */
+14 clauses from parsing, 
+33422 clauses generated, 
+22830 clauses subsumed, 
+10005 clauses in To_Select, 
+601 clauses in Selected, 
+in 300.243896315 seconds (out of time limit).
+E` SODDISFACIBILE.
+Reading file ALG002-1.p...
+14 clauses.
+Starting satisfiability proving... à la Otter with 'standard' kbo ordering
+/* info */
+14 clauses from parsing, 
+128876 clauses generated, 
+122586 clauses subsumed, 
+4989 clauses in To_Select, 
+1315 clauses in Selected, 
+in 300.073091355 seconds (out of time limit).
+E` SODDISFACIBILE.
+Reading file ALG002-1.p...
+14 clauses.
+Starting satisfiability proving... à la Otter with no ordering and set of support strategy
+/* info */
+14 clauses from parsing, 
+962 clauses generated, 
+656 clauses subsumed, 
+208 clauses in To_Select, 
+108 clauses in Selected, 
+in 2.634688331 seconds.
+E` INSODDISFACIBILE, stampare la prova? [y,n]: 
+Usare 'dot' per esportare un immagine del grafo della prova? [y,n]: 
+Selezionare il formato di esportazione: [1=jpg, 2=ps, 3=pdf]: Grafo esportato in ./ALG002-1-sos.pdf
+Reading file ALG002-1.p...
+14 clauses.
+Starting satisfiability proving... à la Otter with 'standard' lexicographic ordering and set of support strategy
+/* info */
+14 clauses from parsing, 
+1 clauses generated, 
+1 clauses subsumed, 
+0 clauses in To_Select, 
+14 clauses in Selected, 
+in 0.00611635 seconds.
+E` SODDISFACIBILE.
+Reading file ALG002-1.p...
+14 clauses.
+Starting satisfiability proving... à la Otter with 'standard' multiset ordering and set of support strategy
+/* info */
+14 clauses from parsing, 
+1 clauses generated, 
+1 clauses subsumed, 
+0 clauses in To_Select, 
+14 clauses in Selected, 
+in 0.014631473 seconds.
+E` SODDISFACIBILE.
+Reading file ALG002-1.p...
+14 clauses.
+Starting satisfiability proving... à la Otter with 'standard' kbo ordering and set of support strategy
+/* info */
+14 clauses from parsing, 
+0 clauses generated, 
+0 clauses subsumed, 
+0 clauses in To_Select, 
+14 clauses in Selected, 
+in 0.003893999 seconds.
+E` SODDISFACIBILE.

@@ -1,0 +1,28 @@
+digraph {
+	nodesep="1.5"; ranksep=2;
+	node [shape=plaintext];
+	edge [color=gray];
+	"~member(lorenzo)" -> "[]" [labelfontcolor=black,labelfontsize="12",headlabel="Risoluzione Ordinata\n{ }",labeldistance="6"];
+	"member(guido)" -> "~member(lorenzo)" [labelfontcolor=black,labelfontsize="12",headlabel="Semplificazione Clausale\n{ }",labeldistance="6"];
+	"~member(lorenzo) | ~member(guido)" -> "~member(lorenzo)" ;
+	"~member(Y_21) | shaved(Y_21,guido)" -> "~member(lorenzo) | ~member(guido)" [labelfontcolor=black,labelfontsize="12",headlabel="Risoluzione Ordinata\n{ Y_21 <- lorenzo, Y_15 <- guido }",labeldistance="6"];
+	"shaved(members,guido)" -> "~member(Y_21) | shaved(Y_21,guido)" [labelfontcolor=black,labelfontsize="12",headlabel="Risoluzione Ordinata\n{ X_1 <- guido }",labeldistance="6"];
+	"member(cesare)" -> "shaved(members,guido)" [labelfontcolor=black,labelfontsize="12",headlabel="Semplificazione Clausale\n{ }",labeldistance="6"];
+	"~member(cesare) | shaved(members,guido)" -> "shaved(members,guido)" ;
+	"member(guido)" -> "~member(cesare) | shaved(members,guido)" [labelfontcolor=black,labelfontsize="12",headlabel="Semplificazione Clausale\n{ }",labeldistance="6"];
+	"~member(guido) | ~member(cesare) | shaved(members,guido)" -> "~member(cesare) | shaved(members,guido)" ;
+	"~member(X_0) | ~member(Y_0) | ~shaved(X_0,Y_0) | shaved(members,X_0)" -> "~member(guido) | ~member(cesare) | shaved(members,guido)" [labelfontcolor=black,labelfontsize="12",headlabel="Risoluzione Ordinata\n{ X_0 <- guido, Y_0 <- cesare }",labeldistance="6"];
+	"shaved(guido,cesare)" -> "~member(guido) | ~member(cesare) | shaved(members,guido)" ;
+	"~shaved(members,X_1) | ~member(Y_1) | shaved(Y_1,X_1)" -> "~member(Y_21) | shaved(Y_21,guido)" ;
+	"~member(Y_15) | ~shaved(lorenzo,Y_15)" -> "~member(lorenzo) | ~member(guido)" ;
+	"member(lorenzo)" -> "~member(Y_15) | ~shaved(lorenzo,Y_15)" [labelfontcolor=black,labelfontsize="12",headlabel="Semplificazione Clausale\n{ }",labeldistance="6"];
+	"~member(lorenzo) | ~member(Y_15) | ~shaved(lorenzo,Y_15)" -> "~member(Y_15) | ~shaved(lorenzo,Y_15)" ;
+	"~member(X_0) | ~member(Y_0) | ~shaved(X_0,Y_0) | shaved(members,X_0)" -> "~member(lorenzo) | ~member(Y_15) | ~shaved(lorenzo,Y_15)" [labelfontcolor=black,labelfontsize="12",headlabel="Risoluzione Ordinata\n{ X_0 <- lorenzo }",labeldistance="6"];
+	"~shaved(members,lorenzo)" -> "~member(lorenzo) | ~member(Y_15) | ~shaved(lorenzo,Y_15)" ;
+	"member(petruchio)" -> "~shaved(members,lorenzo)" [labelfontcolor=black,labelfontsize="12",headlabel="Semplificazione Clausale\n{ }",labeldistance="6"];
+	"~shaved(members,lorenzo) | ~member(petruchio)" -> "~shaved(members,lorenzo)" ;
+	"~shaved(members,X_1) | ~member(Y_1) | shaved(Y_1,X_1)" -> "~shaved(members,lorenzo) | ~member(petruchio)" [labelfontcolor=black,labelfontsize="12",headlabel="Risoluzione Ordinata\n{ Y_1 <- petruchio, X_1 <- lorenzo }",labeldistance="6"];
+	"~shaved(petruchio,lorenzo)" -> "~shaved(members,lorenzo) | ~member(petruchio)" ;
+	"member(lorenzo)" -> "[]" ;
+}
+

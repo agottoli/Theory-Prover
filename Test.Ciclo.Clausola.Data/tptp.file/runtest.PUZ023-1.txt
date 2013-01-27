@@ -1,0 +1,92 @@
+Reading file PUZ023-1.p...
+22 clauses.
+Starting satisfiability proving... à la Otter with no ordering
+/* info */
+22 clauses from parsing, 
+26 clauses generated, 
+22 clauses subsumed, 
+12 clauses in To_Select, 
+12 clauses in Selected, 
+in 0.079899829 seconds.
+E` INSODDISFACIBILE, stampare la prova? [y,n]: 
+Usare 'dot' per esportare un immagine del grafo della prova? [y,n]: 
+Selezionare il formato di esportazione: [1=jpg, 2=ps, 3=pdf]: Grafo esportato in ./PUZ023-1.pdf
+Reading file PUZ023-1.p...
+22 clauses.
+Starting satisfiability proving... à la Otter with 'standard' lexicographic ordering
+/* info */
+22 clauses from parsing, 
+54920 clauses generated, 
+47208 clauses subsumed, 
+6961 clauses in To_Select, 
+773 clauses in Selected, 
+in 300.772848564 seconds (out of time limit).
+E` SODDISFACIBILE.
+Reading file PUZ023-1.p...
+22 clauses.
+Starting satisfiability proving... à la Otter with 'standard' multiset ordering
+/* info */
+22 clauses from parsing, 
+55456 clauses generated, 
+47625 clauses subsumed, 
+7074 clauses in To_Select, 
+779 clauses in Selected, 
+in 300.944068521 seconds (out of time limit).
+E` SODDISFACIBILE.
+Reading file PUZ023-1.p...
+22 clauses.
+Starting satisfiability proving... à la Otter with 'standard' kbo ordering
+/* info */
+22 clauses from parsing, 
+92 clauses generated, 
+60 clauses subsumed, 
+0 clauses in To_Select, 
+54 clauses in Selected, 
+in 0.221760043 seconds.
+E` SODDISFACIBILE.
+Reading file PUZ023-1.p...
+22 clauses.
+Starting satisfiability proving... à la Otter with no ordering and set of support strategy
+/* info */
+22 clauses from parsing, 
+109 clauses generated, 
+83 clauses subsumed, 
+25 clauses in To_Select, 
+21 clauses in Selected, 
+in 0.258406748 seconds.
+E` INSODDISFACIBILE, stampare la prova? [y,n]: 
+Usare 'dot' per esportare un immagine del grafo della prova? [y,n]: 
+Selezionare il formato di esportazione: [1=jpg, 2=ps, 3=pdf]: Grafo esportato in ./PUZ023-1-sos.pdf
+Reading file PUZ023-1.p...
+22 clauses.
+Starting satisfiability proving... à la Otter with 'standard' lexicographic ordering and set of support strategy
+/* info */
+22 clauses from parsing, 
+0 clauses generated, 
+0 clauses subsumed, 
+0 clauses in To_Select, 
+22 clauses in Selected, 
+in 0.007716001 seconds.
+E` SODDISFACIBILE.
+Reading file PUZ023-1.p...
+22 clauses.
+Starting satisfiability proving... à la Otter with 'standard' multiset ordering and set of support strategy
+/* info */
+22 clauses from parsing, 
+0 clauses generated, 
+0 clauses subsumed, 
+0 clauses in To_Select, 
+22 clauses in Selected, 
+in 0.035644545 seconds.
+E` SODDISFACIBILE.
+Reading file PUZ023-1.p...
+22 clauses.
+Starting satisfiability proving... à la Otter with 'standard' kbo ordering and set of support strategy
+/* info */
+22 clauses from parsing, 
+0 clauses generated, 
+0 clauses subsumed, 
+0 clauses in To_Select, 
+22 clauses in Selected, 
+in 0.005167835 seconds.
+E` SODDISFACIBILE.

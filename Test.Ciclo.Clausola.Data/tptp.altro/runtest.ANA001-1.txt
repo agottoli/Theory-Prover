@@ -1,0 +1,64 @@
+Reading file ANA001-1.p...
+18 clauses.
+Starting satisfiability proving... à la Otter with no ordering
+/* info */
+18 clauses from parsing, 
+99329 clauses generated, 
+87381 clauses subsumed, 
+9462 clauses in To_Select, 
+2379 clauses in Selected, 
+in 300.526972188 seconds (out of time limit).
+E` SODDISFACIBILE.
+Reading file ANA001-1.p...
+18 clauses.
+Starting satisfiability proving... à la Otter with 'standard' lexicographic ordering
+/* info */
+18 clauses from parsing, 
+130730 clauses generated, 
+123085 clauses subsumed, 
+6700 clauses in To_Select, 
+936 clauses in Selected, 
+in 300.821374921 seconds (out of time limit).
+E` SODDISFACIBILE.
+Reading file ANA001-1.p...
+18 clauses.
+Starting satisfiability proving... à la Otter with 'standard' multiset ordering
+/* info */
+18 clauses from parsing, 
+253701 clauses generated, 
+248854 clauses subsumed, 
+4067 clauses in To_Select, 
+793 clauses in Selected, 
+in 300.27972224 seconds (out of time limit).
+E` SODDISFACIBILE.
+Reading file ANA001-1.p...
+18 clauses.
+Starting satisfiability proving... à la Otter with 'standard' kbo ordering
+Reading file ANA001-1.p...
+18 clauses.
+Starting satisfiability proving... à la Otter with no ordering and set of support strategy
+/* info */
+18 clauses from parsing, 
+96365 clauses generated, 
+83901 clauses subsumed, 
+11117 clauses in To_Select, 
+1292 clauses in Selected, 
+in 303.454919589 seconds (out of time limit).
+E` SODDISFACIBILE.
+Reading file ANA001-1.p...
+18 clauses.
+Starting satisfiability proving... à la Otter with 'standard' lexicographic ordering and set of support strategy
+Reading file ANA001-1.p...
+18 clauses.
+Starting satisfiability proving... à la Otter with 'standard' multiset ordering and set of support strategy
+/* info */
+18 clauses from parsing, 
+366505 clauses generated, 
+363941 clauses subsumed, 
+1897 clauses in To_Select, 
+685 clauses in Selected, 
+in 301.708059881 seconds (out of time limit).
+E` SODDISFACIBILE.
+Reading file ANA001-1.p...
+18 clauses.
+Starting satisfiability proving... à la Otter with 'standard' kbo ordering and set of support strategy

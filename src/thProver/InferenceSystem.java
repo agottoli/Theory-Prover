@@ -237,8 +237,7 @@ public class InferenceSystem {
 
     // if mgu == null --> non unificabili
     private static boolean mgu(Term x, Term y, Substitution sub,
-            boolean forSubsumptionOrSemplification) 
-            throws IllegalArgumentException {
+            boolean forSubsumptionOrSemplification) {
         if (x.equals(y))
             return true;
 
@@ -270,13 +269,21 @@ public class InferenceSystem {
             return true;
         
         if (xSub instanceof Variable) {
-            sub.addAssignment((Variable) xSub, ySub);
+            try {
+                sub.addAssignment((Variable) xSub, ySub);
+            } catch (IllegalArgumentException iae) {
+                return false;
+            }
             return true;
         }
         // NOTA: in caso di trovare l'mgu per la sussunzione non devo guarade 
         //       questo caso 
         if (!forSubsumptionOrSemplification && ySub instanceof Variable) {
-            sub.addAssignment((Variable) ySub, xSub);
+            try {
+                sub.addAssignment((Variable) ySub, xSub);
+            } catch (IllegalArgumentException iae) {
+                return false;
+            }
             return true;
         }
         if (xSub instanceof Function && ySub instanceof Function
@@ -291,8 +298,7 @@ public class InferenceSystem {
     }
 
     public static boolean mgu(List<Term> x, List<Term> y, Substitution sub,
-            boolean forSubsumptionOrSemplification) 
-            throws IllegalArgumentException {
+            boolean forSubsumptionOrSemplification) {
         //if (sub.isKilled())
         //    return;
 
@@ -308,8 +314,7 @@ public class InferenceSystem {
     }
 
     private static boolean mgu(Atom x, Atom y, Substitution sub,
-            boolean forSubsumptionOrSemplification) 
-            throws IllegalArgumentException {
+            boolean forSubsumptionOrSemplification) {
         if (x.equals(y))
             return true;
 
@@ -326,7 +331,7 @@ public class InferenceSystem {
         if ((x.isPositive() == y.isPositive() && sameSign)
                 || (x.isPositive() != y.isPositive() && !sameSign)) {
             //Substitution sub = new Substitution();
-            try { 
+            //try { 
                 
                 if (mgu(x.getAtom(), y.getAtom(), sub, forSubsumptionOrSemplification)
                         && sub.isWellFormed()) {
@@ -366,12 +371,12 @@ public class InferenceSystem {
                     return true;
                 }
 
-            } catch (IllegalArgumentException ie) {
-                /*System.out.println("Errore mgu tra:\n\t" + x.toString() + "\ne\n\t" 
-                        + y.toString() + "\n\nsub: " + sub.toString());*/
-                return false;
+            //} catch (IllegalArgumentException ie) {
+            //    /*System.out.println("Errore mgu tra:\n\t" + x.toString() + "\ne\n\t" 
+            //            + y.toString() + "\n\nsub: " + sub.toString());*/
+            //    return false;
 
-            }
+            //}
         }
 
         return false;

@@ -288,21 +288,21 @@ public class Clause implements Comparable<Clause> {
         maximalLits = ord.getMaximalLiterals(this);
     }
 
-    public Set<Clause> getFactors(IndexingClauses indexingC) {
+    public Set<Clause> getFactors(IndexingClauses indexingC, boolean all) {
         if (factors == null)
-            calculateFactors(indexingC);
+            calculateFactors(indexingC, all);
 
         return factors; //=
     }
 
-    public Set<Clause> getMaximalFactors(Ordering ord, IndexingClauses indexingC) {
+    public Set<Clause> getMaximalFactors(Ordering ord, IndexingClauses indexingC, boolean all) {
         if (maximalFactors == null)
-            calculateMaximalFactors(ord, indexingC);
+            calculateMaximalFactors(ord, indexingC, all);
 
         return maximalFactors; //=
     }
 
-    private void calculateFactors(IndexingClauses indexingC) {
+    private void calculateFactors(IndexingClauses indexingC, boolean all) {
         factors = new LinkedHashSet<>();
 
         // DEBUG inizio //
@@ -362,16 +362,19 @@ public class Clause implements Comparable<Clause> {
         //System.out.println(factors + "\n");
         // DEBUG fine
         // ??? devo trovare anche i fattori dei fattori? se lo faccio calcolo 2 volte gli stessi risolventi...
-        Set<Clause> aggiuntivi = new LinkedHashSet<>();
-        for (Clause c : factors)
-            aggiuntivi.addAll(c.getFactors(indexingC));
-        factors.addAll(aggiuntivi);
+        // se chiamo con all = true --> devo calcolare anche i fattori dei fattori
+        if (all) {
+            Set<Clause> aggiuntivi = new LinkedHashSet<>();
+            for (Clause c : factors)
+                aggiuntivi.addAll(c.getFactors(indexingC, all));
+            factors.addAll(aggiuntivi);
+        }
         // DEBUG inizio //
         //System.out.println("più aggiunti anche i fattori dei sui fattori ricorsivamente\nottengo per " + toString() + "\n->" + factors + "\n");
         // DEBUG fine
     }
 
-    private void calculateMaximalFactors(Ordering ord, IndexingClauses indexingC) {
+    private void calculateMaximalFactors(Ordering ord, IndexingClauses indexingC, boolean all) {
         getMaximalLiterals(ord); // così se non già calcolati non da problemi
 
         // DEBUG inizio //
@@ -450,10 +453,13 @@ public class Clause implements Comparable<Clause> {
         //System.out.println(maximalFactors + "\n");
         // DEBUG fine
         // ??? devo trovare anche i fattori dei fattori?
-        Set<Clause> aggiuntivi = new LinkedHashSet<>();
-        for (Clause c : maximalFactors)
-            aggiuntivi.addAll(c.getMaximalFactors(ord, indexingC));
-        maximalFactors.addAll(aggiuntivi);
+        
+        if (all) {
+            Set<Clause> aggiuntivi = new LinkedHashSet<>();
+            for (Clause c : maximalFactors)
+                aggiuntivi.addAll(c.getMaximalFactors(ord, indexingC, all));
+            maximalFactors.addAll(aggiuntivi);
+        }
         // DEBUG inizio //
         //System.out.println("più aggiunti anche i fattori dei sui fattori ricorsivamente\nottengo per " + toString() + "\n->" + maximalFactors + "\n");
         // DEBUG fine
@@ -595,12 +601,12 @@ public class Clause implements Comparable<Clause> {
         Set<Clause> resolvents = new LinkedHashSet<>();
 
         resolvents.addAll(this.resolvents(othC, indexingC));
-        for (Clause c : othC.getFactors(indexingC))
+        for (Clause c : othC.getFactors(indexingC, true))
             resolvents.addAll(this.resolvents(c, indexingC));
-        for (Clause c : getFactors(indexingC))
+        for (Clause c : getFactors(indexingC, true))
             resolvents.addAll(c.resolvents(othC, indexingC));
-        for (Clause c1 : getFactors(indexingC))
-            for (Clause c2 : othC.getFactors(indexingC))
+        for (Clause c1 : getFactors(indexingC, true))
+            for (Clause c2 : othC.getFactors(indexingC, true))
                 resolvents.addAll(c1.resolvents(c2, indexingC));
 
         return resolvents;
@@ -690,12 +696,12 @@ public class Clause implements Comparable<Clause> {
         /////////////////////////////////////////
 
         resolvents.addAll(this.orderedResolvents(othC, indexingC));
-        for (Clause c : othC.getMaximalFactors(ord, indexingC))
+        for (Clause c : othC.getMaximalFactors(ord, indexingC, true))
             resolvents.addAll(this.orderedResolvents(c, indexingC));
-        for (Clause c : getMaximalFactors(ord, indexingC))
+        for (Clause c : getMaximalFactors(ord, indexingC, true))
             resolvents.addAll(c.orderedResolvents(othC, indexingC));
-        for (Clause c1 : getMaximalFactors(ord, indexingC))
-            for (Clause c2 : othC.getMaximalFactors(ord, indexingC))
+        for (Clause c1 : getMaximalFactors(ord, indexingC, true))
+            for (Clause c2 : othC.getMaximalFactors(ord, indexingC, true))
                 resolvents.addAll(c1.orderedResolvents(c2, indexingC));
 
         return resolvents;

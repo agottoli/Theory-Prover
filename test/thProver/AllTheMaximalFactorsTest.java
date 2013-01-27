@@ -90,7 +90,7 @@ public class AllTheMaximalFactorsTest {
             
             for (Clause c : f.getClauses()) {
                 sb.append("\n-------\nTutti i fattori massimali di " + c.toString() + " sono:\n");
-                c.getMaximalFactors(or, indexingC);
+                c.getMaximalFactors(or, indexingC, true);
                 sb.append(c.getMaximalFactorsString());
             }
             

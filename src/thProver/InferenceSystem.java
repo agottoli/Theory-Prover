@@ -111,7 +111,10 @@ public class InferenceSystem {
             }
         return res;*/
         /* DEBUG fine */
-        return c.getFactors(indexingC);
+        
+        // la fattorizzazione non calcola i fattori dei fattori allora
+        // lo chiamo con all = false
+        return c.getFactors(indexingC, false); 
     }
 
     public static Set<Clause> orderedFactorization(Clause c, Ordering ord
@@ -125,7 +128,7 @@ public class InferenceSystem {
         //    }
         //return res;
             /* DEBUG fine */
-        return c.getMaximalFactors(ord, indexingC);
+        return c.getMaximalFactors(ord, indexingC, false);
     }
 
     public static int tautologyElimination(List<Clause> clauses) {

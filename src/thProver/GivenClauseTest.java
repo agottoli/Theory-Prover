@@ -38,7 +38,7 @@ public class GivenClauseTest {
 
     public static void main(String[] args) throws FileNotFoundException {
 
-        /**/
+        /** /
         String[] arrayT = new String[]{"prover",
             "-gui",
             //"-kbo",
@@ -47,7 +47,7 @@ public class GivenClauseTest {
             "/home/ale/NetBeansProjects/RA/Test.Ciclo.Clausola.Data/tptp.altro/COL123-2.p"
         };
         args = arrayT;
-        /**/
+        / **/
         
         /*
          * Read and process command line arguments

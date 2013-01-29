@@ -333,6 +333,8 @@ public class InferenceSystem {
             //Substitution sub = new Substitution();
             //try { 
                 
+            // NOTA: probabilemente non serve più il controllo isWellFormed
+            //       perché lo faccio già in substitution 
                 if (mgu(x.getAtom(), y.getAtom(), sub, forSubsumptionOrSemplification)
                         && sub.isWellFormed()) {
                     // ammetto solo sostituzioni ben formate

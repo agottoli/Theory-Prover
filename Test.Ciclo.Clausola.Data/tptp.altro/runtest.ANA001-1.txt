@@ -31,9 +31,13 @@ Starting satisfiability proving... à la Otter with 'standard' multiset ordering
 793 clauses in Selected, 
 in 300.27972224 seconds (out of time limit).
 E` SODDISFACIBILE.
+
+
 Reading file ANA001-1.p...
 18 clauses.
 Starting satisfiability proving... à la Otter with 'standard' kbo ordering
+
+
 Reading file ANA001-1.p...
 18 clauses.
 Starting satisfiability proving... à la Otter with no ordering and set of support strategy
@@ -45,9 +49,13 @@ Starting satisfiability proving... à la Otter with no ordering and set of suppo
 1292 clauses in Selected, 
 in 303.454919589 seconds (out of time limit).
 E` SODDISFACIBILE.
+
+
 Reading file ANA001-1.p...
 18 clauses.
 Starting satisfiability proving... à la Otter with 'standard' lexicographic ordering and set of support strategy
+
+
 Reading file ANA001-1.p...
 18 clauses.
 Starting satisfiability proving... à la Otter with 'standard' multiset ordering and set of support strategy
@@ -59,6 +67,13 @@ Starting satisfiability proving... à la Otter with 'standard' multiset ordering
 685 clauses in Selected, 
 in 301.708059881 seconds (out of time limit).
 E` SODDISFACIBILE.
+
+
 Reading file ANA001-1.p...
 18 clauses.
 Starting satisfiability proving... à la Otter with 'standard' kbo ordering and set of support strategy
+
+
+Reading file ANA001-1.p...
+18 clauses.
+Starting satisfiability proving... à la Otter with 'standard' kbo ordering

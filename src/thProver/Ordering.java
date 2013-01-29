@@ -29,6 +29,11 @@ public class Ordering {
     /* solo per KBO */
     HashMap<String, Integer> weightFunction;
     int weightVars;
+    /* */
+    int weightNoDefinedAtom = 1;
+    int weightNoDefinedFunction = 1;
+    int weightNoDefinedConstant = 1;
+    /* */
     // struttura dati che mi conta per ogni variabile qualte occorrenze ci sono
     HashMap<String, Integer> countA;
     HashMap<String, Integer> countB;
@@ -427,13 +432,13 @@ public class Ordering {
         errCountVars = false;
         countA.clear();
         countB.clear();
-        try {
+        //try {
             wA = weight(a, true);
             wB = weight(b, false);
-        } catch (NullPointerException npe) {
-            System.err.print("Ordinamento KBO: la funzione peso non è definita per tutti i simboli delle clausole.\n");
-            return false;
-        }
+        //} catch (NullPointerException npe) {
+        //    System.err.print("Ordinamento KBO: la funzione peso non è definita per tutti i simboli delle clausole.\n");
+        //    return false;
+        //}
 
         if (wA >= wB) {
 
@@ -502,7 +507,7 @@ public class Ordering {
         return false;
     }
     
-    public int weight(Object t, boolean isA) throws NullPointerException {
+    public int weight(Object t, boolean isA) { // throws NullPointerException {
         if (t instanceof Atom) {
             int argsWeight = 0;
             List<Term> args = ((Atom) t).getArgs();
@@ -513,7 +518,10 @@ public class Ordering {
                 return standardWeight + argsWeight;
             }
             ////////////////////
-            return weightFunction.get(((Atom) t).getSymbol()) + argsWeight;
+            if (weightFunction.containsKey(((Atom) t).getSymbol()))
+                return weightFunction.get(((Atom) t).getSymbol()) + argsWeight;
+            else
+                return weightNoDefinedAtom + argsWeight;
         } else
         if (t instanceof Function) {
             int argsWeight = 0;
@@ -525,7 +533,10 @@ public class Ordering {
                 return standardWeight + argsWeight;
             }
             ////////////////////
-            return weightFunction.get(((Function) t).getSymbol()) + argsWeight;
+            if (weightFunction.containsKey(((Function) t).getSymbol()))
+                return weightFunction.get(((Function) t).getSymbol()) + argsWeight;
+            else
+                return weightNoDefinedFunction + argsWeight;
         } else
         
         if (t instanceof Variable) {
@@ -562,7 +573,10 @@ public class Ordering {
                 return standardWeight;
             }
             ////////////////////
-        return weightFunction.get(((Term) t).getSymbol());
+            if (weightFunction.containsKey(((Term) t).getSymbol()))
+                return weightFunction.get(((Term) t).getSymbol());
+            else
+                return weightNoDefinedConstant;
      
     }
     

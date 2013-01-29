@@ -52,6 +52,11 @@ public class Substitution {
             throw new IllegalArgumentException("Substitution: " + v
                     + " ha già un assegnamento.");
         }
+        
+        if (checkVarInTerm(v, t)) {
+            throw new IllegalArgumentException("Substitution: " + v
+                    + " appare in " + t);
+        }
 
         for (Variable var : assignments.keySet()) {
             Term term = assignments.get(var);
@@ -62,6 +67,18 @@ public class Substitution {
         }
 
         assignments.put(v, t);
+    }
+    
+    private boolean checkVarInTerm(Variable v, Term t) {
+        if (t instanceof Function) {
+            for (Term arg : ((Function) t).getArgs()) {
+                if (checkVarInTerm(v, arg))
+                    return true;
+            }
+        } else if (v.equals(t))
+            return true;
+        
+        return false;
     }
 
     public Map<Variable, Term> getAssignments() {

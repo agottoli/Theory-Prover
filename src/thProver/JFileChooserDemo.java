@@ -39,8 +39,8 @@ import thProver.parserTptp.CNFParserTptp;
 public class JFileChooserDemo extends javax.swing.JFrame {
 
     private final String GRAFO_TEXT_INIT = "Parsing...";
-    private final String CC_TEXT_INIT = "Given Clause Cicle...";
-    private final String SAT_TEXT_INIT = " La formula risulta";
+    private final String CC_TEXT_INIT = "Given Clause Cicle";//...";
+    private final String SAT_TEXT_INIT = " The formula results";
     private final String START_BUTTON_INIT = "Parse";
     private final String START_BUTTON_SAT = "Prove";
     //private final int AUMENTO_DIM = 62;
@@ -57,7 +57,7 @@ public class JFileChooserDemo extends javax.swing.JFrame {
     private boolean kbo = false;
     private boolean multiset = false;
     private boolean useOrdering = false;
-    private boolean useStandard = false;
+    private boolean useStandard = true; //false;
     private boolean aLaE = false;
     private boolean tptp = false;
     private int limit = -1;//Integer.MAX_VALUE;
@@ -102,6 +102,7 @@ public class JFileChooserDemo extends javax.swing.JFrame {
         showGraphProveButton = new javax.swing.JButton();
         limitBox = new javax.swing.JCheckBox();
         limitValue = new javax.swing.JFormattedTextField();
+        sosBox = new javax.swing.JCheckBox();
         jMenuBar1 = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         openItem = new javax.swing.JMenuItem();
@@ -115,15 +116,15 @@ public class JFileChooserDemo extends javax.swing.JFrame {
         multisetButton = new javax.swing.JRadioButtonMenuItem();
         knuthBendixButton = new javax.swing.JRadioButtonMenuItem();
         precedencesAndWeightsTypeMenu = new javax.swing.JMenu();
-        useUserDefinedOrderingButton = new javax.swing.JRadioButtonMenuItem();
         useStandardOrderingButton = new javax.swing.JRadioButtonMenuItem();
+        useUserDefinedOrderingButton = new javax.swing.JRadioButtonMenuItem();
         otherOptionsMenu = new javax.swing.JMenu();
         sosButton = new javax.swing.JCheckBoxMenuItem();
         answerLiteralButton = new javax.swing.JCheckBoxMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Given Clause Cicle");
-        setPreferredSize(new java.awt.Dimension(465, 370));
+        setPreferredSize(new java.awt.Dimension(563, 433));
         setResizable(false);
 
         inserText.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -213,12 +214,20 @@ public class JFileChooserDemo extends javax.swing.JFrame {
             }
         });
 
+        sosBox.setText("use set of support");
+        sosBox.setEnabled(false);
+        sosBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sosActionPerformed(evt);
+            }
+        });
+
         fileMenu.setText("File");
         fileMenu.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 fileMenuAncestorAdded(evt);
-            }
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
@@ -246,10 +255,10 @@ public class JFileChooserDemo extends javax.swing.JFrame {
         modeMenu.setText("Mode");
         modeMenu.setEnabled(false);
         modeMenu.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 modeMenuAncestorAdded(evt);
-            }
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
@@ -277,10 +286,10 @@ public class JFileChooserDemo extends javax.swing.JFrame {
         orderingTypeMenu.setText("Ordering Type");
         orderingTypeMenu.setEnabled(false);
         orderingTypeMenu.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 orderingAncestorAdded(evt);
-            }
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
@@ -324,24 +333,16 @@ public class JFileChooserDemo extends javax.swing.JFrame {
         precedencesAndWeightsTypeMenu.setText("Precedences and Weights");
         precedencesAndWeightsTypeMenu.setEnabled(false);
         precedencesAndWeightsTypeMenu.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 precedencesAndWeightsTypeMenuAncestorAdded(evt);
-            }
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
         });
 
-        useUserDefinedOrderingButton.setSelected(true);
-        useUserDefinedOrderingButton.setText("user defined precedences and weights");
-        useUserDefinedOrderingButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                setUseUserDefinedOrdering(evt);
-            }
-        });
-        precedencesAndWeightsTypeMenu.add(useUserDefinedOrderingButton);
-
+        useStandardOrderingButton.setSelected(true);
         useStandardOrderingButton.setText("standard precendence and weight");
         useStandardOrderingButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -350,15 +351,23 @@ public class JFileChooserDemo extends javax.swing.JFrame {
         });
         precedencesAndWeightsTypeMenu.add(useStandardOrderingButton);
 
+        useUserDefinedOrderingButton.setText("user defined precedences and weights");
+        useUserDefinedOrderingButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                setUseUserDefinedOrdering(evt);
+            }
+        });
+        precedencesAndWeightsTypeMenu.add(useUserDefinedOrderingButton);
+
         jMenuBar1.add(precedencesAndWeightsTypeMenu);
 
         otherOptionsMenu.setText("Options");
         otherOptionsMenu.setEnabled(false);
         otherOptionsMenu.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 otherOptionsMenuAncestorAdded(evt);
-            }
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
@@ -373,6 +382,7 @@ public class JFileChooserDemo extends javax.swing.JFrame {
         otherOptionsMenu.add(sosButton);
 
         answerLiteralButton.setText("use answer literal");
+        answerLiteralButton.setEnabled(false);
         answerLiteralButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 answerLiteralButtonActionPerformed(evt);
@@ -392,27 +402,29 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(limitBox)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(limitValue, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(140, 140, 140)
-                        .addComponent(startButton, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(37, 37, 37))
-                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jProgressBar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1)
+                            .addComponent(grafoText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(ccText, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(inserText, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(grafoText)
-                                    .addComponent(ccText)
-                                    .addComponent(satText))
+                                .addComponent(inserText, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE)))
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
+                        .addComponent(limitBox)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(limitValue, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(sosBox)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                        .addComponent(startButton, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(31, 31, 31))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(satText, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(showGraphProveButton)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addGap(29, 29, 29))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -420,23 +432,24 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(inserText, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(startButton)
                     .addComponent(limitBox)
-                    .addComponent(limitValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(limitValue, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(sosBox))
                 .addGap(13, 13, 13)
                 .addComponent(grafoText)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(ccText, javax.swing.GroupLayout.PREFERRED_SIZE, 15, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(satText)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(satText, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(showGraphProveButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 20, Short.MAX_VALUE)
                 .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 16, Short.MAX_VALUE)
-                .addComponent(showGraphProveButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -460,12 +473,17 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 // Ingrandisco la Finestra
                 //setSize(getWidth(), getHeight() + AUMENTO_DIM);
 
+                if (showGraphProveButton.isVisible()) {
+                    showGraphProveButton.setVisible(false);
+                    showGraphProveButton.setEnabled(false);
+                    satText.setVisible(false);
+                }
                 log.setEditable(false);
                 fileMenu.setEnabled(false);
                 modeMenu.setEnabled(false);
                 orderingTypeMenu.setEnabled(false);
                 precedencesAndWeightsTypeMenu.setEnabled(false);
-                otherOptionsMenu.setEnabled(false);
+                sosBox.setEnabled(false); //otherOptionsMenu.setEnabled(false);
                 limitBox.setEnabled(false);
                 limitValue.setEnabled(false);
                 grafoText.setVisible(true);
@@ -483,8 +501,13 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 if (myT != null) {
                     if (!faseParsing && prover != null) {
                         prover.stop();
+                        try {
+                            myT.join(); // aspetta che la thread muoia altrimenti potrei far partire 2 thread e far casini
+                        } catch (InterruptedException ie) {
+                        }
                         //prover = null; // no altrimenti non riesco più a ricevere lo stop e da errore
-                    }
+                    } else 
+                        myT.stop(); // stoppa brutalmente in parsing
                     myT = null;
                 }
 
@@ -500,7 +523,7 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 //otherOptionsMenu.setEnabled(true);
                 //log.setEditable(true);
                 //startButton.setText(START_BUTTON_INIT);
-                String canc = " CANCELLATO DALL'UTENTE";
+                String canc = " ABORTED BY USER"; //" CANCELLATO DALL'UTENTE";
 
                 //jProgressBar1.setIndeterminate(false);
                 //jProgressBar1.setEnabled(false);
@@ -544,7 +567,7 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 if (sb.length() < 50000)
                     log.setText(sb.toString());
                 else
-                    log.setText("Formula caricata da file: " + file);
+                    log.setText("Formula loaded from file: " + file); //"Formula caricata da file: " + file);
                 //log.setEditable(false);
                 interactive = false;
                 saveItem.setEnabled(false);
@@ -629,7 +652,7 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                  if (startButton.isEnabled())
                  startButton.doClick();
                  } else {*/
-                if (log.getText().startsWith("Formula caricata da file:"))
+                if (log.getText().startsWith("Formula loaded from file:")) //"Formula caricata da file:"))
                     log.setText("");
                 formula = log.getText();
                 if (grafoText.isVisible()) {
@@ -642,7 +665,7 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                     modeMenu.setEnabled(false);
                     orderingTypeMenu.setEnabled(false);
                     precedencesAndWeightsTypeMenu.setEnabled(false);
-                    otherOptionsMenu.setEnabled(false);
+                    sosBox.setEnabled(false); //otherOptionsMenu.setEnabled(false);
                     limitBox.setEnabled(false);
                     limitValue.setEnabled(false);
                 }
@@ -914,7 +937,7 @@ public class JFileChooserDemo extends javax.swing.JFrame {
 
     private void limitBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_limitBoxActionPerformed
         if (limitBox.isSelected()) {
-            limit = Integer.parseInt(limitValue.getText());  
+            limit = Integer.parseInt(limitValue.getText());
         } else {
             limit = -1;
         }
@@ -926,7 +949,10 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 int i = Integer.parseInt(limitValue.getText());
                 if (i > 0) {
                     // posso settare il limite
-                    limitBox.setEnabled(true);
+                    if (!limitBox.isEnabled())
+                        limitBox.setEnabled(true);
+                    if (limitBox.isSelected())
+                        limit = i;
                 }
             } catch (NumberFormatException nfe) {
                 limitBox.setSelected(false);
@@ -939,6 +965,19 @@ public class JFileChooserDemo extends javax.swing.JFrame {
             limit = -1;
         }
     }//GEN-LAST:event_limitValueKeyReleased
+
+    private void sosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sosActionPerformed
+        sos = sosBox.isSelected();
+
+        if (ccText.isVisible()) {
+            ccText.setVisible(false);
+            ccText.setText(CC_TEXT_INIT);
+            satText.setVisible(false);
+            satText.setText(SAT_TEXT_INIT);
+            showGraphProveButton.setVisible(false);
+            showGraphProveButton.setEnabled(false);
+        }
+    }//GEN-LAST:event_sosActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JRadioButtonMenuItem aLaEButton;
@@ -967,6 +1006,7 @@ public class JFileChooserDemo extends javax.swing.JFrame {
     private javax.swing.JLabel satText;
     private javax.swing.JMenuItem saveItem;
     private javax.swing.JButton showGraphProveButton;
+    private javax.swing.JCheckBox sosBox;
     private javax.swing.JCheckBoxMenuItem sosButton;
     private javax.swing.JButton startButton;
     private javax.swing.JRadioButtonMenuItem useStandardOrderingButton;
@@ -995,7 +1035,7 @@ public class JFileChooserDemo extends javax.swing.JFrame {
         modeMenu.setEnabled(false);
         orderingTypeMenu.setEnabled(false);
         precedencesAndWeightsTypeMenu.setEnabled(false);
-        otherOptionsMenu.setEnabled(false);
+        sosBox.setEnabled(false); //otherOptionsMenu.setEnabled(false);
         //limitBox.setSelected(false);
         limitBox.setEnabled(false);
         limitValue.setEnabled(false);
@@ -1026,7 +1066,7 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 //stop = false;
                 //avan = new Thread(new Avanzamento());
                 //avan.start();
-
+                System.out.println("Parsing is starting...");
                 long inizio = System.nanoTime(); //currentTimeMillis();
 
                 //try {
@@ -1038,8 +1078,10 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                     try {
                         if (!interactive) {
                             try {
+                                System.out.println("Reading file " + file.getCanonicalPath() + " ...");
                                 formulaReader = new FileReader(file);
                             } catch (FileNotFoundException ex) {
+                            } catch (IOException ioe) {
                             }
                         } else {
                             formulaReader = new StringReader(formula);
@@ -1047,8 +1089,8 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                         CNFParser parser = new CNFParser(formulaReader);
                         parser.Start();
                         f = parser.getCNFFormula();
-                        if (!useUserDefinedOrderingButton.isEnabled())
-                            useUserDefinedOrderingButton.setEnabled(true);
+                        //if (!useUserDefinedOrderingButton.isEnabled())
+                        //    useUserDefinedOrderingButton.setEnabled(true);
                     } catch (thProver.parser.ParseException pe) {
                         //System.out.println(pe);
                         tptp = true;
@@ -1072,7 +1114,8 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                         f = parser.getCNFFormula();
                     } catch (thProver.parserTptp.ParseException petptp) {
                         //System.out.println(petptp); //"Errore di parsing.");
-                        System.out.println("Errore di parsing.");
+                        System.out.println("Parsing error: wrong sintax");
+                                            //("Errore di parsing.");
                     }
                 }
 
@@ -1080,7 +1123,8 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 jProgressBar1.setStringPainted(false);
                 /* PARSING fine */
                 if (f == null) {
-                    grafoText.setText(grafoText.getText() + " INTERROTTO (errore di parsing)");
+                    grafoText.setText(grafoText.getText() + " INTERRUPTED (parsing error)");
+                                        //" INTERROTTO (errore di parsing)");
                     startButton.setText(START_BUTTON_INIT);
                     fileMenu.setEnabled(true);
 
@@ -1111,11 +1155,12 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                     long time = (fine - inizio);// / 1000;
 
                     // statistiche di parsing
-                    System.out.println(f.getNumClausesAndSOS() + " clauses.");
+                    System.out.println("Parsing finished. " 
+                            + f.getNumClausesAndSOS() + " clauses found.");
 
-                    grafoText.setText(grafoText.getText() + " COMPLETATO ("
-                            + formatoTime(time) + ") trovate "
-                            + f.getNumClausesAndSOS() + " clauses.");
+                    grafoText.setText(grafoText.getText() + " COMPLETED ("
+                            + formatoTime(time) + ") "
+                            + f.getNumClausesAndSOS() + " clauses found.");
 
                     //System.out.println("uguaglianze: " + clausole[0].toString());
 
@@ -1147,11 +1192,42 @@ public class JFileChooserDemo extends javax.swing.JFrame {
 
             } else {
 
-                ccText.setText(CC_TEXT_INIT);
+                StringBuilder sb = new StringBuilder(CC_TEXT_INIT);
+                if (aLaE)
+                    sb.append(" à la E");
+                else
+                    sb.append(" à la Otter");
+                if (useOrdering) {
+                    sb.append(" with");
+                    if (useStandard)
+                        sb.append(" 'standard'");
+                    else
+                        sb.append(" 'user'");
+                    if (kbo) {
+                        sb.append(" kbo");
+                    } else if (multiset) {
+                        sb.append(" mul.");
+                    } else {
+                        sb.append(" lex.");
+                    }
+                    //sb.append(" ordering");
+                    //} else {
+                    //  sb.append(" with no ordering");
+                }
+                if (sos) {
+                    sb.append(" and sos");
+                }
+
+                sb.append("...");
+
+                ccText.setText(sb.toString());
+
+                //ccText.setText(CC_TEXT_INIT);
                 satText.setText(SAT_TEXT_INIT);
                 ccText.setVisible(true);
-                jProgressBar1.setVisible(true);
+                
                 jProgressBar1.setEnabled(true);
+                jProgressBar1.setVisible(true);
 
                 /* SATISFIABILITY inizio */
                 /* ORDERING */
@@ -1177,7 +1253,7 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 // le clausole in f, quindi devo fare la lazyCopy
                 //prover.setGui(true);
 
-                System.out.println("Starting satisfiability proving...");
+                System.out.println("Satisfiability proving is starting...");
                 StringBuilder strb = new StringBuilder();
                 if (aLaE)
                     strb.append("à la E");
@@ -1247,16 +1323,24 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 //System.out.println("Algoritmo di Chiusura di Congruenza completato.");
                 //time = (fine - inizio);// / 1000;
                 if (!prover.isStopped()) {
-                    ccText.setText(ccText.getText() + " COMPLETATA (" + formatoTime(time) + ")");
+                    if (prover.isTimeOut())
+                        ccText.setText(ccText.getText() + " TIME LIMIT (" + formatoTime(time) + ")");
+                    else
+                        ccText.setText(ccText.getText() + " COMPLETED (" + formatoTime(time) + ")");
 
                     satText.setVisible(true);
 
                     if (result == null) { //if (soddisfacibile) {
-                        System.out.println("E` SODDISFACIBILE.");
-                        satText.setText(satText.getText() + " SODDISFACIBILE");
+                        System.out.println("response: SATISFIABLE"); //"E` SODDISFACIBILE.");
+                        if (!prover.isTimeOut())
+                            satText.setText(satText.getText() + " SATISFIABLE");
+                        else
+                            satText.setText(satText.getText() + " SATISFIABLE"
+                                    + " (time out)");
+
                     } else {
-                        System.out.println("E` INSODDISFACIBILE.");
-                        satText.setText(satText.getText() + " INSODDISFACIBILE");
+                        System.out.println("response: UNSATISFIABLE"); //"E` INSODDISFACIBILE.");
+                        satText.setText(satText.getText() + " UNSATISFIABLE"); //" INSODDISFACIBILE");
                         grafo = result.getDOT();
                         showGraphProveButton.setVisible(true);
                         showGraphProveButton.setEnabled(true);
@@ -1286,19 +1370,28 @@ public class JFileChooserDemo extends javax.swing.JFrame {
             orderingTypeMenu.setEnabled(true);
             if (useOrdering) {
                 precedencesAndWeightsTypeMenu.setEnabled(true);
-                if (tptp) {
-                    // se è tptp allora 
-                    // l'utente non ha definito una precedenza
-                    useUserDefinedOrderingButton.setEnabled(false);
-                    useUserDefinedOrderingButton.setSelected(false);
-                    useStandardOrderingButton.setSelected(true);
-                    useStandard = true;
+                //if (tptp) {
+                //    // se è tptp allora 
+                //    // l'utente non ha definito una precedenza
+                //    useUserDefinedOrderingButton.setEnabled(false);
+                //    useUserDefinedOrderingButton.setSelected(false);
+                //    useStandardOrderingButton.setSelected(true);
+                //    useStandard = true;
+                //}
+            }
+            sosBox. setEnabled(true); //otherOptionsMenu.setEnabled(true);
+            if (limitValue.getText().length() != 0) {
+                try {
+                    int i = Integer.parseInt(limitValue.getText());
+                    if (i > 0) {
+                        limitBox.setEnabled(true);
+                    }
+                } catch (NumberFormatException nfe) {
                 }
             }
-            otherOptionsMenu.setEnabled(true);
-            limitBox.setEnabled(true);
             limitValue.setEnabled(true);
             log.setEditable(true);
+            jProgressBar1.setVisible(false);
             jProgressBar1.setEnabled(false);
 
 

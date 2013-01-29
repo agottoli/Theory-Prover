@@ -45,6 +45,13 @@ SKIP:
 | <LPAR: "(">
 | <RPAR: ")">
 | <DOT: ".">
+// precedence over the signature symbols (the precedenza sui simboli della segnatura)
+| <PREC: "prec:">
+| <RANGLEPAR: ">">
+// weight per KBO
+| <WEIGHTS: "weights:">
+| <WEIGHTVARS: "weightVars:">
+| <EQUALS: "=">
 
 //| <LOWER_NAME: ((<LOWER_WORD>)+ ( <UNDERSCORE> (<LOWER_WORD>)+ )* ) >
 //| <UPPER_NAME: ((<UPPER_WORD>)+ ( <UNDERSCORE> (<UPPER_WORD>)+ )* ) >
@@ -80,8 +87,51 @@ SKIP:
 void Start():
 {}
 {
+        [ Precedences() ]
+        [ WeightVars() ]
+        [ Weights() ]
+
         ( Clause() )*
 	<EOF>
+}
+
+// precedences specification
+void Precedences():
+{}
+{
+    <PREC> ( Precedence() { f.addPrecedence("Bottom"); f.addPrecedence("Top"); } ( <SEMICOLON> Precedence() { f.addPrecedence("Bottom"); f.addPrecedence("Top"); } )*)*
+}
+void Precedence():
+{
+    Token t;
+}
+{
+    ( t = <PREDICATE> | t = <SYMBOL> | t = <INTEGER> ) { f.incrNPrecList(); f.addPrecedence(t.image); } 
+
+    ( <RANGLEPAR> ( t = <PREDICATE> | t = <SYMBOL> | t = <INTEGER> ) { f.addPrecedence(t.image); } )+
+}
+
+// weight for KBO
+void Weights():
+{}
+{
+    <WEIGHTS> Weight() ( [ <SEMICOLON> ] Weight() )*
+}
+
+void Weight():
+{
+    Token s, i;
+}
+{
+     ( s = <SYMBOL> | s = <PREDICATE> | s = <INTEGER> ) <EQUALS> i = <INTEGER>
+        { f.setWeight(s.image, i.image); }
+}
+void WeightVars():
+{
+    Token i;
+}
+{
+    <WEIGHTVARS> i = <INTEGER> { f.setWeightVars(i.image); }
 }
 
 // a clause

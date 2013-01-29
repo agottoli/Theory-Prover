@@ -29,7 +29,7 @@ public class GivenClauseTest {
     private static boolean kbo = false;
     private static boolean multiset = false;
     private static boolean useOrdering = false;
-    private static boolean useStandard = false;
+    private static boolean useStandard = true; //false;
     private static boolean aLaE = false;
     private static boolean tptp = false;
     private static int limit = -1;//Integer.MAX_VALUE;
@@ -120,6 +120,7 @@ public class GivenClauseTest {
             // parserizzo l'input
             CNFFormula f = null;
             File file = null;
+            System.out.println("Parsing is starting..."); // ALESSIA //"Starting parsing...");
             if (!tptp) {
                 try {
                     if (interactive) {
@@ -135,11 +136,11 @@ public class GivenClauseTest {
                 } catch (thProver.parser.ParseException pe) {
                     //System.out.println(pe);
                     tptp = true;
-                    useStandard = true;
+                    //useStandard = true;
                 } catch (thProver.parser.TokenMgrError tme) {
                     //System.out.println(pe);
                     tptp = true;
-                    useStandard = true;
+                    //useStandard = true;
                 }
             }
             if (tptp) {
@@ -155,7 +156,8 @@ public class GivenClauseTest {
                     f = parser.getCNFFormula();
                 } catch (thProver.parserTptp.ParseException petptp) {
                     //System.out.println(petptp); //"Errore di parsing.");
-                    System.out.println("Errore di parsing.");
+                    System.out.println("Parsing error: wrong sintax"); // ALESSIA
+                                //"Errore di parsing.");
                 }
             }
 
@@ -163,7 +165,11 @@ public class GivenClauseTest {
                 return;
 
             // statistiche di parsing
-            System.out.println(f.getNumClausesAndSOS() + " clauses.");
+            System.out.println("Parsing finished. " 
+                    + f.getNumClausesAndSOS() + " clauses found."); // ALESSIA
+            
+            
+            // Setting up ordering... // ALESSIA
 
             /* ORDERING */
             Ordering or = new Ordering();
@@ -181,18 +187,22 @@ public class GivenClauseTest {
             /* DEBUG inizio */
             //System.out.println(f.getPrecedences().toString());
             /* DEBUG fine */
+            
+            // Ordering setted // ALESSIA
 
             
             String grafo = null;
             GivenClauseProver prover = new GivenClauseProver(aLaE, sos, kbo,
                     multiset, useOrdering, or, limit, vAll);
 
-            StringBuilder strb = new StringBuilder("Starting satisfiability proving... ");
+            StringBuilder strb = new StringBuilder(
+                    "Satisfiability proving is starting... ");
+                    //"Starting satisfiability proving... ");
             
             if (aLaE)
-                strb.append("à la E");
+                strb.append("à la E version");
             else
-                strb.append("à la Otter");
+                strb.append("à la Otter version");
             if (useOrdering) {
                 strb.append(" with");
                 if (useStandard)
@@ -223,10 +233,11 @@ public class GivenClauseTest {
           
             if (result == null) {
                 
-                sb.append("E` SODDISFACIBILE.\n");
+                sb.append("response: SATISFIABLE.\n"); // ALESSIA // "E` SODDISFACIBILE.\n");
                 System.out.print(sb.toString());
             } else {
-                sb.append("E` INSODDISFACIBILE, stampare la prova? [y,n]: ");
+                sb.append("response: UNSATISFIABLE, show the prove? [y,n]: "); // ALESSIA
+                        //"E` INSODDISFACIBILE, stampare la prova? [y,n]: ");
                 grafo = result.getDOT();
                 //sb.append(grafo);
                 System.out.print(sb.toString());
@@ -240,12 +251,14 @@ public class GivenClauseTest {
                 if (stamp.equalsIgnoreCase("yes") || stamp.equalsIgnoreCase("y"))
                     System.out.println(grafo);
 
-                System.out.print("\nUsare 'dot' per esportare un immagine del grafo della prova? [y,n]: ");
+                System.out.print("\nUse 'dot' to export the prove graph as image? [y,n]: "); // ALESSIA
+                        // "\nUsare 'dot' per esportare un immagine del grafo della prova? [y,n]: ");
                 stamp = "y"; 
                 if (!test)
                     stamp = stdin.nextLine();
                 if (stamp.equalsIgnoreCase("yes") || stamp.equalsIgnoreCase("y")) {
-                    System.out.print("\nSelezionare il formato di esportazione: [1=jpg, 2=ps, 3=pdf]: ");
+                    System.out.print("\nSelect export file format: [1=jpg, 2=ps, 3=pdf]: "); // ALESSIA
+                            //"\nSelezionare il formato di esportazione: [1=jpg, 2=ps, 3=pdf]: ");
                     boolean flag = true;
                     String format = null;
                     while (flag) {
@@ -262,7 +275,8 @@ public class GivenClauseTest {
                             flag = false;
                             format = "pdf";
                         } else {
-                            System.out.print("Scelta non corretta, digitare 1, 2 o 3: ");
+                            System.out.print("Bad choice, type 1, 2 or 3: "); // ALESSIA
+                                    //"Scelta non corretta, digitare 1, 2 o 3: ");
                         }
                     }
                     String dir = null;
@@ -321,9 +335,9 @@ public class GivenClauseTest {
                 + "\t-mul\tuse multiset ordering (default no ordering is used)\n"
                 + "\t-kbo\tuse knuth-bendix ordering (default no ordering is used)\n"
                 + "\t-usP\tuse user defined precedences and weights\n"
-                + "\t\tif an ordering type is specified (default in not tptp syntax)\n"
+                + "\t\tif an ordering type is specified\n" // (default in not tptp syntax)\n"
                 + "\t-stP\tuse a standard precedences and weights defined in class Ordering "
-                + "\t\tif an ordering type is specified (default in tptp syntax)\n"
+                + "\t\tif an ordering type is specified (default)\n"
                 + "\t-E\tuse à la E version of the given clause loop (defaulf use à la Otter)\n"
                 //+ "\t-tptp\tthe input file is in TPTP cnf format\n"
                 + "\t-limit<secs>\tspecify a time limit - in seconds\n"

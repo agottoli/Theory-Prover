@@ -388,15 +388,31 @@ public class GivenClauseProver {
         sb.append(To_Select.size()).append(" clauses in To_Select, \n");
         sb.append(Selected.size()).append(" clauses in Selected, \n");
         sb.append("in ");
-        sb.append(elapsedTime / 1000000000.0).append(" seconds");
+        sb.append(formatoTime(elapsedTime));
+        //sb.append(elapsedTime / 1000000000.0).append(" seconds");
         if (timeoutWhitoutResponse)
-            sb.append(" (out of time limit)");
+            sb.append(" (out of max time"); // ALESSIA // limit)");
         if (stop)
-            sb.append(" (user stop)");
+            sb.append(" (stopped by user"); // ALESSIA // user stop)");
         sb.append(".\n");
 
         return sb.toString();
     }
+    
+    private String formatoTime(long time) {
+            time = time / 1000000;
+            if (time < 1000)
+                return time + " millisec.";
+            else if (time > 60000) {
+                long minuti = time / 60000;
+                int secondi = (int) ((time / 1000) % 60);
+                return minuti + " min. and " + secondi + " sec.";
+            } else {
+                int secondi = (int) (time / 1000);
+                int milli = (int) (time % 1000);
+                return secondi + " sec. and " + milli + " millisec.";
+            }
+        }
 
     public long getElapsedTime() {
         return elapsedTime;
@@ -408,6 +424,10 @@ public class GivenClauseProver {
 
     public boolean isStopped() {
         return stop;
+    }
+    
+    public boolean isTimeOut() {
+        return timeoutWhitoutResponse;
     }
 
     public String getFiends(Clause c) {
@@ -437,8 +457,11 @@ public class GivenClauseProver {
             PrintStream output = new PrintStream(file);
             output.println(grafo);
         } catch (IOException e) {
-            System.out.println("Errore: non si ha permessi di scrittura nella"
-                    + "cartella " + dir);
+            System.out.println(
+                    "Error: write permission negated in directory " 
+                    + dir);
+                    //"Errore: non si ha permessi di scrittura nella"
+                    //+ "cartella " + dir);
             return;
         }
 
@@ -460,9 +483,14 @@ public class GivenClauseProver {
             pr = run.exec(cmd);
         } catch (IOException e) {
             //e.printStackTrace();
-            System.out.println("Errore nell'esportazione, 'dot' potrebbe non "
-                    + "essere installato. Il file sorgente del grafo è "
-                    + "visualizzabile in " + dir + "/" + nameNoExt + ".dot");
+            System.out.println(
+                    "Export failed: 'dot' could be not installed. "
+                    + "Anyway you can read the graph source file in "
+                    + dir + "/" + nameNoExt + ".dot"); // ALESSIA
+                    
+                    //"Errore nell'esportazione, 'dot' potrebbe non "
+                    //+ "essere installato. Il file sorgente del grafo è "
+                    //+ "visualizzabile in " + dir + "/" + nameNoExt + ".dot");
             return;
         }
         
@@ -470,12 +498,15 @@ public class GivenClauseProver {
             pr.waitFor();
         } catch (InterruptedException e) {
             //e.printStackTrace();
-            System.out.println("Errore: 'dot' è terminato in modo inatteso. "
-                    + "Il grafo potrebbe non essersi salvato correttamente.");
+            System.out.println(
+                    "Warning: 'dot' unexpected exit. "
+                    + "The graph could be saved incorrectly."); // ALESSIA
+                    //"Errore: 'dot' è terminato in modo inatteso. "
+                    //+ "Il grafo potrebbe non essersi salvato correttamente.");
             return;
         }
 
-        System.out.println("Grafo esportato in " + dir + "/" + name);
+        System.out.println("Graph exported in " + dir + "/" + name);
         //Picture p = new Picture(fileNameNoExt + ".dot" + ".jpg");
         //p.show();
         //sb.append(grafo);

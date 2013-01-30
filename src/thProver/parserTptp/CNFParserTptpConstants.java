@@ -23,43 +23,55 @@ public interface CNFParserTptpConstants {
   /** RegularExpression Id. */
   int DOT = 11;
   /** RegularExpression Id. */
-  int LOWER_WORD = 12;
+  int SEMICOLON = 12;
   /** RegularExpression Id. */
-  int UPPER_WORD = 13;
+  int PREC = 13;
   /** RegularExpression Id. */
-  int SINGLE_QUOTED = 14;
+  int RANGLEPAR = 14;
   /** RegularExpression Id. */
-  int LOWER_ALFA = 15;
+  int WEIGHTS = 15;
   /** RegularExpression Id. */
-  int UPPER_ALFA = 16;
+  int WEIGHTVARS = 16;
   /** RegularExpression Id. */
-  int DOLLAR_LOWER_ALFA = 17;
+  int EQUALS = 17;
   /** RegularExpression Id. */
-  int DOLLAR_UPPER_ALFA = 18;
+  int LOWER_WORD = 18;
   /** RegularExpression Id. */
-  int ALFA_NUMERIC = 19;
+  int UPPER_WORD = 19;
   /** RegularExpression Id. */
-  int DEF_SYS = 20;
+  int SINGLE_QUOTED = 20;
   /** RegularExpression Id. */
-  int UNDERSCORE = 21;
+  int LOWER_ALFA = 21;
   /** RegularExpression Id. */
-  int SINGLE_QUOTE = 22;
+  int UPPER_ALFA = 22;
   /** RegularExpression Id. */
-  int SQ_CHAR = 23;
+  int DOLLAR_LOWER_ALFA = 23;
   /** RegularExpression Id. */
-  int INTEGER = 24;
+  int DOLLAR_UPPER_ALFA = 24;
   /** RegularExpression Id. */
-  int SIGNED_INTEGER = 25;
+  int ALFA_NUMERIC = 25;
   /** RegularExpression Id. */
-  int DECIMAL = 26;
+  int DEF_SYS = 26;
   /** RegularExpression Id. */
-  int SIGN = 27;
+  int UNDERSCORE = 27;
   /** RegularExpression Id. */
-  int NUMERIC = 28;
+  int SINGLE_QUOTE = 28;
   /** RegularExpression Id. */
-  int ZERO_NUMERIC = 29;
+  int SQ_CHAR = 29;
   /** RegularExpression Id. */
-  int NON_ZERO_NUMERIC = 30;
+  int INTEGER = 30;
+  /** RegularExpression Id. */
+  int SIGNED_INTEGER = 31;
+  /** RegularExpression Id. */
+  int DECIMAL = 32;
+  /** RegularExpression Id. */
+  int SIGN = 33;
+  /** RegularExpression Id. */
+  int NUMERIC = 34;
+  /** RegularExpression Id. */
+  int ZERO_NUMERIC = 35;
+  /** RegularExpression Id. */
+  int NON_ZERO_NUMERIC = 36;
 
   /** Lexical state. */
   int DEFAULT = 0;
@@ -78,6 +90,12 @@ public interface CNFParserTptpConstants {
     "\"(\"",
     "\")\"",
     "\".\"",
+    "\";\"",
+    "\"prec:\"",
+    "\">\"",
+    "\"weights:\"",
+    "\"weightVars:\"",
+    "\"=\"",
     "<LOWER_WORD>",
     "<UPPER_WORD>",
     "<SINGLE_QUOTED>",

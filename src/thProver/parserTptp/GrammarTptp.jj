@@ -33,8 +33,7 @@ SKIP:
 | <"\t"> 
 | <"\n"> 
 | <"\r"> 
-| <"%" (~["\n","\r"])* ("\n" | "\r" | "\r\n")?>  // used to skip comment, see http://www.cs.utsa.edu/~danlo/teaching/cs4713/lecture/node16.html for more details
-                                                 // and this discussion for <EOF> problem http://www.java-forums.org/advanced-java/44981-single-line-comments-javacc.html
+| <"%" (~["\n","\r"])* ("\n" | "\r" | "\r\n")?>  
 }
  
         
@@ -45,6 +44,7 @@ SKIP:
 | <LPAR: "(">
 | <RPAR: ")">
 | <DOT: ".">
+| <SEMICOLON: ";">
 // precedence over the signature symbols (the precedenza sui simboli della segnatura)
 | <PREC: "prec:">
 | <RANGLEPAR: ">">
@@ -99,23 +99,23 @@ void Start():
 void Precedences():
 {}
 {
-    <PREC> ( Precedence() { f.addPrecedence("*Bottom*"); f.addPrecedence("*Top*"); } ( <SEMICOLON> Precedence() { f.addPrecedence("*Bottom*"); f.addPrecedence("*Top*"); } )*)*
+    <PREC> ( Precedence() { f.addPrecedence("*Bottom*"); f.addPrecedence("*Top*"); } ( <SEMICOLON> Precedence() { f.addPrecedence("*Bottom*"); f.addPrecedence("*Top*"); } )*)
 }
 void Precedence():
 {
     Token t;
 }
 {
-    ( t = <PREDICATE> | t = <SYMBOL> | t = <INTEGER> ) { f.incrNPrecList(); f.addPrecedence(t.image); } 
+    ( t = <LOWER_WORD> | t = <UPPER_WORD> ) { f.incrNPrecList(); f.addPrecedence(t.image); } 
 
-    ( <RANGLEPAR> ( t = <PREDICATE> | t = <SYMBOL> | t = <INTEGER> ) { f.addPrecedence(t.image); } )+
+    ( <RANGLEPAR> ( t = <LOWER_WORD> | t = <UPPER_WORD> ) { f.addPrecedence(t.image); } )+
 }
 
 // weight for KBO
 void Weights():
 {}
 {
-    <WEIGHTS> Weight() ( [ <SEMICOLON> ] Weight() )*
+    <WEIGHTS> ( Weight() ( <SEMICOLON> Weight() )* )
 }
 
 void Weight():
@@ -123,7 +123,7 @@ void Weight():
     Token s, i;
 }
 {
-     ( s = <SYMBOL> | s = <PREDICATE> | s = <INTEGER> ) <EQUALS> i = <INTEGER>
+     ( s = <LOWER_WORD> | s = <UPPER_WORD> ) <EQUALS> i = <INTEGER>
         { f.setWeight(s.image, i.image); }
 }
 void WeightVars():

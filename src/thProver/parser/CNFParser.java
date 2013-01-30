@@ -165,7 +165,7 @@ public class CNFParser implements CNFParserConstants {
         }
         jj_consume_token(SEMICOLON);
         Precedence();
-                                                                                                              f.addPrecedence("*Bottom*"); f.addPrecedence("*Top*");
+                                                                                                                  f.addPrecedence("*Bottom*"); f.addPrecedence("*Top*");
       }
     }
   }

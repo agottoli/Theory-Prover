@@ -10,24 +10,36 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- *
- * @author ale
+ * Variable term.
+ * 
+ * @author Alessandro Gottoli vr352595
  */
 public class Variable implements Term {
     
     private String symbol;
     
+    /**
+     * Constructs a new variable without symbol
+     * (never used)
+     */
     public Variable() {
     }
     
+    /**
+     * Constructs a new variable with given symbol.
+     * 
+     * @param s symbol
+     */
     public Variable(String s) {
         symbol = s;
     }
-        
+    
+    @Override
     public void setSymbol(String sym) {
         symbol = sym;
     }
     
+    @Override
     public String getSymbol() {
         return symbol;
     }

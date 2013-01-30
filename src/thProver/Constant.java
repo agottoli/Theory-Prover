@@ -6,13 +6,19 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- *
- * @author ale
+ * Constant term.
+ * 
+ * @author Alessandro Gottoli vr352595
  */
 public class Constant implements Term {
     
     private String symbol;
     
+    /**
+     * Constructs a new constant with given symbol.
+     * 
+     * @param symbol symbol
+     */
     public Constant(String symbol) {
         this.symbol = symbol;
     }
@@ -21,10 +27,18 @@ public class Constant implements Term {
         symbol = sym;
     }
 */   
+    
+    @Override
+    public void setSymbol(String sym) {
+        symbol = sym;
+    }
+    
+    @Override
     public String getSymbol() {
         return symbol;
     }
     
+    @Override
     public Constant copy() {
         return new Constant(symbol);
     }

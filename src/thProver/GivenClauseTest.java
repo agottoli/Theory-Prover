@@ -324,6 +324,9 @@ public class GivenClauseTest {
         }
     }
 
+    /**
+     * Print the usage instructions.
+     */
     private static void printUsage() {
         System.out.println(
                 "Usage: ThProver [-gui | -i | <filename>] [-ans] [-sos] [(-lex | -mul | -kbo) [-usP | -stP]] [-E] [-limit<secs>] [-vAll]\n\n"
@@ -344,6 +347,11 @@ public class GivenClauseTest {
                 + "\t-vAll\tversione sperimentale\n");
     }
 
+    /**
+     * Process the string in input for setting up the parameter of the prover
+     * 
+     * @param o string with parameter for setting up
+     */
     private static void processOption(String o) {
         if (o.equals("-ans")) {
             answerLiteral = true;
@@ -381,6 +389,11 @@ public class GivenClauseTest {
         }
     }
 
+    /**
+     * Permit to insert the formula by standard input
+     * 
+     * @return string representing the input for parser
+     */
     private static String startInteractive() {
         Scanner stdin = new Scanner(System.in);
 

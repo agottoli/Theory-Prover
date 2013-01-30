@@ -101,7 +101,7 @@ void Consts():
 void Precedences():
 {}
 {
-    <PREC> ( Precedence() { f.addPrecedence("Bottom"); f.addPrecedence("Top"); } ( <SEMICOLON> Precedence() { f.addPrecedence("Bottom"); f.addPrecedence("Top"); } )*)*
+    <PREC> ( Precedence() { f.addPrecedence("*Bottom*"); f.addPrecedence("*Top*"); } ( <SEMICOLON> Precedence() { f.addPrecedence("*Bottom*"); f.addPrecedence("*Top*"); } )*)*
 }
 void Precedence():
 {

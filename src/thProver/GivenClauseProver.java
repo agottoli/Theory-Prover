@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package thProver;
 
 import java.io.File;
@@ -19,8 +15,9 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 /**
- *
- * @author ale
+ * Class that implements the Given Clause Cicle (à la Otter and à la E)
+ * 
+ * @author Alessandro Gottoli vr352595
  */
 public class GivenClauseProver {
 
@@ -70,9 +67,15 @@ public class GivenClauseProver {
     /**
      * Se ritorno una clausola è sicuramente quella vuota e posso anche
      * disegnare la prova.
+     * Procedure to determine the satisfiability of the formula with Given
+     * Clause Cicle
+     * Return 
+     * 
      *
-     * @param f
+     * @param f formula parserized by parser
      * @return null è soddisfacibile la clausola vuota è insoddisfacibile
+     *         null if the formula is satisfiable (no refutation found)
+     *         the empty clause if the formula is unsatisfiable
      */
     public Clause satisfiable(CNFFormula f) {
         timeoutWhitoutResponse = false;
@@ -312,9 +315,11 @@ public class GivenClauseProver {
     }
 
     /**
-     *
-     * @param given
-     * @return null se given viene cancellata clause semplificata se possibile
+     * Forward contraction.
+     * 
+     * @param given given clause of the cicle
+     * @return null if given is subsumed
+     *         semplified clause of given if given is semplificated
      */
     private Clause forwardContraction(Clause given) {
         if (given.isTautology())
@@ -324,7 +329,7 @@ public class GivenClauseProver {
             return null;
         if (!aLaE && InferenceSystem.subsumedBy(given, To_Select))
             return null;
-        Clause sempl = InferenceSystem.semplificatedClause(given, Selected, index);
+        Clause sempl = InferenceSystem.simplifiedByClause(given, Selected, index);
         boolean flagForCount = false;
         if (sempl != null) {
             // cancello given e aggiungo sempl --> deleted++ generated++
@@ -334,7 +339,7 @@ public class GivenClauseProver {
             given = sempl; // DA SISTEMARE LE IDEE
         }
         if (!aLaE) {
-            sempl = InferenceSystem.semplificatedClause(given, To_Select, index);
+            sempl = InferenceSystem.simplifiedByClause(given, To_Select, index);
             if (sempl != null) {
                 // come prima ma non so se ho già contato...
                 if (!flagForCount) {
@@ -349,7 +354,17 @@ public class GivenClauseProver {
 
     }
 
-    public Set<Clause> backwardContraction(Clause given) {
+    /**
+     * Backward Contraction.
+     * Remove the clauses in Selected (and To_Select if à la Otter) that are
+     * subsumed or semplificated by the given clause.
+     * 
+     * @param given given clause of the cicle
+     * @return set of semplified clauses if given subsume any clause in Selected
+     *                                   (and To_Select if à la Otter)
+     *         empty set if no clauses are semplificated 
+     */
+    private Set<Clause> backwardContraction(Clause given) {
         //System.out.println("given da errore: " + given);
         /* DEBUG inizio */
         //int selSize = Selected.size();
@@ -370,15 +385,20 @@ public class GivenClauseProver {
         //}
         /* DEBUG fine */
 
-        Set<Clause> sempl = InferenceSystem.semplificClause(given, Selected, index);
+        Set<Clause> sempl = InferenceSystem.simplifiesClause(given, Selected, index);
 
         if (!aLaE) {
-            sempl.addAll(InferenceSystem.semplificClause(given, To_Select, index));
+            sempl.addAll(InferenceSystem.simplifiesClause(given, To_Select, index));
         }
 
         return sempl;
     }
 
+    /**
+     * Return a string with the computation info.
+     * 
+     * @return info string of the computation
+     */
     public String info() {
         StringBuilder sb = new StringBuilder("/* info */\n"); //finish with: ");
         
@@ -399,6 +419,11 @@ public class GivenClauseProver {
         return sb.toString();
     }
     
+    /**
+     * Transform from nanoTime to a readable format
+     * @param time nano time to convert
+     * @return readable representation of the time
+     */
     private String formatoTime(long time) {
             time = time / 1000000;
             if (time < 1000)
@@ -414,26 +439,57 @@ public class GivenClauseProver {
             }
         }
 
+    /**
+     * Return the elapsed time of the computation
+     * @return elapsd time
+     */
     public long getElapsedTime() {
         return elapsedTime;
     }
 
+    /**
+     * Stops the computation
+     */
     public void stop() {
         stop = true;
     }
 
+    /**
+     * 
+     * @return true if the computation is stopped by user
+     *         false othewise
+     */
     public boolean isStopped() {
         return stop;
     }
     
+    /**
+     * 
+     * @return true if the computation is stopped by timeout
+     *         false otherwise
+     */
     public boolean isTimeOut() {
         return timeoutWhitoutResponse;
     }
 
+    /**
+     * 
+     * @param c refutation clause
+     * @return 'dot' format source of refutational graph
+     */
     public String getFiends(Clause c) {
         return c.getDOT();
     }
 
+    /**
+     * Save to disk (if 'dot' is installed) the grafical graph of the refutation
+     * in several formar
+     * 
+     * @param dir directory where save (path)
+     * @param name file name 
+     * @param format file format (jpg, ps, pdf)
+     * @param grafo source file of the graph for 'dot'
+     */
     public void exportDot(String dir, String name, String format, String grafo) {
         if (name == null) {
             // interactive mode

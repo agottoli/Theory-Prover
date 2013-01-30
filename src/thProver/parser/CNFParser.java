@@ -152,7 +152,7 @@ public class CNFParser implements CNFParserConstants {
         break label_2;
       }
       Precedence();
-                            f.addPrecedence("Bottom"); f.addPrecedence("Top");
+                            f.addPrecedence("*Bottom*"); f.addPrecedence("*Top*");
       label_3:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -165,7 +165,7 @@ public class CNFParser implements CNFParserConstants {
         }
         jj_consume_token(SEMICOLON);
         Precedence();
-                                                                                                              f.addPrecedence("Bottom"); f.addPrecedence("Top");
+                                                                                                              f.addPrecedence("*Bottom*"); f.addPrecedence("*Top*");
       }
     }
   }

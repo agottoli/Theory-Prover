@@ -12,6 +12,8 @@ import java.util.TreeSet;
 
 /**
  * A CNF formula - a set of clauses.
+ * Contains clauses, literals, atoms and terms of the given formula
+ * It's the class used by parser for costruct the graph representing the formula
  */
 public class CNFFormula {
 
@@ -55,6 +57,15 @@ public class CNFFormula {
         nClausesAndSOS = 0;
     }
     
+    /**
+     * Costruct a new constant if the symbol representing the constant is never
+     * used yet and return it, otherwise return the constant costructed before
+     * with that symbol and return it (note: save space)
+     * In case of new constant save it in terms for the future.
+     * 
+     * @param key string representing the constant
+     * @return the constant represented by the key
+     */
     public Constant addConstant(String key) {
         Term c;
         Term nuovo = new Constant(key);
@@ -84,7 +95,13 @@ public class CNFFormula {
         return (Constant) c;
     }
 */
-    
+    /**
+     * Check if the string represents a constant.
+     * 
+     * @param name symbol token parserized by parser 
+     *             (it could represents predicate, function, variable or constant) 
+     * @return true if represent a constant, false otherwise.
+     */
     public boolean isConstant(String name) {
         Term t;
         Term cos = new Constant(name);
@@ -103,6 +120,15 @@ public class CNFFormula {
         return (Variable) v;
     }
 */    
+    /**
+     * Costruct a new variable if the symbol representing the variable is never
+     * used yet and return it, otherwise return the variable costructed before
+     * with that symbol and return it (note: save space)
+     * In case of new variable save it in terms for the future.
+     * 
+     * @param var string representing the variable
+     * @return the variable represented by the string
+     */
     public Variable addVariable(String var) {
         Term v;
         String rinNewVar = var + "_" + nClausesAndSOS;
@@ -120,6 +146,14 @@ public class CNFFormula {
         return (Variable) v;
     }
     
+    /**
+     * Check if the function is constucted and saved yet
+     * if yes get the 'old' function and return it
+     * if no add the function in terms (for the future) and return it.
+     * 
+     * @param fun the function
+     * @return the older function equals or it if it's the first
+     */
     public Function addFunction(Function fun) {
         Term f;
         int hC = fun.hashCode();
@@ -134,6 +168,13 @@ public class CNFFormula {
         return (Function) f;
     }
     
+    /**
+     * Check if the term is constucted and saved yet
+     * if yes get the 'old' term and return it
+     * if no add the term in terms (for the future) and return it.
+     * @param term the term
+     * @return the older term equals or it if it's the first
+     */
     public Term addTerm(Term term) {
         Term t;
         int hC = term.hashCode();
@@ -153,6 +194,13 @@ public class CNFFormula {
         return t;
     }
     
+    /**
+     * Check if the literal is constucted and saved yet
+     * if yes get the 'old' literal and return it
+     * if no add the literal in literals (for the future) and return it. 
+     * @param lit the literal
+     * @return the older literal equals or it if it's the first
+     */
     public Literal addLiteral(Literal lit) {
         Literal l;
         int hC = lit.hashCode();
@@ -163,6 +211,13 @@ public class CNFFormula {
         return l;
     }
     
+    /**
+     * Check if the atom is constucted and saved yet
+     * if yes get the 'old' atom and return it
+     * if no add the atom in atoms (for the future) and return it.
+     * @param atom the atom
+     * @return the older atom equals or it if it's the first
+     */
     public Atom addAtom(Atom atom) {
         Atom a;
         int hC = atom.hashCode();
@@ -173,20 +228,44 @@ public class CNFFormula {
         return a;
     }
     
+    /**
+     * Add the clause in clauses.
+     * 
+     * @param clause the clause
+     */
     public void addClause(Clause clause) {
         clauses.add(clause);
         nClausesAndSOS++;
     }
     
+    /**
+     * Add the clause in sos.
+     * 
+     * @param clause the clause
+     */
     public void addSOS(Clause clause) {
         sos.add(clause);
         nClausesAndSOS++;
     }
     
+    /**
+     * Index of the current clause
+     * (start from 0)
+     * 
+     * @return index of the current clause
+     */
     public long getClauseIndex() {
         return nClausesAndSOS;
     }
     
+    /**
+     * Check Map<symbol, arity> arities to garanty the same symbol has always the
+     * sane number of parameters.
+     * 
+     * @param name symbol to check
+     * @param nArgs arity found
+     * @return true if the arity is equals, false otherwise
+     */
     public boolean checkArity(String name, int nArgs) {
         Integer n;
         if ((n = arities.get(name)) == null) {
@@ -200,10 +279,19 @@ public class CNFFormula {
         return false;
     }
     
+    /**
+     * Add an entry in Map symbol-arity
+     * @param name symbol name
+     * @param nArgs arity to assign to the symbol
+     */
     public void addArity(String name, int nArgs) {
         arities.put(name, nArgs);
     }
 
+    /**
+     * Rapresentation of precedences, weights, clauses saved
+     * @return a string that rapresent the precedences, weights, clauses saved
+     */
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder(getConstantString());
@@ -215,6 +303,10 @@ public class CNFFormula {
         return sb.toString();
     }
     
+    /**
+     * Rapresentation of all the constants saved
+     * @return a string that rapresent the constants saved
+     */
     public String getConstantString() { // DA MIGLIORARE
         StringBuilder sb = new StringBuilder("Constants: { ");
         Collection<Term> cost = terms.values();
@@ -227,6 +319,10 @@ public class CNFFormula {
         return sb.toString();
     }
     
+    /**
+     * Rapresentation of all the clauses saved in sos
+     * @return a string that rapresent the clauses saved in sos
+     */
     public String getSOSString() {
         if (sos.isEmpty()) return "";
         StringBuilder sb = new StringBuilder("sos: { ");
@@ -238,6 +334,10 @@ public class CNFFormula {
         return sb.toString();
     }
     
+    /**
+     * Rapresentation of all the clauses saved in clauses
+     * @return a string that rapresent the clauses saved in clauses
+     */
     public String getClausesString() {
         StringBuilder sb = new StringBuilder();
         sb.append(nClausesAndSOS);
@@ -253,6 +353,10 @@ public class CNFFormula {
         return sb.toString();
     }
     
+    /**
+     * Rapresentation of all the precendences saved
+     * @return a string that rapresent the precedences saved
+     */
     public String getPrecedencesString() {
         StringBuilder sb = new StringBuilder();
         if (nPrecedencesList < 1)
@@ -270,23 +374,42 @@ public class CNFFormula {
         return sb.toString();
     }
     
+    /**
+     * Add precedences and increment the number of them
+     */
     public void incrNPrecList() {
         nPrecedencesList++;
         precedences.add(new ArrayList<String>());
     }
     
+    /**
+     * Add a symbol in the current precedence
+     * @param s the symbol
+     */
     public void addPrecedence(String s) {
         precedences.get(nPrecedencesList).add(s);
     }
     
+    /**
+     * Return all the precedences
+     * @return the precedences
+     */
     public List<List<String>> getPrecedences() {
         return precedences;
     }
     
+    /**
+     * Return the number of precedences
+     * @return the number of precedences
+     */
     public int getNPrec() {
         return nPrecedencesList;
     }
     
+    /**
+     * Return the list of all the clauses saved in clauses
+     * @return the list of all the clauses saved in clauses
+     */
     public List<Clause> getClauses() {
         if (!primoUsoClauses) {
             for (Clause c : clauses)
@@ -297,6 +420,10 @@ public class CNFFormula {
         return clauses;
     }
     
+    /**
+     * Return the list of all the clauses saved in sos
+     * @return the list of all the clauses saved in sos
+     */
     public List<Clause> getSOS() {
         if (!primoUsoSOS) {
             for (Clause c : sos)
@@ -314,6 +441,11 @@ public class CNFFormula {
     }
     /* DEBUG fine */
     
+    /**
+     * Set the KBO weight of the symbol
+     * @param sym symbol
+     * @param weight weight of the symbol
+     */
     public void setWeight(String sym, String weight) {
         Object o = weights.put(sym, Integer.parseInt(weight));
         if (o != null) {
@@ -322,10 +454,17 @@ public class CNFFormula {
         }
     }
     
+    /**
+     * Set the KBO weight of the variables
+     */
     public void setWeightVars(String weight) {
         weightVars = Integer.parseInt(weight);
     }
     
+    /**
+     * Return a rapresentation of all the couple symbol-weight
+     * @return a rapresentation of all the couple symbol-weight
+     */
     public String getWeightsString() {
         if (weights.isEmpty())
             return "";
@@ -338,14 +477,26 @@ public class CNFFormula {
         return sb.toString();
     }
     
+    /**
+     * Return the map of all the weight (note: search efficiency)
+     * @return the map of all the weight
+     */
     public HashMap<String, Integer> getWeights() {
         return weights;
     }
     
+    /**
+     * Integer weight of the variables
+     * @return weight of the variables
+     */
     public int getWeightVars() {
         return weightVars;
     }
     
+    /**
+     * Complessive number of all the clauses (sum of clauses in clauses and sos)
+     * @return number of all the clauses
+     */
     public long getNumClausesAndSOS() {
         return nClausesAndSOS;
     }

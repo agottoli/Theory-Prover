@@ -6,8 +6,9 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- *
- * @author ale
+ * Function term.
+ * 
+ * @author Alessandro Gottoli vr352595
  */
 public class Function implements Term {
 
@@ -16,6 +17,12 @@ public class Function implements Term {
     // stringa della funzione così la calcolo solo una volta
     private String string;
 
+    /**
+     * Constructs a new function with given symbol and arguments.
+     * 
+     * @param symbol functionsymbol
+     * @param args arguments
+     */
     public Function(String symbol, List<Term> args) {
         this.symbol = symbol;
         this.args.addAll(args);
@@ -25,6 +32,11 @@ public class Function implements Term {
      symbol = sym;
      }
      */
+    
+    @Override
+    public void setSymbol(String sym) {
+        symbol = sym;
+    }
 
     @Override
     public String getSymbol() {
@@ -36,6 +48,11 @@ public class Function implements Term {
      }
      */
 
+    /**
+     * Return the arguments list of the function.
+     * 
+     * @return arguments
+     */
     public List<Term> getArgs() {
         return args;
     }
@@ -81,6 +98,12 @@ public class Function implements Term {
         return n;
     }
 
+    /**
+     * Return a tuple for the lexicographical ordering
+     * ONLY arguments
+     * 
+     * @return tuple
+     */
     public List<Term> getArgsTupla() {
         List<Term> l = new ArrayList<>();
         /*for (Term t : args)
@@ -126,11 +149,21 @@ public class Function implements Term {
         return hash;
     }
 
+    /**
+     * Return a multiset for the multiset ordering
+     * ONLY arguments
+     * 
+     * @return multiset
+     */
     public MultiSet getArgsMultiset() {
         return new MultiSet((List<Object>) (List<?>) args);
 
     }
 
+    /**
+     * Number of arguments (arity)
+     * @return number of arguments
+     */
     public int getNArgs() {
         return args.size();
     }

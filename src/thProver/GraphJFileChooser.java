@@ -1,13 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
- * JFileChooser.java
- *
- * Created on 9-giu-2011, 20.06.55
- */
 package thProver;
 
 import java.beans.PropertyChangeEvent;
@@ -33,7 +23,8 @@ import thProver.parser.CNFParser;
 import thProver.parserTptp.CNFParserTptp;
 
 /**
- *
+ * Frame to export graph with gui.
+ * 
  * @author Alessandro Gottoli vr352595
  */
 public class GraphJFileChooser extends javax.swing.JFrame {
@@ -289,7 +280,11 @@ public class GraphJFileChooser extends javax.swing.JFrame {
 	private void logPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_logPropertyChange
 	}//GEN-LAST:event_logPropertyChange
 
-        public void exportDot2Format(String format) {
+        /**
+         * Export the graph in given format.
+         * @param format 
+         */
+        private void exportDot2Format(String format) {
             //if (format == null || format == "")
             //    format = "jpg";
             String nameNoExt = name;
@@ -350,7 +345,11 @@ public class GraphJFileChooser extends javax.swing.JFrame {
             }
     }
         }
-        
+    
+    /**
+     * Export the graph in JPG format.
+     * @param evt 
+     */
     private void exportDot2JpgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportDot2JpgActionPerformed
         FileNameExtensionFilter filterJpg = new FileNameExtensionFilter("Image JPG", ".jpg", ".JPG", ".jpeg", ".JPEG");
         fc.setFileFilter(filterJpg);
@@ -358,6 +357,10 @@ public class GraphJFileChooser extends javax.swing.JFrame {
         fc.removeChoosableFileFilter(filterJpg);
     }//GEN-LAST:event_exportDot2JpgActionPerformed
 
+    /**
+     * Export the graph in PS format.
+     * @param evt 
+     */
     private void exportDot2PsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportDot2PsActionPerformed
         FileNameExtensionFilter filterPS = new FileNameExtensionFilter("PS file", ".ps", ".PS");
         fc.setFileFilter(filterPS);
@@ -365,6 +368,10 @@ public class GraphJFileChooser extends javax.swing.JFrame {
         fc.removeChoosableFileFilter(filterPS);
     }//GEN-LAST:event_exportDot2PsActionPerformed
 
+    /**
+     * Export the graph in PDF format.
+     * @param evt 
+     */
     private void exportDot2PdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportDot2PdfActionPerformed
         FileNameExtensionFilter filterPDF = new FileNameExtensionFilter("PDF file", ".pdf", ".PDF");  
         fc.setFileFilter(filterPDF);

@@ -11,8 +11,9 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *
- * @author ale
+ * Class implementing a substitution Varialble <-- Term
+ * 
+ * @author Alessandro Gottoli vr352595
  */
 public class Substitution {
 
@@ -41,6 +42,8 @@ public class Substitution {
      *
      * @param varSymbol the variable symbol
      * @param t the term to assign
+     * @exception IllegalArgumentException if v is in keyset --> bad substitution,
+     *                           or if v appears in t --> substitution non well formed
      */
     public void addAssignment(Variable v, Term t) throws IllegalArgumentException {
         /*if (v.equals(t)) {
@@ -69,6 +72,13 @@ public class Substitution {
         assignments.put(v, t);
     }
     
+    /**
+     * Check if the variable occours in term.
+     * 
+     * @param v variable
+     * @param t term
+     * @return true is occours, false otherwise.
+     */
     private boolean checkVarInTerm(Variable v, Term t) {
         if (t instanceof Function) {
             for (Term arg : ((Function) t).getArgs()) {
@@ -81,14 +91,29 @@ public class Substitution {
         return false;
     }
 
+    /**
+     * Return the Map of the assignments.
+     * 
+     * @return the assignemnts
+     */
     public Map<Variable, Term> getAssignments() {
         return assignments;
     }
     
+    /**
+     * Set the Map assignment.
+     * 
+     * @param map assignment to set
+     */
     public void setAssignments(Map<Variable, Term> map) {
         assignments = map;
     }
     
+    /**
+     * Check if the substitution is empty.
+     * 
+     * @return true iff the substitution is empty
+     */
     public boolean isEmpty() {
         return assignments.isEmpty();
     }
@@ -183,6 +208,12 @@ public class Substitution {
      }
      */
 
+    /**
+     * Return the term associated the given variable.
+     * 
+     * @param var variable
+     * @return term associated, null if no term associated
+     */
     public Term getTerm(Variable var) {
         return assignments.get(var);
     }
@@ -202,6 +233,11 @@ public class Substitution {
         return sb.toString();
     }
     
+    /**
+     * Clean the assignment of the substitution
+     * after this call a call to isEmpty() return true
+     * (rende la sostituzione vuota)
+     */
     public void clear() {
         assignments.clear();
     }
@@ -214,6 +250,11 @@ public class Substitution {
         return assignments == null;
     }
 */    
+    /**
+     * Deep copy.
+     * 
+     * @return a copy of this substitution
+     */
     public Substitution copy() {
         Substitution s = new Substitution();
         Map<Variable, Term> m = new LinkedHashMap<>();
@@ -222,6 +263,11 @@ public class Substitution {
         return s;
     }
     
+    /**
+     * Check if this substitution is well formed.
+     * 
+     * @return true iff is well formed
+     */
     public boolean isWellFormed() {
         // DA MIGLIORARE ma giusta di sicuro
         /*Substitution copia = this.copy();
@@ -254,6 +300,12 @@ public class Substitution {
         return true;
     }
     
+    /**
+     * Rename the variable symbols with a new index
+     * 
+     * @param time new index
+     * @return a new map with the variables renamed
+     */
     public Map<String, Variable> renameVariables(long time) {
         /*Map<Variable, Term> temp = assignments;
         assignments = new LinkedHashMap<>(temp.size());

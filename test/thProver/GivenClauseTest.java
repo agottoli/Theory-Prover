@@ -139,7 +139,7 @@ public class GivenClauseTest {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            Picture p = new Picture("DOTfile/" + fileName + ".jpg");
+            //Picture p = new Picture("DOTfile/" + fileName + ".jpg");
             //p.show();
             //sb.append(grafo);
 

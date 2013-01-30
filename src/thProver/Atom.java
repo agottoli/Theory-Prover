@@ -11,9 +11,9 @@ import java.util.Map;
 import java.util.Objects;
 
 /**
- * Predicate
+ * Predicate with eventually terms as arguments
  * 
- * @author ale
+ * @author Alessandro Gottoli vr352595
  */
 public class Atom {
     
@@ -25,16 +25,35 @@ public class Atom {
     // e pure il numero dei simboli
     private int symsNum = 0;
     
+    /**
+     * Constructs a propositional atom, with given predicate.
+     * 
+     * @param symbol predicate
+     */
     public Atom(String symbol) {
         this.symbol = symbol;
         args = new ArrayList<>();
     }
     
+    /**
+     * Constructs an atom with given predicate and arguments
+     * 
+     * @param symbol predicate
+     * @param args arguments
+     */
     public Atom(String symbol, List<Term> args) {
         this.symbol = symbol;
         this.args = args;
     }
     
+    /**
+     * Constructs an atom with given predicate and arguments
+     * and set a weight.
+     * 
+     * @param symbol predicate
+     * @param args arguments
+     * @param weight weight
+     */
     public Atom(String symbol, List<Term> args, int weight) {
         this.symbol = symbol;
         this.args = args;
@@ -57,22 +76,45 @@ public class Atom {
     }
     // per il parser (fine)*/
     
+    /**
+     * Set the weight.
+     * 
+     * @param w weight
+     */
     public void setWeight(int w) {
         weight = w;
     }
     
+    /**
+     * Return the predicate symbol.
+     * 
+     * @return predicate
+     */
     public String getSymbol() {
         return symbol;
     }
     
+    /**
+     * Return the argument terms. 
+     * @return list of argumets
+     */
     public List<Term> getArgs() {
         return args;
     }
     
+    /**
+     * Retutn the weight
+     * @return the weght
+     */
     public int getWeight() {
         return weight;
     }
     
+    /**
+     * Return a deep copy
+     * 
+     * @return a copy
+     */
     public Atom copy() {
         List<Term> argsNuovi = new ArrayList<>();
         for (Term t : args)
@@ -144,6 +186,11 @@ public class Atom {
         return hash;
     }
 
+    /**
+     * Return the number of symbols.
+     * 
+     * @return number of symbols
+     */
     public int symbolsNumber() {
         if (symsNum != 0)
             return symsNum;
@@ -157,7 +204,11 @@ public class Atom {
         return symsNum = n;
     }
     
-    
+    /**
+     * Return a tuple for the lexicographical ordering
+     * 
+     * @return tuple
+     */
     public List<Object> getTupla() {
         List<Object> l = new ArrayList<>();
         l.add(this);
@@ -165,6 +216,12 @@ public class Atom {
         
     }
     
+    /**
+     * Return a tuple for the lexicographical ordering
+     * ONLY arguments
+     * 
+     * @return tuple
+     */
     public List<Term> getArgsTupla() {
         //if (args == null)
         //    return null;
@@ -179,14 +236,29 @@ public class Atom {
         //return Collections.unmodifiableList(args);
     }
 
+    /**
+     * Return a multiset for the multiset ordering
+     * ONLY arguments
+     * 
+     * @return multiset
+     */
     public MultiSet getArgsMultiset() {
         return new MultiSet((List<Object>) (List<?>) args);
     }
-
+    
+    /**
+     * Return a multiset for the multiset ordering
+     * 
+     * @return multiset
+     */
     MultiSet getMultiset() {
         return new MultiSet(this);
     }
 
+    /**
+     * Number of arguments (arity)
+     * @return number of arguments
+     */
     int getNArgs() {
         return args.size();
     }
@@ -200,6 +272,19 @@ public class Atom {
         return new Atom(symbol, argsNuovi);
     }
 */   
+     /**
+     * Constructs a new atom from the application of the given substitution 
+     * to this atom.
+     * (Note: apply ' to distinguish variables with equals name 
+     * (and different index)
+     * example: in case of x_3 and x_4 --> x_newIndex and x'_newIndex
+     * 
+     * @param tau substitution
+     * @param vars map of variables and new name given in the results
+     * @param time index of the new clause
+     * @return the new atom if the substitution modify the atom
+     *         this if the substitution has no effects.
+     */
     public Atom applySubstitution(Substitution tau, Map<String, Variable> vars, long time) {
         List<Term> argsNuovi = new ArrayList<>();
         for (Term te : args)

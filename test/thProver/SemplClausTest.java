@@ -59,7 +59,7 @@ public class SemplClausTest {
                 sb.append("\nLa clausola ");
                 sb.append(c.toString());
                 Clause semplificata;
-                if ((semplificata = c.semplClaus(othC, indexingC)) == null)
+                if ((semplificata = c.simplifies(othC, indexingC)) == null)
                     sb.append(" NON");
                 sb.append(" semplifica ");
                 sb.append(othC.toString());

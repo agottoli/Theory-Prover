@@ -10,8 +10,12 @@ import java.util.List;
 import java.util.ListIterator;
 
 /**
- *
- * @author ale
+ * Class that implements three type of ordering:
+ * - lexicographic
+ * - multiset
+ * - Knuth-Bendix (kbo)
+ * 
+ * @author Alessandro Gottoli vr352595
  */
 public class Ordering {
 
@@ -39,6 +43,10 @@ public class Ordering {
     HashMap<String, Integer> countB;
     boolean errCountVars;
     
+    /**
+     * Construct a new empty ordering 
+     * to set up with setPrecedence and setWeights
+     */
     public Ordering() {
         kbo = false;
         statusMultiSet = false;
@@ -46,23 +54,46 @@ public class Ordering {
         countB = new HashMap<>();
     }
     
+    /**
+     * Set to use the standard ordering implemented if the argument is true.
+     * Otherwise use the user defined precedence.
+     * 
+     * @param o true for use standart, false for use user defined
+     */
     public void setUseOrdStandard(boolean o) {
         useOrdStandard = o;
     }
     
+    /**
+     * Set the precedences defined by the user.
+     * 
+     * @param prec precedences
+     * @param nPrec number of precedences
+     */
     public void setPrecedence(List<List<String>> prec, int nPrec) {
         this.prec = prec;
         this.nPrec = nPrec;
     }
 
-    public boolean isGreaterInPrecedence(String a, String b, Object objA, Object objB) {
+    /**
+     * Check if the first element symbol is greater in precedences 
+     * respect to the second element symbol
+     * 
+     * @param a first element symbol
+     * @param b second element symbol
+     * @param objA first element (for standard)
+     * @param objB second element (for standard)
+     * @return true if the first is greater in precedences respect to the second
+     *         false otherwise.
+     */
+    private boolean isGreaterInPrecedence(String a, String b, Object objA, Object objB) {
         //////// EXPERIMENTAL //////////
         if (useOrdStandard) {
             if (objA instanceof Variable)
                 return false; // le variabili sono le ultime
             if (objB instanceof Variable) {// adesso a not var
                 //if (objA instanceof Atom &&
-                //        (a.equals("Top") || a.equals("Bottom")) )
+                //        (a.equals("*Top*") || a.equals("*Bottom*")) )
                 //    return false;
                 //return true;
                 // non si può dire che è più grande di una variabile
@@ -74,7 +105,7 @@ public class Ordering {
                 else if (objB instanceof Function)
                     return false;
                 else // Atom (può capitare?)
-                    return b.equals("Top") || b.equals("Bottom");
+                    return b.equals("*Top*") || b.equals("*Bottom*");
             }
             if (objA instanceof Function) {
                 if (objB instanceof Constant)
@@ -82,14 +113,14 @@ public class Ordering {
                 else if (objB instanceof Function)
                     return a.compareTo(b) < 0;
                 else // Atom (può capitare)
-                    return b.equals("Top") || b.equals("Bottom");
+                    return b.equals("*Top*") || b.equals("*Bottom*");
             }
             // objA sicuramente è un atomo
-            if (a.equals("Top"))
+            if (a.equals("*Top*"))
                 return false;
-            if (a.equals("Bottom")) {
+            if (a.equals("*Bottom*")) {
                 if (objB instanceof Atom) {
-                    if (b.equals("Top"))
+                    if (b.equals("*Top*"))
                         return true;
                     return false;
                 }
@@ -99,7 +130,7 @@ public class Ordering {
             if (objB instanceof Constant || objB instanceof Function)
                 return true;
             // anche objB è un atomo
-            if (b.equals("Bottom") || b.equals("Top"))
+            if (b.equals("*Bottom*") || b.equals("*Top*"))
                 return true; // perché a non può essere Top o Bottom
             // entrambi atomi non Top o Bottom
             return a.compareTo(b) < 0;
@@ -119,21 +150,36 @@ public class Ordering {
         return false;
     }
     
+    /**
+     * Set the weight for kbo
+     * 
+     * @param wF map of the weights of other symbols
+     * @param wV weight of the variables
+     */
     public void setWeightsKBO(HashMap<String, Integer> wF, int wV) {
         weightFunction = wF;
         weightVars = wV;
     }
     
+    /**
+     * Set tu use the multiset ordering
+     */
     public void setMultiSetOrdering() {
         kbo = false;
         statusMultiSet = true;
     }
     
+    /**
+     * Set to use the lexicographic ordering
+     */
     public void setLexicographicOrdering() {
         kbo = false;
         statusMultiSet = false;
     }
     
+    /**
+     * Set to use the Knuth-Bendix ordering
+     */
     public void setKBOrdering() {
         kbo = true;
         statusMultiSet = true;
@@ -141,13 +187,13 @@ public class Ordering {
     
 
     /**
-     * Passo iniziale dell'ordinamento ricorsivo a cammini (o lessicagrafico)
+     * Passo iniziale dell'ordinamento ricorsivo a cammini (o lessicagrafico).
      *
      * @param a Termine o Atomo o Letterale
      * @param b Termine o Atomo o Letterale
-     * @return
+     * @return true if a result greater of b
      */
-    public boolean isGreaterMulLex(Object a, Object b) {
+    private boolean isGreaterMulLex(Object a, Object b) {
         /* NON SI CONFRONTANO CLAUSOLE, ma si comincia dai LETTERALI DI  UNA CLAUSOLA
          if (a instanceof Clause) {
          List<Object> la = (List<Object>)(List<?>) ((Clause) a).getMultiSet();
@@ -289,8 +335,15 @@ public class Ordering {
             return false; // simboli incommensurabili
     }
 
-
-    public boolean isGreaterMul(MultiSet a, MultiSet b) {
+    /**
+     * Sottoprocedura per mul.
+     * Confronta due multiinsiemi.
+     * 
+     * @param a multiset a
+     * @param b multiset b
+     * @return true if a>b, false otherwise.
+     */
+    private boolean isGreaterMul(MultiSet a, MultiSet b) {
         if (!a.isEmpty() && b.isEmpty()) {
             // regola 1
             return true;
@@ -343,8 +396,16 @@ public class Ordering {
      }
      */
 
-
-    public int isGreaterLex(List<Object> a, List<Object> b) {
+    /**
+     * Sottoprocedura per lex.
+     * Confronta 2 tuple.
+     * 
+     * @param a tupla a
+     * @param b tupla b
+     * @return -1 se a non è maggiore di b
+     *         indice dell'elemento che mi renda a maggiore di b.
+     */
+    private int isGreaterLex(List<Object> a, List<Object> b) {
         int i = 0;
         ListIterator<Object> iA = a.listIterator();
         ListIterator<Object> iB = b.listIterator();
@@ -364,6 +425,12 @@ public class Ordering {
         return -1;
     }
 
+    /**
+     * Return the list of maximal literals of the given clause.
+     * 
+     * @param clause clause
+     * @return list of maximal literals of clause
+     */
     public List<Literal> getMaximalLiterals(Clause clause) {
         Object[] lits = clause.getLiterals().toArray();
 
@@ -400,6 +467,13 @@ public class Ordering {
         return maxLits;
     }
     
+    /**
+     * Check if the given literal is maximal in clause (never used)
+     * 
+     * @param l literal
+     * @param c clause
+     * @return true if l is maximal in c, false otherwise.
+     */
     public boolean isMaxLitInClause(Literal l, Clause c) {
         // l massimale in c se > o # 
         for (Literal l2 : c.getLiterals()) {
@@ -411,7 +485,14 @@ public class Ordering {
         return true;
     }
     
-    public boolean isGreaterKBO(Object a, Object b) {
+    /**
+     * Controlla se l'oggetto a è maggiore di b nell'ordinamento kbo
+     * 
+     * @param a oggetto a
+     * @param b oggetto b
+     * @return true se a è maggiore di b, false altrimenti.
+     */
+    private boolean isGreaterKBO(Object a, Object b) {
 
         if (a instanceof Literal) {
             if (((Literal) a).getAtom().equals(((Literal) b).getAtom())
@@ -507,7 +588,14 @@ public class Ordering {
         return false;
     }
     
-    public int weight(Object t, boolean isA) { // throws NullPointerException {
+    /**
+     * Sottoprocedura per kbo
+     * 
+     * @param t
+     * @param isA
+     * @return 
+     */
+    private int weight(Object t, boolean isA) { // throws NullPointerException {
         if (t instanceof Atom) {
             int argsWeight = 0;
             List<Term> args = ((Atom) t).getArgs();
@@ -580,6 +668,14 @@ public class Ordering {
      
     }
     
+    /**
+     * Sottoprocedura per kbo
+     * controlla la condizione KBO2a
+     * 
+     * @param a
+     * @param b
+     * @return 
+     */
     private boolean checkFnToXKBO(Object a, Variable b) {
         if (a instanceof Atom) {
             return ((Atom) a).getArgs().get(0).equals(b);
@@ -594,6 +690,11 @@ public class Ordering {
             
     }
     
+    /**
+     * ritorna il tipo di ordinamento settato
+     * 
+     * @return il tipo di ordinamento settato
+     */
     public String getTipeOrdering() {
         if (kbo)
             return "kbo";
@@ -602,6 +703,14 @@ public class Ordering {
         return "lex";
     }
     
+    /**
+     * Procedure to determine if the object a is greater of the object b.
+     * The ordering used has to be choose before call this.
+     * 
+     * @param a object a
+     * @param b object b
+     * @return true if a>b, false othewise
+     */
     public boolean isGreater(Object a, Object b) {
         if (kbo)
             return isGreaterKBO(a, b);

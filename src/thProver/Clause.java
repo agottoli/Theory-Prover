@@ -46,7 +46,9 @@ public class Clause implements Comparable<Clause> {
     boolean visitato = false;
 
     /**
-     * Constructs an empty clause.
+     * Constructs an empty clause with index given
+     * 
+     * @param index clause index
      */
     public Clause(long index) {
         literals = new LinkedHashSet<>();
@@ -55,6 +57,11 @@ public class Clause implements Comparable<Clause> {
         indiceClausola = index;
     }
 
+    /**
+     * Constructs a clause with given literals and index.
+     * @param lits literals of the clause
+     * @param index index of the clause
+     */
     public Clause(Set<Literal> lits, long index) {
         this(index);
         literals = lits;
@@ -65,6 +72,13 @@ public class Clause implements Comparable<Clause> {
                 this.negLits.add(l);
     }
 
+    /**
+     * Constructs a clause with given literals and index.
+     * 
+     * @param lits1 literal set 1
+     * @param lits2 lireral set 2
+     * @param index clause index
+     */
     // per quando creo una clausola da una regola di espansione
     // C or L  -L or D --> C or D
     public Clause(List<Literal> lits1, List<Literal> lits2, long index) {
@@ -121,18 +135,43 @@ public class Clause implements Comparable<Clause> {
         }
     }
     
+    /**
+     * Return the clause literals.
+     * 
+     * @return literals
+     */
     public Set<Literal> getLiterals() {
         return literals;
     }
 
+    /**
+     * Return the clause positive literals.
+     * 
+     * @return positive literals
+     */
     public List<Literal> getPosiviveLiterals() {
         return posLits;
     }
 
+    /**
+     * Return the clause negative literals.
+     * 
+     * @return negative literals
+     */
     public List<Literal> getNegativeLiterals() {
         return negLits;
     }
     
+    /**
+     * Set parents that generate the clause with wich inference rule
+     * (resolution or semplification) with or without ordering 
+     * specified the used substitution
+     * 
+     * @param par list of clauses parents of the clause
+     * @param ris true if used rule is resolution, false if semplification
+     * @param ordinata true if ordering is used, false otherwise
+     * @param sub the substitution used (empty substitution if not used)
+     */
     // per la risoluzione e semplificazione (2 padri)
     public void setParentsRuleAndSub(List<Clause> par, boolean ris, 
             boolean ordinata, Substitution sub) {
@@ -149,6 +188,15 @@ public class Clause implements Comparable<Clause> {
         this.substitutionFrom = sub;
     }
     
+    /**
+     * Set parent that generate the clause with factorization with or without 
+     * ordering 
+     * specified the used substitution
+     * 
+     * @param par parent clause
+     * @param ordinata true if used ordering
+     * @param sub substitution used (empty substitution if not used)
+     */
     // per la fattorizzazione (1 padre)
     public void setParentsRuleAndSub(Clause par, boolean ordinata, Substitution sub) {
         parents = new ArrayList<>();
@@ -160,14 +208,29 @@ public class Clause implements Comparable<Clause> {
         this.substitutionFrom = sub.copy();
     }
     
+    /**
+     * Get list of clause parents.
+     * 
+     * @return list of clause parents
+     */
     public List<Clause> getParents() {
         return parents;
     }
 
+    /**
+     * Number of literals in clause.
+     * 
+     * @return number of literals
+     */
     public int size() {
         return literals.size();
     }
 
+    /*
+     * Representation of the clause.
+     * 
+     * @return representation of the clause
+     */
     @Override
     public String toString() {
         if (string != null)
@@ -186,10 +249,13 @@ public class Clause implements Comparable<Clause> {
         return sb.toString();
     }
 
-    /**
+    /*
      * Compares clauses using the number of symbols
      *
      * @param c the other clause
+     * @return <code>< 0<\code> if this clause is before in ordering
+     *         <code>> 0<\code> if this clause is after in ordering
+     *         <code>0<\code> if this clause is equals the other clause
      */
     @Override
     public int compareTo(Clause c) {
@@ -202,6 +268,11 @@ public class Clause implements Comparable<Clause> {
         return diff;
     }
 
+    /**
+     * Calculate the symbols number for compare clause
+     * 
+     * @return symbols number
+     */
     private int symbolsNumber() {
         if (numSymbs != 0)
             return numSymbs;
@@ -212,6 +283,12 @@ public class Clause implements Comparable<Clause> {
         return n;
     }
 
+    /*
+     * Check equality of the clauses
+     * 
+     * @param obj other clause
+     * @return true if quals, false otherwise
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj)
@@ -239,6 +316,11 @@ public class Clause implements Comparable<Clause> {
         return false;
     }
 
+    /*
+     * Calculate hashCode (for Map).
+     * 
+     * @return hashcode
+     */
     @Override
     public int hashCode() {
         int hash = 5;
@@ -246,6 +328,11 @@ public class Clause implements Comparable<Clause> {
         return hash;
     }
 
+    /**
+     * Check if the clause is empty.
+     * 
+     * @return true if 0 literals, false otherwise
+     */
     boolean isEmpty() {
         return literals.isEmpty();
     }
@@ -270,6 +357,11 @@ public class Clause implements Comparable<Clause> {
         return false;
     }
 
+    /**
+     * Return maximal literals of the clause given an ordering
+     * @param ord the ordering
+     * @return literal list
+     */
     public List<Literal> getMaximalLiterals(Ordering ord) {
         if (maximalLits == null) {
             calculateMaximalLits(ord);
@@ -284,10 +376,18 @@ public class Clause implements Comparable<Clause> {
         return maximalLits;
     }
 
-    public void calculateMaximalLits(Ordering ord) {
+    private void calculateMaximalLits(Ordering ord) {
         maximalLits = ord.getMaximalLiterals(this);
     }
 
+    /**
+     * Return clause factors.
+     * 
+     * @param indexingC object to assign an univoke index to new clauses
+     * @param all <cod>true<\code> if calcule the factors of the factor recursively
+     *            <code>false<\code> if only factors of this clause
+     * @return clause set of factors (empty set if no factors)
+     */
     public Set<Clause> getFactors(IndexingClauses indexingC, boolean all) {
         if (factors == null)
             calculateFactors(indexingC, all);
@@ -295,6 +395,15 @@ public class Clause implements Comparable<Clause> {
         return factors; //=
     }
 
+    /**
+     * Return clause factors given an ordering.
+     * 
+     * @param ord ordering to use
+     * @param indexingC object to assign an univoke index to new clauses
+     * @param all <code>true<\code> if calcule the factors of the factor recursively
+     *            <code>false<\code> if only factors of this clause
+     * @return clause set of factors (empty set if no factors)
+     */
     public Set<Clause> getMaximalFactors(Ordering ord, IndexingClauses indexingC, boolean all) {
         if (maximalFactors == null)
             calculateMaximalFactors(ord, indexingC, all);
@@ -476,6 +585,19 @@ public class Clause implements Comparable<Clause> {
      }
      */
     
+    /**
+     * Constructs a new clause from the application of the given substitution 
+     * to the clause.
+     * (Note: apply ' to distinguish variables with equals name 
+     * (and different index)
+     * example: in case of x_3 and x_4 --> x_newIndex and x'_newIndex
+     * 
+     * @param tau substitution
+     * @param vars map of variables and new name given in the results
+     * @param time index of the new clause
+     * @return the new clause if the substitution modify the clause
+     *         this if the substitution has no effects.
+     */
     public Clause applySubstitution(Substitution tau, Map<String, Variable> vars, long time) {
         //long time = System.nanoTime();
         Set<Literal> lits = new LinkedHashSet<>();
@@ -486,6 +608,11 @@ public class Clause implements Comparable<Clause> {
         return new Clause(lits, time); // ???? PARENTS? no lo fa dopo nel metodo che l'ha chiamato
     }
 
+    /**
+     * Representation of clause factors.
+     * 
+     * @return representation of factors
+     */
     public String getFactorsString() {
         if (factors == null)
             return "i fattori sono ancora da calcolare."; //calculateFactors();
@@ -503,6 +630,11 @@ public class Clause implements Comparable<Clause> {
         return sb.toString();
     }
 
+    /**
+     * Representation of clause factors calculated from ordering.
+     * 
+     * @return representation of factors
+     */
     public String getMaximalFactorsString() {
         if (maximalFactors == null)
             //calculateMaximalFactors();
@@ -521,6 +653,13 @@ public class Clause implements Comparable<Clause> {
         return sb.toString();
     }
 
+    /**
+     * Calculate the resolvents from the clauses.
+     * 
+     * @param othC the other clause
+     * @param indexingC object to indexing the new clauses
+     * @return resolvent clauses set
+     */
     public Set<Clause> resolvents(Clause othC, IndexingClauses indexingC) {
         Set<Clause> resolvents = new LinkedHashSet<>(); // oppure LinkedHashSet<>(); che non ha il problema dell'incremento dei costi di TreeSet
 
@@ -597,6 +736,15 @@ public class Clause implements Comparable<Clause> {
         return resolvents;
     }
 
+    /**
+     * Return all the resolvent form the clauses
+     * (c1 + c2) , (factors(c1) + c2) , (c1 + factors(c2)) , 
+     * (factors(c1) + factors(c2))
+     * 
+     * @param othC the other clause
+     * @param indexingC object to indexing the new clauses
+     * @return all resolvent clauses set
+     */
     public Set<Clause> allTheResolvents(Clause othC, IndexingClauses indexingC) {
         Set<Clause> resolvents = new LinkedHashSet<>();
 
@@ -612,6 +760,13 @@ public class Clause implements Comparable<Clause> {
         return resolvents;
     }
 
+    /**
+     * Calculate the resolvents from the clauses with a given ordering.
+     * 
+     * @param othC the other clause
+     * @param indexingC objecto to indexing the new clauses
+     * @return resolvent clauses set
+     */
     public Set<Clause> orderedResolvents(Clause othC, IndexingClauses indexingC) {
         //getMaximalLiterals(ord); // così se non già calcolati non da problemi
 
@@ -686,6 +841,16 @@ public class Clause implements Comparable<Clause> {
         return resolvents;
     }
 
+    /**
+     * Return all the resolvent form the clauses given an ordering
+     * (c1 + c2) , (factors(c1) + c2) , (c1 + factors(c2)) , 
+     * (factors(c1) + factors(c2))
+     * 
+     * @param othC the other clause
+     * @param ord the ordering
+     * @param indexingC object to indexing the new clauses
+     * @return all resolvent clauses set
+     */
     public Set<Clause> allTheOrderedResolvents(Clause othC, Ordering ord
             , IndexingClauses indexingC) {
         Set<Clause> resolvents = new LinkedHashSet<>();
@@ -730,6 +895,14 @@ public class Clause implements Comparable<Clause> {
 */
     /****************** SUSSUNZIONE MIA inizio *********************/
     
+    /**
+     * Return the substutution (if exists) that is used to subsume the
+     * other clause.
+     * 
+     * @param othC the other clause
+     * @return substitution use (empty sub if no necessary)
+     *         null if this not subsumes the other clause
+     */
     public Substitution subsumes(Clause othC) {
         //boolean subsumes = false;
 
@@ -818,6 +991,14 @@ public class Clause implements Comparable<Clause> {
         return null; //subsumes;
     }
 
+    /**
+     * Fa una lista di simboli di predicato (con il segno) associato a tutti i 
+     * letterali che hanno quel simbolo nella clausola
+     * 
+     * @param literals letterali della clausola
+     * @return la map che associa simbolo con segno a tutti i letterali della 
+     *         clausola che iniziano con lui
+     */
     private Map<String, List<Literal>> collectLikeLiterals(Set<Literal> literals) {
         Map<String, List<Literal>> likeLiterals = new LinkedHashMap<String, List<Literal>>();
         for (Literal l : literals) {
@@ -839,7 +1020,18 @@ public class Clause implements Comparable<Clause> {
         return likeLiterals;
     }
 
-    public Substitution checkSub(
+    /**
+     * Metodo che effettivamente controlla se posso sussumere.
+     * 
+     * @param thisToTry map dei simboli di questa da provare
+     * @param othCToTry map dei simboli di altra da provare
+     * @param sigma la sostituzione fino a questo momento
+     * @param isDiVarianti true se è una sussunzione di varianti 
+     *                     (non serve più ma lo lascio per sicurezza)
+     * @return la sostituzione che permette la sussunzione,
+     *         null se non sussume
+     */
+    private Substitution checkSub(
             Map<String, List<Literal>> thisToTry,
             Map<String, List<Literal>> othCToTry,
             Substitution sigma,
@@ -920,6 +1112,13 @@ public class Clause implements Comparable<Clause> {
     /****************** SUSSUNZIONE MIA fine *********************/
     
     /************* SUSSUNZIONE Chang-Lee pag. 95 *****************/
+    /**
+     * Subsumption Chang-Lee style.
+     * It uses resolvents...
+     * 
+     * @param othC the other clause
+     * @return 
+     */
     // return  Substitution (mia) boolean (libro)
     public boolean subsumesChangLee(Clause othC) {
         return false;
@@ -927,7 +1126,14 @@ public class Clause implements Comparable<Clause> {
     /************** SUSSUNZIONE Chang-Lee fine *******************/
     
     
-    public Clause semplClaus(Clause othC, IndexingClauses indexingC) {
+    /**
+     * Clausal simplification.
+     * 
+     * @param othC the clause to semplificate
+     * @param indexingC object to indexing the new clause
+     * @return the simplified clause, null if not simplifies
+     */
+    public Clause simplifies(Clause othC, IndexingClauses indexingC) {
         if (this.literals.size() != 1)
             return null; // infatti deve essere unitaria per applicare la regola
         if (othC.literals.size() < 2)
@@ -961,6 +1167,12 @@ public class Clause implements Comparable<Clause> {
         return null;
     }
     
+    /**
+     * Return a dot source string that represent the genealogical tree of the clause.
+     * Used to print the gragh of the refutational prove
+     * 
+     * @return a dot source string that represent the genealogical tree of the clause
+     */
     public String getDOT() {
         StringBuilder sb = new StringBuilder("digraph {\n");
         sb.append("\tnodesep=\"1.5\"; ranksep=2;\n");
@@ -1007,7 +1219,8 @@ public class Clause implements Comparable<Clause> {
         return sb.toString();
     }
     
-    public void resetVisitato() {
+    
+    private void resetVisitato() {
         if (!visitato)
             return;
         
@@ -1020,6 +1233,9 @@ public class Clause implements Comparable<Clause> {
         }
     }
     
+    /**
+     * Reset fields in case of second incocation of the satisfiability procedure
+     */
     public void resetForOtherOrdering() {
         //factors = null; // non serve e poi velocizzo le volte dopo perché
         //                   non vedo ricalcolarli

@@ -42,14 +42,26 @@ public class Literal {
     }
     // per il parser (fine)*/
     
+    /**
+     * Check the sign of the literal.
+     * @return true iff the literal is positive
+     */
     boolean isPositive() {
         return positive;
     }
 
+    /**
+     * Return the literal atom.
+     * @return the atom
+     */
     public Atom getAtom() {
         return atom;
     }
     
+    /**
+     * Deep copy of the literal
+     * @return a new copy
+     */
     public Literal copy() {
         return new Literal(positive, atom.copy());
     }
@@ -93,26 +105,36 @@ public class Literal {
         return hash;
     }
     
-    public int symbolsNumber() {
+    protected int symbolsNumber() {
         return atom.symbolsNumber();
     }
     
+    /**
+     * Return a tuple for the lexicographical ordering
+     * 
+     * @return tuple
+     */
     public List<Object> getTupla() {
         List<Object> l = new ArrayList<>();
         l.add(this.atom);
         if (isPositive())
-            l.add(new Atom("Top"));
+            l.add(new Atom("*Top*"));
         else
-            l.add(new Atom("Bottom"));
+            l.add(new Atom("*Bottom*"));
         return l;
     }
 
+    /**
+     * Return a multiset for the multiset ordering
+     * 
+     * @return multiset
+     */
     MultiSet getMultiset() {
         MultiSet ms = new MultiSet(this.atom);
         if (isPositive())
-            ms.addElement(new Atom("Top"));
+            ms.addElement(new Atom("*Top*"));
         else
-            ms.addElement(new Atom("Bottom"));
+            ms.addElement(new Atom("*Bottom*"));
         return ms;
     }
     /*
@@ -123,6 +145,19 @@ public class Literal {
         return new Literal(positive, a);
     }*/
     
+     /**
+     * Constructs a new literal from the application of the given substitution 
+     * to this literal.
+     * (Note: apply ' to distinguish variables with equals name 
+     * (and different index)
+     * example: in case of x_3 and x_4 --> x_newIndex and x'_newIndex
+     * 
+     * @param tau substitution
+     * @param vars map of variables and new name given in the results
+     * @param time index of the new clause
+     * @return the new literal if the substitution modify the literal
+     *         this if the substitution has no effects.
+     */
     public Literal applySubstitution(Substitution tau, Map<String, Variable> vars, long time) {
         Atom a = atom.applySubstitution(tau, vars, time);
         if (a.equals(atom))

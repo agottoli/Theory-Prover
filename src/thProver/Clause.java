@@ -1117,7 +1117,7 @@ public class Clause implements Comparable<Clause> {
      * It uses resolvents...
      * 
      * @param othC the other clause
-     * @return 
+     * @return ???
      */
     // return  Substitution (mia) boolean (libro)
     public boolean subsumesChangLee(Clause othC) {

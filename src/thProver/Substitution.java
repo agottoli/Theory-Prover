@@ -40,7 +40,7 @@ public class Substitution {
     /**
      * Adds an assignment to this substitution.
      *
-     * @param varSymbol the variable symbol
+     * @param v the variable
      * @param t the term to assign
      * @exception IllegalArgumentException if v is in keyset --> bad substitution,
      *                           or if v appears in t --> substitution non well formed

@@ -591,9 +591,9 @@ public class Ordering {
     /**
      * Sottoprocedura per kbo
      * 
-     * @param t
-     * @param isA
-     * @return 
+     * @param t oggetto da pesare
+     * @param isA true se l'oggetto sta in a (trucco per contare le variabili)
+     * @return il peso dell'oggetto passato
      */
     private int weight(Object t, boolean isA) { // throws NullPointerException {
         if (t instanceof Atom) {
@@ -672,9 +672,9 @@ public class Ordering {
      * Sottoprocedura per kbo
      * controlla la condizione KBO2a
      * 
-     * @param a
-     * @param b
-     * @return 
+     * @param a funzione
+     * @param b argomento
+     * @return true se si può applicare la regola kbo2a
      */
     private boolean checkFnToXKBO(Object a, Variable b) {
         if (a instanceof Atom) {

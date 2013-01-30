@@ -21,8 +21,7 @@ public class Literal {
      * Constructs a literal.
      *
      * @param positive is this a positive literal?
-     * @param symbol the predicate symbol
-     * @param args the list of term arguments
+     * @param atom the atom
      */
     public Literal(boolean positive, Atom atom) {
         this.positive = positive;

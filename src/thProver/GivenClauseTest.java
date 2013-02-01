@@ -1,5 +1,6 @@
 package thProver;
 
+import thProver.gui.JFileChooserDemo;
 import thProver.*;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
@@ -405,7 +406,7 @@ public class GivenClauseTest {
         line = stdin.nextLine();
         sb.append("const: ").append(line).append('\n');
 
-        System.out.println("Please, insert the precedence (signature symbol separate by '>', ? for help)");
+        System.out.println("Please, insert the precedence (symbols separate by '>', ? for help)");
         sb.append("prec: ");
         while (true) {
             line = stdin.nextLine();
@@ -415,7 +416,7 @@ public class GivenClauseTest {
                 break;
             if (line.equals("?")) {
                 System.out.println(
-                        "Insert a precedence (if partial a furthermore precedence can be inserted in a new line or with separator ';').\n"
+                        "Insert a precedence (if partial a further precedence can be inserted in a new line or with separator ';').\n"
                         + "Insert \"end\" in a line to terminate the formula.\n");
                 continue;
             }

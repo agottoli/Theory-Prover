@@ -342,7 +342,7 @@ public class Clause implements Comparable<Clause> {
      *
      * @return <code>true</code> iff this clause is a tautology
      */
-    boolean isTautology() {
+    public boolean isTautology() {
 
         for (Literal l1 : posLits) {
             Atom a1 = l1.getAtom();
@@ -365,19 +365,19 @@ public class Clause implements Comparable<Clause> {
     public List<Literal> getMaximalLiterals(Ordering ord) {
         if (maximalLits == null) {
             calculateMaximalLits(ord);
-            posMaximalLits = new ArrayList<>();
-            negMaximalLits = new ArrayList<>();
-            for (Literal l : maximalLits)
-                if (l.isPositive())
-                    posMaximalLits.add(l);
-                else
-                    negMaximalLits.add(l);
         }
         return maximalLits;
     }
 
     private void calculateMaximalLits(Ordering ord) {
         maximalLits = ord.getMaximalLiterals(this);
+        posMaximalLits = new ArrayList<>();
+        negMaximalLits = new ArrayList<>();
+        for (Literal l : maximalLits)
+           if (l.isPositive())
+               posMaximalLits.add(l);
+           else
+               negMaximalLits.add(l);
     }
 
     /**
@@ -498,7 +498,7 @@ public class Clause implements Comparable<Clause> {
         List<Literal> maxLits = new ArrayList<>();
         List<Literal> lits = new ArrayList<>();
 
-        Set<Literal> maxAlreadySel = new LinkedHashSet<>(maximalLits);
+        Set<Literal> maxAlreadySel = new LinkedHashSet<>(maximalLits.size());
 
         // provvisorio per mgu
         //InferenceSystem is = new InferenceSystem();
@@ -548,12 +548,13 @@ public class Clause implements Comparable<Clause> {
                         /* DEBUG inizio */
                         //System.out.println("\te ottengo " + nuova + "\n\tda sub " + substitution.toString());
                         /* DEBUG fine */
-                        if (!nuova.isTautology())
+                        if (!nuova.isTautology()) {
                             //nuova.renameVariables();
                             nuova.setParentsRuleAndSub(this, true, substitution);
                             maximalFactors.add(nuova); //} else {
                         /* DEBUG inizio */ //System.out.println("\ttautologia, quindi la cancello.");
                         /* DEBUG fine */
+                        }
                     }
                 }
             }

@@ -1,0 +1,25 @@
+#################################################################################
+#                                                                               #
+# esercizio 22 novembre 2012 (preparazione al compito)                          #
+#                                                                               #
+# trova tutti i risolventi delle due clausole                                   #
+# input: (1) ~P(x,y,u) | ~P(y,z,v) | ~P(x,v,w) | P(u,z,w)                       #
+#        (2) P(g(x,y),x,y)                                                      #
+#                                                                               #
+# fattori di (1): (a) ~P(z,z,v) | ~P(z,v,w) | P(v,z,w)                          #
+#                 (b) ~P(x,v,w) | ~P(v,z,v) | P(w,z,w)                          #
+#                 (c) ~P(x,x,u) | ~P(x,w,w) | P(u,w,w)                          #
+# fattori di (2): nessuno                                                       #
+#                                                                               #
+# output:  ~P(x_2,z_2,v_2) | ~P(g(x_2,y_2),v_2,w_2) | P(y_2,z_2,w_2);           #
+#          ~P(x'_3,g(x_3,y_3),u_3) | ~P(x'_3,y_3,w_3) | P(u_3,x_3,w_3);         #
+#          ~P(g(x_4,y_4),y'_4,u_4) | ~P(y'_4,z_4,x_4) | P(u_4,z_4,y_4);         #
+#          ~P(g(x_11,y_11),g(x_11,y_11),x_11) | P(x_11,g(x_11,y_11),y_11);      #
+#          ~P(x_12,z_12,x_12) | P(y_12,z_12,y_12);                              #
+#          ~P(g(y_13,y_13),g(y_13,y_13),u_13) | P(u_13,y_13,y_13);              #
+#                                                                               #
+#################################################################################
+
+clauses: ~P(x,y,u) | ~P(y,z,v) | ~P(x,v,w) | P(u,z,w)
+         P(g(x,y),x,y)
+

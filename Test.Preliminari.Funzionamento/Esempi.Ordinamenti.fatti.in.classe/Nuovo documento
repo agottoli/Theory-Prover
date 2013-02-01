@@ -1,0 +1,22 @@
+const: a,b,0,c,d
+prec: P>R>Q>ack>succ>per>piu>f>g>a>c>d>0
+weightVars: 1
+weights: P = 1; ack = 1; succ = 1; per = 1; piu = 1; f = 1; g = 1; 0 = 1; a = 1
+clauses: P(z,y) | ~P(x,g(u)) | P(x,g(x)) | ~P(u,v) | Q(b)
+clauses: P(z,y) | P(x,g(x))
+                    //"sos: Q(c)" +
+                    //"clauses: P(ack(succ(x),succ(y))) | P(ack(x,ack(succ(x),y)))";
+                    //"clauses: R(x) | ~P(f(0)) | R(a) | P(f(f(z))) | P(f(z)) \n Q(b)\n";
+            //"clauses: P(per(x,piu(y,z))) | P(piu(per(x,y),per(x,z)))";
+            // associatività per mul # e per lex > (ok)    
+            //"clauses: P(f(f(x,y),z)) | P(f(x,f(y,z))) \n Q(b)\n";
+            // distributività se per>piu per mul > e per lex > (ok) 
+            //"clauses: P(per(x,piu(y,z))) | P(piu(per(x,y),per(x,z)))";
+            // se ack>succ mul > e lex > , weight = 1 KBO1 >
+            //"clauses: P(ack(0,y)) | P(succ(y))";
+            // se ack>succ mul # e lex > (ok)
+            //"clauses: P(ack(succ(x),a)) | P(ack(x,succ(a)))";
+            // se ack>succ mul < e lex > (ok)
+            //"clauses: P(ack(succ(x),succ(y))) | P(ack(x,ack(succ(x),y)))";
+            // esempio trova tutti i risolventi
+            //"clauses: ~P(x,y,u) | ~P(y,z,v) | ~P(x,v,w) | P(u,z,w) ; P(g(x,y),x,y)";

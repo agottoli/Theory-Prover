@@ -1,0 +1,28 @@
+###############################################
+#
+# ackerman 2
+# se ack > succ mul # e lex > , weight = 1 KBO1 >
+#
+# -----------------------------------
+# Trovo i letterali massimali con lex
+# per la clausola P(ack(succ(x_0),a)) | P(ack(x_0,succ(a))) sono:
+# [P(ack(succ(x_0),a))]
+# 
+# -----------------------------------
+# Trovo i letterali massimali con mul
+# per la clausola P(ack(succ(x_0),a)) | P(ack(x_0,succ(a))) sono:
+# [P(ack(succ(x_0),a)), P(ack(x_0,succ(a)))]
+# 
+# -----------------------------------
+# Trovo i letterali massimali con kbo
+# per la clausola P(ack(succ(x_0),a)) | P(ack(x_0,succ(a))) sono:
+# [P(ack(succ(x_0),a))]
+# 
+#
+###############################################
+
+const: a
+prec: ack > succ
+weightVars: 1
+weights: P = 1; ack = 1; succ = 1; a = 1
+clauses: P(ack(succ(x),a)) | P(ack(x,succ(a)))

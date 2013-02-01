@@ -237,7 +237,9 @@ public class GivenClauseTest {
                 sb.append("response: SATISFIABLE.\n"); // ALESSIA // "E` SODDISFACIBILE.\n");
                 System.out.print(sb.toString());
             } else {
-                sb.append("response: UNSATISFIABLE, show the prove? [y,n]: "); // ALESSIA
+                sb.append("response: UNSATISFIABLE.\n");
+                if (!test)
+                    sb.append("  show the prove? [y,n]: "); // ALESSIA
                         //"E` INSODDISFACIBILE, stampare la prova? [y,n]: ");
                 grafo = result.getDOT();
                 //sb.append(grafo);
@@ -252,13 +254,17 @@ public class GivenClauseTest {
                 if (stamp.equalsIgnoreCase("yes") || stamp.equalsIgnoreCase("y"))
                     System.out.println(grafo);
 
-                System.out.print("\nUse 'dot' to export the prove graph as image? [y,n]: "); // ALESSIA
+                
                         // "\nUsare 'dot' per esportare un immagine del grafo della prova? [y,n]: ");
                 stamp = "y"; 
-                if (!test)
+                if (!test) {
+                    System.out.print("\nUse 'dot' to export the prove graph as image? [y,n]: "); // ALESSIA
                     stamp = stdin.nextLine();
+                }
+                    
                 if (stamp.equalsIgnoreCase("yes") || stamp.equalsIgnoreCase("y")) {
-                    System.out.print("\nSelect export file format: [1=jpg, 2=ps, 3=pdf]: "); // ALESSIA
+                    if (!test)
+                        System.out.print("\nSelect export file format: [1=jpg, 2=ps, 3=pdf]: "); // ALESSIA
                             //"\nSelezionare il formato di esportazione: [1=jpg, 2=ps, 3=pdf]: ");
                     boolean flag = true;
                     String format = null;
@@ -281,7 +287,7 @@ public class GivenClauseTest {
                         }
                     }
                     String dir = null;
-                    String name;
+                    String name = null;
                     String nameNoExt = null;
                     if (file != null) {
                         dir = file.getParent();
@@ -294,8 +300,12 @@ public class GivenClauseTest {
                             nameNoExt = name.substring(0, index);
                         }
                     }
-                    
+                                       
                     String sosString = "";
+                    String versione = "-Otter";
+                    if (aLaE) {
+                        versione = "-E";
+                    }
                     if (sos)
                         sosString = "-sos";
                     String ordString = "";
@@ -315,8 +325,29 @@ public class GivenClauseTest {
                     }
                     
                     
+                    if (test) {
+                        dir += "/risultati/" + name;
+                        // stampo anche quello che ho dato a schermo su un file
+                        try {
+                            FileOutputStream outputRisTest = new FileOutputStream(dir + "/"
+                                    + nameNoExt + versione + sosString + ordString + precString + ".txt");
+                            PrintStream output = new PrintStream(outputRisTest);
+                            output.println(strb.toString() + "\n"
+                                    + prover.info() + "\n"
+                                    + "\n" + sb.toString());
+                        } catch (IOException e) {
+                            System.out.println(
+                                    "Error: write permission negated in directory " 
+                                    + dir);
+                                    //"Errore: non si ha permessi di scrittura nella"
+                                    //+ "cartella " + dir);
+                            return;
+                        }
+                        
+                    }
+                    
                     prover.exportDot(dir, 
-                            nameNoExt + sosString + ordString + precString + "." + format, 
+                            nameNoExt + versione + sosString + ordString + precString + "." + format, 
                             format, grafo);
                 }
                 stdin.close();
@@ -330,10 +361,11 @@ public class GivenClauseTest {
      */
     private static void printUsage() {
         System.out.println(
-                "Usage: ThProver [-gui | -i | <filename>] [-ans] [-sos] [(-lex | -mul | -kbo) [-usP | -stP]] [-E] [-limit<secs>] [-vAll]\n\n"
+                "Usage: ThProver [-gui | -i | <filename>]"// [-ans]"
+                + " [-sos] [(-lex | -mul | -kbo) [-usP | -stP]] [-E] [-limit<secs>] [-vAll]\n\n"
                 + "\t-gui\tstart graphical user interface mode\n"
                 + "\t-i\tstart interactive mode\n"
-                + "\t-ans\tdetect answer clause\n"
+                //+ "\t-ans\tdetect answer clause\n"
                 + "\t-sos\tuse Set-of-Support strategy\n"
                 + "\t-lex\tuse lexicographic ordering (default no ordering is used)\n"
                 + "\t-mul\tuse multiset ordering (default no ordering is used)\n"

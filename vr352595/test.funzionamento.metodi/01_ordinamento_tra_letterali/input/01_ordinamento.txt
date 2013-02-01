@@ -1,0 +1,13 @@
+###############################################
+#
+# output:     >lex ok
+#             >mul ok
+#             <kbo ok
+#
+###############################################
+const: a
+prec: f > g
+weightVars: 1
+weights: P = 1; f = 1; g = 1; a = 1
+clauses: P(f(a)) | P(g(g(g(g(a)))))
+

@@ -1,0 +1,16 @@
+###############################################
+#
+# ackerman 2
+# se ack > succ mul < e lex > , weight = 1 KBO1 <
+#
+# output:     >lex ok
+#             <mul ok
+#             <kbo ok
+#
+###############################################
+
+const: a
+prec: ack > succ
+weightVars: 1
+weights: P = 1; ack = 1; succ = 1; a = 1
+clauses: P(ack(succ(x),succ(y))) | P(ack(x,ack(succ(x),y)))

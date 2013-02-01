@@ -1,0 +1,27 @@
+###############################################
+#
+# output:    
+# -----------------------------------
+# Trovo i letterali massimali con lex
+# per la clausola P(f(a)) | P(g(g(g(g(a))))) sono:
+# [P(f(a))]
+#
+# -----------------------------------
+# Trovo i letterali massimali con mul
+# per la clausola P(f(a)) | P(g(g(g(g(a))))) sono:
+# [P(f(a))]
+# 
+# -----------------------------------
+# Trovo i letterali massimali con kbo
+# per la clausola P(f(a)) | P(g(g(g(g(a))))) sono:
+# [P(g(g(g(g(a)))))]
+#
+#
+###############################################
+
+const: a
+prec: f > g
+weightVars: 1
+weights: P = 1; f = 1; g = 1; a = 1
+clauses: P(f(a)) | P(g(g(g(g(a)))))
+

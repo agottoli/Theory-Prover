@@ -1,0 +1,15 @@
+###############################################
+#
+# distributività 
+# se per > piu, weight = 1
+#
+# output:     >lex ok
+#             >mul ok
+#             <kbo ok
+#
+############################################### 
+prec: per > piu
+weightVars: 1
+weights: P = 1; per = 1; piu = 1
+clauses: P(per(x,piu(y,z))) | P(piu(per(x,y),per(x,z)))
+

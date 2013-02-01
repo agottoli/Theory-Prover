@@ -1,0 +1,26 @@
+##################################################################
+#
+# La clausola ~P(x_0,y_0,u_0) | R(x_0) | ~P(y_0,z_0,v_0) | ~P(g(f(z_0),x_0),f(v_0),w_0) | P(u_0,z_0,w_0) NON sussume R(y_1) | ~P(g(x_1,y_1),x_1,y_1)
+@ La clausola R(y_1) | ~P(g(x_1,y_1),x_1,y_1) NON sussume ~P(x_0,y_0,u_0) | R(x_0) | ~P(y_0,z_0,v_0) | ~P(g(f(z_0),x_0),f(v_0),w_0) | P(u_0,z_0,w_0)
+#
+#
+##################################################################
+
+clauses: ~P(x,y,u) | R(x) | ~P(y,z,v) | ~P(g(f(z),x),f(v),w) | P(u,z,w) ; R(y) | ~P(g(x,y),x,y)
+
+# ~P(g(f(z),x),f(v),w) | R(x) ; R(y) | ~P(g(x,y),x,y)
+# x <- y' 
+# ~P(g(f(z),y'),f(v),w) | R(y')  ; R(y') | ~P(g(x',y'),x',y')
+# x' <- f(z) <-- FLAG SUSSUNZIONE ok
+# ~P(g(f(z),y'),f(v),w) | R(y')  ; R(y') | ~P(g(f(z),y'),f(z),y')
+# v <- z
+# ~P(g(f(z),y'),f(z),w) | R(y')  ; R(y') | ~P(g(f(z),y'),f(z),y')
+# w <- y'
+# ~P(g(f(z),y'),f(z),w) | R(y')  ; R(y') | ~P(g(f(z),y'),f(z),y')
+
+#  ~P(x,y,u) | R(x) ; R(y') | ~P(g(x',y'),x',y')
+# x <- y'
+#  ~P(y',y,u) | R(y') ; R(y') | ~P(g(x',y'),x',y')
+# y' <- g(x',y') ERRORE
+
+# funziona gusto :)

@@ -1,0 +1,22 @@
+######################################################
+#
+# letterali massimali (per testare poi la fattorizzazione ordinata)
+# -----------------------------------
+# Trovo i letterali massimali con lex
+# per la clausola ~P(x_0,y_0,u_0) | R(x_0) | R(f(z_0)) | ~P(y_0,z_0,v_0) | ~P(x_0,v_0,w_0) | P(u_0,z_0,w_0) sono:
+# [~P(x_0,y_0,u_0), R(x_0), R(f(z_0)), ~P(y_0,z_0,v_0), ~P(x_0,v_0,w_0), P(u_0,z_0,w_0)]
+# 
+# -----------------------------------
+# Trovo i letterali massimali con mul
+# per la clausola ~P(x_0,y_0,u_0) | R(x_0) | R(f(z_0)) | ~P(y_0,z_0,v_0) | ~P(x_0,v_0,w_0) | P(u_0,z_0,w_0) sono:
+# [~P(x_0,y_0,u_0), R(x_0), R(f(z_0)), ~P(y_0,z_0,v_0), ~P(x_0,v_0,w_0), P(u_0,z_0,w_0)]
+# 
+# -----------------------------------
+# Trovo i letterali massimali con kbo
+# per la clausola ~P(x_0,y_0,u_0) | R(x_0) | R(f(z_0)) | ~P(y_0,z_0,v_0) | ~P(x_0,v_0,w_0) | P(u_0,z_0,w_0) sono:
+# [~P(x_0,y_0,u_0), ~P(y_0,z_0,v_0), ~P(x_0,v_0,w_0), P(u_0,z_0,w_0)]
+# 
+#
+#######################################################
+
+clauses: ~P(x,y,u) | R(x) | R(f(z)) | ~P(y,z,v) | ~P(x,v,w) | P(u,z,w)

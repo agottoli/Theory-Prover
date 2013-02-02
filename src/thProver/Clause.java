@@ -183,7 +183,7 @@ public class Clause implements Comparable<Clause> {
                 this.rule = "Binary Resolution";
             }
         } else {
-            this.rule = "Clausal Simplifation";
+            this.rule = "Clausal Simplification";
         }
         this.substitutionFrom = sub;
     }

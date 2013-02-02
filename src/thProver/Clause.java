@@ -178,12 +178,12 @@ public class Clause implements Comparable<Clause> {
         parents = par;
         if (ris) {
             if (ordinata) {
-                this.rule = "Risoluzione Ordinata";
+                this.rule = "Ordered Resolution";
             } else {
-                this.rule = "Risoluzione Binaria";
+                this.rule = "Binary Resolution";
             }
         } else {
-            this.rule = "Semplificazione Clausale";
+            this.rule = "Clausal Simplifation";
         }
         this.substitutionFrom = sub;
     }
@@ -202,9 +202,9 @@ public class Clause implements Comparable<Clause> {
         parents = new ArrayList<>();
         parents.add(par);
         if (ordinata)
-            this.rule = "Fattorizzazione Ordinata";
+            this.rule = "Ordered Factorization";
         else
-            this.rule = "Fattorizzazione";
+            this.rule = "Factorization";
         this.substitutionFrom = sub.copy();
     }
     

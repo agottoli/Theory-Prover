@@ -1,6 +1,6 @@
 #!/bin/sh
 
-mkdir ./tptp.file/risultati
+mkdir $SCRIPTDIR/tptp.file/risultati
 
 ####################################################################################################################
 ####################################################################################################################
@@ -8,69 +8,69 @@ mkdir ./tptp.file/risultati
 
 ##### Otter #####
 
-echo "Al termine dello script è possibile visualizzare i risultati del test in ./tptp.file/risultati/ALG002-1.p/\n"
+echo "Al termine dello script è possibile visualizzare i risultati del test in $SCRIPTDIR/tptp.file/risultati/ALG002-1.p/\n"
 
-mkdir ./tptp.file/risultati/ALG002-1.p
+mkdir $SCRIPTDIR/tptp.file/risultati/ALG002-1.p
 
 SCRIPTDIR=`dirname $0`
 
 echo "Otter senza ordinamento (limite 5 minuti) su ALG002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ALG002-1.p -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ALG002-1.p -limit300 -test
 
 echo "Otter con ordinamento lexicografico definito dall'utente (limite 5 minuti) su ALG002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ALG002-1.p -lex -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ALG002-1.p -lex -usP -limit300 -test
 
 echo "Otter con ordinamento multiinsieme definito dall'utente (limite 5 minuti) su ALG002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ALG002-1.p -mul -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ALG002-1.p -mul -usP -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix definito dall'utente (limite 5 minuti) su ALG002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ALG002-1.p -kbo -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ALG002-1.p -kbo -usP -limit300 -test
 
 echo "Otter con ordinamento lexicografico predefinito (limite 5 minuti) su ALG002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ALG002-1.p -lex -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ALG002-1.p -lex -stP -limit300 -test
 
 echo "Otter con ordinamento multiinsieme predefinito (limite 5 minuti) su ALG002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ALG002-1.p -mul -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ALG002-1.p -mul -stP -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix predefinito (limite 5 minuti) su ALG002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ALG002-1.p -kbo -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ALG002-1.p -kbo -stP -limit300 -test
 
 ###### sos
 
 echo "Otter senza ordinamento con insieme di supporto (limite 5 minuti) su ALG002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ALG002-1.p -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ALG002-1.p -sos -limit300 -test
 
 echo "Otter con ordinamento lexicografico definito dall'utente con insieme di supporto (limite 5 minuti) su ALG002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ALG002-1.p -lex -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ALG002-1.p -lex -usP -sos -limit300 -test
 
 echo "Otter con ordinamento multiinsieme definito dall'utente con insieme di supporto (limite 5 minuti) su ALG002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ALG002-1.p -mul -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ALG002-1.p -mul -usP -sos -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix definito dall'utente con insieme di supporto (limite 5 minuti) su ALG002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ALG002-1.p -kbo -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ALG002-1.p -kbo -usP -sos -limit300 -test
 
 echo "Otter con ordinamento lexicografico predefinito con insieme di supporto (limite 5 minuti) su ALG002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ALG002-1.p -lex -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ALG002-1.p -lex -stP -sos -limit300 -test
 
 echo "Otter con ordinamento multiinsieme predefinito con insieme di supporto (limite 5 minuti) su ALG002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ALG002-1.p -mul -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ALG002-1.p -mul -stP -sos -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix predefinito con insieme di supporto (limite 5 minuti) su ALG002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ALG002-1.p -kbo -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ALG002-1.p -kbo -stP -sos -limit300 -test
 
 
 
@@ -80,63 +80,63 @@ $SCRIPTDIR/../vr352595.sh ./tptp.file/ALG002-1.p -kbo -stP -sos -limit300 -test
 
 echo "E senza ordinamento (limite 5 minuti) su ALG002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ALG002-1.p -E -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ALG002-1.p -E -limit300 -test
 
 echo "E con ordinamento lexicografico definito dall'utente (limite 5 minuti) su ALG002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ALG002-1.p -E -lex -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ALG002-1.p -E -lex -usP -limit300 -test
 
 echo "E con ordinamento multiinsieme definito dall'utente (limite 5 minuti) su ALG002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ALG002-1.p -E -mul -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ALG002-1.p -E -mul -usP -limit300 -test
 
 echo "E con ordinamento knuth-bendix definito dall'utente (limite 5 minuti) su ALG002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ALG002-1.p -E -kbo -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ALG002-1.p -E -kbo -usP -limit300 -test
 
 echo "E con ordinamento lexicografico predefinito (limite 5 minuti) su ALG002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ALG002-1.p -E -lex -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ALG002-1.p -E -lex -stP -limit300 -test
 
 echo "E con ordinamento multiinsieme predefinito (limite 5 minuti) su ALG002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ALG002-1.p -E -mul -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ALG002-1.p -E -mul -stP -limit300 -test
 
 echo "E con ordinamento knuth-bendix predefinito (limite 5 minuti) su ALG002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ALG002-1.p -E -kbo -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ALG002-1.p -E -kbo -stP -limit300 -test
 
 #### sos
 
 echo "E senza ordinamento con insieme di supporto (limite 5 minuti) su ALG002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ALG002-1.p -E -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ALG002-1.p -E -sos -limit300 -test
 
 echo "E con ordinamento lexicografico definito dall'utente con insieme di supporto (limite 5 minuti) su ALG002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ALG002-1.p -E -lex -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ALG002-1.p -E -lex -usP -sos -limit300 -test
 
 echo "E con ordinamento multiinsieme definito dall'utente con insieme di supporto (limite 5 minuti) su ALG002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ALG002-1.p -E -mul -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ALG002-1.p -E -mul -usP -sos -limit300 -test
 
 echo "E con ordinamento knuth-bendix definito dall'utente con insieme di supporto (limite 5 minuti) su ALG002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ALG002-1.p -E -kbo -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ALG002-1.p -E -kbo -usP -sos -limit300 -test
 
 echo "E con ordinamento lexicografico predefinito con insieme di supporto (limite 5 minuti) su ALG002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ALG002-1.p -E -lex -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ALG002-1.p -E -lex -stP -sos -limit300 -test
 
 echo "E con ordinamento multiinsieme predefinito con insieme di supporto (limite 5 minuti) su ALG002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ALG002-1.p -E -mul -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ALG002-1.p -E -mul -stP -sos -limit300 -test
 
 echo "E con ordinamento knuth-bendix predefinito con insieme di supporto (limite 5 minuti) su ALG002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ALG002-1.p -E -kbo -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ALG002-1.p -E -kbo -stP -sos -limit300 -test
  
-echo "E' possibile visualizzare i risultati del test in ./tptp.file/risultati/ALG002-1.p/\n"
+echo "E' possibile visualizzare i risultati del test in $SCRIPTDIR/tptp.file/risultati/ALG002-1.p/\n"
 
 ####################################################################################################################
 ####################################################################################################################
@@ -148,69 +148,69 @@ echo "E' possibile visualizzare i risultati del test in ./tptp.file/risultati/AL
 
 ##### Otter #####
 
-echo "Al termine dello script è possibile visualizzare i risultati del test in ./tptp.file/risultati/ANA001-1.p/\n"
+echo "Al termine dello script è possibile visualizzare i risultati del test in $SCRIPTDIR/tptp.file/risultati/ANA001-1.p/\n"
 
-mkdir ./tptp.file/risultati/ANA001-1.p
+mkdir $SCRIPTDIR/tptp.file/risultati/ANA001-1.p
 
 SCRIPTDIR=`dirname $0`
 
 echo "Otter senza ordinamento (limite 5 minuti) su ANA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ANA001-1.p -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ANA001-1.p -limit300 -test
 
 echo "Otter con ordinamento lexicografico definito dall'utente (limite 5 minuti) su ANA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ANA001-1.p -lex -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ANA001-1.p -lex -usP -limit300 -test
 
 echo "Otter con ordinamento multiinsieme definito dall'utente (limite 5 minuti) su ANA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ANA001-1.p -mul -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ANA001-1.p -mul -usP -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix definito dall'utente (limite 5 minuti) su ANA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ANA001-1.p -kbo -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ANA001-1.p -kbo -usP -limit300 -test
 
 echo "Otter con ordinamento lexicografico predefinito (limite 5 minuti) su ANA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ANA001-1.p -lex -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ANA001-1.p -lex -stP -limit300 -test
 
 echo "Otter con ordinamento multiinsieme predefinito (limite 5 minuti) su ANA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ANA001-1.p -mul -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ANA001-1.p -mul -stP -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix predefinito (limite 5 minuti) su ANA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ANA001-1.p -kbo -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ANA001-1.p -kbo -stP -limit300 -test
 
 ###### sos
 
 echo "Otter senza ordinamento con insieme di supporto (limite 5 minuti) su ANA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ANA001-1.p -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ANA001-1.p -sos -limit300 -test
 
 echo "Otter con ordinamento lexicografico definito dall'utente con insieme di supporto (limite 5 minuti) su ANA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ANA001-1.p -lex -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ANA001-1.p -lex -usP -sos -limit300 -test
 
 echo "Otter con ordinamento multiinsieme definito dall'utente con insieme di supporto (limite 5 minuti) su ANA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ANA001-1.p -mul -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ANA001-1.p -mul -usP -sos -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix definito dall'utente con insieme di supporto (limite 5 minuti) su ANA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ANA001-1.p -kbo -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ANA001-1.p -kbo -usP -sos -limit300 -test
 
 echo "Otter con ordinamento lexicografico predefinito con insieme di supporto (limite 5 minuti) su ANA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ANA001-1.p -lex -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ANA001-1.p -lex -stP -sos -limit300 -test
 
 echo "Otter con ordinamento multiinsieme predefinito con insieme di supporto (limite 5 minuti) su ANA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ANA001-1.p -mul -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ANA001-1.p -mul -stP -sos -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix predefinito con insieme di supporto (limite 5 minuti) su ANA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ANA001-1.p -kbo -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ANA001-1.p -kbo -stP -sos -limit300 -test
 
 
 
@@ -220,63 +220,63 @@ $SCRIPTDIR/../vr352595.sh ./tptp.file/ANA001-1.p -kbo -stP -sos -limit300 -test
 
 echo "E senza ordinamento (limite 5 minuti) su ANA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ANA001-1.p -E -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ANA001-1.p -E -limit300 -test
 
 echo "E con ordinamento lexicografico definito dall'utente (limite 5 minuti) su ANA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ANA001-1.p -E -lex -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ANA001-1.p -E -lex -usP -limit300 -test
 
 echo "E con ordinamento multiinsieme definito dall'utente (limite 5 minuti) su ANA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ANA001-1.p -E -mul -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ANA001-1.p -E -mul -usP -limit300 -test
 
 echo "E con ordinamento knuth-bendix definito dall'utente (limite 5 minuti) su ANA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ANA001-1.p -E -kbo -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ANA001-1.p -E -kbo -usP -limit300 -test
 
 echo "E con ordinamento lexicografico predefinito (limite 5 minuti) su ANA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ANA001-1.p -E -lex -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ANA001-1.p -E -lex -stP -limit300 -test
 
 echo "E con ordinamento multiinsieme predefinito (limite 5 minuti) su ANA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ANA001-1.p -E -mul -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ANA001-1.p -E -mul -stP -limit300 -test
 
 echo "E con ordinamento knuth-bendix predefinito (limite 5 minuti) su ANA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ANA001-1.p -E -kbo -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ANA001-1.p -E -kbo -stP -limit300 -test
 
 #### sos
 
 echo "E senza ordinamento con insieme di supporto (limite 5 minuti) su ANA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ANA001-1.p -E -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ANA001-1.p -E -sos -limit300 -test
 
 echo "E con ordinamento lexicografico definito dall'utente con insieme di supporto (limite 5 minuti) su ANA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ANA001-1.p -E -lex -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ANA001-1.p -E -lex -usP -sos -limit300 -test
 
 echo "E con ordinamento multiinsieme definito dall'utente con insieme di supporto (limite 5 minuti) su ANA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ANA001-1.p -E -mul -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ANA001-1.p -E -mul -usP -sos -limit300 -test
 
 echo "E con ordinamento knuth-bendix definito dall'utente con insieme di supporto (limite 5 minuti) su ANA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ANA001-1.p -E -kbo -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ANA001-1.p -E -kbo -usP -sos -limit300 -test
 
 echo "E con ordinamento lexicografico predefinito con insieme di supporto (limite 5 minuti) su ANA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ANA001-1.p -E -lex -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ANA001-1.p -E -lex -stP -sos -limit300 -test
 
 echo "E con ordinamento multiinsieme predefinito con insieme di supporto (limite 5 minuti) su ANA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ANA001-1.p -E -mul -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ANA001-1.p -E -mul -stP -sos -limit300 -test
 
 echo "E con ordinamento knuth-bendix predefinito con insieme di supporto (limite 5 minuti) su ANA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/ANA001-1.p -E -kbo -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/ANA001-1.p -E -kbo -stP -sos -limit300 -test
  
-echo "E' possibile visualizzare i risultati del test in ./tptp.file/risultati/ANA001-1.p/\n"
+echo "E' possibile visualizzare i risultati del test in $SCRIPTDIR/tptp.file/risultati/ANA001-1.p/\n"
 
 ####################################################################################################################
 ####################################################################################################################
@@ -288,69 +288,69 @@ echo "E' possibile visualizzare i risultati del test in ./tptp.file/risultati/AN
 
 ##### Otter #####
 
-echo "Al termine dello script è possibile visualizzare i risultati del test in ./tptp.file/risultati/COL123-2.p/\n"
+echo "Al termine dello script è possibile visualizzare i risultati del test in $SCRIPTDIR/tptp.file/risultati/COL123-2.p/\n"
 
-mkdir ./tptp.file/risultati/COL123-2.p
+mkdir $SCRIPTDIR/tptp.file/risultati/COL123-2.p
 
 SCRIPTDIR=`dirname $0`
 
 echo "Otter senza ordinamento (limite 5 minuti) su COL123-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COL123-2.p -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COL123-2.p -limit300 -test
 
 echo "Otter con ordinamento lexicografico definito dall'utente (limite 5 minuti) su COL123-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COL123-2.p -lex -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COL123-2.p -lex -usP -limit300 -test
 
 echo "Otter con ordinamento multiinsieme definito dall'utente (limite 5 minuti) su COL123-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COL123-2.p -mul -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COL123-2.p -mul -usP -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix definito dall'utente (limite 5 minuti) su COL123-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COL123-2.p -kbo -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COL123-2.p -kbo -usP -limit300 -test
 
 echo "Otter con ordinamento lexicografico predefinito (limite 5 minuti) su COL123-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COL123-2.p -lex -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COL123-2.p -lex -stP -limit300 -test
 
 echo "Otter con ordinamento multiinsieme predefinito (limite 5 minuti) su COL123-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COL123-2.p -mul -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COL123-2.p -mul -stP -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix predefinito (limite 5 minuti) su COL123-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COL123-2.p -kbo -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COL123-2.p -kbo -stP -limit300 -test
 
 ###### sos
 
 echo "Otter senza ordinamento con insieme di supporto (limite 5 minuti) su COL123-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COL123-2.p -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COL123-2.p -sos -limit300 -test
 
 echo "Otter con ordinamento lexicografico definito dall'utente con insieme di supporto (limite 5 minuti) su COL123-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COL123-2.p -lex -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COL123-2.p -lex -usP -sos -limit300 -test
 
 echo "Otter con ordinamento multiinsieme definito dall'utente con insieme di supporto (limite 5 minuti) su COL123-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COL123-2.p -mul -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COL123-2.p -mul -usP -sos -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix definito dall'utente con insieme di supporto (limite 5 minuti) su COL123-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COL123-2.p -kbo -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COL123-2.p -kbo -usP -sos -limit300 -test
 
 echo "Otter con ordinamento lexicografico predefinito con insieme di supporto (limite 5 minuti) su COL123-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COL123-2.p -lex -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COL123-2.p -lex -stP -sos -limit300 -test
 
 echo "Otter con ordinamento multiinsieme predefinito con insieme di supporto (limite 5 minuti) su COL123-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COL123-2.p -mul -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COL123-2.p -mul -stP -sos -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix predefinito con insieme di supporto (limite 5 minuti) su COL123-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COL123-2.p -kbo -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COL123-2.p -kbo -stP -sos -limit300 -test
 
 
 
@@ -360,63 +360,63 @@ $SCRIPTDIR/../vr352595.sh ./tptp.file/COL123-2.p -kbo -stP -sos -limit300 -test
 
 echo "E senza ordinamento (limite 5 minuti) su COL123-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COL123-2.p -E -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COL123-2.p -E -limit300 -test
 
 echo "E con ordinamento lexicografico definito dall'utente (limite 5 minuti) su COL123-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COL123-2.p -E -lex -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COL123-2.p -E -lex -usP -limit300 -test
 
 echo "E con ordinamento multiinsieme definito dall'utente (limite 5 minuti) su COL123-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COL123-2.p -E -mul -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COL123-2.p -E -mul -usP -limit300 -test
 
 echo "E con ordinamento knuth-bendix definito dall'utente (limite 5 minuti) su COL123-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COL123-2.p -E -kbo -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COL123-2.p -E -kbo -usP -limit300 -test
 
 echo "E con ordinamento lexicografico predefinito (limite 5 minuti) su COL123-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COL123-2.p -E -lex -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COL123-2.p -E -lex -stP -limit300 -test
 
 echo "E con ordinamento multiinsieme predefinito (limite 5 minuti) su COL123-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COL123-2.p -E -mul -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COL123-2.p -E -mul -stP -limit300 -test
 
 echo "E con ordinamento knuth-bendix predefinito (limite 5 minuti) su COL123-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COL123-2.p -E -kbo -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COL123-2.p -E -kbo -stP -limit300 -test
 
 #### sos
 
 echo "E senza ordinamento con insieme di supporto (limite 5 minuti) su COL123-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COL123-2.p -E -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COL123-2.p -E -sos -limit300 -test
 
 echo "E con ordinamento lexicografico definito dall'utente con insieme di supporto (limite 5 minuti) su COL123-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COL123-2.p -E -lex -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COL123-2.p -E -lex -usP -sos -limit300 -test
 
 echo "E con ordinamento multiinsieme definito dall'utente con insieme di supporto (limite 5 minuti) su COL123-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COL123-2.p -E -mul -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COL123-2.p -E -mul -usP -sos -limit300 -test
 
 echo "E con ordinamento knuth-bendix definito dall'utente con insieme di supporto (limite 5 minuti) su COL123-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COL123-2.p -E -kbo -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COL123-2.p -E -kbo -usP -sos -limit300 -test
 
 echo "E con ordinamento lexicografico predefinito con insieme di supporto (limite 5 minuti) su COL123-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COL123-2.p -E -lex -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COL123-2.p -E -lex -stP -sos -limit300 -test
 
 echo "E con ordinamento multiinsieme predefinito con insieme di supporto (limite 5 minuti) su COL123-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COL123-2.p -E -mul -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COL123-2.p -E -mul -stP -sos -limit300 -test
 
 echo "E con ordinamento knuth-bendix predefinito con insieme di supporto (limite 5 minuti) su COL123-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COL123-2.p -E -kbo -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COL123-2.p -E -kbo -stP -sos -limit300 -test
  
-echo "E' possibile visualizzare i risultati del test in ./tptp.file/risultati/COL123-2.p/\n"
+echo "E' possibile visualizzare i risultati del test in $SCRIPTDIR/tptp.file/risultati/COL123-2.p/\n"
 
 ####################################################################################################################
 ####################################################################################################################
@@ -428,69 +428,69 @@ echo "E' possibile visualizzare i risultati del test in ./tptp.file/risultati/CO
 
 ##### Otter #####
 
-echo "Al termine dello script è possibile visualizzare i risultati del test in ./tptp.file/risultati/COM001-1.p/\n"
+echo "Al termine dello script è possibile visualizzare i risultati del test in $SCRIPTDIR/tptp.file/risultati/COM001-1.p/\n"
 
-mkdir ./tptp.file/risultati/COM001-1.p
+mkdir $SCRIPTDIR/tptp.file/risultati/COM001-1.p
 
 SCRIPTDIR=`dirname $0`
 
 echo "Otter senza ordinamento (limite 5 minuti) su COM001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM001-1.p -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM001-1.p -limit300 -test
 
 echo "Otter con ordinamento lexicografico definito dall'utente (limite 5 minuti) su COM001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM001-1.p -lex -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM001-1.p -lex -usP -limit300 -test
 
 echo "Otter con ordinamento multiinsieme definito dall'utente (limite 5 minuti) su COM001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM001-1.p -mul -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM001-1.p -mul -usP -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix definito dall'utente (limite 5 minuti) su COM001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM001-1.p -kbo -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM001-1.p -kbo -usP -limit300 -test
 
 echo "Otter con ordinamento lexicografico predefinito (limite 5 minuti) su COM001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM001-1.p -lex -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM001-1.p -lex -stP -limit300 -test
 
 echo "Otter con ordinamento multiinsieme predefinito (limite 5 minuti) su COM001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM001-1.p -mul -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM001-1.p -mul -stP -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix predefinito (limite 5 minuti) su COM001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM001-1.p -kbo -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM001-1.p -kbo -stP -limit300 -test
 
 ###### sos
 
 echo "Otter senza ordinamento con insieme di supporto (limite 5 minuti) su COM001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM001-1.p -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM001-1.p -sos -limit300 -test
 
 echo "Otter con ordinamento lexicografico definito dall'utente con insieme di supporto (limite 5 minuti) su COM001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM001-1.p -lex -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM001-1.p -lex -usP -sos -limit300 -test
 
 echo "Otter con ordinamento multiinsieme definito dall'utente con insieme di supporto (limite 5 minuti) su COM001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM001-1.p -mul -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM001-1.p -mul -usP -sos -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix definito dall'utente con insieme di supporto (limite 5 minuti) su COM001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM001-1.p -kbo -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM001-1.p -kbo -usP -sos -limit300 -test
 
 echo "Otter con ordinamento lexicografico predefinito con insieme di supporto (limite 5 minuti) su COM001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM001-1.p -lex -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM001-1.p -lex -stP -sos -limit300 -test
 
 echo "Otter con ordinamento multiinsieme predefinito con insieme di supporto (limite 5 minuti) su COM001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM001-1.p -mul -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM001-1.p -mul -stP -sos -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix predefinito con insieme di supporto (limite 5 minuti) su COM001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM001-1.p -kbo -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM001-1.p -kbo -stP -sos -limit300 -test
 
 
 
@@ -500,63 +500,63 @@ $SCRIPTDIR/../vr352595.sh ./tptp.file/COM001-1.p -kbo -stP -sos -limit300 -test
 
 echo "E senza ordinamento (limite 5 minuti) su COM001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM001-1.p -E -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM001-1.p -E -limit300 -test
 
 echo "E con ordinamento lexicografico definito dall'utente (limite 5 minuti) su COM001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM001-1.p -E -lex -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM001-1.p -E -lex -usP -limit300 -test
 
 echo "E con ordinamento multiinsieme definito dall'utente (limite 5 minuti) su COM001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM001-1.p -E -mul -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM001-1.p -E -mul -usP -limit300 -test
 
 echo "E con ordinamento knuth-bendix definito dall'utente (limite 5 minuti) su COM001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM001-1.p -E -kbo -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM001-1.p -E -kbo -usP -limit300 -test
 
 echo "E con ordinamento lexicografico predefinito (limite 5 minuti) su COM001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM001-1.p -E -lex -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM001-1.p -E -lex -stP -limit300 -test
 
 echo "E con ordinamento multiinsieme predefinito (limite 5 minuti) su COM001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM001-1.p -E -mul -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM001-1.p -E -mul -stP -limit300 -test
 
 echo "E con ordinamento knuth-bendix predefinito (limite 5 minuti) su COM001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM001-1.p -E -kbo -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM001-1.p -E -kbo -stP -limit300 -test
 
 #### sos
 
 echo "E senza ordinamento con insieme di supporto (limite 5 minuti) su COM001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM001-1.p -E -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM001-1.p -E -sos -limit300 -test
 
 echo "E con ordinamento lexicografico definito dall'utente con insieme di supporto (limite 5 minuti) su COM001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM001-1.p -E -lex -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM001-1.p -E -lex -usP -sos -limit300 -test
 
 echo "E con ordinamento multiinsieme definito dall'utente con insieme di supporto (limite 5 minuti) su COM001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM001-1.p -E -mul -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM001-1.p -E -mul -usP -sos -limit300 -test
 
 echo "E con ordinamento knuth-bendix definito dall'utente con insieme di supporto (limite 5 minuti) su COM001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM001-1.p -E -kbo -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM001-1.p -E -kbo -usP -sos -limit300 -test
 
 echo "E con ordinamento lexicografico predefinito con insieme di supporto (limite 5 minuti) su COM001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM001-1.p -E -lex -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM001-1.p -E -lex -stP -sos -limit300 -test
 
 echo "E con ordinamento multiinsieme predefinito con insieme di supporto (limite 5 minuti) su COM001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM001-1.p -E -mul -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM001-1.p -E -mul -stP -sos -limit300 -test
 
 echo "E con ordinamento knuth-bendix predefinito con insieme di supporto (limite 5 minuti) su COM001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM001-1.p -E -kbo -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM001-1.p -E -kbo -stP -sos -limit300 -test
  
-echo "E' possibile visualizzare i risultati del test in ./tptp.file/risultati/COM001-1.p/\n"
+echo "E' possibile visualizzare i risultati del test in $SCRIPTDIR/tptp.file/risultati/COM001-1.p/\n"
 
 ####################################################################################################################
 ####################################################################################################################
@@ -568,69 +568,69 @@ echo "E' possibile visualizzare i risultati del test in ./tptp.file/risultati/CO
 
 ##### Otter #####
 
-echo "Al termine dello script è possibile visualizzare i risultati del test in ./tptp.file/risultati/COM005-1.p/\n"
+echo "Al termine dello script è possibile visualizzare i risultati del test in $SCRIPTDIR/tptp.file/risultati/COM005-1.p/\n"
 
-mkdir ./tptp.file/risultati/COM005-1.p
+mkdir $SCRIPTDIR/tptp.file/risultati/COM005-1.p
 
 SCRIPTDIR=`dirname $0`
 
 echo "Otter senza ordinamento (limite 5 minuti) su COM005-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM005-1.p -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM005-1.p -limit300 -test
 
 echo "Otter con ordinamento lexicografico definito dall'utente (limite 5 minuti) su COM005-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM005-1.p -lex -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM005-1.p -lex -usP -limit300 -test
 
 echo "Otter con ordinamento multiinsieme definito dall'utente (limite 5 minuti) su COM005-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM005-1.p -mul -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM005-1.p -mul -usP -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix definito dall'utente (limite 5 minuti) su COM005-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM005-1.p -kbo -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM005-1.p -kbo -usP -limit300 -test
 
 echo "Otter con ordinamento lexicografico predefinito (limite 5 minuti) su COM005-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM005-1.p -lex -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM005-1.p -lex -stP -limit300 -test
 
 echo "Otter con ordinamento multiinsieme predefinito (limite 5 minuti) su COM005-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM005-1.p -mul -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM005-1.p -mul -stP -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix predefinito (limite 5 minuti) su COM005-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM005-1.p -kbo -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM005-1.p -kbo -stP -limit300 -test
 
 ###### sos
 
 echo "Otter senza ordinamento con insieme di supporto (limite 5 minuti) su COM005-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM005-1.p -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM005-1.p -sos -limit300 -test
 
 echo "Otter con ordinamento lexicografico definito dall'utente con insieme di supporto (limite 5 minuti) su COM005-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM005-1.p -lex -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM005-1.p -lex -usP -sos -limit300 -test
 
 echo "Otter con ordinamento multiinsieme definito dall'utente con insieme di supporto (limite 5 minuti) su COM005-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM005-1.p -mul -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM005-1.p -mul -usP -sos -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix definito dall'utente con insieme di supporto (limite 5 minuti) su COM005-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM005-1.p -kbo -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM005-1.p -kbo -usP -sos -limit300 -test
 
 echo "Otter con ordinamento lexicografico predefinito con insieme di supporto (limite 5 minuti) su COM005-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM005-1.p -lex -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM005-1.p -lex -stP -sos -limit300 -test
 
 echo "Otter con ordinamento multiinsieme predefinito con insieme di supporto (limite 5 minuti) su COM005-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM005-1.p -mul -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM005-1.p -mul -stP -sos -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix predefinito con insieme di supporto (limite 5 minuti) su COM005-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM005-1.p -kbo -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM005-1.p -kbo -stP -sos -limit300 -test
 
 
 
@@ -640,63 +640,63 @@ $SCRIPTDIR/../vr352595.sh ./tptp.file/COM005-1.p -kbo -stP -sos -limit300 -test
 
 echo "E senza ordinamento (limite 5 minuti) su COM005-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM005-1.p -E -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM005-1.p -E -limit300 -test
 
 echo "E con ordinamento lexicografico definito dall'utente (limite 5 minuti) su COM005-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM005-1.p -E -lex -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM005-1.p -E -lex -usP -limit300 -test
 
 echo "E con ordinamento multiinsieme definito dall'utente (limite 5 minuti) su COM005-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM005-1.p -E -mul -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM005-1.p -E -mul -usP -limit300 -test
 
 echo "E con ordinamento knuth-bendix definito dall'utente (limite 5 minuti) su COM005-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM005-1.p -E -kbo -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM005-1.p -E -kbo -usP -limit300 -test
 
 echo "E con ordinamento lexicografico predefinito (limite 5 minuti) su COM005-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM005-1.p -E -lex -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM005-1.p -E -lex -stP -limit300 -test
 
 echo "E con ordinamento multiinsieme predefinito (limite 5 minuti) su COM005-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM005-1.p -E -mul -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM005-1.p -E -mul -stP -limit300 -test
 
 echo "E con ordinamento knuth-bendix predefinito (limite 5 minuti) su COM005-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM005-1.p -E -kbo -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM005-1.p -E -kbo -stP -limit300 -test
 
 #### sos
 
 echo "E senza ordinamento con insieme di supporto (limite 5 minuti) su COM005-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM005-1.p -E -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM005-1.p -E -sos -limit300 -test
 
 echo "E con ordinamento lexicografico definito dall'utente con insieme di supporto (limite 5 minuti) su COM005-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM005-1.p -E -lex -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM005-1.p -E -lex -usP -sos -limit300 -test
 
 echo "E con ordinamento multiinsieme definito dall'utente con insieme di supporto (limite 5 minuti) su COM005-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM005-1.p -E -mul -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM005-1.p -E -mul -usP -sos -limit300 -test
 
 echo "E con ordinamento knuth-bendix definito dall'utente con insieme di supporto (limite 5 minuti) su COM005-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM005-1.p -E -kbo -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM005-1.p -E -kbo -usP -sos -limit300 -test
 
 echo "E con ordinamento lexicografico predefinito con insieme di supporto (limite 5 minuti) su COM005-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM005-1.p -E -lex -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM005-1.p -E -lex -stP -sos -limit300 -test
 
 echo "E con ordinamento multiinsieme predefinito con insieme di supporto (limite 5 minuti) su COM005-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM005-1.p -E -mul -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM005-1.p -E -mul -stP -sos -limit300 -test
 
 echo "E con ordinamento knuth-bendix predefinito con insieme di supporto (limite 5 minuti) su COM005-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/COM005-1.p -E -kbo -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/COM005-1.p -E -kbo -stP -sos -limit300 -test
  
-echo "E' possibile visualizzare i risultati del test in ./tptp.file/risultati/COM005-1.p/\n"
+echo "E' possibile visualizzare i risultati del test in $SCRIPTDIR/tptp.file/risultati/COM005-1.p/\n"
 
 ####################################################################################################################
 ####################################################################################################################
@@ -708,69 +708,69 @@ echo "E' possibile visualizzare i risultati del test in ./tptp.file/risultati/CO
 
 ##### Otter #####
 
-echo "Al termine dello script è possibile visualizzare i risultati del test in ./tptp.file/risultati/MGT010-1.p/\n"
+echo "Al termine dello script è possibile visualizzare i risultati del test in $SCRIPTDIR/tptp.file/risultati/MGT010-1.p/\n"
 
-mkdir ./tptp.file/risultati/MGT010-1.p
+mkdir $SCRIPTDIR/tptp.file/risultati/MGT010-1.p
 
 SCRIPTDIR=`dirname $0`
 
 echo "Otter senza ordinamento (limite 5 minuti) su MGT010-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/MGT010-1.p -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/MGT010-1.p -limit300 -test
 
 echo "Otter con ordinamento lexicografico definito dall'utente (limite 5 minuti) su MGT010-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/MGT010-1.p -lex -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/MGT010-1.p -lex -usP -limit300 -test
 
 echo "Otter con ordinamento multiinsieme definito dall'utente (limite 5 minuti) su MGT010-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/MGT010-1.p -mul -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/MGT010-1.p -mul -usP -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix definito dall'utente (limite 5 minuti) su MGT010-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/MGT010-1.p -kbo -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/MGT010-1.p -kbo -usP -limit300 -test
 
 echo "Otter con ordinamento lexicografico predefinito (limite 5 minuti) su MGT010-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/MGT010-1.p -lex -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/MGT010-1.p -lex -stP -limit300 -test
 
 echo "Otter con ordinamento multiinsieme predefinito (limite 5 minuti) su MGT010-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/MGT010-1.p -mul -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/MGT010-1.p -mul -stP -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix predefinito (limite 5 minuti) su MGT010-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/MGT010-1.p -kbo -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/MGT010-1.p -kbo -stP -limit300 -test
 
 ###### sos
 
 echo "Otter senza ordinamento con insieme di supporto (limite 5 minuti) su MGT010-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/MGT010-1.p -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/MGT010-1.p -sos -limit300 -test
 
 echo "Otter con ordinamento lexicografico definito dall'utente con insieme di supporto (limite 5 minuti) su MGT010-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/MGT010-1.p -lex -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/MGT010-1.p -lex -usP -sos -limit300 -test
 
 echo "Otter con ordinamento multiinsieme definito dall'utente con insieme di supporto (limite 5 minuti) su MGT010-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/MGT010-1.p -mul -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/MGT010-1.p -mul -usP -sos -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix definito dall'utente con insieme di supporto (limite 5 minuti) su MGT010-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/MGT010-1.p -kbo -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/MGT010-1.p -kbo -usP -sos -limit300 -test
 
 echo "Otter con ordinamento lexicografico predefinito con insieme di supporto (limite 5 minuti) su MGT010-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/MGT010-1.p -lex -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/MGT010-1.p -lex -stP -sos -limit300 -test
 
 echo "Otter con ordinamento multiinsieme predefinito con insieme di supporto (limite 5 minuti) su MGT010-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/MGT010-1.p -mul -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/MGT010-1.p -mul -stP -sos -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix predefinito con insieme di supporto (limite 5 minuti) su MGT010-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/MGT010-1.p -kbo -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/MGT010-1.p -kbo -stP -sos -limit300 -test
 
 
 
@@ -780,63 +780,63 @@ $SCRIPTDIR/../vr352595.sh ./tptp.file/MGT010-1.p -kbo -stP -sos -limit300 -test
 
 echo "E senza ordinamento (limite 5 minuti) su MGT010-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/MGT010-1.p -E -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/MGT010-1.p -E -limit300 -test
 
 echo "E con ordinamento lexicografico definito dall'utente (limite 5 minuti) su MGT010-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/MGT010-1.p -E -lex -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/MGT010-1.p -E -lex -usP -limit300 -test
 
 echo "E con ordinamento multiinsieme definito dall'utente (limite 5 minuti) su MGT010-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/MGT010-1.p -E -mul -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/MGT010-1.p -E -mul -usP -limit300 -test
 
 echo "E con ordinamento knuth-bendix definito dall'utente (limite 5 minuti) su MGT010-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/MGT010-1.p -E -kbo -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/MGT010-1.p -E -kbo -usP -limit300 -test
 
 echo "E con ordinamento lexicografico predefinito (limite 5 minuti) su MGT010-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/MGT010-1.p -E -lex -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/MGT010-1.p -E -lex -stP -limit300 -test
 
 echo "E con ordinamento multiinsieme predefinito (limite 5 minuti) su MGT010-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/MGT010-1.p -E -mul -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/MGT010-1.p -E -mul -stP -limit300 -test
 
 echo "E con ordinamento knuth-bendix predefinito (limite 5 minuti) su MGT010-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/MGT010-1.p -E -kbo -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/MGT010-1.p -E -kbo -stP -limit300 -test
 
 #### sos
 
 echo "E senza ordinamento con insieme di supporto (limite 5 minuti) su MGT010-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/MGT010-1.p -E -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/MGT010-1.p -E -sos -limit300 -test
 
 echo "E con ordinamento lexicografico definito dall'utente con insieme di supporto (limite 5 minuti) su MGT010-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/MGT010-1.p -E -lex -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/MGT010-1.p -E -lex -usP -sos -limit300 -test
 
 echo "E con ordinamento multiinsieme definito dall'utente con insieme di supporto (limite 5 minuti) su MGT010-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/MGT010-1.p -E -mul -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/MGT010-1.p -E -mul -usP -sos -limit300 -test
 
 echo "E con ordinamento knuth-bendix definito dall'utente con insieme di supporto (limite 5 minuti) su MGT010-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/MGT010-1.p -E -kbo -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/MGT010-1.p -E -kbo -usP -sos -limit300 -test
 
 echo "E con ordinamento lexicografico predefinito con insieme di supporto (limite 5 minuti) su MGT010-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/MGT010-1.p -E -lex -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/MGT010-1.p -E -lex -stP -sos -limit300 -test
 
 echo "E con ordinamento multiinsieme predefinito con insieme di supporto (limite 5 minuti) su MGT010-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/MGT010-1.p -E -mul -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/MGT010-1.p -E -mul -stP -sos -limit300 -test
 
 echo "E con ordinamento knuth-bendix predefinito con insieme di supporto (limite 5 minuti) su MGT010-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/MGT010-1.p -E -kbo -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/MGT010-1.p -E -kbo -stP -sos -limit300 -test
  
-echo "E' possibile visualizzare i risultati del test in ./tptp.file/risultati/MGT010-1.p/\n"
+echo "E' possibile visualizzare i risultati del test in $SCRIPTDIR/tptp.file/risultati/MGT010-1.p/\n"
 
 ####################################################################################################################
 ####################################################################################################################
@@ -848,69 +848,69 @@ echo "E' possibile visualizzare i risultati del test in ./tptp.file/risultati/MG
 
 ##### Otter #####
 
-echo "Al termine dello script è possibile visualizzare i risultati del test in ./tptp.file/risultati/PLA001-1.p/\n"
+echo "Al termine dello script è possibile visualizzare i risultati del test in $SCRIPTDIR/tptp.file/risultati/PLA001-1.p/\n"
 
-mkdir ./tptp.file/risultati/PLA001-1.p
+mkdir $SCRIPTDIR/tptp.file/risultati/PLA001-1.p
 
 SCRIPTDIR=`dirname $0`
 
 echo "Otter senza ordinamento (limite 5 minuti) su PLA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA001-1.p -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA001-1.p -limit300 -test
 
 echo "Otter con ordinamento lexicografico definito dall'utente (limite 5 minuti) su PLA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA001-1.p -lex -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA001-1.p -lex -usP -limit300 -test
 
 echo "Otter con ordinamento multiinsieme definito dall'utente (limite 5 minuti) su PLA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA001-1.p -mul -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA001-1.p -mul -usP -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix definito dall'utente (limite 5 minuti) su PLA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA001-1.p -kbo -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA001-1.p -kbo -usP -limit300 -test
 
 echo "Otter con ordinamento lexicografico predefinito (limite 5 minuti) su PLA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA001-1.p -lex -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA001-1.p -lex -stP -limit300 -test
 
 echo "Otter con ordinamento multiinsieme predefinito (limite 5 minuti) su PLA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA001-1.p -mul -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA001-1.p -mul -stP -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix predefinito (limite 5 minuti) su PLA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA001-1.p -kbo -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA001-1.p -kbo -stP -limit300 -test
 
 ###### sos
 
 echo "Otter senza ordinamento con insieme di supporto (limite 5 minuti) su PLA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA001-1.p -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA001-1.p -sos -limit300 -test
 
 echo "Otter con ordinamento lexicografico definito dall'utente con insieme di supporto (limite 5 minuti) su PLA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA001-1.p -lex -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA001-1.p -lex -usP -sos -limit300 -test
 
 echo "Otter con ordinamento multiinsieme definito dall'utente con insieme di supporto (limite 5 minuti) su PLA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA001-1.p -mul -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA001-1.p -mul -usP -sos -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix definito dall'utente con insieme di supporto (limite 5 minuti) su PLA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA001-1.p -kbo -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA001-1.p -kbo -usP -sos -limit300 -test
 
 echo "Otter con ordinamento lexicografico predefinito con insieme di supporto (limite 5 minuti) su PLA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA001-1.p -lex -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA001-1.p -lex -stP -sos -limit300 -test
 
 echo "Otter con ordinamento multiinsieme predefinito con insieme di supporto (limite 5 minuti) su PLA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA001-1.p -mul -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA001-1.p -mul -stP -sos -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix predefinito con insieme di supporto (limite 5 minuti) su PLA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA001-1.p -kbo -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA001-1.p -kbo -stP -sos -limit300 -test
 
 
 
@@ -920,63 +920,63 @@ $SCRIPTDIR/../vr352595.sh ./tptp.file/PLA001-1.p -kbo -stP -sos -limit300 -test
 
 echo "E senza ordinamento (limite 5 minuti) su PLA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA001-1.p -E -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA001-1.p -E -limit300 -test
 
 echo "E con ordinamento lexicografico definito dall'utente (limite 5 minuti) su PLA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA001-1.p -E -lex -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA001-1.p -E -lex -usP -limit300 -test
 
 echo "E con ordinamento multiinsieme definito dall'utente (limite 5 minuti) su PLA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA001-1.p -E -mul -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA001-1.p -E -mul -usP -limit300 -test
 
 echo "E con ordinamento knuth-bendix definito dall'utente (limite 5 minuti) su PLA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA001-1.p -E -kbo -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA001-1.p -E -kbo -usP -limit300 -test
 
 echo "E con ordinamento lexicografico predefinito (limite 5 minuti) su PLA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA001-1.p -E -lex -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA001-1.p -E -lex -stP -limit300 -test
 
 echo "E con ordinamento multiinsieme predefinito (limite 5 minuti) su PLA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA001-1.p -E -mul -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA001-1.p -E -mul -stP -limit300 -test
 
 echo "E con ordinamento knuth-bendix predefinito (limite 5 minuti) su PLA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA001-1.p -E -kbo -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA001-1.p -E -kbo -stP -limit300 -test
 
 #### sos
 
 echo "E senza ordinamento con insieme di supporto (limite 5 minuti) su PLA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA001-1.p -E -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA001-1.p -E -sos -limit300 -test
 
 echo "E con ordinamento lexicografico definito dall'utente con insieme di supporto (limite 5 minuti) su PLA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA001-1.p -E -lex -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA001-1.p -E -lex -usP -sos -limit300 -test
 
 echo "E con ordinamento multiinsieme definito dall'utente con insieme di supporto (limite 5 minuti) su PLA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA001-1.p -E -mul -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA001-1.p -E -mul -usP -sos -limit300 -test
 
 echo "E con ordinamento knuth-bendix definito dall'utente con insieme di supporto (limite 5 minuti) su PLA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA001-1.p -E -kbo -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA001-1.p -E -kbo -usP -sos -limit300 -test
 
 echo "E con ordinamento lexicografico predefinito con insieme di supporto (limite 5 minuti) su PLA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA001-1.p -E -lex -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA001-1.p -E -lex -stP -sos -limit300 -test
 
 echo "E con ordinamento multiinsieme predefinito con insieme di supporto (limite 5 minuti) su PLA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA001-1.p -E -mul -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA001-1.p -E -mul -stP -sos -limit300 -test
 
 echo "E con ordinamento knuth-bendix predefinito con insieme di supporto (limite 5 minuti) su PLA001-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA001-1.p -E -kbo -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA001-1.p -E -kbo -stP -sos -limit300 -test
  
-echo "E' possibile visualizzare i risultati del test in ./tptp.file/risultati/PLA001-1.p/\n"
+echo "E' possibile visualizzare i risultati del test in $SCRIPTDIR/tptp.file/risultati/PLA001-1.p/\n"
 
 ####################################################################################################################
 ####################################################################################################################
@@ -988,69 +988,69 @@ echo "E' possibile visualizzare i risultati del test in ./tptp.file/risultati/PL
 
 ##### Otter #####
 
-echo "Al termine dello script è possibile visualizzare i risultati del test in ./tptp.file/risultati/PLA002-1.p/\n"
+echo "Al termine dello script è possibile visualizzare i risultati del test in $SCRIPTDIR/tptp.file/risultati/PLA002-1.p/\n"
 
-mkdir ./tptp.file/risultati/PLA002-1.p
+mkdir $SCRIPTDIR/tptp.file/risultati/PLA002-1.p
 
 SCRIPTDIR=`dirname $0`
 
 echo "Otter senza ordinamento (limite 5 minuti) su PLA002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA002-1.p -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA002-1.p -limit300 -test
 
 echo "Otter con ordinamento lexicografico definito dall'utente (limite 5 minuti) su PLA002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA002-1.p -lex -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA002-1.p -lex -usP -limit300 -test
 
 echo "Otter con ordinamento multiinsieme definito dall'utente (limite 5 minuti) su PLA002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA002-1.p -mul -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA002-1.p -mul -usP -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix definito dall'utente (limite 5 minuti) su PLA002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA002-1.p -kbo -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA002-1.p -kbo -usP -limit300 -test
 
 echo "Otter con ordinamento lexicografico predefinito (limite 5 minuti) su PLA002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA002-1.p -lex -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA002-1.p -lex -stP -limit300 -test
 
 echo "Otter con ordinamento multiinsieme predefinito (limite 5 minuti) su PLA002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA002-1.p -mul -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA002-1.p -mul -stP -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix predefinito (limite 5 minuti) su PLA002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA002-1.p -kbo -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA002-1.p -kbo -stP -limit300 -test
 
 ###### sos
 
 echo "Otter senza ordinamento con insieme di supporto (limite 5 minuti) su PLA002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA002-1.p -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA002-1.p -sos -limit300 -test
 
 echo "Otter con ordinamento lexicografico definito dall'utente con insieme di supporto (limite 5 minuti) su PLA002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA002-1.p -lex -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA002-1.p -lex -usP -sos -limit300 -test
 
 echo "Otter con ordinamento multiinsieme definito dall'utente con insieme di supporto (limite 5 minuti) su PLA002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA002-1.p -mul -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA002-1.p -mul -usP -sos -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix definito dall'utente con insieme di supporto (limite 5 minuti) su PLA002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA002-1.p -kbo -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA002-1.p -kbo -usP -sos -limit300 -test
 
 echo "Otter con ordinamento lexicografico predefinito con insieme di supporto (limite 5 minuti) su PLA002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA002-1.p -lex -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA002-1.p -lex -stP -sos -limit300 -test
 
 echo "Otter con ordinamento multiinsieme predefinito con insieme di supporto (limite 5 minuti) su PLA002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA002-1.p -mul -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA002-1.p -mul -stP -sos -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix predefinito con insieme di supporto (limite 5 minuti) su PLA002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA002-1.p -kbo -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA002-1.p -kbo -stP -sos -limit300 -test
 
 
 
@@ -1060,63 +1060,63 @@ $SCRIPTDIR/../vr352595.sh ./tptp.file/PLA002-1.p -kbo -stP -sos -limit300 -test
 
 echo "E senza ordinamento (limite 5 minuti) su PLA002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA002-1.p -E -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA002-1.p -E -limit300 -test
 
 echo "E con ordinamento lexicografico definito dall'utente (limite 5 minuti) su PLA002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA002-1.p -E -lex -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA002-1.p -E -lex -usP -limit300 -test
 
 echo "E con ordinamento multiinsieme definito dall'utente (limite 5 minuti) su PLA002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA002-1.p -E -mul -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA002-1.p -E -mul -usP -limit300 -test
 
 echo "E con ordinamento knuth-bendix definito dall'utente (limite 5 minuti) su PLA002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA002-1.p -E -kbo -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA002-1.p -E -kbo -usP -limit300 -test
 
 echo "E con ordinamento lexicografico predefinito (limite 5 minuti) su PLA002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA002-1.p -E -lex -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA002-1.p -E -lex -stP -limit300 -test
 
 echo "E con ordinamento multiinsieme predefinito (limite 5 minuti) su PLA002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA002-1.p -E -mul -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA002-1.p -E -mul -stP -limit300 -test
 
 echo "E con ordinamento knuth-bendix predefinito (limite 5 minuti) su PLA002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA002-1.p -E -kbo -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA002-1.p -E -kbo -stP -limit300 -test
 
 #### sos
 
 echo "E senza ordinamento con insieme di supporto (limite 5 minuti) su PLA002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA002-1.p -E -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA002-1.p -E -sos -limit300 -test
 
 echo "E con ordinamento lexicografico definito dall'utente con insieme di supporto (limite 5 minuti) su PLA002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA002-1.p -E -lex -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA002-1.p -E -lex -usP -sos -limit300 -test
 
 echo "E con ordinamento multiinsieme definito dall'utente con insieme di supporto (limite 5 minuti) su PLA002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA002-1.p -E -mul -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA002-1.p -E -mul -usP -sos -limit300 -test
 
 echo "E con ordinamento knuth-bendix definito dall'utente con insieme di supporto (limite 5 minuti) su PLA002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA002-1.p -E -kbo -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA002-1.p -E -kbo -usP -sos -limit300 -test
 
 echo "E con ordinamento lexicografico predefinito con insieme di supporto (limite 5 minuti) su PLA002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA002-1.p -E -lex -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA002-1.p -E -lex -stP -sos -limit300 -test
 
 echo "E con ordinamento multiinsieme predefinito con insieme di supporto (limite 5 minuti) su PLA002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA002-1.p -E -mul -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA002-1.p -E -mul -stP -sos -limit300 -test
 
 echo "E con ordinamento knuth-bendix predefinito con insieme di supporto (limite 5 minuti) su PLA002-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA002-1.p -E -kbo -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA002-1.p -E -kbo -stP -sos -limit300 -test
  
-echo "E' possibile visualizzare i risultati del test in ./tptp.file/risultati/PLA002-1.p/\n"
+echo "E' possibile visualizzare i risultati del test in $SCRIPTDIR/tptp.file/risultati/PLA002-1.p/\n"
 
 ####################################################################################################################
 ####################################################################################################################
@@ -1128,69 +1128,69 @@ echo "E' possibile visualizzare i risultati del test in ./tptp.file/risultati/PL
 
 ##### Otter #####
 
-echo "Al termine dello script è possibile visualizzare i risultati del test in ./tptp.file/risultati/PLA003-1.p/\n"
+echo "Al termine dello script è possibile visualizzare i risultati del test in $SCRIPTDIR/tptp.file/risultati/PLA003-1.p/\n"
 
-mkdir ./tptp.file/risultati/PLA003-1.p
+mkdir $SCRIPTDIR/tptp.file/risultati/PLA003-1.p
 
 SCRIPTDIR=`dirname $0`
 
 echo "Otter senza ordinamento (limite 5 minuti) su PLA003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA003-1.p -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA003-1.p -limit300 -test
 
 echo "Otter con ordinamento lexicografico definito dall'utente (limite 5 minuti) su PLA003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA003-1.p -lex -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA003-1.p -lex -usP -limit300 -test
 
 echo "Otter con ordinamento multiinsieme definito dall'utente (limite 5 minuti) su PLA003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA003-1.p -mul -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA003-1.p -mul -usP -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix definito dall'utente (limite 5 minuti) su PLA003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA003-1.p -kbo -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA003-1.p -kbo -usP -limit300 -test
 
 echo "Otter con ordinamento lexicografico predefinito (limite 5 minuti) su PLA003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA003-1.p -lex -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA003-1.p -lex -stP -limit300 -test
 
 echo "Otter con ordinamento multiinsieme predefinito (limite 5 minuti) su PLA003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA003-1.p -mul -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA003-1.p -mul -stP -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix predefinito (limite 5 minuti) su PLA003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA003-1.p -kbo -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA003-1.p -kbo -stP -limit300 -test
 
 ###### sos
 
 echo "Otter senza ordinamento con insieme di supporto (limite 5 minuti) su PLA003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA003-1.p -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA003-1.p -sos -limit300 -test
 
 echo "Otter con ordinamento lexicografico definito dall'utente con insieme di supporto (limite 5 minuti) su PLA003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA003-1.p -lex -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA003-1.p -lex -usP -sos -limit300 -test
 
 echo "Otter con ordinamento multiinsieme definito dall'utente con insieme di supporto (limite 5 minuti) su PLA003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA003-1.p -mul -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA003-1.p -mul -usP -sos -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix definito dall'utente con insieme di supporto (limite 5 minuti) su PLA003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA003-1.p -kbo -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA003-1.p -kbo -usP -sos -limit300 -test
 
 echo "Otter con ordinamento lexicografico predefinito con insieme di supporto (limite 5 minuti) su PLA003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA003-1.p -lex -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA003-1.p -lex -stP -sos -limit300 -test
 
 echo "Otter con ordinamento multiinsieme predefinito con insieme di supporto (limite 5 minuti) su PLA003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA003-1.p -mul -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA003-1.p -mul -stP -sos -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix predefinito con insieme di supporto (limite 5 minuti) su PLA003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA003-1.p -kbo -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA003-1.p -kbo -stP -sos -limit300 -test
 
 
 
@@ -1200,63 +1200,63 @@ $SCRIPTDIR/../vr352595.sh ./tptp.file/PLA003-1.p -kbo -stP -sos -limit300 -test
 
 echo "E senza ordinamento (limite 5 minuti) su PLA003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA003-1.p -E -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA003-1.p -E -limit300 -test
 
 echo "E con ordinamento lexicografico definito dall'utente (limite 5 minuti) su PLA003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA003-1.p -E -lex -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA003-1.p -E -lex -usP -limit300 -test
 
 echo "E con ordinamento multiinsieme definito dall'utente (limite 5 minuti) su PLA003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA003-1.p -E -mul -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA003-1.p -E -mul -usP -limit300 -test
 
 echo "E con ordinamento knuth-bendix definito dall'utente (limite 5 minuti) su PLA003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA003-1.p -E -kbo -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA003-1.p -E -kbo -usP -limit300 -test
 
 echo "E con ordinamento lexicografico predefinito (limite 5 minuti) su PLA003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA003-1.p -E -lex -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA003-1.p -E -lex -stP -limit300 -test
 
 echo "E con ordinamento multiinsieme predefinito (limite 5 minuti) su PLA003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA003-1.p -E -mul -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA003-1.p -E -mul -stP -limit300 -test
 
 echo "E con ordinamento knuth-bendix predefinito (limite 5 minuti) su PLA003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA003-1.p -E -kbo -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA003-1.p -E -kbo -stP -limit300 -test
 
 #### sos
 
 echo "E senza ordinamento con insieme di supporto (limite 5 minuti) su PLA003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA003-1.p -E -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA003-1.p -E -sos -limit300 -test
 
 echo "E con ordinamento lexicografico definito dall'utente con insieme di supporto (limite 5 minuti) su PLA003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA003-1.p -E -lex -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA003-1.p -E -lex -usP -sos -limit300 -test
 
 echo "E con ordinamento multiinsieme definito dall'utente con insieme di supporto (limite 5 minuti) su PLA003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA003-1.p -E -mul -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA003-1.p -E -mul -usP -sos -limit300 -test
 
 echo "E con ordinamento knuth-bendix definito dall'utente con insieme di supporto (limite 5 minuti) su PLA003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA003-1.p -E -kbo -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA003-1.p -E -kbo -usP -sos -limit300 -test
 
 echo "E con ordinamento lexicografico predefinito con insieme di supporto (limite 5 minuti) su PLA003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA003-1.p -E -lex -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA003-1.p -E -lex -stP -sos -limit300 -test
 
 echo "E con ordinamento multiinsieme predefinito con insieme di supporto (limite 5 minuti) su PLA003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA003-1.p -E -mul -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA003-1.p -E -mul -stP -sos -limit300 -test
 
 echo "E con ordinamento knuth-bendix predefinito con insieme di supporto (limite 5 minuti) su PLA003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA003-1.p -E -kbo -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA003-1.p -E -kbo -stP -sos -limit300 -test
  
-echo "E' possibile visualizzare i risultati del test in ./tptp.file/risultati/PLA003-1.p/\n"
+echo "E' possibile visualizzare i risultati del test in $SCRIPTDIR/tptp.file/risultati/PLA003-1.p/\n"
 
 ####################################################################################################################
 ####################################################################################################################
@@ -1268,69 +1268,69 @@ echo "E' possibile visualizzare i risultati del test in ./tptp.file/risultati/PL
 
 ##### Otter #####
 
-echo "Al termine dello script è possibile visualizzare i risultati del test in ./tptp.file/risultati/PLA031-1.008.p/\n"
+echo "Al termine dello script è possibile visualizzare i risultati del test in $SCRIPTDIR/tptp.file/risultati/PLA031-1.008.p/\n"
 
-mkdir ./tptp.file/risultati/PLA031-1.008.p
+mkdir $SCRIPTDIR/tptp.file/risultati/PLA031-1.008.p
 
 SCRIPTDIR=`dirname $0`
 
 echo "Otter senza ordinamento (limite 5 minuti) su PLA031-1.008.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA031-1.008.p -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA031-1.008.p -limit300 -test
 
 echo "Otter con ordinamento lexicografico definito dall'utente (limite 5 minuti) su PLA031-1.008.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA031-1.008.p -lex -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA031-1.008.p -lex -usP -limit300 -test
 
 echo "Otter con ordinamento multiinsieme definito dall'utente (limite 5 minuti) su PLA031-1.008.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA031-1.008.p -mul -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA031-1.008.p -mul -usP -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix definito dall'utente (limite 5 minuti) su PLA031-1.008.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA031-1.008.p -kbo -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA031-1.008.p -kbo -usP -limit300 -test
 
 echo "Otter con ordinamento lexicografico predefinito (limite 5 minuti) su PLA031-1.008.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA031-1.008.p -lex -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA031-1.008.p -lex -stP -limit300 -test
 
 echo "Otter con ordinamento multiinsieme predefinito (limite 5 minuti) su PLA031-1.008.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA031-1.008.p -mul -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA031-1.008.p -mul -stP -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix predefinito (limite 5 minuti) su PLA031-1.008.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA031-1.008.p -kbo -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA031-1.008.p -kbo -stP -limit300 -test
 
 ###### sos
 
 echo "Otter senza ordinamento con insieme di supporto (limite 5 minuti) su PLA031-1.008.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA031-1.008.p -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA031-1.008.p -sos -limit300 -test
 
 echo "Otter con ordinamento lexicografico definito dall'utente con insieme di supporto (limite 5 minuti) su PLA031-1.008.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA031-1.008.p -lex -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA031-1.008.p -lex -usP -sos -limit300 -test
 
 echo "Otter con ordinamento multiinsieme definito dall'utente con insieme di supporto (limite 5 minuti) su PLA031-1.008.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA031-1.008.p -mul -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA031-1.008.p -mul -usP -sos -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix definito dall'utente con insieme di supporto (limite 5 minuti) su PLA031-1.008.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA031-1.008.p -kbo -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA031-1.008.p -kbo -usP -sos -limit300 -test
 
 echo "Otter con ordinamento lexicografico predefinito con insieme di supporto (limite 5 minuti) su PLA031-1.008.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA031-1.008.p -lex -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA031-1.008.p -lex -stP -sos -limit300 -test
 
 echo "Otter con ordinamento multiinsieme predefinito con insieme di supporto (limite 5 minuti) su PLA031-1.008.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA031-1.008.p -mul -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA031-1.008.p -mul -stP -sos -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix predefinito con insieme di supporto (limite 5 minuti) su PLA031-1.008.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA031-1.008.p -kbo -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA031-1.008.p -kbo -stP -sos -limit300 -test
 
 
 
@@ -1340,63 +1340,63 @@ $SCRIPTDIR/../vr352595.sh ./tptp.file/PLA031-1.008.p -kbo -stP -sos -limit300 -t
 
 echo "E senza ordinamento (limite 5 minuti) su PLA031-1.008.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA031-1.008.p -E -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA031-1.008.p -E -limit300 -test
 
 echo "E con ordinamento lexicografico definito dall'utente (limite 5 minuti) su PLA031-1.008.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA031-1.008.p -E -lex -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA031-1.008.p -E -lex -usP -limit300 -test
 
 echo "E con ordinamento multiinsieme definito dall'utente (limite 5 minuti) su PLA031-1.008.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA031-1.008.p -E -mul -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA031-1.008.p -E -mul -usP -limit300 -test
 
 echo "E con ordinamento knuth-bendix definito dall'utente (limite 5 minuti) su PLA031-1.008.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA031-1.008.p -E -kbo -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA031-1.008.p -E -kbo -usP -limit300 -test
 
 echo "E con ordinamento lexicografico predefinito (limite 5 minuti) su PLA031-1.008.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA031-1.008.p -E -lex -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA031-1.008.p -E -lex -stP -limit300 -test
 
 echo "E con ordinamento multiinsieme predefinito (limite 5 minuti) su PLA031-1.008.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA031-1.008.p -E -mul -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA031-1.008.p -E -mul -stP -limit300 -test
 
 echo "E con ordinamento knuth-bendix predefinito (limite 5 minuti) su PLA031-1.008.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA031-1.008.p -E -kbo -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA031-1.008.p -E -kbo -stP -limit300 -test
 
 #### sos
 
 echo "E senza ordinamento con insieme di supporto (limite 5 minuti) su PLA031-1.008.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA031-1.008.p -E -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA031-1.008.p -E -sos -limit300 -test
 
 echo "E con ordinamento lexicografico definito dall'utente con insieme di supporto (limite 5 minuti) su PLA031-1.008.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA031-1.008.p -E -lex -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA031-1.008.p -E -lex -usP -sos -limit300 -test
 
 echo "E con ordinamento multiinsieme definito dall'utente con insieme di supporto (limite 5 minuti) su PLA031-1.008.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA031-1.008.p -E -mul -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA031-1.008.p -E -mul -usP -sos -limit300 -test
 
 echo "E con ordinamento knuth-bendix definito dall'utente con insieme di supporto (limite 5 minuti) su PLA031-1.008.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA031-1.008.p -E -kbo -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA031-1.008.p -E -kbo -usP -sos -limit300 -test
 
 echo "E con ordinamento lexicografico predefinito con insieme di supporto (limite 5 minuti) su PLA031-1.008.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA031-1.008.p -E -lex -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA031-1.008.p -E -lex -stP -sos -limit300 -test
 
 echo "E con ordinamento multiinsieme predefinito con insieme di supporto (limite 5 minuti) su PLA031-1.008.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA031-1.008.p -E -mul -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA031-1.008.p -E -mul -stP -sos -limit300 -test
 
 echo "E con ordinamento knuth-bendix predefinito con insieme di supporto (limite 5 minuti) su PLA031-1.008.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PLA031-1.008.p -E -kbo -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PLA031-1.008.p -E -kbo -stP -sos -limit300 -test
  
-echo "E' possibile visualizzare i risultati del test in ./tptp.file/risultati/PLA031-1.008.p/\n"
+echo "E' possibile visualizzare i risultati del test in $SCRIPTDIR/tptp.file/risultati/PLA031-1.008.p/\n"
 
 ####################################################################################################################
 ####################################################################################################################
@@ -1408,69 +1408,69 @@ echo "E' possibile visualizzare i risultati del test in ./tptp.file/risultati/PL
 
 ##### Otter #####
 
-echo "Al termine dello script è possibile visualizzare i risultati del test in ./tptp.file/risultati/PUZ001-3.p/\n"
+echo "Al termine dello script è possibile visualizzare i risultati del test in $SCRIPTDIR/tptp.file/risultati/PUZ001-3.p/\n"
 
-mkdir ./tptp.file/risultati/PUZ001-3.p
+mkdir $SCRIPTDIR/tptp.file/risultati/PUZ001-3.p
 
 SCRIPTDIR=`dirname $0`
 
 echo "Otter senza ordinamento (limite 5 minuti) su PUZ001-3.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ001-3.p -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ001-3.p -limit300 -test
 
 echo "Otter con ordinamento lexicografico definito dall'utente (limite 5 minuti) su PUZ001-3.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ001-3.p -lex -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ001-3.p -lex -usP -limit300 -test
 
 echo "Otter con ordinamento multiinsieme definito dall'utente (limite 5 minuti) su PUZ001-3.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ001-3.p -mul -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ001-3.p -mul -usP -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix definito dall'utente (limite 5 minuti) su PUZ001-3.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ001-3.p -kbo -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ001-3.p -kbo -usP -limit300 -test
 
 echo "Otter con ordinamento lexicografico predefinito (limite 5 minuti) su PUZ001-3.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ001-3.p -lex -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ001-3.p -lex -stP -limit300 -test
 
 echo "Otter con ordinamento multiinsieme predefinito (limite 5 minuti) su PUZ001-3.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ001-3.p -mul -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ001-3.p -mul -stP -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix predefinito (limite 5 minuti) su PUZ001-3.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ001-3.p -kbo -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ001-3.p -kbo -stP -limit300 -test
 
 ###### sos
 
 echo "Otter senza ordinamento con insieme di supporto (limite 5 minuti) su PUZ001-3.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ001-3.p -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ001-3.p -sos -limit300 -test
 
 echo "Otter con ordinamento lexicografico definito dall'utente con insieme di supporto (limite 5 minuti) su PUZ001-3.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ001-3.p -lex -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ001-3.p -lex -usP -sos -limit300 -test
 
 echo "Otter con ordinamento multiinsieme definito dall'utente con insieme di supporto (limite 5 minuti) su PUZ001-3.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ001-3.p -mul -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ001-3.p -mul -usP -sos -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix definito dall'utente con insieme di supporto (limite 5 minuti) su PUZ001-3.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ001-3.p -kbo -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ001-3.p -kbo -usP -sos -limit300 -test
 
 echo "Otter con ordinamento lexicografico predefinito con insieme di supporto (limite 5 minuti) su PUZ001-3.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ001-3.p -lex -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ001-3.p -lex -stP -sos -limit300 -test
 
 echo "Otter con ordinamento multiinsieme predefinito con insieme di supporto (limite 5 minuti) su PUZ001-3.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ001-3.p -mul -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ001-3.p -mul -stP -sos -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix predefinito con insieme di supporto (limite 5 minuti) su PUZ001-3.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ001-3.p -kbo -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ001-3.p -kbo -stP -sos -limit300 -test
 
 
 
@@ -1480,63 +1480,63 @@ $SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ001-3.p -kbo -stP -sos -limit300 -test
 
 echo "E senza ordinamento (limite 5 minuti) su PUZ001-3.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ001-3.p -E -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ001-3.p -E -limit300 -test
 
 echo "E con ordinamento lexicografico definito dall'utente (limite 5 minuti) su PUZ001-3.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ001-3.p -E -lex -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ001-3.p -E -lex -usP -limit300 -test
 
 echo "E con ordinamento multiinsieme definito dall'utente (limite 5 minuti) su PUZ001-3.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ001-3.p -E -mul -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ001-3.p -E -mul -usP -limit300 -test
 
 echo "E con ordinamento knuth-bendix definito dall'utente (limite 5 minuti) su PUZ001-3.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ001-3.p -E -kbo -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ001-3.p -E -kbo -usP -limit300 -test
 
 echo "E con ordinamento lexicografico predefinito (limite 5 minuti) su PUZ001-3.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ001-3.p -E -lex -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ001-3.p -E -lex -stP -limit300 -test
 
 echo "E con ordinamento multiinsieme predefinito (limite 5 minuti) su PUZ001-3.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ001-3.p -E -mul -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ001-3.p -E -mul -stP -limit300 -test
 
 echo "E con ordinamento knuth-bendix predefinito (limite 5 minuti) su PUZ001-3.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ001-3.p -E -kbo -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ001-3.p -E -kbo -stP -limit300 -test
 
 #### sos
 
 echo "E senza ordinamento con insieme di supporto (limite 5 minuti) su PUZ001-3.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ001-3.p -E -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ001-3.p -E -sos -limit300 -test
 
 echo "E con ordinamento lexicografico definito dall'utente con insieme di supporto (limite 5 minuti) su PUZ001-3.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ001-3.p -E -lex -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ001-3.p -E -lex -usP -sos -limit300 -test
 
 echo "E con ordinamento multiinsieme definito dall'utente con insieme di supporto (limite 5 minuti) su PUZ001-3.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ001-3.p -E -mul -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ001-3.p -E -mul -usP -sos -limit300 -test
 
 echo "E con ordinamento knuth-bendix definito dall'utente con insieme di supporto (limite 5 minuti) su PUZ001-3.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ001-3.p -E -kbo -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ001-3.p -E -kbo -usP -sos -limit300 -test
 
 echo "E con ordinamento lexicografico predefinito con insieme di supporto (limite 5 minuti) su PUZ001-3.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ001-3.p -E -lex -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ001-3.p -E -lex -stP -sos -limit300 -test
 
 echo "E con ordinamento multiinsieme predefinito con insieme di supporto (limite 5 minuti) su PUZ001-3.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ001-3.p -E -mul -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ001-3.p -E -mul -stP -sos -limit300 -test
 
 echo "E con ordinamento knuth-bendix predefinito con insieme di supporto (limite 5 minuti) su PUZ001-3.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ001-3.p -E -kbo -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ001-3.p -E -kbo -stP -sos -limit300 -test
  
-echo "E' possibile visualizzare i risultati del test in ./tptp.file/risultati/PUZ001-3.p/\n"
+echo "E' possibile visualizzare i risultati del test in $SCRIPTDIR/tptp.file/risultati/PUZ001-3.p/\n"
 
 ####################################################################################################################
 ####################################################################################################################
@@ -1548,69 +1548,69 @@ echo "E' possibile visualizzare i risultati del test in ./tptp.file/risultati/PU
 
 ##### Otter #####
 
-echo "Al termine dello script è possibile visualizzare i risultati del test in ./tptp.file/risultati/PUZ003-1.p/\n"
+echo "Al termine dello script è possibile visualizzare i risultati del test in $SCRIPTDIR/tptp.file/risultati/PUZ003-1.p/\n"
 
-mkdir ./tptp.file/risultati/PUZ003-1.p
+mkdir $SCRIPTDIR/tptp.file/risultati/PUZ003-1.p
 
 SCRIPTDIR=`dirname $0`
 
 echo "Otter senza ordinamento (limite 5 minuti) su PUZ003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ003-1.p -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ003-1.p -limit300 -test
 
 echo "Otter con ordinamento lexicografico definito dall'utente (limite 5 minuti) su PUZ003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ003-1.p -lex -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ003-1.p -lex -usP -limit300 -test
 
 echo "Otter con ordinamento multiinsieme definito dall'utente (limite 5 minuti) su PUZ003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ003-1.p -mul -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ003-1.p -mul -usP -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix definito dall'utente (limite 5 minuti) su PUZ003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ003-1.p -kbo -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ003-1.p -kbo -usP -limit300 -test
 
 echo "Otter con ordinamento lexicografico predefinito (limite 5 minuti) su PUZ003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ003-1.p -lex -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ003-1.p -lex -stP -limit300 -test
 
 echo "Otter con ordinamento multiinsieme predefinito (limite 5 minuti) su PUZ003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ003-1.p -mul -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ003-1.p -mul -stP -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix predefinito (limite 5 minuti) su PUZ003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ003-1.p -kbo -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ003-1.p -kbo -stP -limit300 -test
 
 ###### sos
 
 echo "Otter senza ordinamento con insieme di supporto (limite 5 minuti) su PUZ003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ003-1.p -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ003-1.p -sos -limit300 -test
 
 echo "Otter con ordinamento lexicografico definito dall'utente con insieme di supporto (limite 5 minuti) su PUZ003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ003-1.p -lex -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ003-1.p -lex -usP -sos -limit300 -test
 
 echo "Otter con ordinamento multiinsieme definito dall'utente con insieme di supporto (limite 5 minuti) su PUZ003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ003-1.p -mul -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ003-1.p -mul -usP -sos -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix definito dall'utente con insieme di supporto (limite 5 minuti) su PUZ003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ003-1.p -kbo -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ003-1.p -kbo -usP -sos -limit300 -test
 
 echo "Otter con ordinamento lexicografico predefinito con insieme di supporto (limite 5 minuti) su PUZ003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ003-1.p -lex -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ003-1.p -lex -stP -sos -limit300 -test
 
 echo "Otter con ordinamento multiinsieme predefinito con insieme di supporto (limite 5 minuti) su PUZ003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ003-1.p -mul -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ003-1.p -mul -stP -sos -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix predefinito con insieme di supporto (limite 5 minuti) su PUZ003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ003-1.p -kbo -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ003-1.p -kbo -stP -sos -limit300 -test
 
 
 
@@ -1620,63 +1620,63 @@ $SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ003-1.p -kbo -stP -sos -limit300 -test
 
 echo "E senza ordinamento (limite 5 minuti) su PUZ003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ003-1.p -E -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ003-1.p -E -limit300 -test
 
 echo "E con ordinamento lexicografico definito dall'utente (limite 5 minuti) su PUZ003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ003-1.p -E -lex -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ003-1.p -E -lex -usP -limit300 -test
 
 echo "E con ordinamento multiinsieme definito dall'utente (limite 5 minuti) su PUZ003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ003-1.p -E -mul -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ003-1.p -E -mul -usP -limit300 -test
 
 echo "E con ordinamento knuth-bendix definito dall'utente (limite 5 minuti) su PUZ003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ003-1.p -E -kbo -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ003-1.p -E -kbo -usP -limit300 -test
 
 echo "E con ordinamento lexicografico predefinito (limite 5 minuti) su PUZ003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ003-1.p -E -lex -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ003-1.p -E -lex -stP -limit300 -test
 
 echo "E con ordinamento multiinsieme predefinito (limite 5 minuti) su PUZ003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ003-1.p -E -mul -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ003-1.p -E -mul -stP -limit300 -test
 
 echo "E con ordinamento knuth-bendix predefinito (limite 5 minuti) su PUZ003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ003-1.p -E -kbo -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ003-1.p -E -kbo -stP -limit300 -test
 
 #### sos
 
 echo "E senza ordinamento con insieme di supporto (limite 5 minuti) su PUZ003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ003-1.p -E -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ003-1.p -E -sos -limit300 -test
 
 echo "E con ordinamento lexicografico definito dall'utente con insieme di supporto (limite 5 minuti) su PUZ003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ003-1.p -E -lex -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ003-1.p -E -lex -usP -sos -limit300 -test
 
 echo "E con ordinamento multiinsieme definito dall'utente con insieme di supporto (limite 5 minuti) su PUZ003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ003-1.p -E -mul -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ003-1.p -E -mul -usP -sos -limit300 -test
 
 echo "E con ordinamento knuth-bendix definito dall'utente con insieme di supporto (limite 5 minuti) su PUZ003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ003-1.p -E -kbo -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ003-1.p -E -kbo -usP -sos -limit300 -test
 
 echo "E con ordinamento lexicografico predefinito con insieme di supporto (limite 5 minuti) su PUZ003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ003-1.p -E -lex -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ003-1.p -E -lex -stP -sos -limit300 -test
 
 echo "E con ordinamento multiinsieme predefinito con insieme di supporto (limite 5 minuti) su PUZ003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ003-1.p -E -mul -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ003-1.p -E -mul -stP -sos -limit300 -test
 
 echo "E con ordinamento knuth-bendix predefinito con insieme di supporto (limite 5 minuti) su PUZ003-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ003-1.p -E -kbo -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ003-1.p -E -kbo -stP -sos -limit300 -test
  
-echo "E' possibile visualizzare i risultati del test in ./tptp.file/risultati/PUZ003-1.p/\n"
+echo "E' possibile visualizzare i risultati del test in $SCRIPTDIR/tptp.file/risultati/PUZ003-1.p/\n"
 
 ####################################################################################################################
 ####################################################################################################################
@@ -1688,69 +1688,69 @@ echo "E' possibile visualizzare i risultati del test in ./tptp.file/risultati/PU
 
 ##### Otter #####
 
-echo "Al termine dello script è possibile visualizzare i risultati del test in ./tptp.file/risultati/PUZ014-1.p/\n"
+echo "Al termine dello script è possibile visualizzare i risultati del test in $SCRIPTDIR/tptp.file/risultati/PUZ014-1.p/\n"
 
-mkdir ./tptp.file/risultati/PUZ014-1.p
+mkdir $SCRIPTDIR/tptp.file/risultati/PUZ014-1.p
 
 SCRIPTDIR=`dirname $0`
 
 echo "Otter senza ordinamento (limite 5 minuti) su PUZ014-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ014-1.p -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ014-1.p -limit300 -test
 
 echo "Otter con ordinamento lexicografico definito dall'utente (limite 5 minuti) su PUZ014-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ014-1.p -lex -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ014-1.p -lex -usP -limit300 -test
 
 echo "Otter con ordinamento multiinsieme definito dall'utente (limite 5 minuti) su PUZ014-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ014-1.p -mul -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ014-1.p -mul -usP -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix definito dall'utente (limite 5 minuti) su PUZ014-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ014-1.p -kbo -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ014-1.p -kbo -usP -limit300 -test
 
 echo "Otter con ordinamento lexicografico predefinito (limite 5 minuti) su PUZ014-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ014-1.p -lex -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ014-1.p -lex -stP -limit300 -test
 
 echo "Otter con ordinamento multiinsieme predefinito (limite 5 minuti) su PUZ014-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ014-1.p -mul -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ014-1.p -mul -stP -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix predefinito (limite 5 minuti) su PUZ014-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ014-1.p -kbo -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ014-1.p -kbo -stP -limit300 -test
 
 ###### sos
 
 echo "Otter senza ordinamento con insieme di supporto (limite 5 minuti) su PUZ014-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ014-1.p -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ014-1.p -sos -limit300 -test
 
 echo "Otter con ordinamento lexicografico definito dall'utente con insieme di supporto (limite 5 minuti) su PUZ014-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ014-1.p -lex -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ014-1.p -lex -usP -sos -limit300 -test
 
 echo "Otter con ordinamento multiinsieme definito dall'utente con insieme di supporto (limite 5 minuti) su PUZ014-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ014-1.p -mul -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ014-1.p -mul -usP -sos -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix definito dall'utente con insieme di supporto (limite 5 minuti) su PUZ014-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ014-1.p -kbo -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ014-1.p -kbo -usP -sos -limit300 -test
 
 echo "Otter con ordinamento lexicografico predefinito con insieme di supporto (limite 5 minuti) su PUZ014-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ014-1.p -lex -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ014-1.p -lex -stP -sos -limit300 -test
 
 echo "Otter con ordinamento multiinsieme predefinito con insieme di supporto (limite 5 minuti) su PUZ014-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ014-1.p -mul -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ014-1.p -mul -stP -sos -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix predefinito con insieme di supporto (limite 5 minuti) su PUZ014-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ014-1.p -kbo -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ014-1.p -kbo -stP -sos -limit300 -test
 
 
 
@@ -1760,63 +1760,63 @@ $SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ014-1.p -kbo -stP -sos -limit300 -test
 
 echo "E senza ordinamento (limite 5 minuti) su PUZ014-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ014-1.p -E -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ014-1.p -E -limit300 -test
 
 echo "E con ordinamento lexicografico definito dall'utente (limite 5 minuti) su PUZ014-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ014-1.p -E -lex -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ014-1.p -E -lex -usP -limit300 -test
 
 echo "E con ordinamento multiinsieme definito dall'utente (limite 5 minuti) su PUZ014-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ014-1.p -E -mul -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ014-1.p -E -mul -usP -limit300 -test
 
 echo "E con ordinamento knuth-bendix definito dall'utente (limite 5 minuti) su PUZ014-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ014-1.p -E -kbo -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ014-1.p -E -kbo -usP -limit300 -test
 
 echo "E con ordinamento lexicografico predefinito (limite 5 minuti) su PUZ014-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ014-1.p -E -lex -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ014-1.p -E -lex -stP -limit300 -test
 
 echo "E con ordinamento multiinsieme predefinito (limite 5 minuti) su PUZ014-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ014-1.p -E -mul -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ014-1.p -E -mul -stP -limit300 -test
 
 echo "E con ordinamento knuth-bendix predefinito (limite 5 minuti) su PUZ014-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ014-1.p -E -kbo -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ014-1.p -E -kbo -stP -limit300 -test
 
 #### sos
 
 echo "E senza ordinamento con insieme di supporto (limite 5 minuti) su PUZ014-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ014-1.p -E -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ014-1.p -E -sos -limit300 -test
 
 echo "E con ordinamento lexicografico definito dall'utente con insieme di supporto (limite 5 minuti) su PUZ014-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ014-1.p -E -lex -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ014-1.p -E -lex -usP -sos -limit300 -test
 
 echo "E con ordinamento multiinsieme definito dall'utente con insieme di supporto (limite 5 minuti) su PUZ014-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ014-1.p -E -mul -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ014-1.p -E -mul -usP -sos -limit300 -test
 
 echo "E con ordinamento knuth-bendix definito dall'utente con insieme di supporto (limite 5 minuti) su PUZ014-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ014-1.p -E -kbo -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ014-1.p -E -kbo -usP -sos -limit300 -test
 
 echo "E con ordinamento lexicografico predefinito con insieme di supporto (limite 5 minuti) su PUZ014-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ014-1.p -E -lex -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ014-1.p -E -lex -stP -sos -limit300 -test
 
 echo "E con ordinamento multiinsieme predefinito con insieme di supporto (limite 5 minuti) su PUZ014-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ014-1.p -E -mul -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ014-1.p -E -mul -stP -sos -limit300 -test
 
 echo "E con ordinamento knuth-bendix predefinito con insieme di supporto (limite 5 minuti) su PUZ014-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ014-1.p -E -kbo -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ014-1.p -E -kbo -stP -sos -limit300 -test
  
-echo "E' possibile visualizzare i risultati del test in ./tptp.file/risultati/PUZ014-1.p/\n"
+echo "E' possibile visualizzare i risultati del test in $SCRIPTDIR/tptp.file/risultati/PUZ014-1.p/\n"
 
 ####################################################################################################################
 ####################################################################################################################
@@ -1828,69 +1828,69 @@ echo "E' possibile visualizzare i risultati del test in ./tptp.file/risultati/PU
 
 ##### Otter #####
 
-echo "Al termine dello script è possibile visualizzare i risultati del test in ./tptp.file/risultati/PUZ023-1.p/\n"
+echo "Al termine dello script è possibile visualizzare i risultati del test in $SCRIPTDIR/tptp.file/risultati/PUZ023-1.p/\n"
 
-mkdir ./tptp.file/risultati/PUZ023-1.p
+mkdir $SCRIPTDIR/tptp.file/risultati/PUZ023-1.p
 
 SCRIPTDIR=`dirname $0`
 
 echo "Otter senza ordinamento (limite 5 minuti) su PUZ023-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ023-1.p -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ023-1.p -limit300 -test
 
 echo "Otter con ordinamento lexicografico definito dall'utente (limite 5 minuti) su PUZ023-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ023-1.p -lex -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ023-1.p -lex -usP -limit300 -test
 
 echo "Otter con ordinamento multiinsieme definito dall'utente (limite 5 minuti) su PUZ023-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ023-1.p -mul -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ023-1.p -mul -usP -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix definito dall'utente (limite 5 minuti) su PUZ023-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ023-1.p -kbo -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ023-1.p -kbo -usP -limit300 -test
 
 echo "Otter con ordinamento lexicografico predefinito (limite 5 minuti) su PUZ023-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ023-1.p -lex -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ023-1.p -lex -stP -limit300 -test
 
 echo "Otter con ordinamento multiinsieme predefinito (limite 5 minuti) su PUZ023-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ023-1.p -mul -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ023-1.p -mul -stP -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix predefinito (limite 5 minuti) su PUZ023-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ023-1.p -kbo -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ023-1.p -kbo -stP -limit300 -test
 
 ###### sos
 
 echo "Otter senza ordinamento con insieme di supporto (limite 5 minuti) su PUZ023-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ023-1.p -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ023-1.p -sos -limit300 -test
 
 echo "Otter con ordinamento lexicografico definito dall'utente con insieme di supporto (limite 5 minuti) su PUZ023-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ023-1.p -lex -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ023-1.p -lex -usP -sos -limit300 -test
 
 echo "Otter con ordinamento multiinsieme definito dall'utente con insieme di supporto (limite 5 minuti) su PUZ023-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ023-1.p -mul -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ023-1.p -mul -usP -sos -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix definito dall'utente con insieme di supporto (limite 5 minuti) su PUZ023-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ023-1.p -kbo -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ023-1.p -kbo -usP -sos -limit300 -test
 
 echo "Otter con ordinamento lexicografico predefinito con insieme di supporto (limite 5 minuti) su PUZ023-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ023-1.p -lex -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ023-1.p -lex -stP -sos -limit300 -test
 
 echo "Otter con ordinamento multiinsieme predefinito con insieme di supporto (limite 5 minuti) su PUZ023-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ023-1.p -mul -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ023-1.p -mul -stP -sos -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix predefinito con insieme di supporto (limite 5 minuti) su PUZ023-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ023-1.p -kbo -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ023-1.p -kbo -stP -sos -limit300 -test
 
 
 
@@ -1900,63 +1900,63 @@ $SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ023-1.p -kbo -stP -sos -limit300 -test
 
 echo "E senza ordinamento (limite 5 minuti) su PUZ023-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ023-1.p -E -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ023-1.p -E -limit300 -test
 
 echo "E con ordinamento lexicografico definito dall'utente (limite 5 minuti) su PUZ023-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ023-1.p -E -lex -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ023-1.p -E -lex -usP -limit300 -test
 
 echo "E con ordinamento multiinsieme definito dall'utente (limite 5 minuti) su PUZ023-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ023-1.p -E -mul -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ023-1.p -E -mul -usP -limit300 -test
 
 echo "E con ordinamento knuth-bendix definito dall'utente (limite 5 minuti) su PUZ023-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ023-1.p -E -kbo -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ023-1.p -E -kbo -usP -limit300 -test
 
 echo "E con ordinamento lexicografico predefinito (limite 5 minuti) su PUZ023-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ023-1.p -E -lex -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ023-1.p -E -lex -stP -limit300 -test
 
 echo "E con ordinamento multiinsieme predefinito (limite 5 minuti) su PUZ023-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ023-1.p -E -mul -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ023-1.p -E -mul -stP -limit300 -test
 
 echo "E con ordinamento knuth-bendix predefinito (limite 5 minuti) su PUZ023-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ023-1.p -E -kbo -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ023-1.p -E -kbo -stP -limit300 -test
 
 #### sos
 
 echo "E senza ordinamento con insieme di supporto (limite 5 minuti) su PUZ023-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ023-1.p -E -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ023-1.p -E -sos -limit300 -test
 
 echo "E con ordinamento lexicografico definito dall'utente con insieme di supporto (limite 5 minuti) su PUZ023-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ023-1.p -E -lex -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ023-1.p -E -lex -usP -sos -limit300 -test
 
 echo "E con ordinamento multiinsieme definito dall'utente con insieme di supporto (limite 5 minuti) su PUZ023-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ023-1.p -E -mul -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ023-1.p -E -mul -usP -sos -limit300 -test
 
 echo "E con ordinamento knuth-bendix definito dall'utente con insieme di supporto (limite 5 minuti) su PUZ023-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ023-1.p -E -kbo -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ023-1.p -E -kbo -usP -sos -limit300 -test
 
 echo "E con ordinamento lexicografico predefinito con insieme di supporto (limite 5 minuti) su PUZ023-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ023-1.p -E -lex -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ023-1.p -E -lex -stP -sos -limit300 -test
 
 echo "E con ordinamento multiinsieme predefinito con insieme di supporto (limite 5 minuti) su PUZ023-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ023-1.p -E -mul -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ023-1.p -E -mul -stP -sos -limit300 -test
 
 echo "E con ordinamento knuth-bendix predefinito con insieme di supporto (limite 5 minuti) su PUZ023-1.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/PUZ023-1.p -E -kbo -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/PUZ023-1.p -E -kbo -stP -sos -limit300 -test
  
-echo "E' possibile visualizzare i risultati del test in ./tptp.file/risultati/PUZ023-1.p/\n"
+echo "E' possibile visualizzare i risultati del test in $SCRIPTDIR/tptp.file/risultati/PUZ023-1.p/\n"
 
 ####################################################################################################################
 ####################################################################################################################
@@ -1968,69 +1968,69 @@ echo "E' possibile visualizzare i risultati del test in ./tptp.file/risultati/PU
 
 ##### Otter #####
 
-echo "Al termine dello script è possibile visualizzare i risultati del test in ./tptp.file/risultati/RNG039-2.p/\n"
+echo "Al termine dello script è possibile visualizzare i risultati del test in $SCRIPTDIR/tptp.file/risultati/RNG039-2.p/\n"
 
-mkdir ./tptp.file/risultati/RNG039-2.p
+mkdir $SCRIPTDIR/tptp.file/risultati/RNG039-2.p
 
 SCRIPTDIR=`dirname $0`
 
 echo "Otter senza ordinamento (limite 5 minuti) su RNG039-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/RNG039-2.p -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/RNG039-2.p -limit300 -test
 
 echo "Otter con ordinamento lexicografico definito dall'utente (limite 5 minuti) su RNG039-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/RNG039-2.p -lex -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/RNG039-2.p -lex -usP -limit300 -test
 
 echo "Otter con ordinamento multiinsieme definito dall'utente (limite 5 minuti) su RNG039-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/RNG039-2.p -mul -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/RNG039-2.p -mul -usP -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix definito dall'utente (limite 5 minuti) su RNG039-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/RNG039-2.p -kbo -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/RNG039-2.p -kbo -usP -limit300 -test
 
 echo "Otter con ordinamento lexicografico predefinito (limite 5 minuti) su RNG039-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/RNG039-2.p -lex -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/RNG039-2.p -lex -stP -limit300 -test
 
 echo "Otter con ordinamento multiinsieme predefinito (limite 5 minuti) su RNG039-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/RNG039-2.p -mul -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/RNG039-2.p -mul -stP -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix predefinito (limite 5 minuti) su RNG039-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/RNG039-2.p -kbo -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/RNG039-2.p -kbo -stP -limit300 -test
 
 ###### sos
 
 echo "Otter senza ordinamento con insieme di supporto (limite 5 minuti) su RNG039-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/RNG039-2.p -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/RNG039-2.p -sos -limit300 -test
 
 echo "Otter con ordinamento lexicografico definito dall'utente con insieme di supporto (limite 5 minuti) su RNG039-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/RNG039-2.p -lex -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/RNG039-2.p -lex -usP -sos -limit300 -test
 
 echo "Otter con ordinamento multiinsieme definito dall'utente con insieme di supporto (limite 5 minuti) su RNG039-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/RNG039-2.p -mul -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/RNG039-2.p -mul -usP -sos -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix definito dall'utente con insieme di supporto (limite 5 minuti) su RNG039-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/RNG039-2.p -kbo -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/RNG039-2.p -kbo -usP -sos -limit300 -test
 
 echo "Otter con ordinamento lexicografico predefinito con insieme di supporto (limite 5 minuti) su RNG039-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/RNG039-2.p -lex -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/RNG039-2.p -lex -stP -sos -limit300 -test
 
 echo "Otter con ordinamento multiinsieme predefinito con insieme di supporto (limite 5 minuti) su RNG039-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/RNG039-2.p -mul -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/RNG039-2.p -mul -stP -sos -limit300 -test
 
 echo "Otter con ordinamento knuth-bendix predefinito con insieme di supporto (limite 5 minuti) su RNG039-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/RNG039-2.p -kbo -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/RNG039-2.p -kbo -stP -sos -limit300 -test
 
 
 
@@ -2040,63 +2040,63 @@ $SCRIPTDIR/../vr352595.sh ./tptp.file/RNG039-2.p -kbo -stP -sos -limit300 -test
 
 echo "E senza ordinamento (limite 5 minuti) su RNG039-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/RNG039-2.p -E -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/RNG039-2.p -E -limit300 -test
 
 echo "E con ordinamento lexicografico definito dall'utente (limite 5 minuti) su RNG039-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/RNG039-2.p -E -lex -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/RNG039-2.p -E -lex -usP -limit300 -test
 
 echo "E con ordinamento multiinsieme definito dall'utente (limite 5 minuti) su RNG039-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/RNG039-2.p -E -mul -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/RNG039-2.p -E -mul -usP -limit300 -test
 
 echo "E con ordinamento knuth-bendix definito dall'utente (limite 5 minuti) su RNG039-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/RNG039-2.p -E -kbo -usP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/RNG039-2.p -E -kbo -usP -limit300 -test
 
 echo "E con ordinamento lexicografico predefinito (limite 5 minuti) su RNG039-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/RNG039-2.p -E -lex -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/RNG039-2.p -E -lex -stP -limit300 -test
 
 echo "E con ordinamento multiinsieme predefinito (limite 5 minuti) su RNG039-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/RNG039-2.p -E -mul -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/RNG039-2.p -E -mul -stP -limit300 -test
 
 echo "E con ordinamento knuth-bendix predefinito (limite 5 minuti) su RNG039-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/RNG039-2.p -E -kbo -stP -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/RNG039-2.p -E -kbo -stP -limit300 -test
 
 #### sos
 
 echo "E senza ordinamento con insieme di supporto (limite 5 minuti) su RNG039-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/RNG039-2.p -E -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/RNG039-2.p -E -sos -limit300 -test
 
 echo "E con ordinamento lexicografico definito dall'utente con insieme di supporto (limite 5 minuti) su RNG039-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/RNG039-2.p -E -lex -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/RNG039-2.p -E -lex -usP -sos -limit300 -test
 
 echo "E con ordinamento multiinsieme definito dall'utente con insieme di supporto (limite 5 minuti) su RNG039-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/RNG039-2.p -E -mul -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/RNG039-2.p -E -mul -usP -sos -limit300 -test
 
 echo "E con ordinamento knuth-bendix definito dall'utente con insieme di supporto (limite 5 minuti) su RNG039-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/RNG039-2.p -E -kbo -usP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/RNG039-2.p -E -kbo -usP -sos -limit300 -test
 
 echo "E con ordinamento lexicografico predefinito con insieme di supporto (limite 5 minuti) su RNG039-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/RNG039-2.p -E -lex -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/RNG039-2.p -E -lex -stP -sos -limit300 -test
 
 echo "E con ordinamento multiinsieme predefinito con insieme di supporto (limite 5 minuti) su RNG039-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/RNG039-2.p -E -mul -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/RNG039-2.p -E -mul -stP -sos -limit300 -test
 
 echo "E con ordinamento knuth-bendix predefinito con insieme di supporto (limite 5 minuti) su RNG039-2.p"
 
-$SCRIPTDIR/../vr352595.sh ./tptp.file/RNG039-2.p -E -kbo -stP -sos -limit300 -test
+$SCRIPTDIR/../vr352595.sh $SCRIPTDIR/tptp.file/RNG039-2.p -E -kbo -stP -sos -limit300 -test
  
-echo "E' possibile visualizzare i risultati del test in ./tptp.file/risultati/RNG039-2.p/\n"
+echo "E' possibile visualizzare i risultati del test in $SCRIPTDIR/tptp.file/risultati/RNG039-2.p/\n"
 
 ####################################################################################################################
 ####################################################################################################################

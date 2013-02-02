@@ -5,7 +5,7 @@ Satisfiability proving is starting... à la E version with 'user specified' kbo 
 2 clauses subsumed, 
 0 clauses in To_Select, 
 7 clauses in Selected, 
-in 7 millisec..
+in 8 millisec..
 
 
 response: UNSATISFIABLE.

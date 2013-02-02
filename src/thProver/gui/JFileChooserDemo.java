@@ -121,14 +121,16 @@ public class JFileChooserDemo extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Given Clause Cicle");
+        setPreferredSize(new java.awt.Dimension(563, 447));
         setResizable(false);
 
         inserText.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         inserText.setText("Inserire la formula:");
 
         log.setColumns(20);
-        log.setLineWrap(true);
+        log.setFont(new java.awt.Font("Monospaced", 0, 14)); // NOI18N
         log.setRows(5);
+        log.setAutoscrolls(false);
         log.addContainerListener(new java.awt.event.ContainerAdapter() {
             public void componentAdded(java.awt.event.ContainerEvent evt) {
                 logComponentAdded(evt);
@@ -221,10 +223,10 @@ public class JFileChooserDemo extends javax.swing.JFrame {
 
         fileMenu.setText("File");
         fileMenu.addAncestorListener(new javax.swing.event.AncestorListener() {
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 fileMenuAncestorAdded(evt);
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
@@ -252,10 +254,10 @@ public class JFileChooserDemo extends javax.swing.JFrame {
         modeMenu.setText("Mode");
         modeMenu.setEnabled(false);
         modeMenu.addAncestorListener(new javax.swing.event.AncestorListener() {
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 modeMenuAncestorAdded(evt);
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
@@ -283,10 +285,10 @@ public class JFileChooserDemo extends javax.swing.JFrame {
         orderingTypeMenu.setText("Ordering Type");
         orderingTypeMenu.setEnabled(false);
         orderingTypeMenu.addAncestorListener(new javax.swing.event.AncestorListener() {
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 orderingAncestorAdded(evt);
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
@@ -330,10 +332,10 @@ public class JFileChooserDemo extends javax.swing.JFrame {
         precedencesAndWeightsTypeMenu.setText("Precedences and Weights");
         precedencesAndWeightsTypeMenu.setEnabled(false);
         precedencesAndWeightsTypeMenu.addAncestorListener(new javax.swing.event.AncestorListener() {
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 precedencesAndWeightsTypeMenuAncestorAdded(evt);
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
@@ -361,10 +363,10 @@ public class JFileChooserDemo extends javax.swing.JFrame {
         otherOptionsMenu.setText("Options");
         otherOptionsMenu.setEnabled(false);
         otherOptionsMenu.addAncestorListener(new javax.swing.event.AncestorListener() {
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 otherOptionsMenuAncestorAdded(evt);
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
@@ -444,7 +446,7 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(satText, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(showGraphProveButton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 28, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 34, Short.MAX_VALUE)
                 .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );

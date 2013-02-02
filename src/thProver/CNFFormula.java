@@ -13,7 +13,7 @@ import java.util.TreeSet;
 /**
  * A CNF formula - a set of clauses.
  * Contains clauses, literals, atoms and terms of the given formula
- * It's the class used by parser for costruct the graph representing the formula
+ * It's the class used by parser to construct the graph representing the formula
  */
 public class CNFFormula {
 
@@ -58,7 +58,7 @@ public class CNFFormula {
     }
     
     /**
-     * Costruct a new constant if the symbol representing the constant is never
+     * Constructs a new constant if the symbol representing the constant is never
      * used yet and return it, otherwise return the constant costructed before
      * with that symbol and return it (note: save space)
      * In case of new constant save it in terms for the future.
@@ -98,8 +98,8 @@ public class CNFFormula {
     /**
      * Check if the string represents a constant.
      * 
-     * @param name symbol token parserized by parser 
-     *             (it could represents predicate, function, variable or constant) 
+     * @param name symbol token processed by parser 
+     *             (it could represent predicate, function, variable or constant) 
      * @return true if represent a constant, false otherwise.
      */
     public boolean isConstant(String name) {

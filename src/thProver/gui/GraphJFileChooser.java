@@ -97,8 +97,9 @@ public class GraphJFileChooser extends javax.swing.JFrame {
         inserText.setText("graph in 'dot' format:");
 
         log.setColumns(20);
-        log.setLineWrap(true);
+        log.setFont(new java.awt.Font("Monospaced", 0, 14)); // NOI18N
         log.setRows(5);
+        log.setAutoscrolls(false);
         log.addContainerListener(new java.awt.event.ContainerAdapter() {
             public void componentAdded(java.awt.event.ContainerEvent evt) {
                 logComponentAdded(evt);
@@ -121,10 +122,10 @@ public class GraphJFileChooser extends javax.swing.JFrame {
 
         fileMenu.setText("File");
         fileMenu.addAncestorListener(new javax.swing.event.AncestorListener() {
-            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
-            }
             public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
                 fileMenuAncestorAdded(evt);
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
@@ -186,7 +187,7 @@ public class GraphJFileChooser extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(inserText, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
                 .addContainerGap())
         );
 

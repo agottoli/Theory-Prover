@@ -15,7 +15,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 /**
- * Class that implements the Given Clause Cicle (à la Otter and à la E)
+ * Class which implements the Given Clause Cicle (à la Otter and à la E)
  * 
  * @author Alessandro Gottoli vr352595
  */
@@ -72,7 +72,7 @@ public class GivenClauseProver {
      * Return 
      * 
      *
-     * @param f formula parserized by parser
+     * @param f formula processed by parser
      * @return null è soddisfacibile la clausola vuota è insoddisfacibile
      *         null if the formula is satisfiable (no refutation found)
      *         the empty clause if the formula is unsatisfiable
@@ -230,6 +230,7 @@ public class GivenClauseProver {
                         elapsedTime = System.nanoTime() - startTime;
                         /* DEBUG inizio */
                         //System.out.println("trovata la clausola vuota.");
+                        //System.out.println("given= " + given);
                     /* DEBUG fine */
                         System.out.print(info());
                         Selected.add(given); // per non perdermi una clausola 
@@ -420,7 +421,8 @@ public class GivenClauseProver {
     }
     
     /**
-     * Transform from nanoTime to a readable format
+     * Transform from nanoTime to a readable format.
+     * 
      * @param time nano time to convert
      * @return readable representation of the time
      */
@@ -455,6 +457,7 @@ public class GivenClauseProver {
     }
 
     /**
+     * Check if stopped by user.
      * 
      * @return true if the computation is stopped by user
      *         false othewise
@@ -483,7 +486,7 @@ public class GivenClauseProver {
 
     /**
      * Save to disk (if 'dot' is installed) the grafical graph of the refutation
-     * in several formar
+     * in several format.
      * 
      * @param dir directory where save (path)
      * @param name file name 

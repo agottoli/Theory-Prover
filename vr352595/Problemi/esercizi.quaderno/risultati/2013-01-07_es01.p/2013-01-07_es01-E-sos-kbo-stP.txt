@@ -1,0 +1,12 @@
+Satisfiability proving is starting... à la E version with 'standard' kbo ordering and set of support strategy
+/* info */
+7 clauses from parsing, 
+8 clauses generated, 
+3 clauses subsumed, 
+1 clauses in To_Select, 
+10 clauses in Selected, 
+in 14 millisec..
+
+
+response: UNSATISFIABLE.
+

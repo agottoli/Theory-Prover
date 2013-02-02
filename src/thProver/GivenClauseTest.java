@@ -381,7 +381,7 @@ public class GivenClauseTest {
     }
 
     /**
-     * Process the string in input for setting up the parameter of the prover
+     * Process the string in input to set up the parameter of the prover
      * 
      * @param o string with parameter for setting up
      */

@@ -224,6 +224,9 @@ public class GivenClauseProver {
             /* DEBUG inizio */
             //System.out.println("ho generato " + alfa.size() + " risolventi.\n"
             //        + alfa.toString());
+            //try {
+            //    System.in.read();
+            //} catch (IOException ioe) {}
             /* DEBUG fine */
             if (!alfa.isEmpty()) {
                 generated += alfa.size();

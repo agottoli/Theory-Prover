@@ -1,0 +1,12 @@
+Satisfiability proving is starting... à la E version with no ordering
+/* info */
+268 clauses from parsing, 
+252186 clauses generated, 
+201295 clauses deleted, 
+49220 clauses in To_Select, 
+1926 clauses in Selected, 
+in 5 min. and 0 sec. (out of max time).
+
+
+response: SATISFIABLE.
+

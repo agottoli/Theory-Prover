@@ -1,8 +1,0 @@
-/* info */
-22 clauses from parsing, 
-26 clauses generated, 
-22 clauses subsumed, 
-12 clauses in To_Select, 
-12 clauses in Selected, 
-in 71 millisec..
-response: UNSATISFIABLE.

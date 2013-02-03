@@ -1,0 +1,5 @@
+Otter e E terminano con UNSAT con e senza ordinamento.
+
+se attivo l'insieme di supporto terminano in UNSAT solo senza ordinamento.
+
+sos + ordinamento arriva a timeout di 5 minuti.

@@ -26,6 +26,10 @@ public class Ordering {
     // usare un'ordinamento standard?
     private boolean useOrdStandard = false;
     private int standardWeight = 1; // peso standard per tutto in kbo
+    private int standardWeightAtom = 1; // peso standard kbo
+    private int standardWeightFunction = 1; // peso standard kbo
+    private int standardWeightVariable = 1; // peso standard kbo
+    private int standardWeightConstant = 2; // peso standard kbo
     
     /* solo per Ordinamento ricorsivo a cammini o lessicografico */
     private boolean statusMultiSet; // a cammini
@@ -550,7 +554,7 @@ public class Ordering {
                 if (arity == 1 
                         && 
                         (
-                        (useOrdStandard && standardWeight == 0) 
+                        (useOrdStandard && standardWeightFunction == 0) 
                         || (weightFunction.get(symA) != null && weightFunction.get(symA) == 0) 
                         ) 
                         && b instanceof Variable
@@ -603,7 +607,7 @@ public class Ordering {
                 argsWeight += weight(term, isA);
             /// EXPERIMENTAL ///
             if (useOrdStandard) {
-                return standardWeight + argsWeight;
+                return standardWeightAtom + argsWeight;
             }
             ////////////////////
             if (weightFunction.containsKey(((Atom) t).getSymbol()))
@@ -618,7 +622,7 @@ public class Ordering {
                 argsWeight += weight(term, isA);
             /// EXPERIMENTAL ///
             if (useOrdStandard) {
-                return standardWeight + argsWeight;
+                return standardWeightFunction + argsWeight;
             }
             ////////////////////
             if (weightFunction.containsKey(((Function) t).getSymbol()))
@@ -649,7 +653,7 @@ public class Ordering {
             }
             /// EXPERIMENTAL ///
             if (useOrdStandard) {
-                return standardWeight;
+                return standardWeightVariable;
             }
             ////////////////////
             return weightVars;
@@ -658,7 +662,7 @@ public class Ordering {
         // Costanti :)
         /// EXPERIMENTAL ///
             if (useOrdStandard) {
-                return standardWeight;
+                return standardWeightConstant;
             }
             ////////////////////
             if (weightFunction.containsKey(((Term) t).getSymbol()))
@@ -681,6 +685,7 @@ public class Ordering {
             return ((Atom) a).getArgs().get(0).equals(b);
         }
         // sicuramente a è una Function
+        // e ha arietà 1 perché controllata prima di chiamarla
         Term arg = (Term) a;
         do {
             arg = ((Function) arg).getArgs().get(0);

@@ -2,10 +2,10 @@ Satisfiability proving is starting... à la E version with 'user specified' kbo 
 /* info */
 7 clauses from parsing, 
 9 clauses generated, 
-5 clauses subsumed, 
+5 clauses deleted, 
 0 clauses in To_Select, 
 10 clauses in Selected, 
-in 16 millisec..
+in 18 millisec..
 
 
 response: UNSATISFIABLE.

@@ -2,10 +2,10 @@ Satisfiability proving is starting... à la E version with 'standard' multiset o
 /* info */
 5 clauses from parsing, 
 9 clauses generated, 
-2 clauses subsumed, 
+2 clauses deleted, 
 3 clauses in To_Select, 
 7 clauses in Selected, 
-in 15 millisec..
+in 14 millisec..
 
 
 response: UNSATISFIABLE.

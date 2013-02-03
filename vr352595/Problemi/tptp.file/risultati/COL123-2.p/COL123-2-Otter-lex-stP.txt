@@ -1,0 +1,12 @@
+Satisfiability proving is starting... à la Otter version with 'standard' lexicographic ordering
+/* info */
+9 clauses from parsing, 
+4080 clauses generated, 
+257 clauses deleted, 
+3316 clauses in To_Select, 
+490 clauses in Selected, 
+in 35 sec. and 459 millisec..
+
+
+response: UNSATISFIABLE.
+

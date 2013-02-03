@@ -1,0 +1,5 @@
+Senza insieme di supporto è scattato il time out di 5 minuti.
+
+Con insieme di supporto risponde UNSAT.
+
+Con insieme di supporto e ordinamento risponde SAT.

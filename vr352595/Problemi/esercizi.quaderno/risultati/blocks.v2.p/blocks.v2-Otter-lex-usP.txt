@@ -2,10 +2,10 @@ Satisfiability proving is starting... à la Otter version with 'user specified' 
 /* info */
 5 clauses from parsing, 
 10 clauses generated, 
-1 clauses subsumed, 
+1 clauses deleted, 
 4 clauses in To_Select, 
 8 clauses in Selected, 
-in 13 millisec..
+in 15 millisec..
 
 
 response: UNSATISFIABLE.

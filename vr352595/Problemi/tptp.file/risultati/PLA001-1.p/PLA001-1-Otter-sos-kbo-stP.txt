@@ -1,0 +1,12 @@
+Satisfiability proving is starting... à la Otter version with 'standard' kbo ordering and set of support strategy
+/* info */
+16 clauses from parsing, 
+538 clauses generated, 
+292 clauses deleted, 
+121 clauses in To_Select, 
+140 clauses in Selected, 
+in 1 sec. and 697 millisec..
+
+
+response: UNSATISFIABLE.
+

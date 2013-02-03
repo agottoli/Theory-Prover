@@ -2,7 +2,7 @@ Satisfiability proving is starting... à la Otter version with 'standard' kbo or
 /* info */
 7 clauses from parsing, 
 8 clauses generated, 
-2 clauses subsumed, 
+2 clauses deleted, 
 1 clauses in To_Select, 
 11 clauses in Selected, 
 in 11 millisec..

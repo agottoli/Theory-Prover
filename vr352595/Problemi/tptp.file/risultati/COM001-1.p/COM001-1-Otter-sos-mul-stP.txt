@@ -1,0 +1,12 @@
+Satisfiability proving is starting... à la Otter version with 'standard' multiset ordering and set of support strategy
+/* info */
+11 clauses from parsing, 
+19009 clauses generated, 
+11525 clauses deleted, 
+6363 clauses in To_Select, 
+1132 clauses in Selected, 
+in 5 min. and 0 sec. (out of max time).
+
+
+response: SATISFIABLE.
+

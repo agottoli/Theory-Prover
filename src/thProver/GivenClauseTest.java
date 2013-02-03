@@ -328,9 +328,13 @@ public class GivenClauseTest {
                         else
                             precString = "-usP";
                     }
+                    
+                    String sub = "";
+                    if (changlee)
+                        sub = "-changlee";
                                        
                     prover.exportDot(dir, 
-                            nameNoExt + versione + sosString + ordString + precString + "." + format, 
+                            nameNoExt + versione + sosString + ordString + precString + sub + "." + format, 
                             format, grafo);
                 }
                 stdin.close();
@@ -512,13 +516,18 @@ public class GivenClauseTest {
                             precString = "-usP";
                     }
                     
+                    String sub = "";
+                    if (changlee)
+                        sub = "-changlee";
+                    
                     
                     if (test) {
                         dir += "/risultati/" + name;
                         // stampo anche quello che ho dato a schermo su un file
                         try {
                             FileOutputStream outputRisTest = new FileOutputStream(dir + "/"
-                                    + nameNoExt + versione + sosString + ordString + precString + ".txt");
+                                    + nameNoExt + versione + sosString + ordString + precString 
+                                    + sub + ".txt");
                             PrintStream output = new PrintStream(outputRisTest);
                             output.println(strb.toString() + "\n"
                                     + prover.info() + "\n"

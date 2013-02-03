@@ -1,0 +1,12 @@
+Satisfiability proving is starting... à la E version with 'standard' multiset ordering and set of support strategy
+/* info */
+11 clauses from parsing, 
+0 clauses generated, 
+2 clauses deleted, 
+0 clauses in To_Select, 
+9 clauses in Selected, 
+in 18 millisec..
+
+
+response: SATISFIABLE.
+

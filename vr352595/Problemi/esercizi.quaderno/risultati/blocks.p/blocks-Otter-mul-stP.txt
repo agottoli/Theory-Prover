@@ -2,7 +2,7 @@ Satisfiability proving is starting... à la Otter version with 'standard' multis
 /* info */
 5 clauses from parsing, 
 10 clauses generated, 
-1 clauses subsumed, 
+1 clauses deleted, 
 4 clauses in To_Select, 
 8 clauses in Selected, 
 in 16 millisec..

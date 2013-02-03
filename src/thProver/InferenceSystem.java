@@ -70,6 +70,9 @@ public class InferenceSystem {
     public static Set<Clause> orderedResolution(Clause c1, List<Clause> selected, Ordering ord, IndexingClauses indexingC) {
         Set<Clause> resolvents = new LinkedHashSet<>();
         c1.getMaximalLiterals(ord);
+        /* DEBUG inizio */
+        //System.out.println("");
+        /* DEBUG fine */
         for (Clause c2 : selected) {
             // resolvents.addAll(c1.allTheOrderedResolvents(c2, ord, indexingC));
             // siccome i risolventi devono avere come padri la clausola data

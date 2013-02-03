@@ -911,9 +911,9 @@ public class Clause implements Comparable<Clause> {
         if (!(this == othC))
             // Ensure this has less literals total and that
             // it is a subset of the other clauses positive and negative counts
-            if (this.literals.size() < othC.literals.size() ) {
-                  //  && this.posLits.size() <= othC.posLits.size()
-                  //  && this.negLits.size() <= othC.negLits.size()) {
+            if (this.literals.size() < othC.literals.size() //) {
+                    && this.posLits.size() <= othC.posLits.size() //2013-02-03 RIGA DECOMMENTATA
+                    && this.negLits.size() <= othC.negLits.size()) { //2013-02-03 RIGA DECOMMENTATA
 
                 // PROVO SUSSUNZIONE PROPRIA
                 Map<String, List<Literal>> thisToTry = collectLikeLiterals(this.literals);
@@ -1053,6 +1053,11 @@ public class Clause implements Comparable<Clause> {
             if (!litsT.isEmpty()) {
                 Literal lT = litsT.get(0);
             //for (Literal lT : litsT) {
+                if (litsO == null) {
+                    // non c'è una corrispondenza allora esco 
+                    // non può sussumere
+                    return null;
+                }
                 for (Literal lO : litsO) {
                     Substitution copy = sub.copy();
                     /* DEBUG inizio */
@@ -1078,6 +1083,23 @@ public class Clause implements Comparable<Clause> {
                             thisToTryCopy.remove(key);
                         else
                             get.remove(lT);
+                        
+                        /* 2013-02-03 aggiunto le righe sotto per non fare cose strane nella sussunzione */
+                        Map<String, List<Literal>> othCToTryCopy = new LinkedHashMap<>(othCToTry.size());
+                        // devo copiare pure gli elementi della lista interna
+                        // allora non posso fare come sopra
+                        for (String keyCopy: othCToTry.keySet()) {
+                            // per ogni key devo copiarmi la lista e fare il put
+                            List<Literal> cp = new ArrayList(othCToTry.get(keyCopy));
+                            othCToTryCopy.put(keyCopy, cp);
+                        }
+                        /* fine 2013-02-03 */
+                        
+                        List<Literal> getO = othCToTryCopy.get(key);
+                        if (getO.size() == 1)
+                            othCToTryCopy.remove(key);
+                        else
+                            getO.remove(lO);
 
                         //Map<String, List<Literal>> othCToTryCopy = new LinkedHashMap<>(othCToTry);
                         //othCToTryCopy.remove(key);
@@ -1090,7 +1112,7 @@ public class Clause implements Comparable<Clause> {
                         
                         //Substitution copy = sub.copy();
                         Substitution nuova;
-                        nuova = checkSub(thisToTryCopy, othCToTry, copy, isDiVarianti);
+                        nuova = checkSub(thisToTryCopy, othCToTryCopy, copy, isDiVarianti);
                         if (nuova != null)
                             return nuova; // credo di aver unificato tutto
                         
@@ -1122,7 +1144,78 @@ public class Clause implements Comparable<Clause> {
      */
     // return  Substitution (mia) boolean (libro)
     public boolean subsumesChangLee(Clause othC) {
+        // fase 1: creo una nuova othC in cui le variabili sono state
+        //         sostituite da nuove costanti fresh (posso chiamarle *costante_indicecrescente*)
+        Set<Clause> W = fase1(othC);
+        IndexingClauses indexingNuovoDiPacca = new IndexingClauses(0);
+        Set<Clause> U = new LinkedHashSet<>();
+        U.add(this);
+        Set<Clause> Unuovo = new LinkedHashSet<>();
+        while (!U.isEmpty()) {
+            for (Clause clauseInU : U) {
+                if (clauseInU.isEmpty())
+                    return true;
+                for (Clause Wi : W) {
+                    Unuovo.addAll(clauseInU.resolvents(Wi, indexingNuovoDiPacca));
+                }
+            }
+            U.clear();
+            U.addAll(Unuovo);
+            Unuovo.clear();
+        }
         return false;
+    }
+    
+    public Set<Clause> fase1(Clause D) {
+        Set<Clause> W = new LinkedHashSet<>(D.getLiterals().size());
+        Map<Variable, Constant> theta = new LinkedHashMap();
+        IndexingClauses indiceNuoveCostanti = new IndexingClauses(0);
+        for (Literal Li : D.getLiterals()) {
+            Atom Ai = Li.getAtom();
+            List<Term> nuoviArgsAi = new ArrayList(Ai.getNArgs());
+            for (Term TiAi : Ai.getArgs()) {
+                Term nuovoTiAi = fase1Ricorsiva(TiAi, indiceNuoveCostanti, theta);
+                nuoviArgsAi.add(nuovoTiAi);
+            }
+            Atom newAto;
+            if (nuoviArgsAi.equals(Ai.getArgs()))
+               newAto = Ai;
+            else
+               newAto = new Atom(Ai.getSymbol(), nuoviArgsAi);
+        
+             Literal newLit = new Literal(!Li.isPositive(),newAto);
+             Set<Literal> setNewLit = new LinkedHashSet<>();
+             setNewLit.add(newLit);
+             W.add(new Clause(setNewLit, 999999));
+        
+        }
+        
+        return W;
+    }
+    
+    private Term fase1Ricorsiva(Term TiAi, IndexingClauses indiceNuoveCostanti
+            , Map<Variable, Constant> theta) {
+        if (TiAi instanceof Constant) {
+            return TiAi;
+        }
+        if (TiAi instanceof Function) {
+            List<Term> nuoviArgsTiAi = new ArrayList(((Function) TiAi).getNArgs());
+            for (Term TiTiAi : ((Function) TiAi).getArgs()) {
+                Term nuovoTiTiAi = fase1Ricorsiva(TiTiAi, indiceNuoveCostanti, theta);
+                nuoviArgsTiAi.add(nuovoTiTiAi);
+            }
+            if (nuoviArgsTiAi.equals(((Function) TiAi).getArgs()))
+                return TiAi;
+            return new Function(((Function) TiAi).getSymbol(), nuoviArgsTiAi);
+        }
+        // è una variabile
+        Variable thisVar = (Variable) TiAi;
+        if (theta.containsKey(thisVar))
+            return theta.get(thisVar);
+        // devo costruire una costante nuova e inserirla
+        Constant nuovaCos = new Constant("*costanteSuss*" + indiceNuoveCostanti.getIndexAndIncrement());
+        theta.put(thisVar, nuovaCos);
+        return nuovaCos;
     }
     /************** SUSSUNZIONE Chang-Lee fine *******************/
     

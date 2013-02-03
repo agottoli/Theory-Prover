@@ -35,6 +35,7 @@ public class GivenClauseProver {
     private boolean stop = false;
     private boolean testAll = false;
     private long nCIniziali;
+    private boolean useChangLee = false;
     //private boolean gui = false;
 
     public GivenClauseProver(boolean aLaE, boolean sos, boolean kbo,
@@ -58,6 +59,10 @@ public class GivenClauseProver {
 
     public void setTimeOut(int seconds) {
         timeout = seconds;
+    }
+    
+    public void setUseChangLee(boolean b) {
+        useChangLee = b;
     }
     
     //public void setGui(boolean gui) {
@@ -326,10 +331,17 @@ public class GivenClauseProver {
         if (given.isTautology())
             return null;
 
-        if (InferenceSystem.subsumedBy(given, Selected))
-            return null;
-        if (!aLaE && InferenceSystem.subsumedBy(given, To_Select))
-            return null;
+        if (useChangLee) {
+            if (InferenceSystem.subsumedByChangLeeVersion(given, Selected))
+                return null;
+            if (!aLaE && InferenceSystem.subsumedByChangLeeVersion(given, To_Select))
+                return null;
+        } else {
+            if (InferenceSystem.subsumedBy(given, Selected))
+                return null;
+            if (!aLaE && InferenceSystem.subsumedBy(given, To_Select))
+                return null;
+        }
         Clause sempl = InferenceSystem.simplifiedByClause(given, Selected, index);
         boolean flagForCount = false;
         if (sempl != null) {
@@ -371,10 +383,17 @@ public class GivenClauseProver {
         //int selSize = Selected.size();
         //int toSelSize = To_Select.size();
         /* DEBUG fine */
-        int numSuss = InferenceSystem.subsumes(given, Selected);
-        if (!aLaE)
-            numSuss += InferenceSystem.subsumes(given, To_Select);
-        deleted += numSuss;
+        if (useChangLee) {
+            int numSuss = InferenceSystem.subsumesChangLeeVersion(given, Selected);
+            if (!aLaE)
+                numSuss += InferenceSystem.subsumesChangLeeVersion(given, To_Select);
+            deleted += numSuss;
+        } else {
+            int numSuss = InferenceSystem.subsumes(given, Selected);
+            if (!aLaE)
+                numSuss += InferenceSystem.subsumes(given, To_Select);
+            deleted += numSuss;
+        }
         /* DEBUG inizio */
         //if (numSuss == 40)
         //    System.out.println("eccolo");
@@ -405,16 +424,16 @@ public class GivenClauseProver {
         
         sb.append(nCIniziali).append(" clauses from parsing, \n");
         sb.append(generated).append(" clauses generated, \n");
-        sb.append(deleted).append(" clauses subsumed, \n");
+        sb.append(deleted).append(" clauses deleted, \n");
         sb.append(To_Select.size()).append(" clauses in To_Select, \n");
         sb.append(Selected.size()).append(" clauses in Selected, \n");
         sb.append("in ");
         sb.append(formatoTime(elapsedTime));
         //sb.append(elapsedTime / 1000000000.0).append(" seconds");
         if (timeoutWhitoutResponse)
-            sb.append(" (out of max time"); // ALESSIA // limit)");
+            sb.append(" (out of max time)"); // ALESSIA // limit)");
         if (stop)
-            sb.append(" (stopped by user"); // ALESSIA // user stop)");
+            sb.append(" (stopped by user)"); // ALESSIA // user stop)");
         sb.append(".\n");
 
         return sb.toString();

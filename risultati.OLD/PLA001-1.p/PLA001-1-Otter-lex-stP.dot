@@ -1,0 +1,30 @@
+digraph {
+	nodesep="1.5"; ranksep=2;
+	node [shape=plaintext];
+	edge [color=gray];
+	"~next_to(cheyenne,northPlatte)" -> "[]" [labelfontcolor=black,labelfontsize="12",headlabel="Ordered Resolution\n{ }",labeldistance="6"];
+	"~at(FromCity_213,none,Time_213,Situation_213) | ~next_to(FromCity_213,northPlatte)" -> "~next_to(cheyenne,northPlatte)" [labelfontcolor=black,labelfontsize="12",headlabel="Ordered Resolution\n{ FromCity_213 <- cheyenne, Time_213 <- start, Situation_213 <- initial_situation }",labeldistance="6"];
+	"~at(northPlatte,none,Time_203,Situation_203)" -> "~at(FromCity_213,none,Time_213,Situation_213) | ~next_to(FromCity_213,northPlatte)" [labelfontcolor=black,labelfontsize="12",headlabel="Ordered Resolution\n{ ToCity_0 <- northPlatte, Loaves_0 <- none, Time_203 <- s(s(Time_0)), Situation_203 <- drive(northPlatte,Situation_0) }",labeldistance="6"];
+	"next_to(grandIsland,lincoln)" -> "~at(northPlatte,none,Time_203,Situation_203)" [labelfontcolor=black,labelfontsize="12",headlabel="Clausal Simplification\n{ }",labeldistance="6"];
+	"~next_to(grandIsland,lincoln) | ~at(northPlatte,none,Time_203,Situation_203)" -> "~at(northPlatte,none,Time_203,Situation_203)" ;
+	"~next_to(ToCity_89,lincoln) | ~at(FromCity_89,none,Time_89,Situation_89) | ~next_to(FromCity_89,ToCity_89)" -> "~next_to(grandIsland,lincoln) | ~at(northPlatte,none,Time_203,Situation_203)" [labelfontcolor=black,labelfontsize="12",headlabel="Ordered Resolution\n{ FromCity_89 <- northPlatte, ToCity_89 <- grandIsland }",labeldistance="6"];
+	"~at(FromCity_65,none,Time_65,Situation_65) | ~next_to(FromCity_65,lincoln)" -> "~next_to(ToCity_89,lincoln) | ~at(FromCity_89,none,Time_89,Situation_89) | ~next_to(FromCity_89,ToCity_89)" [labelfontcolor=black,labelfontsize="12",headlabel="Ordered Resolution\n{ FromCity_65 <- ToCity_0, Loaves_0 <- none, Time_65 <- s(s(Time_0)), Situation_65 <- drive(ToCity_0,Situation_0) }",labeldistance="6"];
+	"~at(lincoln,none,Time_57,Situation_57)" -> "~at(FromCity_65,none,Time_65,Situation_65) | ~next_to(FromCity_65,lincoln)" [labelfontcolor=black,labelfontsize="12",headlabel="Ordered Resolution\n{ ToCity_0 <- lincoln, Loaves_0 <- none, Time_57 <- s(s(Time_0)), Situation_57 <- drive(lincoln,Situation_0) }",labeldistance="6"];
+	"next_to(omaha,desMoines)" -> "~at(lincoln,none,Time_57,Situation_57)" [labelfontcolor=black,labelfontsize="12",headlabel="Clausal Simplification\n{ }",labeldistance="6"];
+	"~next_to(omaha,desMoines) | ~at(lincoln,none,Time_57,Situation_57)" -> "~at(lincoln,none,Time_57,Situation_57)" ;
+	"~next_to(ToCity_38,desMoines) | ~at(FromCity_38,none,Time_38,Situation_38) | ~next_to(FromCity_38,ToCity_38)" -> "~next_to(omaha,desMoines) | ~at(lincoln,none,Time_57,Situation_57)" [labelfontcolor=black,labelfontsize="12",headlabel="Ordered Resolution\n{ FromCity_38 <- lincoln, ToCity_38 <- omaha }",labeldistance="6"];
+	"~at(FromCity_34,none,Time_34,Situation_34) | ~next_to(FromCity_34,desMoines)" -> "~next_to(ToCity_38,desMoines) | ~at(FromCity_38,none,Time_38,Situation_38) | ~next_to(FromCity_38,ToCity_38)" [labelfontcolor=black,labelfontsize="12",headlabel="Ordered Resolution\n{ FromCity_34 <- ToCity_0, Loaves_0 <- none, Time_34 <- s(s(Time_0)), Situation_34 <- drive(ToCity_0,Situation_0) }",labeldistance="6"];
+	"~at(FromCity_0,Loaves_0,Time_0,Situation_0) | ~next_to(FromCity_0,ToCity_0) | at(ToCity_0,Loaves_0,s(s(Time_0)),drive(ToCity_0,Situation_0))" -> "~at(FromCity_34,none,Time_34,Situation_34) | ~next_to(FromCity_34,desMoines)" [labelfontcolor=black,labelfontsize="12",headlabel="Ordered Resolution\n{ ToCity_0 <- desMoines, Loaves_0 <- none, Time_17 <- s(s(Time_0)), Situation_17 <- drive(desMoines,Situation_0) }",labeldistance="6"];
+	"~at(desMoines,none,Time_17,Situation_17)" -> "~at(FromCity_34,none,Time_34,Situation_34) | ~next_to(FromCity_34,desMoines)" ;
+	"~at(City_3,Loaves_3,Time_3,Situation_3) | at(City_3,s(Loaves_3),s(Time_3),buy(Situation_3))" -> "~at(desMoines,none,Time_17,Situation_17)" [labelfontcolor=black,labelfontsize="12",headlabel="Ordered Resolution\n{ City_3 <- desMoines, Loaves_3 <- none, Time_15 <- s(Time_3), Situation_15 <- buy(Situation_3) }",labeldistance="6"];
+	"~at(desMoines,s(none),Time_15,Situation_15)" -> "~at(desMoines,none,Time_17,Situation_17)" ;
+	"~at(FromCity_0,Loaves_0,Time_0,Situation_0) | ~next_to(FromCity_0,ToCity_0) | at(ToCity_0,Loaves_0,s(s(Time_0)),drive(ToCity_0,Situation_0))" -> "~next_to(ToCity_38,desMoines) | ~at(FromCity_38,none,Time_38,Situation_38) | ~next_to(FromCity_38,ToCity_38)" ;
+	"next_to(lincoln,omaha)" -> "~next_to(omaha,desMoines) | ~at(lincoln,none,Time_57,Situation_57)" ;
+	"~at(FromCity_0,Loaves_0,Time_0,Situation_0) | ~next_to(FromCity_0,ToCity_0) | at(ToCity_0,Loaves_0,s(s(Time_0)),drive(ToCity_0,Situation_0))" -> "~at(FromCity_65,none,Time_65,Situation_65) | ~next_to(FromCity_65,lincoln)" ;
+	"~at(FromCity_0,Loaves_0,Time_0,Situation_0) | ~next_to(FromCity_0,ToCity_0) | at(ToCity_0,Loaves_0,s(s(Time_0)),drive(ToCity_0,Situation_0))" -> "~next_to(ToCity_89,lincoln) | ~at(FromCity_89,none,Time_89,Situation_89) | ~next_to(FromCity_89,ToCity_89)" ;
+	"next_to(northPlatte,grandIsland)" -> "~next_to(grandIsland,lincoln) | ~at(northPlatte,none,Time_203,Situation_203)" ;
+	"~at(FromCity_0,Loaves_0,Time_0,Situation_0) | ~next_to(FromCity_0,ToCity_0) | at(ToCity_0,Loaves_0,s(s(Time_0)),drive(ToCity_0,Situation_0))" -> "~at(FromCity_213,none,Time_213,Situation_213) | ~next_to(FromCity_213,northPlatte)" ;
+	"at(cheyenne,none,start,initial_situation)" -> "~next_to(cheyenne,northPlatte)" ;
+	"next_to(cheyenne,northPlatte)" -> "[]" ;
+}
+

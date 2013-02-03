@@ -1,0 +1,12 @@
+Satisfiability proving is starting... à la Otter version with 'standard' multiset ordering
+/* info */
+16 clauses from parsing, 
+213 clauses generated, 
+101 clauses subsumed, 
+44 clauses in To_Select, 
+83 clauses in Selected, 
+in 669 millisec..
+
+
+response: UNSATISFIABLE.
+

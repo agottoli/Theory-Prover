@@ -1,0 +1,12 @@
+Satisfiability proving is starting... à la E version with no ordering
+/* info */
+16 clauses from parsing, 
+250 clauses generated, 
+28 clauses subsumed, 
+170 clauses in To_Select, 
+67 clauses in Selected, 
+in 591 millisec..
+
+
+response: UNSATISFIABLE.
+

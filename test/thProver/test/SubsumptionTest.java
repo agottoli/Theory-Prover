@@ -4,6 +4,7 @@
  */
 package thProver.test;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Reader;
@@ -16,6 +17,7 @@ import thProver.Ordering;
 import thProver.Substitution;
 import thProver.parser.CNFParser;
 import thProver.parser.ParseException;
+import thProver.parserTptp.CNFParserTptp;
 
 /**
  *
@@ -56,10 +58,44 @@ public class SubsumptionTest {
 
 
         // parserizzo l'input
-        CNFFormula f;
-        CNFParser parser = new CNFParser(formulaReader);
-        parser.Start();
-        f = parser.getCNFFormula();
+        boolean tptp = false;
+        CNFFormula f = null;
+        File file = null;
+        System.out.println("Parsing is starting..."); // ALESSIA //"Starting parsing...");
+        if (!tptp) {
+            try {
+                System.out.println("Reading file " + fileName + "...");
+                file = new File(fileName);
+                formulaReader = new FileReader(file);
+                CNFParser parser = new CNFParser(formulaReader);
+                parser.Start();
+                f = parser.getCNFFormula();
+            } catch (thProver.parser.ParseException pe) {
+                //System.out.println(pe);
+                tptp = true;
+                //useStandard = true;
+            } catch (thProver.parser.TokenMgrError tme) {
+                //System.out.println(pe);
+                tptp = true;
+                //useStandard = true;
+            }
+        }
+        if (tptp) {
+            try {
+                //System.out.println("Reading file " + fileName + "...");
+                formulaReader = new FileReader(fileName);
+                CNFParserTptp parser = new CNFParserTptp(formulaReader);
+                parser.Start();
+                f = parser.getCNFFormula();
+            } catch (thProver.parserTptp.ParseException petptp) {
+                //System.out.println(petptp); //"Errore di parsing.");
+                System.out.println("Parsing error: wrong sintax"); // ALESSIA
+                //"Errore di parsing.");
+            }
+        }
+
+        if (f == null)
+            return;
         
         //System.out.println(f.toString());
         //System.out.println(f.getTermsString());

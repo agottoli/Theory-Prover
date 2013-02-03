@@ -1,0 +1,2 @@
+clauses: P(x,x)
+         P(f(x),y) | P(y,f(x))

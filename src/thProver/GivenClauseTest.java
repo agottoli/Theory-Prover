@@ -37,6 +37,7 @@ public class GivenClauseTest {
     private static boolean gui = false;
     private static boolean vAll = false;
     private static boolean test = false;
+    private static boolean changlee = false;
 
     public static void main(String[] args) throws FileNotFoundException {
 
@@ -195,6 +196,8 @@ public class GivenClauseTest {
             String grafo = null;
             GivenClauseProver prover = new GivenClauseProver(aLaE, sos, kbo,
                     multiset, useOrdering, or, limit, vAll);
+            
+            prover.setUseChangLee(changlee);
 
             StringBuilder strb = new StringBuilder(
                     "Satisfiability proving is starting... ");
@@ -225,6 +228,8 @@ public class GivenClauseTest {
                 strb.append(" and set of support strategy");
             }
 
+            if (changlee)
+                strb.append(" (chang-lee subsumption)");
 
             System.out.println(strb.toString());
 
@@ -287,8 +292,8 @@ public class GivenClauseTest {
                         }
                     }
                     String dir = null;
-                    String name = null;
-                    String nameNoExt = null;
+                    String name = "input.txt";
+                    String nameNoExt = "input";
                     if (file != null) {
                         dir = file.getParent();
                         name = file.getName();
@@ -323,35 +328,17 @@ public class GivenClauseTest {
                         else
                             precString = "-usP";
                     }
-                    
-                    
-                    if (test) {
-                        dir += "/risultati/" + name;
-                        // stampo anche quello che ho dato a schermo su un file
-                        try {
-                            FileOutputStream outputRisTest = new FileOutputStream(dir + "/"
-                                    + nameNoExt + versione + sosString + ordString + precString + ".txt");
-                            PrintStream output = new PrintStream(outputRisTest);
-                            output.println(strb.toString() + "\n"
-                                    + prover.info() + "\n"
-                                    + "\n" + sb.toString());
-                        } catch (IOException e) {
-                            System.out.println(
-                                    "Error: write permission negated in directory " 
-                                    + dir);
-                                    //"Errore: non si ha permessi di scrittura nella"
-                                    //+ "cartella " + dir);
-                            return;
-                        }
-                        
-                    }
-                    
+                                       
                     prover.exportDot(dir, 
                             nameNoExt + versione + sosString + ordString + precString + "." + format, 
                             format, grafo);
                 }
                 stdin.close();
 
+            }
+            
+            if (test) {
+                testReport(file, prover, strb, sb);
             }
         }
     }
@@ -419,6 +406,8 @@ public class GivenClauseTest {
             vAll = true;
         } else if (o.equals("-test")) {
             test = true;
+        } else if (o.equals("-changlee")) {
+            changlee = true;
         }
     }
 
@@ -482,5 +471,67 @@ public class GivenClauseTest {
         stdin.close();
 
         return sb.toString();
+    }
+    
+    private static void testReport(File file, GivenClauseProver prover, StringBuilder strb, StringBuilder sb) {
+        String dir = null;
+                    String name = "input.txt";
+                    String nameNoExt = "input";
+                    if (file != null) {
+                        dir = file.getParent();
+                        name = file.getName();
+                        int index = name.lastIndexOf('.');
+                        if (index == -1) {
+                            // il carattere . non 'è nel nome del file
+                            nameNoExt = name;
+                        } else {
+                            nameNoExt = name.substring(0, index);
+                        }
+                    }
+                                       
+                    String sosString = "";
+                    String versione = "-Otter";
+                    if (aLaE) {
+                        versione = "-E";
+                    }
+                    if (sos)
+                        sosString = "-sos";
+                    String ordString = "";
+                    String precString = "";
+                    if (useOrdering) {
+                        if (kbo)
+                            ordString = "-kbo";
+                        else if (multiset)
+                            ordString = "-mul";
+                        else
+                            ordString = "-lex";
+                        
+                        if (useStandard)
+                            precString = "-stP";
+                        else
+                            precString = "-usP";
+                    }
+                    
+                    
+                    if (test) {
+                        dir += "/risultati/" + name;
+                        // stampo anche quello che ho dato a schermo su un file
+                        try {
+                            FileOutputStream outputRisTest = new FileOutputStream(dir + "/"
+                                    + nameNoExt + versione + sosString + ordString + precString + ".txt");
+                            PrintStream output = new PrintStream(outputRisTest);
+                            output.println(strb.toString() + "\n"
+                                    + prover.info() + "\n"
+                                    + "\n" + sb.toString());
+                        } catch (IOException e) {
+                            System.out.println(
+                                    "Error: write permission negated in directory " 
+                                    + dir);
+                                    //"Errore: non si ha permessi di scrittura nella"
+                                    //+ "cartella " + dir);
+                            return;
+                        }
+                        
+                    }
     }
 }

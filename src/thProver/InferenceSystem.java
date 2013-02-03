@@ -305,6 +305,30 @@ public class InferenceSystem {
         }
         return false;
     }
+    
+    /**
+     * Check if the first clause is subsumed by any clause in the Collection
+     * with algorithm on pag 95 Chang-Lee.
+     * 
+     * @param c clause to subsume
+     * @param clauses collection of clause
+     * @return true if c is subsumed, false otherwise
+     */
+    public static boolean subsumedByChangLeeVersion(Clause c, Collection<Clause> clauses) {
+        // clauses <. c --> cancello c
+        //Iterator<Clause> it = clauses.iterator();
+        //while (it.hasNext()) {
+        for (Clause c1 : clauses) {
+            if (c1.subsumesChangLee(c)) {
+                /* DEBUG inizio */
+                //System.out.println("contr. AVANTI");
+                //System.out.println(c1 + " sussume " + c);
+                /* DEBUG fine */
+                return true;
+            }
+        }
+        return false;
+    }
 
     /**
      * Check if the first clause subsumes any other clause in Collection.
@@ -320,6 +344,39 @@ public class InferenceSystem {
         List<Clause> copy = new ArrayList<>(clauses);
         for (Clause c2 : copy) {
             if (c.subsumes(c2) != null) {
+                /* DEBUG inizio */
+                //System.out.println("contr. INDIETRO");
+                //System.out.println(c2 + " sussunta da " + c);
+                /* DEBUG fine */
+                numClausSuss++;
+                clauses.remove(c2);
+            }
+        }
+        /* DEBUG inizio */
+        //System.out.println("Sussunte: " + numClausSuss);
+        //try {
+        //    System.in.read();
+        //} catch (IOException ioe) {    
+        //}
+        /* DEBUG fine */
+        return numClausSuss;
+    }
+    
+    /**
+     * Check if the first clause subsumes any other clause in Collection
+     * with algorithm on pag 95 Chang-Lee.
+     * 
+     * @param c clause
+     * @param clauses clauses to subsume
+     * @return number of clauses subsumed
+     */
+    public static int subsumesChangLeeVersion(Clause c, Collection<Clause> clauses) {
+        // c <. clauses --> cancello clauses
+        // NOTA: modifica clauses ????
+        int numClausSuss = 0;
+        List<Clause> copy = new ArrayList<>(clauses);
+        for (Clause c2 : copy) {
+            if (c.subsumesChangLee(c2)) {
                 /* DEBUG inizio */
                 //System.out.println("contr. INDIETRO");
                 //System.out.println(c2 + " sussunta da " + c);

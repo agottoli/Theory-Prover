@@ -1,10 +1,11 @@
 #!/bin/sh
 
+SCRIPTDIR=`dirname $0`
+
 echo "Al termine dello script è possibile visualizzare i risultati del test in $SCRIPTDIR/esercizi.quaderno/risultati/blocks.p/\n"
 mkdir $SCRIPTDIR/esercizi.quaderno/risultati
 mkdir $SCRIPTDIR/esercizi.quaderno/risultati/blocks.p
 
-SCRIPTDIR=`dirname $0`
 
 echo "Otter senza ordinamento (limite 5 minuti) su blocks.p"
 

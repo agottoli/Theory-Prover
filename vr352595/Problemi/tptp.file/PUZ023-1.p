@@ -1,7 +1,7 @@
 %--------------------------------------------------------------------------
 % File     : PUZ023-1 : TPTP v5.4.0. Released v1.0.0.
 % Domain   : Puzzles
-% Problem  : Knights and Knaves %27
+% Problem  : Knights and Knaves #27
 % Version  : Especial.
 % English  : There is an island with exactly two types of people :
 %            truthtellers who always tell the truth and liars who always
@@ -33,6 +33,7 @@
 %--------------------------------------------------------------------------
 %----Include axioms for truthtellers and liars
 %include('Axioms/PUZ002-0.ax').
+
 cnf(truthteller_or_liar,axiom,
     ( a_truth(truthteller(X))
     | a_truth(liar(X)) )).
@@ -60,6 +61,7 @@ cnf(liars_are_told_by_liars,axiom,
     ( a_truth(Statement)
     | ~ a_truth(says(Liar,Statement))
     | a_truth(liar(Liar)) )).
+
 %--------------------------------------------------------------------------
 cnf(one_is_the_truthteller,axiom,
     ( ~ people(X,Y,Z)
@@ -145,5 +147,3 @@ cnf(prove_there_is_an_answer,negated_conjecture,
     ( ~ an_answer(X) )).
 
 %--------------------------------------------------------------------------
-
-

@@ -47,7 +47,7 @@ public class Clause implements Comparable<Clause> {
 
     /**
      * Constructs an empty clause with index given
-     * 
+     *
      * @param index clause index
      */
     public Clause(long index) {
@@ -59,6 +59,7 @@ public class Clause implements Comparable<Clause> {
 
     /**
      * Constructs a clause with given literals and index.
+     *
      * @param lits literals of the clause
      * @param index index of the clause
      */
@@ -74,7 +75,7 @@ public class Clause implements Comparable<Clause> {
 
     /**
      * Constructs a clause with given literals and index.
-     * 
+     *
      * @param lits1 literal set 1
      * @param lits2 lireral set 2
      * @param index clause index
@@ -110,12 +111,10 @@ public class Clause implements Comparable<Clause> {
      */
 
     /**
-     * Adds a literal to this clause. 
-     * (NOTA: solo il <b>parser</b> può usarlo perché è delicato visto che mi incasina:
-     * - i letterali massimali
-     * - i fattori e i fattori massimali
-     * - la stringa da stampare (risolta facilmente)
-     * ...
+     * Adds a literal to this clause. (NOTA: solo il <b>parser</b> può usarlo
+     * perché è delicato visto che mi incasina: - i letterali massimali - i
+     * fattori e i fattori massimali - la stringa da stampare (risolta
+     * facilmente) ...
      *
      * @param literal the literal to add
      */
@@ -134,10 +133,10 @@ public class Clause implements Comparable<Clause> {
             string = null; // devo ricalcolarla
         }
     }
-    
+
     /**
      * Return the clause literals.
-     * 
+     *
      * @return literals
      */
     public Set<Literal> getLiterals() {
@@ -146,7 +145,7 @@ public class Clause implements Comparable<Clause> {
 
     /**
      * Return the clause positive literals.
-     * 
+     *
      * @return positive literals
      */
     public List<Literal> getPosiviveLiterals() {
@@ -155,25 +154,25 @@ public class Clause implements Comparable<Clause> {
 
     /**
      * Return the clause negative literals.
-     * 
+     *
      * @return negative literals
      */
     public List<Literal> getNegativeLiterals() {
         return negLits;
     }
-    
+
     /**
-     * Set parents that generate the clause with wich inference rule
-     * (resolution or semplification) with or without ordering 
-     * specified the used substitution
-     * 
+     * Set parents that generate the clause with wich inference rule (resolution
+     * or semplification) with or without ordering specified the used
+     * substitution
+     *
      * @param par list of clauses parents of the clause
      * @param ris true if used rule is resolution, false if semplification
      * @param ordinata true if ordering is used, false otherwise
      * @param sub the substitution used (empty substitution if not used)
      */
     // per la risoluzione e semplificazione (2 padri)
-    public void setParentsRuleAndSub(List<Clause> par, boolean ris, 
+    public void setParentsRuleAndSub(List<Clause> par, boolean ris,
             boolean ordinata, Substitution sub) {
         parents = par;
         if (ris) {
@@ -187,12 +186,11 @@ public class Clause implements Comparable<Clause> {
         }
         this.substitutionFrom = sub;
     }
-    
+
     /**
-     * Set parent that generate the clause with factorization with or without 
-     * ordering 
-     * specified the used substitution
-     * 
+     * Set parent that generate the clause with factorization with or without
+     * ordering specified the used substitution
+     *
      * @param par parent clause
      * @param ordinata true if used ordering
      * @param sub substitution used (empty substitution if not used)
@@ -207,10 +205,10 @@ public class Clause implements Comparable<Clause> {
             this.rule = "Factorization";
         this.substitutionFrom = sub.copy();
     }
-    
+
     /**
      * Get list of clause parents.
-     * 
+     *
      * @return list of clause parents
      */
     public List<Clause> getParents() {
@@ -219,7 +217,7 @@ public class Clause implements Comparable<Clause> {
 
     /**
      * Number of literals in clause.
-     * 
+     *
      * @return number of literals
      */
     public int size() {
@@ -235,7 +233,7 @@ public class Clause implements Comparable<Clause> {
     public String toString() {
         if (string != null)
             return string;
-        
+
         if (literals == null || literals.isEmpty())
             return "[]";
 
@@ -262,7 +260,7 @@ public class Clause implements Comparable<Clause> {
         int diff = symbolsNumber() - c.symbolsNumber();
         if (diff == 0 && !equals(c)) {
             //return -1; // keep consistency with equals()
-            return (int)(this.indiceClausola - c.indiceClausola); 
+            return (int) (this.indiceClausola - c.indiceClausola);
             // così sceglie la clausola più vecchia in caso di peso =
         }
         return diff;
@@ -270,7 +268,7 @@ public class Clause implements Comparable<Clause> {
 
     /**
      * Calculate the symbols number for compare clause
-     * 
+     *
      * @return symbols number
      */
     private int symbolsNumber() {
@@ -300,15 +298,15 @@ public class Clause implements Comparable<Clause> {
             if (literals.size() != other.literals.size())
                 return false;
             /*for (Literal l : literals)
-                if (!other.literals.contains(l))
-                    return false;
-            // tutti i letterali sono presenti in other ma
-            // non so niente del contrario
-            for (Literal l : other.literals)
-                if (!this.literals.contains(l))
-                    return false;
-            // tutti i letterali sono in entrambe le clausole 
-            */
+             if (!other.literals.contains(l))
+             return false;
+             // tutti i letterali sono presenti in other ma
+             // non so niente del contrario
+             for (Literal l : other.literals)
+             if (!this.literals.contains(l))
+             return false;
+             // tutti i letterali sono in entrambe le clausole 
+             */
             return literals.equals(other.literals);
             //return true;
         }
@@ -330,7 +328,7 @@ public class Clause implements Comparable<Clause> {
 
     /**
      * Check if the clause is empty.
-     * 
+     *
      * @return true if 0 literals, false otherwise
      */
     boolean isEmpty() {
@@ -359,6 +357,7 @@ public class Clause implements Comparable<Clause> {
 
     /**
      * Return maximal literals of the clause given an ordering
+     *
      * @param ord the ordering
      * @return literal list
      */
@@ -374,17 +373,18 @@ public class Clause implements Comparable<Clause> {
         posMaximalLits = new ArrayList<>();
         negMaximalLits = new ArrayList<>();
         for (Literal l : maximalLits)
-           if (l.isPositive())
-               posMaximalLits.add(l);
-           else
-               negMaximalLits.add(l);
+            if (l.isPositive())
+                posMaximalLits.add(l);
+            else
+                negMaximalLits.add(l);
     }
 
     /**
      * Return clause factors.
-     * 
+     *
      * @param indexingC object to assign an univoke index to new clauses
-     * @param all <cod>true<\code> if calcule the factors of the factor recursively
+     * @param all <cod>true<\code> if calcule the factors of the factor
+     * recursively
      *            <code>false<\code> if only factors of this clause
      * @return clause set of factors (empty set if no factors)
      */
@@ -397,7 +397,7 @@ public class Clause implements Comparable<Clause> {
 
     /**
      * Return clause factors given an ordering.
-     * 
+     *
      * @param ord ordering to use
      * @param indexingC object to assign an univoke index to new clauses
      * @param all <code>true<\code> if calcule the factors of the factor recursively
@@ -563,7 +563,7 @@ public class Clause implements Comparable<Clause> {
         //System.out.println(maximalFactors + "\n");
         // DEBUG fine
         // ??? devo trovare anche i fattori dei fattori?
-        
+
         if (all) {
             Set<Clause> aggiuntivi = new LinkedHashSet<>();
             for (Clause c : maximalFactors)
@@ -585,19 +585,17 @@ public class Clause implements Comparable<Clause> {
      return new Clause(lits);
      }
      */
-    
     /**
-     * Constructs a new clause from the application of the given substitution 
-     * to the clause.
-     * (Note: apply ' to distinguish variables with equals name 
-     * (and different index)
-     * example: in case of x_3 and x_4 --> x_newIndex and x'_newIndex
-     * 
+     * Constructs a new clause from the application of the given substitution to
+     * the clause. (Note: apply ' to distinguish variables with equals name (and
+     * different index) example: in case of x_3 and x_4 --> x_newIndex and
+     * x'_newIndex
+     *
      * @param tau substitution
      * @param vars map of variables and new name given in the results
      * @param time index of the new clause
-     * @return the new clause if the substitution modify the clause
-     *         this if the substitution has no effects.
+     * @return the new clause if the substitution modify the clause this if the
+     * substitution has no effects.
      */
     public Clause applySubstitution(Substitution tau, Map<String, Variable> vars, long time) {
         //long time = System.nanoTime();
@@ -611,7 +609,7 @@ public class Clause implements Comparable<Clause> {
 
     /**
      * Representation of clause factors.
-     * 
+     *
      * @return representation of factors
      */
     public String getFactorsString() {
@@ -633,7 +631,7 @@ public class Clause implements Comparable<Clause> {
 
     /**
      * Representation of clause factors calculated from ordering.
-     * 
+     *
      * @return representation of factors
      */
     public String getMaximalFactorsString() {
@@ -656,7 +654,7 @@ public class Clause implements Comparable<Clause> {
 
     /**
      * Calculate the resolvents from the clauses.
-     * 
+     *
      * @param othC the other clause
      * @param indexingC object to indexing the new clauses
      * @return resolvent clauses set
@@ -694,20 +692,20 @@ public class Clause implements Comparable<Clause> {
                     if (InferenceSystem.mgu(litX, litY, false, substitution, false)) {
                         Set<Literal> set = new LinkedHashSet<>();
                         long time = indexingC.getIndexAndIncrement(); //long time = System.nanoTime();
-                        Substitution subOriginale = substitution.copy(); 
+                        Substitution subOriginale = substitution.copy();
                         Map<String, Variable> renam = substitution.renameVariables(time);
-                        
+
                         /* DEBUG inizio */
                         //System.out.println("risolvente tra " + this + " e " + othC);
                         //System.out.println("subOrig: " + subOriginale);
                         //System.out.println("subRen: " + substitution);
                         /*try {
-                            System.in.read();
-                        } catch (IOException ioe) {
+                         System.in.read();
+                         } catch (IOException ioe) {
                             
-                        }*/
+                         }*/
                         /* DEBUG fine */
-                        
+
                         for (Literal l : literals) {
                             if (l.equals(litX))
                                 continue;
@@ -738,10 +736,9 @@ public class Clause implements Comparable<Clause> {
     }
 
     /**
-     * Return all the resolvent form the clauses
-     * (c1 + c2) , (factors(c1) + c2) , (c1 + factors(c2)) , 
-     * (factors(c1) + factors(c2))
-     * 
+     * Return all the resolvent form the clauses (c1 + c2) , (factors(c1) + c2)
+     * , (c1 + factors(c2)) , (factors(c1) + factors(c2))
+     *
      * @param othC the other clause
      * @param indexingC object to indexing the new clauses
      * @return all resolvent clauses set
@@ -763,7 +760,7 @@ public class Clause implements Comparable<Clause> {
 
     /**
      * Calculate the resolvents from the clauses with a given ordering.
-     * 
+     *
      * @param othC the other clause
      * @param indexingC objecto to indexing the new clauses
      * @return resolvent clauses set
@@ -803,20 +800,20 @@ public class Clause implements Comparable<Clause> {
                     if (InferenceSystem.mgu(litX, litY, false, substitution, false)) {
                         Set<Literal> set = new LinkedHashSet<>();
                         long time = indexingC.getIndexAndIncrement(); //long time = System.nanoTime();
-                        Substitution subOriginale = substitution.copy();                     
+                        Substitution subOriginale = substitution.copy();
                         Map<String, Variable> renam = substitution.renameVariables(time);
-                        
+
                         /* DEBUG inizio */
                         //System.out.println("risolvente tra " + this + " e " + othC);
                         //System.out.println("subOrig: " + subOriginale);
                         //System.out.println("subRen: " + substitution);
                         /*try {
-                            System.in.read();
-                        } catch (IOException ioe) {
+                         System.in.read();
+                         } catch (IOException ioe) {
                             
-                        }*/
+                         }*/
                         /* DEBUG fine */
-                        
+
                         for (Literal l : literals) {
                             if (l.equals(litX))
                                 continue;
@@ -843,17 +840,15 @@ public class Clause implements Comparable<Clause> {
     }
 
     /**
-     * Return all the resolvent form the clauses given an ordering
-     * (c1 + c2) , (factors(c1) + c2) , (c1 + factors(c2)) , 
-     * (factors(c1) + factors(c2))
-     * 
+     * Return all the resolvent form the clauses given an ordering (c1 + c2) ,
+     * (factors(c1) + c2) , (c1 + factors(c2)) , (factors(c1) + factors(c2))
+     *
      * @param othC the other clause
      * @param ord the ordering
      * @param indexingC object to indexing the new clauses
      * @return all resolvent clauses set
      */
-    public Set<Clause> allTheOrderedResolvents(Clause othC, Ordering ord
-            , IndexingClauses indexingC) {
+    public Set<Clause> allTheOrderedResolvents(Clause othC, Ordering ord, IndexingClauses indexingC) {
         Set<Clause> resolvents = new LinkedHashSet<>();
 
         // per essere sicuro che siano stati calcolati i letterali massimali
@@ -872,37 +867,39 @@ public class Clause implements Comparable<Clause> {
 
         return resolvents;
     }
-/*
-    public void renameVariables() {
-        long num = System.nanoTime();
-        Set<Literal> lits = literals;
-        /*for (Literal l : literals)
-         lNuovi.add(l.renameVariables(num));
-         if (!lNuovi.equals(literals))
-         literals = lNuovi;
-         * /
-        posLits.clear();
-        negLits.clear();
-        literals = new LinkedHashSet<>(lits.size());
-        for (Literal l : lits)
-            literals.add(l.renameVariables(num));
-        for (Literal l : literals)
-            if (l.isPositive())
-                posLits.add(l);
-            else
-                negLits.add(l);
+    /*
+     public void renameVariables() {
+     long num = System.nanoTime();
+     Set<Literal> lits = literals;
+     /*for (Literal l : literals)
+     lNuovi.add(l.renameVariables(num));
+     if (!lNuovi.equals(literals))
+     literals = lNuovi;
+     * /
+     posLits.clear();
+     negLits.clear();
+     literals = new LinkedHashSet<>(lits.size());
+     for (Literal l : lits)
+     literals.add(l.renameVariables(num));
+     for (Literal l : literals)
+     if (l.isPositive())
+     posLits.add(l);
+     else
+     negLits.add(l);
 
-    }
-*/
-    /****************** SUSSUNZIONE MIA inizio *********************/
-    
+     }
+     */
+
     /**
-     * Return the substutution (if exists) that is used to subsume the
-     * other clause.
-     * 
+     * **************** SUSSUNZIONE MIA inizio ********************
+     */
+    /**
+     * Return the substutution (if exists) that is used to subsume the other
+     * clause.
+     *
      * @param othC the other clause
-     * @return substitution use (empty sub if no necessary)
-     *         null if this not subsumes the other clause
+     * @return substitution use (empty sub if no necessary) null if this not
+     * subsumes the other clause
      */
     public Substitution subsumes(Clause othC) {
         //boolean subsumes = false;
@@ -911,9 +908,9 @@ public class Clause implements Comparable<Clause> {
         if (!(this == othC))
             // Ensure this has less literals total and that
             // it is a subset of the other clauses positive and negative counts
-            if (this.literals.size() < othC.literals.size() //) {
-                    && this.posLits.size() <= othC.posLits.size() //2013-02-03 RIGA DECOMMENTATA
-                    && this.negLits.size() <= othC.negLits.size()) { //2013-02-03 RIGA DECOMMENTATA
+            if (this.literals.size() < othC.literals.size() ) {
+                    //&& this.posLits.size() <= othC.posLits.size() //2013-02-03 RIGA DECOMMENTATA
+                    //&& this.negLits.size() <= othC.negLits.size()) { //2013-02-03 RIGA DECOMMENTATA
 
                 // PROVO SUSSUNZIONE PROPRIA
                 Map<String, List<Literal>> thisToTry = collectLikeLiterals(this.literals);
@@ -965,23 +962,23 @@ public class Clause implements Comparable<Clause> {
                 Map<String, List<Literal>> othCToTry = collectLikeLiterals(othC.literals);
                 // Ensure all like literals from this clause are a subset
                 // of the other clause.
-                if (this.indiceClausola < othC.indiceClausola 
+                if (this.indiceClausola < othC.indiceClausola
                         && othCToTry.keySet().containsAll(thisToTry.keySet())) {
                     /* DEBUG inizio */
                     //if (this.indiceClausola == 2291 && othC.indiceClausola == 2533)
                     //System.out.println("sussunzione propria?: " + this + " e "+ othC);
                     Substitution temp = checkSub(thisToTry, othCToTry,
-                                        new Substitution(), true);
+                            new Substitution(), true);
                     //if (temp != null) {
                     //    System.out.println("Sì, con " + temp);
                     //} else {
                     //    System.out.println("No");
                     //}
                     /*try {
-                        System.in.read();
-                    } catch (IOException io) {
+                     System.in.read();
+                     } catch (IOException io) {
                         
-                    }*/
+                     }*/
                     return temp;
                     /* DEBUG fine */
                     //return checkSub(thisToTry, othCToTry,
@@ -993,12 +990,12 @@ public class Clause implements Comparable<Clause> {
     }
 
     /**
-     * Fa una lista di simboli di predicato (con il segno) associato a tutti i 
+     * Fa una lista di simboli di predicato (con il segno) associato a tutti i
      * letterali che hanno quel simbolo nella clausola
-     * 
+     *
      * @param literals letterali della clausola
-     * @return la map che associa simbolo con segno a tutti i letterali della 
-     *         clausola che iniziano con lui
+     * @return la map che associa simbolo con segno a tutti i letterali della
+     * clausola che iniziano con lui
      */
     private Map<String, List<Literal>> collectLikeLiterals(Set<Literal> literals) {
         Map<String, List<Literal>> likeLiterals = new LinkedHashMap<String, List<Literal>>();
@@ -1023,14 +1020,13 @@ public class Clause implements Comparable<Clause> {
 
     /**
      * Metodo che effettivamente controlla se posso sussumere.
-     * 
+     *
      * @param thisToTry map dei simboli di questa da provare
      * @param othCToTry map dei simboli di altra da provare
      * @param sigma la sostituzione fino a questo momento
-     * @param isDiVarianti true se è una sussunzione di varianti 
-     *                     (non serve più ma lo lascio per sicurezza)
-     * @return la sostituzione che permette la sussunzione,
-     *         null se non sussume
+     * @param isDiVarianti true se è una sussunzione di varianti (non serve più
+     * ma lo lascio per sicurezza)
+     * @return la sostituzione che permette la sussunzione, null se non sussume
      */
     private Substitution checkSub(
             Map<String, List<Literal>> thisToTry,
@@ -1040,105 +1036,162 @@ public class Clause implements Comparable<Clause> {
 
         //boolean subsumes = false;
 
-        Substitution sub = sigma.copy();
+        Substitution sub = sigma;//.copy();
 
-        Iterator<String> it = thisToTry.keySet().iterator();
-        if (it.hasNext()) {
-            String key = it.next();
-        //for (String key : thisToTry.keySet()) {
+        //Iterator<String> it = thisToTry.keySet().iterator();
+        //if (it.hasNext()) {
+        //    String key = it.next();
+        for (String key : thisToTry.keySet()) {
             // che è più piccolo
             List<Literal> litsT = thisToTry.get(key);
             List<Literal> litsO = othCToTry.get(key);
-            
-            if (!litsT.isEmpty()) {
-                Literal lT = litsT.get(0);
-            //for (Literal lT : litsT) {
-                if (litsO == null) {
-                    // non c'è una corrispondenza allora esco 
-                    // non può sussumere
-                    return null;
-                }
-                for (Literal lO : litsO) {
-                    Substitution copy = sub.copy();
-                    /* DEBUG inizio */
-                    //System.out.println("errore: mgu tra ("+ lT + " e " + lO + " )");
-                    //if (lT.toString().equals("~product(X_7,X_7,additive_identity)"))
-                            //&& lO.toString().equals("product(Y_8,X_8,Z_8)product(Y_8,X_8,Z_8)"))
-                    //    System.out.print("eccoci");
-                    /* DEBUG fine */
-                    if (InferenceSystem.mgu(lT, lO, true, copy, true)) {
-                        // if sub.assignments.keySet() contains variabile di othC
-                        // allora non è un unificazione giusta
-                        // ????
-                        // OK, modifico l'mgu per la sussunzione così 
-                        // se gli passo true non mi fa gli assegnamenti
-                        //subsumes = true;//return sub; // subsumes = true;
-                        //break;
 
-                        // sub è stata aggiornata per continuare l'unificazione
+            //if (!litsT.isEmpty()) {
+                for (Literal lT : litsT) {
 
-                        Map<String, List<Literal>> thisToTryCopy = new LinkedHashMap<>(thisToTry);
-                        List<Literal> get = thisToTryCopy.get(key);
-                        if (get.size() == 1)
-                            thisToTryCopy.remove(key);
-                        else
-                            get.remove(lT);
-                        
-                        /* 2013-02-03 aggiunto le righe sotto per non fare cose strane nella sussunzione */
-                        Map<String, List<Literal>> othCToTryCopy = new LinkedHashMap<>(othCToTry.size());
-                        // devo copiare pure gli elementi della lista interna
-                        // allora non posso fare come sopra
-                        for (String keyCopy: othCToTry.keySet()) {
-                            // per ogni key devo copiarmi la lista e fare il put
-                            List<Literal> cp = new ArrayList(othCToTry.get(keyCopy));
-                            othCToTryCopy.put(keyCopy, cp);
+                    boolean flag = false;
+                    for (Literal lO : litsO) {
+                        Substitution copy = sub.copy(); // mi prendo la sost. buona che avevo prima
+
+                        if (!InferenceSystem.mgu(lT, lO, true, copy, true)) {
+                            // devo provare il prossimo lO
+                            continue;
                         }
-                        /* fine 2013-02-03 */
-                        
-                        List<Literal> getO = othCToTryCopy.get(key);
-                        if (getO.size() == 1)
-                            othCToTryCopy.remove(key);
-                        else
-                            getO.remove(lO);
 
-                        //Map<String, List<Literal>> othCToTryCopy = new LinkedHashMap<>(othCToTry);
-                        //othCToTryCopy.remove(key);
+                        // qua lT e lO UNIFICANO
+                        // non è detto che siano giusti per riuscire a sussumere
+                        // ma è già un inizio.
+                        flag = true;
+                        sub = copy;
+                        break;
 
-                        if (thisToTryCopy.isEmpty())
-                            return copy; // tutti i letterali in this unificano contemporaneamente
-
-                        // non è vuota allora guardo che l'indice della variabile 
-                        // sia più piccolo ????
-                        
-                        //Substitution copy = sub.copy();
-                        Substitution nuova;
-                        nuova = checkSub(thisToTryCopy, othCToTryCopy, copy, isDiVarianti);
-                        if (nuova != null)
-                            return nuova; // credo di aver unificato tutto
-                        
-                        // else prova con il prossimo lO
-                            
-                        // la copy è stata rovinata ma non c'è problema perché
-                        // si ricostruisce al prossimo passo
                     }
+
+                    if (!flag) {
+                        // se arrivo qua non sono riuscito ad unificare con nessun lit0
+                        return null;
+                    }
+
+                    // qua vuol dire che ho unificato l'lT corrente e proverò col prossimo
+
                 }
 
-                // se arrivo qua non sono riuscito ad unificare con nessun lit0
-                return null;
-            }
+            //}
         }
         // se tutto va bene non arriva mai fino a qui
         // perché ci sarà sempre almeno un elemento :)
-        return sigma;     
+        return sigma;
     }
-    
-    /****************** SUSSUNZIONE MIA fine *********************/
-    
-    /************* SUSSUNZIONE Chang-Lee pag. 95 *****************/
+
+    /* BAKUPPO 2013-02-03 2.57 di notte...
+     private Substitution checkSub(
+     Map<String, List<Literal>> thisToTry,
+     Map<String, List<Literal>> othCToTry,
+     Substitution sigma,
+     boolean isDiVarianti) {
+
+     //boolean subsumes = false;
+
+     Substitution sub = sigma.copy();
+
+     Iterator<String> it = thisToTry.keySet().iterator();
+     if (it.hasNext()) {
+     String key = it.next();
+     //for (String key : thisToTry.keySet()) {
+     // che è più piccolo
+     List<Literal> litsT = thisToTry.get(key);
+     List<Literal> litsO = othCToTry.get(key);
+            
+     if (!litsT.isEmpty()) {
+     Literal lT = litsT.get(0);
+     //for (Literal lT : litsT) {
+     if (litsO == null) {
+     // non c'è una corrispondenza allora esco 
+     // non può sussumere
+     return null;
+     }
+     for (Literal lO : litsO) {
+     Substitution copy = sub.copy();
+     /* DEBUG inizio */
+    //System.out.println("errore: mgu tra ("+ lT + " e " + lO + " )");
+    //if (lT.toString().equals("~product(X_7,X_7,additive_identity)"))
+    //&& lO.toString().equals("product(Y_8,X_8,Z_8)product(Y_8,X_8,Z_8)"))
+    //    System.out.print("eccoci");
+                    /* DEBUG fine * /
+     if (InferenceSystem.mgu(lT, lO, true, copy, true)) {
+     // if sub.assignments.keySet() contains variabile di othC
+     // allora non è un unificazione giusta
+     // ????
+     // OK, modifico l'mgu per la sussunzione così 
+     // se gli passo true non mi fa gli assegnamenti
+     //subsumes = true;//return sub; // subsumes = true;
+     //break;
+
+     // sub è stata aggiornata per continuare l'unificazione
+
+     Map<String, List<Literal>> thisToTryCopy = new LinkedHashMap<>(thisToTry);
+     List<Literal> get = thisToTryCopy.get(key);
+     if (get.size() == 1)
+     thisToTryCopy.remove(key);
+     else
+     get.remove(lT);
+                        
+     /* 2013-02-03 aggiunto le righe sotto per non fare cose strane nella sussunzione * /
+     Map<String, List<Literal>> othCToTryCopy = new LinkedHashMap<>(othCToTry.size());
+     // devo copiare pure gli elementi della lista interna
+     // allora non posso fare come sopra
+     for (String keyCopy: othCToTry.keySet()) {
+     // per ogni key devo copiarmi la lista e fare il put
+     List<Literal> cp = new ArrayList(othCToTry.get(keyCopy));
+     othCToTryCopy.put(keyCopy, cp);
+     }
+     /* fine 2013-02-03 * /
+                        
+     List<Literal> getO = othCToTryCopy.get(key);
+     if (getO.size() == 1)
+     othCToTryCopy.remove(key);
+     else
+     getO.remove(lO);
+
+     //Map<String, List<Literal>> othCToTryCopy = new LinkedHashMap<>(othCToTry);
+     //othCToTryCopy.remove(key);
+
+     if (thisToTryCopy.isEmpty())
+     return copy; // tutti i letterali in this unificano contemporaneamente
+
+     // non è vuota allora guardo che l'indice della variabile 
+     // sia più piccolo ????
+                        
+     //Substitution copy = sub.copy();
+     Substitution nuova;
+     nuova = checkSub(thisToTryCopy, othCToTryCopy, copy, isDiVarianti);
+     if (nuova != null)
+     return nuova; // credo di aver unificato tutto
+                        
+     // else prova con il prossimo lO
+                            
+     // la copy è stata rovinata ma non c'è problema perché
+     // si ricostruisce al prossimo passo
+     }
+     }
+
+     // se arrivo qua non sono riuscito ad unificare con nessun lit0
+     return null;
+     }
+     }
+     // se tutto va bene non arriva mai fino a qui
+     // perché ci sarà sempre almeno un elemento :)
+     return sigma;     
+     }*/
     /**
-     * Subsumption Chang-Lee style.
-     * It uses resolvents...
-     * 
+     * **************** SUSSUNZIONE MIA fine ********************
+     */
+    /**
+     * *********** SUSSUNZIONE Chang-Lee pag. 95 ****************
+     */
+    /**
+     * Subsumption Chang-Lee style. It uses resolvents...
+     *
      * @param othC the other clause
      * @return ???
      */
@@ -1165,7 +1218,7 @@ public class Clause implements Comparable<Clause> {
         }
         return false;
     }
-    
+
     public Set<Clause> fase1(Clause D) {
         Set<Clause> W = new LinkedHashSet<>(D.getLiterals().size());
         Map<Variable, Constant> theta = new LinkedHashMap();
@@ -1179,22 +1232,21 @@ public class Clause implements Comparable<Clause> {
             }
             Atom newAto;
             if (nuoviArgsAi.equals(Ai.getArgs()))
-               newAto = Ai;
+                newAto = Ai;
             else
-               newAto = new Atom(Ai.getSymbol(), nuoviArgsAi);
-        
-             Literal newLit = new Literal(!Li.isPositive(),newAto);
-             Set<Literal> setNewLit = new LinkedHashSet<>();
-             setNewLit.add(newLit);
-             W.add(new Clause(setNewLit, 999999));
-        
+                newAto = new Atom(Ai.getSymbol(), nuoviArgsAi);
+
+            Literal newLit = new Literal(!Li.isPositive(), newAto);
+            Set<Literal> setNewLit = new LinkedHashSet<>();
+            setNewLit.add(newLit);
+            W.add(new Clause(setNewLit, 999999));
+
         }
-        
+
         return W;
     }
-    
-    private Term fase1Ricorsiva(Term TiAi, IndexingClauses indiceNuoveCostanti
-            , Map<Variable, Constant> theta) {
+
+    private Term fase1Ricorsiva(Term TiAi, IndexingClauses indiceNuoveCostanti, Map<Variable, Constant> theta) {
         if (TiAi instanceof Constant) {
             return TiAi;
         }
@@ -1217,12 +1269,13 @@ public class Clause implements Comparable<Clause> {
         theta.put(thisVar, nuovaCos);
         return nuovaCos;
     }
-    /************** SUSSUNZIONE Chang-Lee fine *******************/
-    
-    
+
+    /**
+     * ************ SUSSUNZIONE Chang-Lee fine ******************
+     */
     /**
      * Clausal simplification.
-     * 
+     *
      * @param othC the clause to semplificate
      * @param indexingC object to indexing the new clause
      * @return the simplified clause, null if not simplifies
@@ -1232,7 +1285,7 @@ public class Clause implements Comparable<Clause> {
             return null; // infatti deve essere unitaria per applicare la regola
         if (othC.literals.size() < 2)
             return null;
-        
+
         Literal l1 = literals.iterator().next();
         List<Literal> ls2;
         if (l1.isPositive())
@@ -1242,7 +1295,7 @@ public class Clause implements Comparable<Clause> {
         Substitution sigma = new Substitution();
         for (Literal l2 : ls2) {
             sigma.clear();
-            if (InferenceSystem.mgu(l1, l2, false, sigma, true)) {               
+            if (InferenceSystem.mgu(l1, l2, false, sigma, true)) {
                 //othC.removeLiteral(l2);
                 // vista la mole di dati da cambiare è + conveniente
                 // creare una nuova Clausola e cancellare la vecchia
@@ -1260,12 +1313,13 @@ public class Clause implements Comparable<Clause> {
         }
         return null;
     }
-    
+
     /**
-     * Return a dot source string that represent the genealogical tree of the clause.
-     * Used to print the gragh of the refutational prove
-     * 
-     * @return a dot source string that represent the genealogical tree of the clause
+     * Return a dot source string that represent the genealogical tree of the
+     * clause. Used to print the gragh of the refutational prove
+     *
+     * @return a dot source string that represent the genealogical tree of the
+     * clause
      */
     public String getDOT() {
         StringBuilder sb = new StringBuilder("digraph {\n");
@@ -1274,22 +1328,22 @@ public class Clause implements Comparable<Clause> {
         sb.append("\tedge [color=gray];\n");
         sb.append(getDOT2());
         sb.append("}\n");
-        
+
         // risistemo il campo visitato nel caso di una seconda chiamata
         resetVisitato();
         return sb.toString();
     }
-    
+
     private String getDOT2() {
         if (visitato)
             return "";
-        
+
         visitato = true;
         StringBuilder sb = new StringBuilder();
         /*sb.append("\t\"");
-        sb.append(this.toString());
-        sb.append("\" [shape=plaintext];\n");*/
-        
+         sb.append(this.toString());
+         sb.append("\" [shape=plaintext];\n");*/
+
         if (parents != null) {
             boolean primo = true;
             for (Clause c : parents) {
@@ -1312,21 +1366,20 @@ public class Clause implements Comparable<Clause> {
         }
         return sb.toString();
     }
-    
-    
+
     private void resetVisitato() {
         if (!visitato)
             return;
-        
+
         visitato = false;
-        
+
         if (parents != null) {
             for (Clause c : parents) {
                 c.resetVisitato();
             }
         }
     }
-    
+
     /**
      * Reset fields in case of second incocation of the satisfiability procedure
      */
@@ -1338,12 +1391,11 @@ public class Clause implements Comparable<Clause> {
         posMaximalLits = null;
         negMaximalLits = null;
     }
-    
-/*  // uso il reset che costa meno  
-    public Clause lazyCopy() {
-        // non copia i letterali, ma solo fa una nuova clausola con i dati
-        // princpali della clausola (quelli che ha alla creazione)
-        return new Clause(literals, indiceClausola);
-    }
-    */
+    /*  // uso il reset che costa meno  
+     public Clause lazyCopy() {
+     // non copia i letterali, ma solo fa una nuova clausola con i dati
+     // princpali della clausola (quelli che ha alla creazione)
+     return new Clause(literals, indiceClausola);
+     }
+     */
 }

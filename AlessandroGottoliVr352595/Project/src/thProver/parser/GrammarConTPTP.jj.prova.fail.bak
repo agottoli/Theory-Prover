@@ -1,0 +1,401 @@
+PARSER_BEGIN(CNFParser)
+package thProver.parser;
+
+import thProver.CNFFormula;
+import thProver.Clause;
+import thProver.Literal;
+import thProver.Term;
+import thProver.Atom;
+import thProver.Constant;
+import thProver.Variable;
+import thProver.Function;
+
+import java.util.List;
+import java.util.ArrayList;
+import java.util.LinkedList;
+
+public class CNFParser {
+
+    private static CNFFormula f = new CNFFormula();
+
+    public CNFFormula getCNFFormula() {
+        CNFFormula currentFormula = f;
+        f = new CNFFormula();
+        return currentFormula;
+    }
+
+}
+PARSER_END(CNFParser)
+
+SKIP:
+{ <" ">
+| <"\n">
+| <"\r">
+| <"\t">
+| <"%"(~["\n"])* "\n"> // comment
+}
+
+TOKEN:
+{ <OR: "|">
+| <INTEGER: (["0"-"9"])+>
+| <PREDICATE: ((["A"-"Z"])+(["A"-"Z","0"-"9"])*)> // in tptp indica anche le variabili
+| <CNFTPTP: cnf>
+| <SYMBOL: ((["a"-"z"])+(["a"-"z","0"-"9"])*)> // in tptp indica anche le costanti
+| <SYMBOLTPTP: (["a"-"z","A"-"Z","0"-"9","_"])+>
+| <DOTTPTP: ".">
+| <COMMA: ",">
+| <SEMICOLON: ";">
+| <LPAR: "(">
+| <RPAR: ")">
+| <NOT: "~"> //"!" | "~">
+// constants declaration
+| <CONST: "const:">
+// precedence over the signature symbols (the precedenza sui simboli della segnatura)
+| <PREC: "prec:">
+| <RANGLEPAR: ">">
+// set of support
+| <SOS: "sos:"> 
+// clauses
+| <CLAUSES: "clauses:">
+// weight per KBO
+| <WEIGHTS: "weights:">
+| <WEIGHTVARS: "weightVars:">
+| <EQUALS: "=">
+}
+
+
+/*
+* Productions
+*/
+void Start():
+{
+    Clause c;
+}
+{
+	([ Declaration() ]
+        [ Precedences() ]
+        [ WeightVars() ]
+        [ Weights() ]
+        [ Sos() ]
+        [ Clauses() ] )
+        | Tptp()
+	<EOF>
+}
+
+// constants declaration
+void Declaration():
+{}
+{
+	<CONST> [Consts()] 
+}
+
+void Consts():
+{
+    Token c;
+}
+{
+	( c = <SYMBOL> | c= <CNF> | c = <INTEGER> )
+        { f.addConstant(c.image); f.addArity(c.image, 0); }
+	( <COMMA> ( c = <SYMBOL> | c = <CNF> | c = <INTEGER> )
+            { f.addConstant(c.image); f.addArity(c.image, 0); } )*
+}
+
+// precedences specification
+void Precedences():
+{}
+{
+    <PREC> ( Precedence() { f.addPrecedence("*Bottom*"); f.addPrecedence("*Top*"); } )*
+}
+void Precedence():
+{
+    Token t;
+}
+{
+    ( t = <PREDICATE> | t = <SYMBOL> | t = <CNF> | t = <INTEGER> ) { f.incrNPrecList(); f.addPrecedence(t.image); } 
+
+    ( <RANGLEPAR> ( t = <PREDICATE> | t = <SYMBOL> | t = <CNF> | t = <INTEGER> ) { f.addPrecedence(t.image); } )+
+}
+
+// weight for KBO
+void Weights():
+{}
+{
+    <WEIGHTS> Weight() ( [ <SEMICOLON> ] Weight() )*
+}
+
+void Weight():
+{
+    Token s, i;
+}
+{
+     ( s = <SYMBOL> | s = <CNF> | s = <PREDICATE> | s = <INTEGER> ) <EQUALS> i = <INTEGER>
+        { f.setWeight(s.image, i.image); }
+}
+void WeightVars():
+{
+    Token i;
+}
+{
+    <WEIGHTVARS> i = <INTEGER> { f.setWeightVars(i.image); }
+}
+
+// SOS
+void Sos():
+{
+    Clause c;
+}
+{
+    <SOS> ( c = Clause() { f.addSOS(c); } ( <SEMICOLON> c = Clause() { f.addSOS(c); } )* )*
+}
+
+// clauses
+void Clauses():
+{ 
+    Clause c;
+}
+{
+ <CLAUSES> ( c = Clause() { f.addClause(c); } ( <SEMICOLON> c = Clause() { f.addClause(c); } )* )*
+}
+
+// a clause
+Clause Clause():
+{
+    Clause c = new Clause();
+    Literal l;
+}
+{
+	l = Literal()
+        { c.addLiteral(l); }
+        ( <OR> l = Literal() 
+            { c.addLiteral(l); } )*
+
+        { return c; }
+}
+
+// a literal
+Literal Literal():
+{
+    boolean pos = true;
+    Atom a;
+}
+{
+	[ <NOT> { pos = false; } ]
+        a = Atom()
+
+        { return f.addLiteral(new Literal(pos, a)); }
+}
+
+Atom Atom():
+{
+    Atom a;
+    List<Term> terms = null;
+    Token p;
+}
+{
+    p = <PREDICATE>
+        [ <LPAR> terms = Terms() <RPAR> ]
+
+        { boolean ok;
+          if (terms != null) {
+             a = new Atom(p.image, terms);
+             ok = f.checkArity(p.image, terms.size());
+          } else {
+             a = new Atom(p.image);
+             ok = f.checkArity(p.image, 0);
+          }
+          if (!ok)
+             throw new IllegalArgumentException("Errore di arietà: " + p.image + "\n");
+
+          return f.addAtom(a); }
+}
+
+List<Term> Terms():
+{
+    List<Term> tl = new LinkedList<Term>();
+    Term t;
+}
+{
+	t = Term()  { tl.add(t); } ( <COMMA> t = Term() { tl.add(t); } )*
+
+        { return tl; }
+}
+
+Term Term():
+{
+    boolean noArgs = true;
+    Token s;
+    Term t;
+    List<Term> terms = null;
+
+}
+{
+	( 
+            ( ( s = <SYMBOL> | s = <CNF> )
+                [ { noArgs = false; } <LPAR> terms = Terms() <RPAR> ] ) 
+            | s = <INTEGER> { if (!f.isConstant(s.image)) throw new ParseException(s.image + " must be constant."); }
+
+        )
+
+        {  if (noArgs) { // constant or variable
+                if (!f.isConstant(s.image)) {
+                    boolean ok = f.checkArity(s.image, 0);
+                    if (!ok) {
+                        throw new IllegalArgumentException("Errore di arietà: " + s.image + "\n");
+                    }
+                    t = f.addVariable(s.image);
+                } else
+                    t = f.addConstant(s.image); // per recuperare il puntatore alla costante
+            } else { // function
+                boolean ok = f.checkArity(s.image, terms.size());
+                if (!ok) {
+                    throw new IllegalArgumentException("Errore di arietà: " + s.image + "\n");
+                }
+                t = new Function(s.image, terms);
+                //t.setSymbol(s.image);
+                //((Function) t).setArgs(terms);
+                t = f.addTerm(t);
+           }
+           return t;
+
+            
+        }
+
+}
+
+void Tptp():
+{
+}
+{
+    ( ClauseTptp() )*
+}
+
+Clause ClauseTptp:
+{
+    Clause c;
+    Token name;
+    Token role;
+}
+{
+    <CNF> <LPAR>
+    ( name = <SYMBOL> | name = <CNF> | name = <SYMBOLTPTP> | name = <PREDICATE> | name = <INTEGER> )
+    <COMMA>
+    ( ( <LPAR> c = LiteralsTptp() <RPAR> ) | c = LiteralsTptp() )
+    <RPAR> <DOT>
+
+    { if (role.image.equals("negated_conjecture")) {
+          f.addSOS(c);
+      } else {
+          f.addClause(c);
+      }
+    }
+}
+
+Clause LiteralsTptp():
+{
+    Clause c = new Clause();
+    Literal l;
+}
+{
+    l = LiteralTptp()
+        { c.addLiteral(l); }
+        ( <OR> l = LiteralTptp() 
+            { c.addLiteral(l); } )*
+
+        { return c; }
+}
+
+Literal LiteralTptp():
+{
+    boolean pos = true;
+    Atom a;
+}
+{
+	[ <NOT> { pos = false; } ]
+        a = AtomTptp()
+
+        { return f.addLiteral(new Literal(pos, a)); }
+}
+
+Atom AtomTptp():
+{
+    Atom a;
+    List<Term> terms = null;
+    Token p;
+}
+{
+    ( p = <PREDICATE> | p = <SYMBOL> | p = <SYMBOLTPTP> | p = <INTEGER> )
+        [ <LPAR> terms = TermsTptp() <RPAR> ]
+
+        { boolean ok;
+          if (terms != null) {
+             a = new Atom(p.image, terms);
+             ok = f.checkArity(p.image, terms.size());
+          } else {
+             a = new Atom(p.image);
+             ok = f.checkArity(p.image, 0);
+          }
+          if (!ok)
+             throw new IllegalArgumentException("Errore di arietà: " + p.image + "\n");
+
+          return f.addAtom(a); }
+}
+
+List<Term> TermsTptp():
+{
+    List<Term> tl = new LinkedList<Term>();
+    Term t;
+}
+{
+	t = TermTptp()  { tl.add(t); } ( <COMMA> t = TermTptp() { tl.add(t); } )*
+
+        { return tl; }
+}
+
+Term TermTptp():
+{
+    boolean probabileVariabile = false;
+    boolean probabileCostante = false;
+    boolean noArgs = true;
+    Token s;
+    Term t;
+    List<Term> terms = null;
+
+}
+{
+	( 
+            ( s = <PREDICATE> { probabileVariabile = true; } 
+              | s = <SYMBOL> { probabileCostante = true; } 
+              | s = <SYMBOLTPTP> | s = <INTEGER> )
+                [ { noArgs = false; } <LPAR> terms = TermsTptp() <RPAR> ] 
+
+        )
+
+        {  if (noArgs) { // constant or variable
+                if (probabileCostante) {
+                    t = f.addConstant(s.image); // per recuperare il puntatore alla costante
+                }
+                if (probabileVariabile)
+                if (!f.isConstant(s.image)) {
+                    boolean ok = f.checkArity(s.image, 0);
+                    if (!ok) {
+                        throw new IllegalArgumentException("Errore di arietà: " + s.image + "\n");
+                    }
+                    t = f.addVariable(s.image);
+                } else
+                    t = f.addConstant(s.image); // per recuperare il puntatore alla costante
+            } else { // function
+                boolean ok = f.checkArity(s.image, terms.size());
+                if (!ok) {
+                    throw new IllegalArgumentException("Errore di arietà: " + s.image + "\n");
+                }
+                t = new Function(s.image, terms);
+                //t.setSymbol(s.image);
+                //((Function) t).setArgs(terms);
+                t = f.addTerm(t);
+           }
+           return t;
+
+            
+        }
+
+}

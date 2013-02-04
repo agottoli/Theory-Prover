@@ -1,0 +1,14 @@
+################################
+#
+# P(x) | P(f(a)) sempre #
+# P(x) | P(f(x)) sempre <
+# P(x) | P(f(y)) sempre #
+# P(a) | P(f(y)) sempre <
+#
+################################
+
+const: a
+prec: P > f > a
+weightVars: 1
+weights: P = 1; f = 0; g = 1; a = 1
+clauses: P(x) | P(f(a))

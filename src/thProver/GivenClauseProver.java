@@ -1,18 +1,13 @@
 package thProver;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
 /**
  * Class which implements the Given Clause Cicle (à la Otter and à la E)
@@ -130,6 +125,28 @@ public class GivenClauseProver {
         Set<Clause> alfa = new LinkedHashSet<>();
 
         startTime = System.nanoTime();
+        
+       
+        // evito di fare un giro a vuoto se Selected è vuoto
+        if (Selected.isEmpty()) {
+            while (!To_Select.isEmpty()) {
+                Clause elemento = To_Select.remove();
+                if (elemento.isEmpty()) {
+                    elapsedTime = System.nanoTime() - startTime;
+                    Selected.add(elemento); // per non perdere un elemento
+                    System.out.print(info());
+                    return elemento;
+                }
+                if (elemento.isTautology()) {
+                    deleted++;
+                    //System.out.print("deleted = " + deleted);
+                    continue;
+                }
+                Selected.add(elemento);
+                break;
+            }   
+        }
+        //System.out.println("selected = " + Selected.toString());   
 
         // given clause cicle
         while (!To_Select.isEmpty()) {

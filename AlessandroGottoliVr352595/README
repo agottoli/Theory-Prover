@@ -1,0 +1,22 @@
+Per avviare l'elaborato far partire lo script vr352595.sh contenuto in questa directory
+utilizzando le seguenti opzioni.
+
+Usage: vr352595.sh [-gui | -i | <filename>] [-sos] [(-lex | -mul | -kbo) [-usP | -stP]] [-E] [-limit<secs>] [-vAll]
+
+        -gui    start graphical user interface mode
+        -i      start interactive mode
+        -sos    use Set-of-Support strategy
+        -lex    use lexicographic ordering (default no ordering is used)
+        -mul    use multiset ordering (default no ordering is used)
+        -kbo    use knuth-bendix ordering (default no ordering is used)
+        -usP    use user defined precedences and weights
+                if an ordering type is specified
+        -stP    use a standard precedences and weights defined in class Ordering 		
+                if an ordering type is specified (default)
+        -E      use à la E version of the given clause loop (default use à la Otter)
+        -limit<secs>    specify a time limit - in seconds
+
+        (opzioni solo per test)
+        -changlee    use the Chang-Lee subsumption
+        -vAll        sperimental version (calculate all the factors)
+

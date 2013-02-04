@@ -1,0 +1,12 @@
+Satisfiability proving is starting... à la E version with 'standard' kbo ordering and set of support strategy
+/* info */
+484 clauses from parsing, 
+74946 clauses generated, 
+45063 clauses deleted, 
+28029 clauses in To_Select, 
+2338 clauses in Selected, 
+in 5 min. and 19 sec. (out of max time).
+
+
+response: SATISFIABLE.
+

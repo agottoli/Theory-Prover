@@ -1,20 +1,15 @@
 package thProver;
 
-import thProver.gui.JFileChooserDemo;
-import thProver.*;
-import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.util.Scanner;
-import javax.imageio.ImageIO;
+import thProver.gui.JFileChooserDemo;
 import thProver.parser.CNFParser;
 import thProver.parserTptp.CNFParserTptp;
 
@@ -94,10 +89,11 @@ public class GivenClauseTest {
             Reader formulaReader;
 
             String stringa = "";
-
+            Scanner stdin = new Scanner(System.in);
+            
             if (interactive) {
-                stringa = startInteractive();
-                System.out.println(stringa);
+                stringa = startInteractive(stdin);
+                //System.out.println(stringa);
             }
 
             //String folder = "";//"/home/ale/NetBeansProjects/RA/Test.Ciclo.Clausola.Data/";
@@ -230,6 +226,8 @@ public class GivenClauseTest {
 
             if (changlee)
                 strb.append(" (chang-lee subsumption)");
+            if (vAll)
+                strb.append(" (vAll)");
 
             System.out.println(strb.toString());
 
@@ -252,7 +250,7 @@ public class GivenClauseTest {
 
 
 
-                Scanner stdin = new Scanner(System.in);
+                //Scanner stdin = new Scanner(System.in);
                 String stamp = "n"; 
                 if (!test)
                     stamp = stdin.nextLine();
@@ -332,18 +330,24 @@ public class GivenClauseTest {
                     String sub = "";
                     if (changlee)
                         sub = "-changlee";
+                    String vall = "";
+                    if (vAll)
+                        vall = "-vAll";
                                        
                     prover.exportDot(dir, 
-                            nameNoExt + versione + sosString + ordString + precString + sub + "." + format, 
+                            nameNoExt + versione + sosString + ordString 
+                            + precString + sub + vall + "." + format, 
                             format, grafo);
                 }
-                stdin.close();
+                
 
             }
             
             if (test) {
                 testReport(file, prover, strb, sb);
             }
+            
+            stdin.close();
         }
     }
 
@@ -365,10 +369,11 @@ public class GivenClauseTest {
                 + "\t\tif an ordering type is specified\n" // (default in not tptp syntax)\n"
                 + "\t-stP\tuse a standard precedences and weights defined in class Ordering "
                 + "\t\tif an ordering type is specified (default)\n"
-                + "\t-E\tuse à la E version of the given clause loop (defaulf use à la Otter)\n"
+                + "\t-E\tuse à la E version of the given clause loop (default use à la Otter)\n"
                 //+ "\t-tptp\tthe input file is in TPTP cnf format\n"
                 + "\t-limit<secs>\tspecify a time limit - in seconds\n"
-                + "\t-vAll\tversione sperimentale\n");
+                + "\t-changlee\tuse the Chang-Lee subsumption\n"
+                + "\t-vAll\tsperimental version (calculate all the factors)\n");
     }
 
     /**
@@ -420,8 +425,8 @@ public class GivenClauseTest {
      * 
      * @return string representing the input for parser
      */
-    private static String startInteractive() {
-        Scanner stdin = new Scanner(System.in);
+    private static String startInteractive(Scanner stdin) {
+        //Scanner stdin = new Scanner(System.in);
 
         StringBuilder sb = new StringBuilder();
 
@@ -429,28 +434,32 @@ public class GivenClauseTest {
 
         System.out.println("Please, insert the constants (separated by ',')");
         line = stdin.nextLine();
-        sb.append("const: ").append(line).append('\n');
+        if (!line.replaceAll(" ", "").equals(""))
+            sb.append("const: ").append(line).append('\n');
 
         System.out.println("Please, insert the precedence (symbols separate by '>', ? for help)");
-        sb.append("prec: ");
-        while (true) {
+        //sb.append("prec: ");
+        boolean flag = true;
+        while (flag) {
             line = stdin.nextLine();
-            if (line.length() == 0)
-                continue;
-            if (line.equals("end"))
-                break;
+            //if (line.length() == 0)
+            //    continue;
+            //if (line.equals("end"))
+            //    break;
             if (line.equals("?")) {
                 System.out.println(
-                        "Insert a precedence (if partial a further precedence can be inserted in a new line or with separator ';').\n"
-                        + "Insert \"end\" in a line to terminate the formula.\n");
+                        "Insert a precedence (if partial a further precedence can be inserted with separator ';').\n");
+                        //+ "Insert \"end\" in a line to terminate the formula.\n");
                 continue;
             }
-            sb.append(line).append('\n');
+            if (!line.replaceAll(" ", "").equals(""))
+                sb.append("prec: ").append(line).append('\n');
+            flag = false;
         }
 
         System.out.println("Please, insert the formula (? for help)");
-        sb.append("clauses: ");
-
+        //sb.append("clauses: ");
+        boolean prima = true;
         while (true) {
             line = stdin.nextLine();
 
@@ -468,11 +477,20 @@ public class GivenClauseTest {
             if (line.length() == 0) {
                 continue;
             }
+            String temp = line.trim();
+            if (temp.startsWith("cnf")) {
+                prima = false;
+            }
+            if (prima) {
+                sb.append("clauses: ");
+                prima = false;
+            }
+            sb.append(temp).append('\n');
 
-            sb.append(line).append('\n');
+            
         }
 
-        stdin.close();
+        //stdin.close();
 
         return sb.toString();
     }
@@ -519,6 +537,9 @@ public class GivenClauseTest {
                     String sub = "";
                     if (changlee)
                         sub = "-changlee";
+                    String vall = "";
+                    if (vAll)
+                        vall = "-vAll";
                     
                     
                     if (test) {
@@ -527,7 +548,7 @@ public class GivenClauseTest {
                         try {
                             FileOutputStream outputRisTest = new FileOutputStream(dir + "/"
                                     + nameNoExt + versione + sosString + ordString + precString 
-                                    + sub + ".txt");
+                                    + sub + vall + ".txt");
                             PrintStream output = new PrintStream(outputRisTest);
                             output.println(strb.toString() + "\n"
                                     + prover.info() + "\n"

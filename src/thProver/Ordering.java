@@ -213,17 +213,17 @@ public class Ordering {
         if (a instanceof Literal) { 
             // anche b sarà sicuramente Literal
             // ma mettiamo il controllo che non si sa mai
-            
-            if (statusMultiSet) {
+            /* 2013-02-05 6:05
+            if (statusMultiSet) { */
                 MultiSet ma = ((Literal) a).getMultiset();
                 MultiSet mb;
                 if (b instanceof Literal)
                     mb = ((Literal) b).getMultiset();
                 else // è un atomo (e probabilmente si tratta di Top o Bottom
-                    mb = ((Atom) b).getMultiset();
+                    mb = ((Atom) b).getMultiset(); // non dovrebbe mai capitare
                 
                 return isGreaterMul(ma, mb);
-            } else {
+            /*} else { 2013-02-05 6:05
                 List<Object> la = ((Literal) a).getTupla();
                 List<Object> lb;
                 if (b instanceof Literal)
@@ -233,7 +233,7 @@ public class Ordering {
                 
                 int i = isGreaterLex(la, lb);
                 if (i == -1)
-                    return false;
+                    return false; */
                 /* // ???? quando si estende a letterali si guarda solo 
                  //      lo status e non la condizione aggiuntiva
                  ListIterator<Object> li = lb.listIterator(i + 1);
@@ -241,8 +241,8 @@ public class Ordering {
                  if (!isGreater(a, li.next()))
                  return false;
                  */
-                return true;
-            }
+                /*return true; 2013-02-05 6:05
+            }*/
 
         }
 

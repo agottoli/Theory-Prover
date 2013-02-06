@@ -1,0 +1,36 @@
+# Ex. 8.1 p. 163, Chang-Lee
+
+const: a, b, e
+
+sos: E(op(x,x),e) ; ~E(op(a,b),op(b,a))
+
+clauses:
+# equality properties
+
+E(x,x)
+~E(x,y) | E(y,x)
+~E(x,y) | ~E(y,z) | E(x,z)
+
+~E(x,y) | ~E(x,u) | E(y,u)
+~E(x,y) | ~E(u,x) | E(u,y)
+~E(x,y) | E(f(x,z),f(y,z))
+~E(x,y) | E(f(z,x),f(z,y))
+~E(x,y) | E(op(x,z),op(y,z))
+~E(x,y) | E(op(z,x),op(z,y))
+~E(x,y) | E(i(x),i(y))
+
+##########################
+
+E(op(x,y),f(x,y))
+E(op(x,op(y,z)),op(op(x,y),z))
+
+E(op(x,e),x)
+E(op(e,x),x)
+
+E(op(x,i(x)),e)
+E(op(i(x),x),e)
+
+
+
+
+

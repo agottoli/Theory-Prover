@@ -1,0 +1,8 @@
+# Ex. 5.16 p. 81, Chang-Lee
+
+const: a, b, c, d
+
+clauses: ~T(x,y,u,v) | P(x,y,u,v)
+         ~P(x,y,u,v) | E(x,y,v,u,v,y)
+         T(a,b,c,d)
+         ~E(a,b,d,c,d,b)

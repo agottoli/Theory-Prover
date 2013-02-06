@@ -5,7 +5,7 @@ Satisfiability proving is starting... à la E version with 'standard' kbo orderi
 5 clauses deleted, 
 3 clauses in To_Select, 
 13 clauses in Selected, 
-in 29 millisec..
+in 27 millisec..
 
 
 response: UNSATISFIABLE.

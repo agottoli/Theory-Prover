@@ -181,7 +181,7 @@ public class JFileChooserDemo extends javax.swing.JFrame {
         jProgressBar1.setFocusable(false);
         jProgressBar1.setIndeterminate(true);
 
-        showGraphProveButton.setText("show graph prove");
+        showGraphProveButton.setText("show prove");
         showGraphProveButton.setEnabled(false);
         showGraphProveButton.setVisible(false);
         showGraphProveButton.addActionListener(new java.awt.event.ActionListener() {
@@ -413,7 +413,7 @@ public class JFileChooserDemo extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(satText, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(showGraphProveButton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 42, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 46, Short.MAX_VALUE)
                 .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );

@@ -95,7 +95,7 @@ public class InferenceSystem {
 
     /**
      * Apply the ALL resolution to the the given clause and the given set of
-     * clauses. ALL = apply the resolution also to ALL the factors of che
+     * clauses. ALL = apply the resolution also to ALL the factorization of che
      * clauses used in experimental approach
      *
      * @param c1 clause
@@ -119,7 +119,7 @@ public class InferenceSystem {
     /**
      * Apply the ALL ordered resolution to the the given clause and the given
      * set of clauses. ALL = apply the orderede resolution also to ALL the
-     * factors of che clauses used in experimental approach
+     * factorization of che clauses used in experimental approach
      *
      * @param c1 clause
      * @param selected set of other clauses
@@ -149,13 +149,13 @@ public class InferenceSystem {
      *
      * @param c clause
      * @param indexingC object for give index to new clauses
-     * @return clauses factors set (empty set if no factors found)
+     * @return clauses factorization set (empty set if no factorization found)
      */
     public static Set<Clause> factorization(Clause c, IndexingClauses indexingC) {
         /* DEBUG inizio */
         /*if (c.toString().equals("~GREEN(x_0) | GREEN(y_0) | ~ON(x_0,y_0)"))
          System.out.println("eccolo: " + c.toString());
-         Set<Clause> res = c.getFactors(indexingC);
+         Set<Clause> res = c.factorization(indexingC);
          for (Clause cla : res) {
          if (cla.toString().equals("GREEN(b)")) {
          System.out.println("eccolo: " + c.toString());
@@ -166,7 +166,7 @@ public class InferenceSystem {
 
         // la fattorizzazione non calcola i fattori dei fattori allora
         // lo chiamo con all = false
-        return c.getFactors(indexingC, false);
+        return c.factorization(indexingC, false);
     }
 
     /**
@@ -175,11 +175,11 @@ public class InferenceSystem {
      * @param c clause
      * @param ord ordering to use
      * @param indexingC object for give index to new clauses
-     * @return clauses factors set (empty set if no factors found)
+     * @return clauses factorization set (empty set if no factorization found)
      */
     public static Set<Clause> orderedFactorization(Clause c, Ordering ord, IndexingClauses indexingC) {
         /* DEBUG inizio */
-        //Set<Clause> res = c.getMaximalFactors(ord, indexingC);
+        //Set<Clause> res = c.orderedFactorization(ord, indexingC);
         //    for (Clause cla : res) {
         //        if (cla.toString().equals("GREEN(b)")) {
         //            System.out.println("eccolo: " + c.toString());
@@ -187,7 +187,7 @@ public class InferenceSystem {
         //    }
         //return res;
             /* DEBUG fine */
-        return c.getMaximalFactors(ord, indexingC, false);
+        return c.orderedFactorization(ord, indexingC, false);
     }
 
     /**
@@ -340,6 +340,7 @@ public class InferenceSystem {
      * @return number of clauses subsumed
      */
     public static int subsumes(Clause c, Collection<Clause> clauses) {
+            //LinkedHashSet<Clause> forPeak, boolean usePeak) {
         // c <. clauses --> cancello clauses
         // NOTA: modifica clauses ????
         int numClausSuss = 0;
@@ -352,6 +353,8 @@ public class InferenceSystem {
                 /* DEBUG fine */
                 numClausSuss++;
                 clauses.remove(c2);
+                //if (usePeak)
+                //    forPeak.remove(c2);
             }
         }
         /* DEBUG inizio */
@@ -372,10 +375,12 @@ public class InferenceSystem {
      * @param clauses clauses to subsume
      * @return number of clauses subsumed
      */
-    public static int subsumesChangLeeVersion(Clause c, Collection<Clause> clauses) {
+    public static int subsumesChangLeeVersion(Clause c, Collection<Clause> clauses) { //,
+            //LinkedHashSet<Clause> forPeak, boolean usePeak) {
         // c <. clauses --> cancello clauses
         // NOTA: modifica clauses ????
         int numClausSuss = 0;
+        //List<Clause> sussunte = new ArrayList<>();
         List<Clause> copy = new ArrayList<>(clauses);
         for (Clause c2 : copy) {
             if (c.subsumesChangLee(c2)) {
@@ -384,7 +389,10 @@ public class InferenceSystem {
                 //System.out.println(c2 + " sussunta da " + c);
                 /* DEBUG fine */
                 numClausSuss++;
+                //sussunte.add(c2);
                 clauses.remove(c2);
+                //if (usePeak)
+                //    forPeak.remove(c2);
             }
         }
         /* DEBUG inizio */
@@ -395,6 +403,7 @@ public class InferenceSystem {
         //}
         /* DEBUG fine */
         return numClausSuss;
+        //return sussunte;
     }
 
     // if mgu == null --> non unificabili

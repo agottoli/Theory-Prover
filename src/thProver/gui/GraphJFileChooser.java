@@ -11,7 +11,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import thProver.GivenClauseProver;
 
 /**
- * Frame to export graph with gui.
+ * Frame to export tree with gui.
  * 
  * @author Alessandro Gottoli vr352595
  */
@@ -78,10 +78,10 @@ public class GraphJFileChooser extends javax.swing.JFrame {
         exportDot2Pdf = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Dot Graph Prove");
+        setTitle("Dot Prove Tree");
 
         inserText.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        inserText.setText("graph in 'dot' format:");
+        inserText.setText("tree in 'dot' format:");
 
         log.setColumns(20);
         log.setFont(new java.awt.Font("Monospaced", 0, 14)); // NOI18N
@@ -174,7 +174,7 @@ public class GraphJFileChooser extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(inserText, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -270,7 +270,7 @@ public class GraphJFileChooser extends javax.swing.JFrame {
 	}//GEN-LAST:event_logPropertyChange
 
         /**
-         * Export the graph in given format.
+         * Export the tree in given format.
          * @param format 
          */
         private void exportDot2Format(String format) {
@@ -336,7 +336,7 @@ public class GraphJFileChooser extends javax.swing.JFrame {
         }
     
     /**
-     * Export the graph in JPG format.
+     * Export the tree in JPG format.
      * @param evt 
      */
     private void exportDot2JpgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportDot2JpgActionPerformed
@@ -347,7 +347,7 @@ public class GraphJFileChooser extends javax.swing.JFrame {
     }//GEN-LAST:event_exportDot2JpgActionPerformed
 
     /**
-     * Export the graph in PS format.
+     * Export the tree in PS format.
      * @param evt 
      */
     private void exportDot2PsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportDot2PsActionPerformed
@@ -358,7 +358,7 @@ public class GraphJFileChooser extends javax.swing.JFrame {
     }//GEN-LAST:event_exportDot2PsActionPerformed
 
     /**
-     * Export the graph in PDF format.
+     * Export the tree in PDF format.
      * @param evt 
      */
     private void exportDot2PdfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exportDot2PdfActionPerformed

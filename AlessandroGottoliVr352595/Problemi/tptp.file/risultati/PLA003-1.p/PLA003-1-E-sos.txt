@@ -5,7 +5,7 @@ Satisfiability proving is starting... à la E version with no ordering and set o
 18 clauses deleted, 
 2 clauses in To_Select, 
 25 clauses in Selected, 
-in 124 millisec..
+in 123 millisec..
 
 
 response: UNSATISFIABLE.

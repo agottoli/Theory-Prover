@@ -5,7 +5,7 @@ Satisfiability proving is starting... à la E version with 'standard' multiset o
 0 clauses deleted, 
 0 clauses in To_Select, 
 22 clauses in Selected, 
-in 33 millisec..
+in 36 millisec..
 
 
 response: SATISFIABLE.

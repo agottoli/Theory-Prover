@@ -23,10 +23,10 @@ public class Ordering {
     private boolean useOrdStandard = false;
     private int standardWeight = 1; // peso standard per tutto in kbo 
     // è stato sostituito dai 4 sotto :)
-    private int standardWeightAtom = 1; // peso standard kbo
-    private int standardWeightFunction = 1; // peso standard kbo
-    private int standardWeightVariable = 1; // peso standard kbo
-    private int standardWeightConstant = 1; // peso standard kbo
+    private int standardWeightAtom = 1; // peso standard kbo     (>0 altrimenti casino)
+    private int standardWeightFunction = 1; // peso standard kbo (>0 altrimenti casino)
+    private int standardWeightVariable = 1; // peso standard kbo (>0)
+    private int standardWeightConstant = 1; // peso standard kbo (>= stWeightVAR)
     
     /* solo per Ordinamento ricorsivo a cammini o lessicografico */
     private boolean statusMultiSet; // a cammini
@@ -88,6 +88,18 @@ public class Ordering {
      *         false otherwise.
      */
     private boolean isGreaterInPrecedence(String a, String b, Object objA, Object objB) {
+        /* 2013-02-05 6:05 */
+        if (kbo) {
+            if (objA instanceof Function && ((Function) objA).getNArgs() == 1) {
+                // per kbo se una funzione pesa 0 allora deve essere >= a tutti
+                // gli altri simboli della signatura
+                System.out.println("KBO: l'utente si assicuri che la funzione "
+                        + ((Function) objA).getSymbol() + " di peso 0 sia"
+                        + " >= nella precedenza inserita di ogni altro simbolo"
+                        + " della segnatura.");
+            }
+        }
+        
         //////// EXPERIMENTAL //////////
         if (useOrdStandard) {
             if (objA instanceof Variable)
@@ -572,7 +584,11 @@ public class Ordering {
 
                     return isGreaterLex(argsA, argsB) != -1; // KBO usa Lex
                     
-                } else if (isGreaterInPrecedence(symA, symB, a, b)) {
+                } else if (
+                        ((a instanceof Function && b instanceof Function) ||
+                         (a instanceof Atom && b instanceof Atom))
+                        &&
+                        isGreaterInPrecedence(symA, symB, a, b)) {
                     // KBO2b
                     return true;
                 } else {

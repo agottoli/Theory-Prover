@@ -1,1 +1,0 @@
-Per tutte le versioni scatta il timeout di 5 minuti.

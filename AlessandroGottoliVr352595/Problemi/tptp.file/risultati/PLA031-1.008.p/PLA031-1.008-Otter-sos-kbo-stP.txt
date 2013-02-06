@@ -1,10 +1,10 @@
 Satisfiability proving is starting... à la Otter version with 'standard' kbo ordering and set of support strategy
 /* info */
 192 clauses from parsing, 
-27481 clauses generated, 
-15305 clauses deleted, 
-9989 clauses in To_Select, 
-2379 clauses in Selected, 
+27923 clauses generated, 
+15571 clauses deleted, 
+10132 clauses in To_Select, 
+2412 clauses in Selected, 
 in 5 min. and 0 sec. (out of max time).
 
 

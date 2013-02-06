@@ -106,11 +106,11 @@ public class Literal {
         return atom.symbolsNumber();
     }
     
-    /**
+    /* * 2013-02-05 6:05
      * Return a tuple for the lexicographical ordering
      * 
      * @return tuple
-     */
+     * /
     public List<Object> getTupla() {
         List<Object> l = new ArrayList<>();
         l.add(this.atom);
@@ -119,7 +119,7 @@ public class Literal {
         else
             l.add(new Atom("*Bottom*"));
         return l;
-    }
+    }*/
 
     /**
      * Return a multiset for the multiset ordering

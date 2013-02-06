@@ -1,0 +1,12 @@
+digraph {
+	nodesep="1.5"; ranksep=2;
+	node [shape=plaintext];
+	edge [color=gray];
+	"~P(a,b,c,d)" -> "[]" [labelfontcolor=black,labelfontsize="12",headlabel="Binary Resolution\n{ }",labeldistance="6"];
+	"~P(x_1,y_1,u_1,v_1) | E(x_1,y_1,v_1,u_1,v_1,y_1)" -> "~P(a,b,c,d)" [labelfontcolor=black,labelfontsize="12",headlabel="Binary Resolution\n{ x_1 <- a, y_1 <- b, v_1 <- d, u_1 <- c }",labeldistance="6"];
+	"~E(a,b,d,c,d,b)" -> "~P(a,b,c,d)" ;
+	"P(a,b,c,d)" -> "[]" ;
+	"~T(x_0,y_0,u_0,v_0) | P(x_0,y_0,u_0,v_0)" -> "P(a,b,c,d)" [labelfontcolor=black,labelfontsize="12",headlabel="Binary Resolution\n{ x_0 <- a, y_0 <- b, u_0 <- c, v_0 <- d }",labeldistance="6"];
+	"T(a,b,c,d)" -> "P(a,b,c,d)" ;
+}
+

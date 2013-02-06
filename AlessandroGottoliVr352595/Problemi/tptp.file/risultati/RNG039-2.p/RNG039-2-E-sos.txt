@@ -1,10 +1,10 @@
 Satisfiability proving is starting... à la E version with no ordering and set of support strategy
 /* info */
 74 clauses from parsing, 
-88178 clauses generated, 
-28979 clauses deleted, 
-55296 clauses in To_Select, 
-3756 clauses in Selected, 
+88474 clauses generated, 
+29157 clauses deleted, 
+55404 clauses in To_Select, 
+3766 clauses in Selected, 
 in 5 min. and 0 sec. (out of max time).
 
 

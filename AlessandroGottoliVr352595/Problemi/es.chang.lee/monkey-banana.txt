@@ -1,0 +1,12 @@
+# Ex. 11.8 p. 242 Chang-Lee
+
+const: a, b, c, s1
+
+clauses:
+~P(x,y,z,s) | P(z,y,z,walk(x,z,s))
+~P(x,y,x,s) | P(y,y,y,carry(x,y,s))
+~P(b,b,b,s) | R(climb(s))
+P(a,b,c,s1)
+
+~R(s)
+

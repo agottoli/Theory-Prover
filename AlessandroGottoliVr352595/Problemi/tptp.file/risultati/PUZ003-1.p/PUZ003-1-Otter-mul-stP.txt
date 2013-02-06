@@ -5,7 +5,7 @@ Satisfiability proving is starting... à la Otter version with 'standard' multis
 20 clauses deleted, 
 13 clauses in To_Select, 
 24 clauses in Selected, 
-in 133 millisec..
+in 132 millisec..
 
 
 response: UNSATISFIABLE.

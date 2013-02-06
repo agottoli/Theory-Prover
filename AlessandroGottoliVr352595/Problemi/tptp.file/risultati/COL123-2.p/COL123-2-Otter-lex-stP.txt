@@ -5,7 +5,7 @@ Satisfiability proving is starting... à la Otter version with 'standard' lexico
 257 clauses deleted, 
 3316 clauses in To_Select, 
 490 clauses in Selected, 
-in 35 sec. and 459 millisec..
+in 36 sec. and 33 millisec..
 
 
 response: UNSATISFIABLE.

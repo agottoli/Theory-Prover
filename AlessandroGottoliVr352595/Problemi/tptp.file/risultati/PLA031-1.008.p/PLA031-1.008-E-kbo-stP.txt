@@ -1,10 +1,10 @@
 Satisfiability proving is starting... à la E version with 'standard' kbo ordering
 /* info */
 192 clauses from parsing, 
-97226 clauses generated, 
-30786 clauses deleted, 
-65034 clauses in To_Select, 
-1598 clauses in Selected, 
+96639 clauses generated, 
+31068 clauses deleted, 
+64177 clauses in To_Select, 
+1586 clauses in Selected, 
 in 5 min. and 0 sec. (out of max time).
 
 

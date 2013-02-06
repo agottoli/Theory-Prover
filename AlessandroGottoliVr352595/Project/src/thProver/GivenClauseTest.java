@@ -89,10 +89,11 @@ public class GivenClauseTest {
             Reader formulaReader;
 
             String stringa = "";
-
+            Scanner stdin = new Scanner(System.in);
+            
             if (interactive) {
-                stringa = startInteractive();
-                System.out.println(stringa);
+                stringa = startInteractive(stdin);
+                //System.out.println(stringa);
             }
 
             //String folder = "";//"/home/ale/NetBeansProjects/RA/Test.Ciclo.Clausola.Data/";
@@ -249,7 +250,7 @@ public class GivenClauseTest {
 
 
 
-                Scanner stdin = new Scanner(System.in);
+                //Scanner stdin = new Scanner(System.in);
                 String stamp = "n"; 
                 if (!test)
                     stamp = stdin.nextLine();
@@ -260,7 +261,7 @@ public class GivenClauseTest {
                         // "\nUsare 'dot' per esportare un immagine del grafo della prova? [y,n]: ");
                 stamp = "y"; 
                 if (!test) {
-                    System.out.print("\nUse 'dot' to export the prove graph as image? [y,n]: "); // ALESSIA
+                    System.out.print("\nUse 'dot' to export the prove tree as image? [y,n]: "); // ALESSIA
                     stamp = stdin.nextLine();
                 }
                     
@@ -338,13 +339,15 @@ public class GivenClauseTest {
                             + precString + sub + vall + "." + format, 
                             format, grafo);
                 }
-                stdin.close();
+                
 
             }
             
             if (test) {
                 testReport(file, prover, strb, sb);
             }
+            
+            stdin.close();
         }
     }
 
@@ -422,8 +425,8 @@ public class GivenClauseTest {
      * 
      * @return string representing the input for parser
      */
-    private static String startInteractive() {
-        Scanner stdin = new Scanner(System.in);
+    private static String startInteractive(Scanner stdin) {
+        //Scanner stdin = new Scanner(System.in);
 
         StringBuilder sb = new StringBuilder();
 
@@ -431,28 +434,32 @@ public class GivenClauseTest {
 
         System.out.println("Please, insert the constants (separated by ',')");
         line = stdin.nextLine();
-        sb.append("const: ").append(line).append('\n');
+        if (!line.replaceAll(" ", "").equals(""))
+            sb.append("const: ").append(line).append('\n');
 
         System.out.println("Please, insert the precedence (symbols separate by '>', ? for help)");
-        sb.append("prec: ");
-        while (true) {
+        //sb.append("prec: ");
+        boolean flag = true;
+        while (flag) {
             line = stdin.nextLine();
-            if (line.length() == 0)
-                continue;
-            if (line.equals("end"))
-                break;
+            //if (line.length() == 0)
+            //    continue;
+            //if (line.equals("end"))
+            //    break;
             if (line.equals("?")) {
                 System.out.println(
-                        "Insert a precedence (if partial a further precedence can be inserted in a new line or with separator ';').\n"
-                        + "Insert \"end\" in a line to terminate the formula.\n");
+                        "Insert a precedence (if partial a further precedence can be inserted with separator ';').\n");
+                        //+ "Insert \"end\" in a line to terminate the formula.\n");
                 continue;
             }
-            sb.append(line).append('\n');
+            if (!line.replaceAll(" ", "").equals(""))
+                sb.append("prec: ").append(line).append('\n');
+            flag = false;
         }
 
         System.out.println("Please, insert the formula (? for help)");
-        sb.append("clauses: ");
-
+        //sb.append("clauses: ");
+        boolean prima = true;
         while (true) {
             line = stdin.nextLine();
 
@@ -470,11 +477,20 @@ public class GivenClauseTest {
             if (line.length() == 0) {
                 continue;
             }
+            String temp = line.trim();
+            if (temp.startsWith("cnf")) {
+                prima = false;
+            }
+            if (prima) {
+                sb.append("clauses: ");
+                prima = false;
+            }
+            sb.append(temp).append('\n');
 
-            sb.append(line).append('\n');
+            
         }
 
-        stdin.close();
+        //stdin.close();
 
         return sb.toString();
     }

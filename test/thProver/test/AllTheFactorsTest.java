@@ -118,7 +118,7 @@ public class AllTheFactorsTest {
         for (Clause c : f.getClauses()) {
             sb.append("\n-------\nTutti i fattori non tautologie di " + c.toString() + " sono:\n");
 
-            c.getFactors(ind, true);
+            c.factorization(ind, true);
             sb.append(c.getFactorsString());
         }
         System.out.println(sb.toString());

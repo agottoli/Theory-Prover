@@ -5,7 +5,7 @@ Satisfiability proving is starting... à la E version with 'standard' lexicograp
 38 clauses deleted, 
 2 clauses in To_Select, 
 14 clauses in Selected, 
-in 84 millisec..
+in 85 millisec..
 
 
 response: UNSATISFIABLE.

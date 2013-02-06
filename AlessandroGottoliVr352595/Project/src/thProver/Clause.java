@@ -27,7 +27,7 @@ public class Clause implements Comparable<Clause> {
     // mi salvo tutti i fattori di una clausola per non doverli rigenerare
     // ad ogni risoluzione
     Set<Clause> factors;
-    Set<Clause> maximalFactors;
+    Set<Clause> orderedFactors;
     // lista dei letterali massimali
     private List<Literal> maximalLits;
     List<Literal> posMaximalLits;
@@ -374,15 +374,15 @@ public class Clause implements Comparable<Clause> {
     }
 
     /**
-     * Return clause factors.
+     * Return clause factorization.
      *
      * @param indexingC object to assign an univoke index to new clauses
-     * @param all <cod>true<\code> if calcule the factors of the factor
+     * @param all <cod>true<\code> if calcule the factorization of the factor
      * recursively
-     *            <code>false<\code> if only factors of this clause
-     * @return clause set of factors (empty set if no factors)
+     *            <code>false<\code> if only factorization of this clause
+     * @return clause set of factorization (empty set if no factorization)
      */
-    public Set<Clause> getFactors(IndexingClauses indexingC, boolean all) {
+    public Set<Clause> factorization(IndexingClauses indexingC, boolean all) {
         if (factors == null)
             calculateFactors(indexingC, all);
 
@@ -390,19 +390,19 @@ public class Clause implements Comparable<Clause> {
     }
 
     /**
-     * Return clause factors given an ordering.
+     * Return clause factorization given an ordering.
      *
      * @param ord ordering to use
      * @param indexingC object to assign an univoke index to new clauses
-     * @param all <code>true<\code> if calcule the factors of the factor recursively
-     *            <code>false<\code> if only factors of this clause
-     * @return clause set of factors (empty set if no factors)
+     * @param all <code>true<\code> if calcule the factorization of the factor recursively
+     *            <code>false<\code> if only factorization of this clause
+     * @return clause set of factorization (empty set if no factorization)
      */
-    public Set<Clause> getMaximalFactors(Ordering ord, IndexingClauses indexingC, boolean all) {
-        if (maximalFactors == null)
-            calculateMaximalFactors(ord, indexingC, all);
+    public Set<Clause> orderedFactorization(Ordering ord, IndexingClauses indexingC, boolean all) {
+        if (orderedFactors == null)
+            calculateOrderedFactors(ord, indexingC, all);
 
-        return maximalFactors; //=
+        return orderedFactors; //=
     }
 
     private void calculateFactors(IndexingClauses indexingC, boolean all) {
@@ -462,29 +462,29 @@ public class Clause implements Comparable<Clause> {
             }
         }
         // DEBUG inizio //
-        //System.out.println(factors + "\n");
+        //System.out.println(factorization + "\n");
         // DEBUG fine
         // ??? devo trovare anche i fattori dei fattori? se lo faccio calcolo 2 volte gli stessi risolventi...
         // se chiamo con all = true --> devo calcolare anche i fattori dei fattori
         if (all) {
             Set<Clause> aggiuntivi = new LinkedHashSet<>();
             for (Clause c : factors)
-                aggiuntivi.addAll(c.getFactors(indexingC, all));
+                aggiuntivi.addAll(c.factorization(indexingC, all));
             factors.addAll(aggiuntivi);
         }
         // DEBUG inizio //
-        //System.out.println("più aggiunti anche i fattori dei sui fattori ricorsivamente\nottengo per " + toString() + "\n->" + factors + "\n");
+        //System.out.println("più aggiunti anche i fattori dei sui fattori ricorsivamente\nottengo per " + toString() + "\n->" + factorization + "\n");
         // DEBUG fine
     }
 
-    private void calculateMaximalFactors(Ordering ord, IndexingClauses indexingC, boolean all) {
+    private void calculateOrderedFactors(Ordering ord, IndexingClauses indexingC, boolean all) {
         getMaximalLiterals(ord); // così se non già calcolati non da problemi
 
         // DEBUG inizio //
         //System.out.println("I fattori MASSIMALI di " + toString() + " sono:");
         // DEBUG fine
 
-        maximalFactors = new LinkedHashSet<>(); // oppure LinkedHashSet<>(); che non ha il problema dell'incremento dei costi di TreeSet
+        orderedFactors = new LinkedHashSet<>(); // oppure LinkedHashSet<>(); che non ha il problema dell'incremento dei costi di TreeSet
 
         //Map<Variable, Term> theta = new HashMap<Variable, Term>();
         Substitution substitution = new Substitution();
@@ -545,7 +545,7 @@ public class Clause implements Comparable<Clause> {
                         if (!nuova.isTautology()) {
                             //nuova.renameVariables();
                             nuova.setParentsRuleAndSub(this, true, substitution);
-                            maximalFactors.add(nuova); //} else {
+                            orderedFactors.add(nuova); //} else {
                         /* DEBUG inizio */ //System.out.println("\ttautologia, quindi la cancello.");
                         /* DEBUG fine */
                         }
@@ -554,18 +554,18 @@ public class Clause implements Comparable<Clause> {
             }
         }
         // DEBUG inizio //
-        //System.out.println(maximalFactors + "\n");
+        //System.out.println(orderedFactorization + "\n");
         // DEBUG fine
         // ??? devo trovare anche i fattori dei fattori?
 
         if (all) {
             Set<Clause> aggiuntivi = new LinkedHashSet<>();
-            for (Clause c : maximalFactors)
-                aggiuntivi.addAll(c.getMaximalFactors(ord, indexingC, all));
-            maximalFactors.addAll(aggiuntivi);
+            for (Clause c : orderedFactors)
+                aggiuntivi.addAll(c.orderedFactorization(ord, indexingC, all));
+            orderedFactors.addAll(aggiuntivi);
         }
         // DEBUG inizio //
-        //System.out.println("più aggiunti anche i fattori dei sui fattori ricorsivamente\nottengo per " + toString() + "\n->" + maximalFactors + "\n");
+        //System.out.println("più aggiunti anche i fattori dei sui fattori ricorsivamente\nottengo per " + toString() + "\n->" + orderedFactorization + "\n");
         // DEBUG fine
     }
 
@@ -602,9 +602,9 @@ public class Clause implements Comparable<Clause> {
     }
 
     /**
-     * Representation of clause factors.
+     * Representation of clause factorization.
      *
-     * @return representation of factors
+     * @return representation of factorization
      */
     public String getFactorsString() {
         if (factors == null)
@@ -624,20 +624,20 @@ public class Clause implements Comparable<Clause> {
     }
 
     /**
-     * Representation of clause factors calculated from ordering.
+     * Representation of clause factorization calculated from ordering.
      *
-     * @return representation of factors
+     * @return representation of factorization
      */
     public String getMaximalFactorsString() {
-        if (maximalFactors == null)
+        if (orderedFactors == null)
             //calculateMaximalFactors();
             return "maximalFactors: non ancora calcolati.";
-        if (maximalFactors.isEmpty())
+        if (orderedFactors.isEmpty())
             return "non ci sono fattori.";
 
         StringBuilder sb = new StringBuilder();
         boolean flag = true;
-        for (Clause c : maximalFactors)
+        for (Clause c : orderedFactors)
             if (flag) {
                 flag = false;
                 sb.append(c.toString());
@@ -720,7 +720,7 @@ public class Clause implements Comparable<Clause> {
                         resolvents.add(nuova);
                         /* DEBUG inizio */
                         //if (indiceClausola == 0)
-                        //    System.out.println("factors: " + factors);
+                        //    System.out.println("factorization: " + factorization);
                         /* DEBUG fine */
                     }
                 }
@@ -730,8 +730,8 @@ public class Clause implements Comparable<Clause> {
     }
 
     /**
-     * Return all the resolvent form the clauses (c1 + c2) , (factors(c1) + c2)
-     * , (c1 + factors(c2)) , (factors(c1) + factors(c2))
+     * Return all the resolvent form the clauses (c1 + c2) , (factorization(c1) + c2)
+     * , (c1 + factorization(c2)) , (factorization(c1) + factorization(c2))
      *
      * @param othC the other clause
      * @param indexingC object to indexing the new clauses
@@ -741,12 +741,12 @@ public class Clause implements Comparable<Clause> {
         Set<Clause> resolvents = new LinkedHashSet<>();
 
         resolvents.addAll(this.resolvents(othC, indexingC));
-        for (Clause c : othC.getFactors(indexingC, true))
+        for (Clause c : othC.factorization(indexingC, true))
             resolvents.addAll(this.resolvents(c, indexingC));
-        for (Clause c : getFactors(indexingC, true))
+        for (Clause c : factorization(indexingC, true))
             resolvents.addAll(c.resolvents(othC, indexingC));
-        for (Clause c1 : getFactors(indexingC, true))
-            for (Clause c2 : othC.getFactors(indexingC, true))
+        for (Clause c1 : factorization(indexingC, true))
+            for (Clause c2 : othC.factorization(indexingC, true))
                 resolvents.addAll(c1.resolvents(c2, indexingC));
 
         return resolvents;
@@ -835,7 +835,7 @@ public class Clause implements Comparable<Clause> {
 
     /**
      * Return all the resolvent form the clauses given an ordering (c1 + c2) ,
-     * (factors(c1) + c2) , (c1 + factors(c2)) , (factors(c1) + factors(c2))
+     * (factorization(c1) + c2) , (c1 + factorization(c2)) , (factorization(c1) + factorization(c2))
      *
      * @param othC the other clause
      * @param ord the ordering
@@ -851,12 +851,12 @@ public class Clause implements Comparable<Clause> {
         /////////////////////////////////////////
 
         resolvents.addAll(this.orderedResolvents(othC, indexingC));
-        for (Clause c : othC.getMaximalFactors(ord, indexingC, true))
+        for (Clause c : othC.orderedFactorization(ord, indexingC, true))
             resolvents.addAll(this.orderedResolvents(c, indexingC));
-        for (Clause c : getMaximalFactors(ord, indexingC, true))
+        for (Clause c : orderedFactorization(ord, indexingC, true))
             resolvents.addAll(c.orderedResolvents(othC, indexingC));
-        for (Clause c1 : getMaximalFactors(ord, indexingC, true))
-            for (Clause c2 : othC.getMaximalFactors(ord, indexingC, true))
+        for (Clause c1 : orderedFactorization(ord, indexingC, true))
+            for (Clause c2 : othC.orderedFactorization(ord, indexingC, true))
                 resolvents.addAll(c1.orderedResolvents(c2, indexingC));
 
         return resolvents;
@@ -1380,7 +1380,7 @@ public class Clause implements Comparable<Clause> {
     public void resetForOtherOrdering() {
         //factors = null; // non serve e poi velocizzo le volte dopo perché
         //                   non vedo ricalcolarli
-        maximalFactors = null;
+        orderedFactors = null;
         maximalLits = null;
         posMaximalLits = null;
         negMaximalLits = null;

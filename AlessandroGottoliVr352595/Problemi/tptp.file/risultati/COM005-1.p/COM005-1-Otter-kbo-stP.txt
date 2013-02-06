@@ -5,7 +5,7 @@ Satisfiability proving is starting... à la Otter version with 'standard' kbo or
 14699 clauses deleted, 
 10609 clauses in To_Select, 
 1476 clauses in Selected, 
-in 5 min. and 2 sec. (out of max time).
+in 5 min. and 1 sec. (out of max time).
 
 
 response: SATISFIABLE.

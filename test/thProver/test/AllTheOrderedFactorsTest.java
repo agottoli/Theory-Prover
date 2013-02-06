@@ -147,7 +147,7 @@ public class AllTheOrderedFactorsTest {
             
             for (Clause c : f.getClauses()) {
                 sb.append("\n-------\nTutti i fattori massimali non tautologie di " + c.toString() + " sono:\n");
-                c.getMaximalFactors(or, indexingC, true);
+                c.orderedFactorization(or, indexingC, true);
                 sb.append(c.getMaximalFactorsString());
                 c.resetForOtherOrdering();
             }

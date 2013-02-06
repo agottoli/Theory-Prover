@@ -1,0 +1,14 @@
+digraph {
+	nodesep="1.5"; ranksep=2;
+	node [shape=plaintext];
+	edge [color=gray];
+	"~P(x_13,b,x_13,s_13)" -> "[]" [labelfontcolor=black,labelfontsize="12",headlabel="Binary Resolution\n{ x_13 <- c, s_13 <- walk(a,c,s1) }",labeldistance="6"];
+	"~P(x_1,y_1,x_1,s_1) | P(y_1,y_1,y_1,carry(x_1,y_1,s_1))" -> "~P(x_13,b,x_13,s_13)" [labelfontcolor=black,labelfontsize="12",headlabel="Binary Resolution\n{ y_1 <- b, s_5 <- carry(x_1,b,s_1) }",labeldistance="6"];
+	"~P(b,b,b,s_5)" -> "~P(x_13,b,x_13,s_13)" ;
+	"~P(b,b,b,s_2) | R(climb(s_2))" -> "~P(b,b,b,s_5)" [labelfontcolor=black,labelfontsize="12",headlabel="Binary Resolution\n{ s_4 <- climb(s_2) }",labeldistance="6"];
+	"~R(s_4)" -> "~P(b,b,b,s_5)" ;
+	"P(c,b,c,walk(a,c,s1))" -> "[]" ;
+	"~P(x_0,y_0,z_0,s_0) | P(z_0,y_0,z_0,walk(x_0,z_0,s_0))" -> "P(c,b,c,walk(a,c,s1))" [labelfontcolor=black,labelfontsize="12",headlabel="Binary Resolution\n{ x_0 <- a, y_0 <- b, z_0 <- c, s_0 <- s1 }",labeldistance="6"];
+	"P(a,b,c,s1)" -> "P(c,b,c,walk(a,c,s1))" ;
+}
+

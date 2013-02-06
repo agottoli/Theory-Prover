@@ -261,7 +261,7 @@ public class GivenClauseTest {
                         // "\nUsare 'dot' per esportare un immagine del grafo della prova? [y,n]: ");
                 stamp = "y"; 
                 if (!test) {
-                    System.out.print("\nUse 'dot' to export the prove graph as image? [y,n]: "); // ALESSIA
+                    System.out.print("\nUse 'dot' to export the prove tree as image? [y,n]: "); // ALESSIA
                     stamp = stdin.nextLine();
                 }
                     

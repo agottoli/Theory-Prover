@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Set;
@@ -31,6 +32,9 @@ public class GivenClauseProver {
     private boolean testAll = false;
     private long nCIniziali;
     private boolean useChangLee = false;
+    //private int peak = 4;
+    //private boolean usePeak = false;
+    //private LinkedHashSet<Clause> forPeak = null;
     //private boolean gui = false;
 
     public GivenClauseProver(boolean aLaE, boolean sos, boolean kbo,
@@ -86,14 +90,20 @@ public class GivenClauseProver {
         //System.out.println("-->" + nCIniziali);
 
         index = new IndexingClauses(nCIniziali);
-
+        
         // per non rovinare f per ulteriori chiamate
         /*if (!gui) {*/ // non serve più per il reset...
             To_Select.addAll(f.getSOS());
             if (sos && !f.getSOS().isEmpty()) {
                 Selected.addAll(f.getClauses());
+                //if (usePeak)
+                //    forPeak = new LinkedHashSet<>(f.getSOS());
             } else {
                 To_Select.addAll(f.getClauses());
+                //if (usePeak) {
+                //    forPeak = new LinkedHashSet<>(f.getClauses());
+                //    forPeak.addAll(f.getSOS());
+                //}
             }
         /*} else {
             // riutilizzo le clausole allora devo copiarle
@@ -126,11 +136,44 @@ public class GivenClauseProver {
 
         startTime = System.nanoTime();
 
+        // evito di fare un giro a vuoto se Selected è vuoto
+        if (Selected.isEmpty()) {
+            while (!To_Select.isEmpty()) {
+                Clause elemento = To_Select.remove();
+                if (elemento.isEmpty()) {
+                    elapsedTime = System.nanoTime() - startTime;
+                    Selected.add(elemento); // per non perdere un elemento
+                    System.out.print(info());
+                    return elemento;
+                }
+                if (elemento.isTautology()) {
+                    deleted++;
+                    //System.out.print("deleted = " + deleted);
+                    continue;
+                }
+                Selected.add(elemento);
+                break;
+            }   
+        }
+        //System.out.println("selected = " + Selected.toString());   
+
+        int numPoll = 0;
+        
         // given clause cicle
         while (!To_Select.isEmpty()) {
 
-            // extract given clause and find her factors
-            Clause given = To_Select.remove(); //.pollFirst(); //remove();
+            //Clause given;
+            //if (usePeak && numPoll++ == peak) {
+            //    numPoll = 0;
+            //    given = forPeak.iterator().next();
+            //    forPeak.remove(given);
+            //    To_Select.remove(given);
+            //} else {
+                // extract given clause and find her factorization
+            Clause given = To_Select.poll(); //remove(); //.pollFirst(); //remove();
+            //    forPeak.remove(given);
+            //    
+            //}
             /* DEBUG inizio */
             //System.out.println("Estraggo " + given);
             //if (given.indiceClausola == 0)
@@ -154,6 +197,8 @@ public class GivenClauseProver {
                     // quindi non c'è il problema che poi le uso per semplificare o sussumere
                     // le alfai (perché lo farò solo con a la Otter) :)
                     To_Select.addAll(betaprimo);
+                    //if (usePeak)
+                    //    forPeak.addAll(betaprimo);
                     generated += betaprimo.size();
                     deleted += betaprimo.size();
                 }
@@ -212,7 +257,7 @@ public class GivenClauseProver {
                     alfa.addAll(InferenceSystem.resolution(given, Selected, index));
                     /* DEBUG inizio */
                     //if (given.indiceClausola == 0)
-                    //    System.out.println("factors: " +given.factors);
+                    //    System.out.println("factorization: " +given.factorization);
                     /* DEBUG fine */
                 }
             }
@@ -280,8 +325,12 @@ public class GivenClauseProver {
                 }
 
                 To_Select.addAll(alfa);
+                //if (usePeak)
+                //    forPeak.addAll(alfa);
                 if (!betaprimo.isEmpty()) {
                     To_Select.addAll(betaprimo);
+                    //if (usePeak)
+                    //    forPeak.addAll(betaprimo);
                     // se metto qui la conta non conta le eventuali clausole uguali
                     // generate nella backward (se vogio contarle dovrò farlo in 
                     // betaprimoAdd)
@@ -382,14 +431,14 @@ public class GivenClauseProver {
         //int toSelSize = To_Select.size();
         /* DEBUG fine */
         if (useChangLee) {
-            int numSuss = InferenceSystem.subsumesChangLeeVersion(given, Selected);
+            int numSuss = InferenceSystem.subsumesChangLeeVersion(given, Selected); //, null, false);
             if (!aLaE)
-                numSuss += InferenceSystem.subsumesChangLeeVersion(given, To_Select);
+                numSuss += InferenceSystem.subsumesChangLeeVersion(given, To_Select); //, forPeak, usePeak);
             deleted += numSuss;
         } else {
-            int numSuss = InferenceSystem.subsumes(given, Selected);
+            int numSuss = InferenceSystem.subsumes(given, Selected); //, null, false);
             if (!aLaE)
-                numSuss += InferenceSystem.subsumes(given, To_Select);
+                numSuss += InferenceSystem.subsumes(given, To_Select); //, forPeak, usePeak);
             deleted += numSuss;
         }
         /* DEBUG inizio */
@@ -403,10 +452,10 @@ public class GivenClauseProver {
         //}
         /* DEBUG fine */
 
-        Set<Clause> sempl = InferenceSystem.simplifiesClause(given, Selected, index);
+        Set<Clause> sempl = InferenceSystem.simplifiesClause(given, Selected, index); //, null, false);
 
         if (!aLaE) {
-            sempl.addAll(InferenceSystem.simplifiesClause(given, To_Select, index));
+            sempl.addAll(InferenceSystem.simplifiesClause(given, To_Select, index)); //, forPeak, usePeak));
         }
 
         return sempl;
@@ -495,20 +544,20 @@ public class GivenClauseProver {
     /**
      * 
      * @param c refutation clause
-     * @return 'dot' format source of refutational graph
+     * @return 'dot' format source of refutational tree
      */
     public String getFiends(Clause c) {
         return c.getDOT();
     }
 
     /**
-     * Save to disk (if 'dot' is installed) the grafical graph of the refutation
+     * Save to disk (if 'dot' is installed) the grafical tree of the refutation
      * in several format.
      * 
      * @param dir directory where save (path)
      * @param name file name 
      * @param format file format (jpg, ps, pdf)
-     * @param grafo source file of the graph for 'dot'
+     * @param grafo source file of the tree for 'dot'
      */
     public void exportDot(String dir, String name, String format, String grafo) {
         if (name == null) {
@@ -576,13 +625,13 @@ public class GivenClauseProver {
             //e.printStackTrace();
             System.out.println(
                     "Warning: 'dot' unexpected exit. "
-                    + "The graph could be saved incorrectly."); // ALESSIA
+                    + "The tree could be saved incorrectly."); // ALESSIA
                     //"Errore: 'dot' è terminato in modo inatteso. "
                     //+ "Il grafo potrebbe non essersi salvato correttamente.");
             return;
         }
 
-        System.out.println("Graph exported in " + dir + "/" + name);
+        System.out.println("Tree exported in " + dir + "/" + name);
         //Picture p = new Picture(fileNameNoExt + ".dot" + ".jpg");
         //p.show();
         //sb.append(grafo);

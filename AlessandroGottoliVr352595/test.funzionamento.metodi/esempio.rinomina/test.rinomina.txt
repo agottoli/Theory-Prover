@@ -1,2 +1,0 @@
-const: a,b,c
-clauses: ~P(x) | R(y) ; P(x) | Q(y,x) ; ~R(a) | Q(b,c)

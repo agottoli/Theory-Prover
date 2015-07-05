@@ -1,0 +1,1768 @@
+% -*- coding: utf-8 -*-
+
+% Relazione implementazione di un dimeostratore di teoremi mediante
+% risoluzione ordinata per clausole nella logica del primo ordine
+% senza uguaglianza o altri simboli interpretati
+%
+% Algoritmo del Ciclo della Clausola Data versione à la Otter, à la E
+% senza ordinament, con ordinamento lessicografico, multiinsieme o di Knuth-Bendix
+% con precedenze e pesi specificati dall'utente o in alternativa preso standard deciso
+% da me (specificato nella classe Ordering)
+% 
+
+
+\documentclass[a4paper,11pt]{article} %{report} %{article}
+\usepackage[italian]{babel} % per scrivere in italiano
+\usepackage[utf8]{inputenc} % per usare lettere accentate direttamente ne .tex
+\usepackage{amssymb, amsmath} % per simboli e ambienti matematici
+\usepackage{amsthm}
+%\usepackage{fourier} % per font utopia
+\usepackage{listings} % pacchetto per codice sorgente
+\usepackage{verbatim}   % useful for program listings
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{fancyvrb}
+\usepackage{color}
+\usepackage[svgnames]{xcolor}
+\usepackage{url}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{siunitx}
+\usepackage{caption}
+\usepackage{subfig}
+\captionsetup{font=small}
+\sisetup{output-decimal-marker={,}}
+\usepackage{cancel}
+
+\pagestyle{plain}
+
+\newcommand{\sintassi}{\texttt}
+\newcommand{\file}{\texttt}
+\newcommand{\package}{\textsf}
+\newcommand{\com}{\texttt}
+\newcommand{\classe}{\textsf}
+\newcommand{\metodo}{\texttt}
+\newcommand{\campo}{\texttt}
+\newcommand{\cod}{\lstset{basicstyle=\ttfamily}\lstinline}
+
+\DefineVerbatimEnvironment{shell}{Verbatim}{gobble=0}
+
+\newenvironment{myfigure}[2]
+  {\newcommand{\didascalia}{\caption{#1}}%
+   \newcommand{\etichetta}{\label{#2}}%
+   \begin{figure}[h!]\centering}
+  {\didascalia\etichetta\end{figure}}
+
+\lstnewenvironment{codice}%
+  {\lstset{language=mylang}}
+  {}
+
+\lstnewenvironment{dotgraph}%
+  {\lstset{language=dot}}
+  {}
+  
+\lstnewenvironment{tptpcod}%
+  {\lstset{language=tptp}}
+  {}
+
+% DEFINIZIONE DI UNO PSEUDO LINGUAGGIO
+\lstdefinelanguage{mylang}{ 
+  basicstyle=\scriptsize\ttfamily,%
+  keywords=[1]{const,prec,weightVars,weights,sos,clauses},keywordstyle=[1]\bfseries\sffamily,%
+  keywords=[2]{int,void,String,boolean,null,Object}, keywordstyle=[2]\itshape\bfseries,%
+  keywords=[3]{false,true}, keywordstyle=[3]\bfseries,%
+  comment=[l]{//}, morecomment=[s]{/∗}{∗/},%
+  commentstyle=\itshape\color{darkgray},%
+  string=[s]{"}{"},
+  stringstyle=\color{black},%
+  tabsize=3,%
+  escapechar=@ %
+}
+
+\lstdefinelanguage{tptp}{ 
+  basicstyle=\scriptsize\ttfamily,%
+  keywords=[1]{const,prec,weightVars,weights,sos,clauses},keywordstyle=[1]\bfseries\sffamily,%
+  keywords=[2]{int,void,String,boolean,null,Object}, keywordstyle=[2]\itshape\bfseries,%
+  keywords=[3]{false,true}, keywordstyle=[3]\bfseries,%
+  comment=[l]{//}, morecomment=[s]{/∗}{∗/},%
+  commentstyle=\itshape\color{darkgray},%
+  string=[s]{"}{"},
+  stringstyle=\color{black},%
+  tabsize=3,%
+  escapechar=@ %
+}
+
+\lstdefinelanguage{dot}{ 
+  basicstyle=\tiny\ttfamily,%
+  keywords=[1]{digraph},keywordstyle=[1]\bfseries\sffamily,%
+  keywords=[2]{int,void,String,boolean,null,Object}, keywordstyle=[2]\itshape\bfseries,%
+  keywords=[3]{false,true}, keywordstyle=[3]\bfseries,%
+  comment=[l]{//}, morecomment=[s]{/∗}{∗/},%
+  commentstyle=\itshape\color{darkgray},%
+  string=[s]{"}{"},
+  stringstyle=\color{black},%
+  tabsize=3,%
+  escapechar=@ %
+}
+
+\definecolor{MyGray}{gray}{0.75}
+
+%\hyphenation{Ackerman} % per non sillabare la parola
+
+%\setcounter{secnumdepth}{-2}
+\setcounter{tocdepth}{2} % per inserire nell'indice fino a 2=subsection
+
+%\evensidemargin=1cm 
+%\oddsidemargin=1.0cm
+%\headsep = -0.5cm
+%\textheight = 680pt
+%\textwidth = 400pt
+
+\setlength{\parindent}{3mm}
+\newcommand{\grammarindent}[1][1]{\hspace*{#1\parindent}\ignorespaces} 
+% set margin
+\usepackage{vmargin}
+\setpapersize{A4}
+\setmarginsrb{25mm}{5mm}{25mm}{8mm}
+             {0mm}{10mm}{0mm}{10mm}
+
+\begin{document}
+
+\title{Implementazione di un dimostratore di teoremi per risoluzione ordinata 
+       basato su ciclo della clausola data à la Otter e à la E \\
+       Ragionamento Automatico 2012-2013}
+\author{Alessandro Gottoli vr352595}
+%\date{}
+\maketitle
+%\tableofcontents % genero l'indice (doppia compilazione)
+
+\section*{Introduzione}
+Il dimostratore di teoremi per la logica del primo ordine senza simboli interpretati
+%L'algoritmo del ciclo della clausola data del dimostratore di teoremi
+sviluppato in questo elaborato per il corso di ragionamento automatico
+%di questo progetto 
+è stato implementato nel linguaggio di 
+programmazione Java per essere eseguibile su diversi sistemi
+operativi.
+Il codice è contenuto nel package \package{thProver} e si divide in cinque parti
+principali: \hyperref[sec: parser]{Parser}, \hyperref[sec: interfaccia]{Interfaccia},
+\hyperref[sec: data]{Clausole}, %, Letterali e Termini}
+\hyperref[sec: ordinamento]{Ordinamento} e 
+\hyperref[sec: ciclo]{Ciclo della clausola data}.
+
+\section{Parser}\label{sec: parser}
+Il programma accetta in ingresso file contenenti un insieme di clausole nella logica
+del primo ordine in due formati differenti, quindi sono
+stati implementati due parser. %perché il programma accetta in ingresso file con insieme
+Uno accetta file in formato 
+\textsf{TPTP}\footnote{\textsf{TPTP}, \url{http://www.cs.miami.edu/~tptp/}} 
+(come da specifica ho implementato solo la sottogrammatica ``cnf''), l'altro
+in un formato appositamente definito da me che ha una sintassi più simile a 
+quella che troviamo in letteratura e che era stato pensato per permettere 
+all'utente di definire opzioni come precedenze e pesi
+personalizzate per ogni problema
+per migliorare l'ordinamento sulle clausole, %specificando precedenze (prec:) 
+%e pesi (weights: e weightVars), ma 
+poi si è
+deciso di aggiungere la possibilità di aggiungere tali opzioni anche all'inizio
+di un file in formato tptp anche se non previsto dalla grammatica ufficiale.
+ 
+Questi parser si trovano nei package \package{thProver.parserTptp} e 
+\package{thProver.parser} e per la generazione è stato utilizzato \textsf{JavaCC}. 
+%quindi è stata definita
+Grazie all'uso di questo generatore di parser %si è %reso lecessario solo
+è stata definita
+la grammatica del linguaggio accettato e le azioni da fare per la costruzione
+delle clausole nei file \file{GrammarTptp.jj} e \file{Grammar.jj}. Da questi file
+sono state generate automaticamente le classi java con il comando \com{javacc file.jj}.
+%java sono state create automaticamente col comando \com{javacc ``file''.jj}.
+
+Vediamo brevemente il mio linguaggio. 
+Per prima cosa dobbiamo specificare le costanti (se ci sono) scrivendo
+\sintassi{const:} \emph{costante$_{1}$}\sintassi{,}
+\emph{costante$_{2}$}\sintassi{,}~\ldots\sintassi{,}\emph{costante$_{n}$}.
+
+Poi possiamo specificare le precedenze scrivendo \sintassi{prec:} 
+\emph{simbolo$_{1}$} \sintassi{$>$} \emph{simbolo$_{2}$} \sintassi{$>$}~\dots
+\sintassi{$>$} \emph{simbolo$_{n}$}
+dove simbolo può essere un simbolo di predicato, funzione o costante. Si possono
+definire precedenze parziali scrivendo
+\sintassi{prec:} \emph{precedenza$_{1}$} \sintassi{;} \emph{precedenza$_{2}$}
+\sintassi{;}~\dots \sintassi{;} \emph{precedenza$_{n}$}. 
+%
+%Definire la precedenza non
+%è obbligatorio perché è possibile utilizzare una precedenza ``standard'' definita
+%nella classe ordinamento in cui \emph{predicati} $>$ \emph{funzioni} $>$ \emph{costanti}
+%e ogni predicato, funzione e costante è ordinata in modo da definire come
+%maggiore quella che viene prima nell'ordinamento lessicografico.
+
+Si possono inoltre definire i pesi da utilizzare nell'ordinamento di 
+Knuth-Bendix:
+\begin{itemize}
+  \item{\sintassi{weightVars:} \emph{integer}} per definire il peso da dare a tutte
+le variabili (così tutte avranno lo stesso peso senza doverle esplicitare)
+  \item{\sintassi{weights:} \sintassi{simbolo$_{1}$ =} \emph{integer} \sintassi{;} 
+\sintassi{simbolo$_{2}$ =} \emph{integer} \sintassi{;} \emph{\ldots} \sintassi{;} 
+\sintassi{simbolo$_{n}$ =} \emph{integer}} per definire il peso di predicati, 
+funzioni e costanti.
+\end{itemize}
+%Se l'utente non inserisce tutti i pesi, l'ordinamento potrebbe trovarsi in 
+%situazioni anomale, quindi ho deciso di specificare nella classe \classe{Ordering}
+%il valore base per i simboli non specificati e si possono dare valori diversi 
+%in caso si tratti di predicati, funzioni, variabili o costanti (io ho deciso di dare valore 1).
+%Come per le precedenze è possibile utilizzare un peso ``standard'' definito nella
+%classe ordinamento in cui %tutto, di default viene pesato tutto 1 ma anche qui 
+%%è possibile definire un peso diverso conforme ti tratti di atomo, funzione, variabile
+%%o costante.
+%ho definito pesi per atomi, funzioni, variabili e costanti.
+
+Adesso vediamo come inserire le clausole. %la sintassi di ogni clausola.
+Ogni clausola è formata da uno o più letterali separati dal simbolo `\sintassi{|}'
+che indica l'\emph{or}. Ogni letterale è composto da un Atomo che può essere definito
+come negativo se preceduto dal simbolo `\sintassi{!}' o `\sintassi{\~}'. Ogni atomo
+è poi composto da un simbolo di predicato che nella mia sintassi 
+deve essere scritto con lettere maiuscole
+(per uniformarmi alla convenzione usata in classe) 
+e seguito da una eventuale lista di termini racchiusi tra `\sintassi{(}' e `\sintassi{)}'.
+I termini si scrivono in minuscolo e possono essere funzioni (se seguite dai propri
+argomenti che saranno ulteriori termini racchiusi tra `\sintassi{(}' e `\sintassi{)}'),
+ variabili o le costanti.% (che vengono identificate tra la lista scritta all'inizio).
+
+Adesso possiamo inserire le clausole nel seguente modo:
+\vspace{-1ex}
+\begin{itemize}
+  \item{\sintassi{sos:} \emph{clausola$_1$} \sintassi{;} 
+  \emph{clausola$_2$} \sintassi{;} \emph{\ldots} \sintassi{;} \emph{clausola$_n$}}
+  per specificare le clausole da inserire nell'insieme di supporto (se usiamo questa strategia)
+\vspace{-1ex}
+  \item{\sintassi{clauses:} \emph{clausola$_1$} \sintassi{;} 
+  \emph{clausola$_2$} \sintassi{;} \emph{\ldots} \sintassi{;} \emph{clausola$_n$}}
+  per specificare le altre clausole.
+\end{itemize}
+\vspace{-1ex}
+Anche se non si ha intenzione di utilizzare l'insieme di supporto si possono
+specificare lo stesso come `sos' le clausole provenienti dalla trasformazione in
+forma clausale della negazione della congettura, perché se non verrà attivata la
+strategia verranno unite alle altre clausole.
+
+Anche per il formato tptp è possibile utilizzare la strategia dell'insieme di 
+supporto, infatti nella sintassi esiste il campo \emph{ruolo} %e nell'insieme di
+e inserirò in sos le clausole indicate con \emph{``negated\_conjecture''}.
+%supporto inserisco quelle che hanno come ruolo \emph{``negated\_conjecture''}.
+
+%Ecco un esempio di file di input di un esercizio fatto in classe:
+%\vspace{-1ex}
+%\begin{shell}
+%const: a,b,c
+%prec: ON>GREEN ; a>b>c
+%weightVars: 1
+%weights: ON = 1; GREEN = 1; a = 1; b = 1; c = 1
+%sos: ~GREEN(x) | GREEN(y) | ~ON(x,y)
+%clauses: ON(a,b) ; ON(b,c) ; GREEN(a) ; ~GREEN(c)
+%\end{shell}
+Un esempio di file di input è mostrato in Figura~\ref{fig: esempio input}
+\begin{myfigure}{Esempio di file di input.}{fig: esempio input}
+\begin{tabular}{c}
+\begin{codice}
+const: a,b,c
+prec: ON>GREEN ; a>b>c
+weightVars: 1
+weights: ON = 1; GREEN = 1; a = 1; b = 1; c = 1
+sos: ~GREEN(x) | GREEN(y) | ~ON(x,y)
+clauses: ON(a,b) ; ON(b,c) ; GREEN(a) ; ~GREEN(c)
+\end{codice}
+\end{tabular}
+\end{myfigure}
+
+Quando viene eseguito, il parser istanzia un oggetto \classe{CNFFormula} che
+conterrà tutti i dati relativi all'input e sarà quello che poi
+verrà passato alla procedura di soddisfacibilità identificando il
+problema in ingresso. 
+Esso contiene diverse \classe{HashMap} che servono a diversi scopi.
+Ci sono quelle in cui salvo i termini e gli atomi costruiti fino a quel momento, 
+così se sono presenti più elementi che rappresentano
+lo stesso oggetto posso ricavarmi efficientemente un'istanza già creata e 
+condividerla senza
+sprecare spazio.
+%salvare atomi e termini così da condividere oggetti uguali senza creare
+%nuove istanze, e
+Poi ce nè una che mappa simbolo token con la propria arietà per controllare 
+che non vengano passati 
+un numero diverso di argomenti allo stesso simbolo
+(in caso contrario il parser avviserà l'errore di arietà).
+Ci sono poi anche altre
+strutture per salvare le precedenze e i pesi.
+ 
+Quando si processano le variabili, siccome è comune utilizzare lo stesso simbolo
+in diverse clausole anche se l'insieme di variabili va considerato disgiunto,
+%bisogna intenderle disgiunte
+%anche se hanno lo stesso simbolo, allora 
+ho deciso di rinominarle durante la creazione 
+assegnandogli come nuovo simbolo univoco che le identifica
+\sintassi{simbolo\_indiceclausola}.
+Così facendo non c'è bisogno di rinominarle ad ogni risoluzione.
+
+
+\section{Interfaccia}\label{sec: interfaccia}
+L'elaborato è fornito di due interfacce: una a 
+%\hyperref[subsec: int. linea]%
+{riga di comando} e una 
+%\hyperref[subsec: int. grafica]%
+{grafica}.
+
+%\subsection{Interfaccia a linea di comando}\label{subsec: int. linea}
+L'\emph{interfaccia a riga di comando}
+%Questa interfaccia 
+è quella predefinita e come si può vedere dall'``usage''
+si possono attivare i diversi parametri specificando le diverse opzioni quando
+si avvia il programma.
+
+Per prima cosa si specifica l'input e sono disponibili due alternative:
+\vspace{-1ex}
+\begin{itemize}
+  \item{\sintassi{-i}} indica che si vuole inserire la formula da standard input in modo iterativo
+\vspace{-1ex}
+  \item{\sintassi{/percorso\_del\_file/input.p}} per caricare da file
+\end{itemize}
+\vspace{-1ex}
+%\`E obbligatorio specificarne una altrimenti il programma terminerà.
+
+Poi si può specificare di utilizzare la strategia dell'insieme di supporto con 
+``\sintassi{-sos}'' che se sono presenti delle clausole
+derivate dalla negazione della congettura mette queste in \campo{To\_Select}
+mentre il resto delle clausole vanno direttamente in \campo{Selected}.
+
+Di default non si utilizza nessun ordinamento, però sono disponibili le seguenti 
+opzioni per selezionarne uno:
+\vspace{-1ex}
+\begin{itemize}
+  \item{\sintassi{-lex}} per l'ordinamento ricorsivo a cammini con status lessicografico
+\vspace{-1ex}
+  \item{\sintassi{-mul}} per l'ordinamento ricorsivo a cammini con status multiinsieme
+\vspace{-1ex}
+  \item{\sintassi{-kbo}} per l'ordinamento di Knuth-Bendix
+\end{itemize}
+\vspace{-1ex}
+Siccome nella maggior parte dei problemi provati non vengono specificate le precedenze sui simboli
+della segnatura o i pesi da dare nell'ordinamento kbo, si è deciso utilizzare di default 
+i valori definiti da me nella classe dell'ordinamento. Se l'utente
+vuole definire i propri valori, può farlo 
+digitando ``\sintassi{-usP}'' e verranno utilizzate le precedenze e i pesi definiti 
+nell'input, in questo caso sarà onere dell'utente verificare che pesi e precedenze rispettino
+le regole previste dall'ordinamento (per esempio in kbo $\exists p>0$ t.c. $\forall var \in Variable.$
+$\lambda(var) = p$ o 
+$\forall cost \in Constant.$ $\lambda(cost)>\lambda(var)$).
+
+Il ciclo della clausola data ha due versioni che differiscono principalmente
+sull'insieme di clausole da mantenere interridotto. L'elaborato le implementa
+entrambe ed utilizza di default la versione \emph{à~la~Otter}, mentre è possibile
+selezionare la versione \emph{à~la~E} con il parametro \sintassi{-E}.
+
+\`E stata inoltre aggiunta l'opzione ``\sintassi{-limit}\emph{n\_secondi}'' che permette 
+di fermare la computazione quando è passato il tempo indicato (di default non è
+previsto un tempo limite).
+
+
+%\subsection{Interfaccia grafica}\label{subsec: int. grafica} 
+%\begin{subsection}{Interfaccia grafica}\label{subsec: int. grafica}
+%Questa interfaccia
+%Se non si vuole ricordare tutte le opzioni o si vogliono fare diverse prove,
+In alternativa si può utilizzare una comoda
+\emph{interfaccia grafica} 
+attivabile con l'opzione ``\sintassi{-gui}'' e verrà visualizzata una finestra 
+in cui poter inserire
+direttamente l'input oppure selezionare un file da cui leggere il problema.
+%Le altre opzioni sono bloccate
+%in modo da rendere selezionabili sono quelle applicabili dopo aver fatto il
+%parsing. 
+Le opzioni, in questo caso, si possono abilitare semplicemente cliccando
+il menù relativo e selezionando quella desiderata.
+Questa interfaccia offre la possibilità di fare un solo parsing
+e poi eseguire diverse prove di soddisfacibilità anche con parametri diversi.
+%\end{subsection}
+
+In entrambe le interfacce c'è la possibilità (se l'input risulta insoddisfacibile)
+di salvare un file con sintassi `dot' in cui è specificato l'albero %il grafo diretto
+%della prova 
+di refutazione per la clausola vuota trovata,
+specificando le clausole genitrici e le regole di inferenza utilizzate.
+Inoltre se sulla macchina è installato `dot' (su linux pacchetto
+\emph{graphviz}) è possibile esportare anche l'immagine dell'albero % grafo 
+in formato jpg, ps o pdf. 
+Per esempio usando Otter e ordinamento lessicografico sull'esempio di prima
+si ottiene come prova di insoddisfacibiltà il sorgente in Figura~\ref{fig: src grafo prova} 
+da cui genero l'immagine in Figura~\ref{fig: grafo prova}.
+%\vspace{-2ex}
+\begin{myfigure}{File sorgente per `dot' del grafo della prova.}{fig: src grafo prova}
+%\begin{tabular}{c}
+\centering
+\begin{dotgraph}
+digraph {
+	nodesep="1.5"; ranksep=2;
+	node [shape=plaintext];
+	edge [color=gray];
+	"GREEN(c)" -> "[]" 
+		[labelfontcolor=black,labelfontsize="12",headlabel="Ordered Resolution\n{ }",labeldistance="6"];
+	"~GREEN(b) | GREEN(c)" -> "GREEN(c)" 
+		[labelfontcolor=black,labelfontsize="12",headlabel="Ordered Resolution\n{ }",labeldistance="6"];
+	"~GREEN(x_0) | GREEN(y_0) | ~ON(x_0,y_0)" -> "~GREEN(b) | GREEN(c)" 
+		[labelfontcolor=black,labelfontsize="12",headlabel="Ordered Resolution\n{ x_0 <- b, y_0 <- c }",labeldistance="6"];
+	"ON(b,c)" -> "~GREEN(b) | GREEN(c)" ;
+	"GREEN(b)" -> "GREEN(c)" ;
+	"GREEN(a)" -> "GREEN(b)" 
+		[labelfontcolor=black,labelfontsize="12",headlabel="Clausal Simplification\n{ }",labeldistance="6"];
+	"~GREEN(a) | GREEN(b)" -> "GREEN(b)" ;
+	"~GREEN(x_0) | GREEN(y_0) | ~ON(x_0,y_0)" -> "~GREEN(a) | GREEN(b)" 
+		[labelfontcolor=black,labelfontsize="12",headlabel="Ordered Resolution\n{ x_0 <- a, y_0 <- b }",labeldistance="6"];
+	"ON(a,b)" -> "~GREEN(a) | GREEN(b)" ;
+	"~GREEN(c)" -> "[]" ;
+}
+\end{dotgraph}
+%\end{tabular}
+\end{myfigure}
+%\vspace{-5ex}
+\begin{myfigure}{Albero della prova.}{fig: grafo prova}
+\includegraphics[width=.85\columnwidth]{blocks-Otter-lex-usP}
+\end{myfigure}
+
+\section{Clausole}\label{sec: data}
+Per rappresentare le varie ``parti''
+di una formula si è strutturato il codice in questa gerarchia di classi.
+Le clausole sono state definite in \classe{Clause} e al loro interno contengono
+dei puntatori ai letterali \classe{Literal} che la compongono.
+I letterali sono composti da \classe{Atom} e un \classe{boolean}
+per rappresentare il segno e l'eventuale lista di argomenti \emph{Term}.
+\emph{Term} rappresenta
+un'interfaccia e viene implementata da \classe{Function}, %(che punterà ad altri \emph{Term}), 
+\classe{Variable} e \classe{Constant}.
+I simboli di predicato, funzione, variabile e costante
+sono definiti in una stringa \textsf{symbol} nella rispettiva classe.
+%%%%%%%%%%%%%%%%%%5
+% Questi metodi utilizzano i ``veri''
+%metodi degli oggetti \classe{Clause}.
+
+La classe %più importante 
+su cui è stato fatto più
+%Siccome %il codice più corposo riguarda i metodi sulle clausole,
+%si lavora principalmente sulle clausole,
+lavoro di ricerca di %una soluzione implementativa 
+implementazione efficiente è %fatto proprio 
+\classe{Clause}. %, perché la maggior parte dei metodi sono applicati
+%proprio a loro. Aprendo la classe si nota subito che
+%Infatti la maggior parte dei metodi sono applicati alle \emph{clausole}.
+Analizziamo brevemente le accortezze utilizzate. Per
+iniziare, i \emph{letterali} che compongono la clausola
+sono inseriti
+sia nel campo \cod{literals}
+sia in due liste (\cod{posLits} e \cod{negLits})
+che servono per mantenere separati letterali positivi e negativi. 
+%Essendo liste di puntatori non ci sarà un eccessivo spreco di memoria
+%e i miglioramenti si percepiscono, perché 
+Il motivo è che per applicare una regola di inferenza si
+%ha un certo letterale che bisogna unificare con qualche altro.
+bisogna unificare dei letterali,
+%pplica ad uno specifico segno (stesso o opposto) e allora
+%invece di sprecare tempo per controlli inutili posso
+in questo modo posso 
+lavorare solo su letterali con il segno che mi interessa. 
+
+%Siccome le clausole sono 
+%``immodificabili'' l'approccio che ho pensato è che tutti i metodi che 
+%possono impiegare parecchio tempo a calcolare un risultato che alle successive 
+Durante la computazione chiamiamo molte volte metodi ricorsivi 
+il cui risultato non cambia, quindi
+%chiamate non cambia, devono salvare il risultato per usi futuri.
+mi salvo il risultato per usi futuri in appositi campi.
+%
+Per esempio è molto importante
+ordinare le clausole efficientemente
+%in man ad ogni iterazione del ciclo bisogna riordinare la coda di priorità
+quindi è stato implementato \metodo{compareTo} in modo da calcolare %effettivamente
+il ``peso'' delle clausole solo la prima volta
+contando il numero di simboli contenuti in essa che poi salvo in
+\cod{numSymbs}.
+%Siccome la stessa istanza di atomi e termini può essere condivisa 
+%(per esempio: P(f(a,g(b)) | Q(f(a,g(b))) utilizzo la stessa tecnica e verranno
+%fatte tutte le chiamate ricorsive fino a variabili o costanti sono la prima
+%volta, avendo il risultato in tempo costante le successive.
+
+%I dati relativi agli ordinamenti ne sono un esempio, infatti posso calcolare
+Anche i letterali massimali %ne sono un esempio, 
+%infatti %solo la prima volta dato quell'ordinamento e salvandoli in
+andrebbero calcolati ad ogni applicazione di una regola di inferenza,
+quindi me li salvo in
+\cod{maximalLiterals} e %riutilizzarli senza ricalcolarli ad ogni inferenza.
+%Come i letterali anche 
+analogamente a quanto fatto per i lettarali anche in \cod{posMaximalLits} e 
+\cod{negMaximalLits}. % per guadagnare confronti inutili.
+
+Quando si effettua l'unificazione e si genera una nuova clausola,
+il metodo \metodo{mgu} ci resituisce un oggetto 
+\classe{Substitution} che contiena
+ una \classe{HashMap}$<$\classe{Variable}, \classe{Term}$>$ che
+rende veloce la ricerca per sostituire la variabile nella nuova
+clausola generata. % del termine da sostituire alla variabile 
+%e sono inclusi
+Nella classe si trovano anche i vari metodi per controllarne l'\emph{idempotenza}.
+Quando si applica una sostituzione, le variabili rimaste vengono rinominate
+aggiornando l'indice della nuova clausola, 
+ma può capitare di avere contemporaneamente
+\sintassi{x\_1} e \sintassi{x\_2} con stesso simbolo ma provenienti
+da clausole diverse, allora per disambiguarle %nella nuova
+%clausola 
+si utilizza ``\sintassi{'}'' ottenendo così
+\sintassi{x\_3} e \sintassi{x'\_3}.
+%Altri esempi sono \cod{numSymbs} che contiene il numero di simboli che sarebbe 
+%necessario ricalcolare ricorsivamente ad ogni iterazione del ciclo della clausola data
+%per ordinare la coda di priorità (questo vale anche per i sottotermini che 
+%vengono condivisi che calcolano il loro valore solo la prima volta)
+%e \cod{stringa} che contiene la rappresentazione della clausola.
+%Questi ultimi due sono utili anche se facciamo partire più volte
+%la prova sullo stesso input (come può avvienire tranquillamente nella GUI), solo la prima mi 
+%calcolerà i risultati rendendo più veloci le successive.
+%
+In \classe{Clause} inotre sono state implementate le regole di inferenza e
+sono diponibili la risoluzione binaria \metodo{resolvents}, la risoluzione binaria
+ordinata \metodo{orderedResolvents}, fattorizzazione \metodo{factorization},
+fattorizzazione ordinata \metodo{orderedFactorization}, semplificazione clausale
+\metodo{simplifies} e due versioni di sussunzione \metodo{subsumes} e 
+\metodo{subsumesChangLee}.
+%
+%In \classe{Clause} ci sono due metodi per la sussunzione. 
+\metodo{subsumes} è la
+mia versione che implementa sia la \emph{sussunzione propria} sia quella 
+\emph{di varianti} e confronta delle liste di letterali con lo 
+stesso segno e simbolo di predicato cercando l'unificatore più generale
+per ogni letterale in queste liste, bloccando la computazione al primo mgu == null
+con risultato negativo oppure quando tutti i letterali della clausola corrente
+riescono ad unificare con risultato positivo.
+%essere ``e se per ogni letterale di
+%clausola corrente riesce  unificare i letterali tra le due clausole.
+\metodo{subsumesChangLee} invece è l'implementazione descritta nel libro di testo
+del corso (Chang-Lee pag.~95) e prevede il calcolo di vari risolventi tra le clausole.
+A livello di test la mia versione risulta più veloce perché richiede solo di trovare
+gli \metodo{mgu} e non fare tutta la risoluzione. %Inoltre mettendo 
+%%La mia avendo la condizione
+%%aggiuntiva sul numero di letterali nella sussunzione propria 
+%%($|$C$|$~$<$~$|$D$|$) e il numero di indice nella di varianti (in(C)~$<$~id(D))
+%%sussume meno clausole rispetto quella del Chang-Lee. Un esempio è:
+%%C~=~\cod{P(x) | P(f(y))} e D~=~\cod{P(f(z))} che per la versione Chang-Lee %risulta
+%%C~sussume~D, mentre con la mia no. Questa differenza però non ha ripercussioni
+%%sul risultato finale. 
+Si può comunque provare la versione del libro con % inserendo
+%%il parametro aggiuntivo 
+l'opzione
+\sintassi{-changlee} %all'avvio del programma e %d è 
+%%disponibile solo nell'interfaccia a riga di comando perché 
+ma serve solo per test.
+
+%Poi ci sono dei campi aggiuntivi \cod{parents}, \cod{substitutionFrom} e \cod{rule}
+%che ci permettono di tenere traccia dell'albero di derivazione e abbinati al
+%metodo \metodo{getDOT} di costruire 
+%l'albero.
+%il grafo.
+
+\section{Ordinamento}\label{sec: ordinamento}
+Per implementare le regole di inferenza ordinate si è
+scelto di definire una classe \classe{Ordering}
+che implementa i tre ordinamenti visti a lezione.
+
+Siccome nelle api java non c'è una classe che implementi
+i multiinsiemi, ho definito \classe{MultiSet} in cui 
+salvo gli oggetti in %con il loro numero di occorrenze
+%utilizzando 
+un'\classe{HashMap$<$Object, Integer$>$} in cui mappo il numero di occorrenze.  
+Per poter adottare questa implementazione si è resa 
+necessaria l'implementazione dei metodi \metodo{equals} e \metodo{hashCode}
+in tutte le classi.
+%a tutte le classi che compongono una clausola perché i metodi
+%ereditati da \classe{Object} mappano oggetti con puntatore diverso
+%chiavi diverse nella HashMap anche se rappresentano lo stesso oggetto.
+
+% precedenze
+%In \classe{Ordering} è stata definita una modalità ``standard'' in cui 
+%si ignora l'eventuale precedenza inserita dall'utente e si usa
+Come accennato prima si può utilizzare la precedenza di default
+in cui ho definito
+\emph{predicati} $>$ \emph{funzioni} $>$ \emph{costanti}
+e se due oggetti da ordinare sono dello stesso ``tipo''
+%e ogni predicato, funzione e costante è ordinata in modo da definire come
+risulterà maggiore il simbolo che viene prima nell'ordinamento lessicografico.
+% pesi kbo
+Per kbo il peso di default vale 1.
+
+Se invece scegliamo l'ordinamento definito dall'utente, 
+%siccome non è prevista la verifica sui valori dei pesi può capitare che non
+%rispetti le regole di buona funzione peso. P
+può capitare che non tutti i pesi vengano inseriti, 
+%allora l'ordinamento potrebbe trovarsi in 
+%situazioni anomale, quindi ho deciso di specificare nella classe \classe{Ordering}
+in tal caso verrà utilizzato il valore base
+% per i simboli non specificati e si possono dare valori diversi 
+%in caso si tratti di predicati, funzioni, variabili o costanti (io ho deciso di dare valore 1).
+%In caso si incontri un peso non definito la computazione va comunque avanti, ma 
+e un avviso
+segnalerà la cosa.
+% all'utente che può decidere quindi di abortire l'esecuzione o
+%ignorarlo.
+
+Una ``ottimizzazione'' sull'ordinamento di Knuth-Bendix che è stata fatta è
+calcolare le occorrenze di ogni variabile direttamente quando si calcola il peso,
+così si esplorerà ricorsivamente i termini solo una volta.
+%di esplora
+%il letterale così da salvare in due \classe{HashMap$<$Variable, Integer$>$>} relative ai
+%due letterali da ordinare le variabili che contengono con il loro numero di occorrenze
+%non dovendo rifare tutto in seguito.
+
+\section{Ciclo della clausola data}\label{sec: ciclo}
+%Adesso vediamo il codice che esegue la computazione vera e propria.
+%della suddisfacibilità della formula data in input.
+
+%Dopo aver processato i parametri dati dall'utente, letto l'input, eseguito il parsing
+%e settato l'ordinemento si può
+%%che istanzia un oggetto \classe{CNFFormula} che
+%%conterrà tutti i dati relativi all'input. Esso contiene diverse \classe{HashMap} 
+%%in cui salvo atomi e termini così creo una sola istanza dello stesso oggetto
+%%che verrà condivisa, 
+%%poi ce nè una
+%%che mappa simbolo con la propria arietà per controllare in fase di parsing
+%%che non vengano passati un numero diverso di argomenti allo stesso simbolo. 
+%%Ci sono poi altre
+%%strutture per le precedenze e i pesi. 
+%%Quando si processano le variabili di clausole diverse bisogna intenderle disgiunte
+%%anche se hanno lo stesso simbolo, allora ho deciso di rinominarle alla creazione 
+%%assegnandogli come nuovo simbolo univoco 
+%%\sintassi{simbolo\_indiceclausola} così non c'è problema di rinominarle ad ogni
+%%risoluzione. In caso di risoluzione in cui la nuova clausola dovesse contenere
+%%\sintassi{x\_1} e \sintassi{x\_2} contemporaneamente, bisogna stare attenti a non confonderle
+%%rinominandole entrambe con l'indice della nuova clausola, così è stato implementato
+%%un metodo che in caso di ``simbolo originale'' uguale ma indice diverso
+%%si otterrà per esempio \sintassi{x\_3} e \sintassi{x'\_3} disambiguando le variabili
+%%con ``\sintassi{'}''.
+%% e in caso si dovesse incontrare una clausola che dovrebbe contenere
+%% x_1 e x_2 senza unificarle è stato aggiunto un metodo che rende le variabili
+%% x_3 e x'_3 tendendo sempre la numerazione ma disambiguandole con il ``'''.
+%%
+%crea un oggetto \classe{Ordering} che implementa i tre ordinamenti 
+%e setta quello selezionato dall'utente.
+%Siccome nelle api java non c'è una classe che implementi
+%i multiinsiemi, ho definito \classe{MultiSet} in cui 
+%salvo gli oggetti con il loro numero di occorrenze
+%utilizzando 
+%un'\classe{HashMap<Object, Integer>}.  Per poter adottare questa implementazione si è resa 
+%necessaria l'implementazione dei metodi \metodo{equals} e \metodo{hashCode}.
+%%altrimenti istanze diverse rappresentanti lo stesso elemento sarebbero state 
+%%mappate in oggetti differenti avendo avuto di default i metodi ereditati da \classe{Object}. 
+
+%Adesso possiamo
+%Per
+%verificare l'insoddisfacbilità della formula inserita
+Il ciclo della clausola data %vero e proprio 
+è implementato nel metodo \metodo{satisfiable} in
+\classe{GivenClauseProver}. % che prende in ingresso
+%un oggetto \classe{CNFFormula} che contiene tutte le clausole generate nella
+%fase di parsing, 
+%costruisce ``\campo{To\_Select}'' e ``\campo{Selected}'' ed esegue il
+%ciclo while fino a che ``\campo{To\_Select}'' risulta vuoto o trova la clausola vuota.
+%Come detto prima sono disponibili due varianti del ciclo della clausola
+L'utente può scergliere di utilizzare la versione \emph{à la Otter} o \emph{à la E}.
+Senza spiegare le differenze tra le versioni che sono state viste
+a lezione, analizzo solo le scelte implementative.
+Per estrarre la clausola data da ``\campo{To\_Select}'' utilizzo un ordinemento
+in cui scelgo quella con \emph{minor numero
+di simboli} (ordinamento \emph{equo}) 
+e nel caso di valore uguale
+do precedenza alla clausola più vecchia. 
+Per questo è stato utilizzata \classe{PriorityQueue}.
+Se \campo{Selected} è vuoto,
+estraggo la prima clausola non tautologica da \campo{To\_Select} e la metto 
+direttamente in \campo{Selected} senza fare un giro a vuoto.
+%
+%Poi ci sono i metodi \metodo{forwardContraction} e \metodo{backwardContraction}
+%che eseguono rispettivamente la contrazione in avanti e all'indietro 
+%(eliminazione di tautologie, sussunzione e semplificazione).
+%
+Sono stati aggiunti anche dei contatori che mi riportano il numero di clausole
+generate, cancellate e rimaste in
+\campo{To\_Select} e \campo{Selected} per avere un'informazione completa del lavoro 
+svolto.
+%``Selected'' invece è un
+%semplice ArrayList perché devo scorrerlo tutto ogni volta per fare risoluzione.
+
+%Il nostro insieme di inferenza è stato implementato in
+%%Durante il ciclo verranno utilizzate le regole del nostro 
+%%insieme di inferenza %che si trovano in 
+%\classe{InferenceSystem} %che
+%che data la clausola ``given'' e l'insieme \campo{Selected}
+%richiama i metodi di \classe{Clause} che invece funzionano
+%su due clausole e non su un intero insieme. Inoltre 
+%contiene anche il metodo \metodo{mgu} %che
+%%aggiorna una sostituzione in modo da trovare 
+%per calcolare l'\emph{unificatore più generale} 
+%tra due letterali. Questo metodo viene chiamato ricorsivamente su
+%ogni sottotermine che si cerca di unificare e aggiorna
+%una sostituzione che alla fine sarà quella che si userà
+%per calcolare la nuova clausola.
+% nelle regole di inferenza. Siccome nella sussunzione e nella
+%semplificazione clausale la sostituzione va applicata solo da un lato, è
+%stato aggiunto un flag booleano per imporre questa restrizione in fase di unificazione. 
+
+%Le sostituzioni sono definite in \classe{Substitution}
+%con una \classe{HashMap}$<$\classe{Variable}, \classe{Term}$>$ che
+%rende veloce la ricerca. % del termine da sostituire alla variabile 
+%%e sono inclusi
+%Nella classe si trovano anche i vari metodi per controllarne l'\emph{idempotenza}.
+%Quando si applica una sostituzione rinominiamo le variabili aggiornando
+%l'indice della clausola, ma può capitare di avere contemporaneamente
+%\sintassi{x\_1} e \sintassi{x\_2}, allora per disambiguarle nella nuova
+%clausola si utilizza ``\sintassi{'}'' ottenendo così
+%\sintassi{x\_3} e \sintassi{x'\_3}.
+%%%%%%%%%%%%%%%%%%5
+
+%In caso di risoluzione in cui la nuova clausola dovesse contenere
+%\sintassi{x\_1} e \sintassi{x\_2} contemporaneamente, bisogna stare attenti a non confonderle
+%rinominandole entrambe con l'indice della nuova clausola, così è stato implementato
+%un metodo che in caso di ``simbolo originale'' uguale ma indice diverso
+%si otterrà per esempio \sintassi{x\_3} e \sintassi{x'\_3} disambiguando le variabili
+%con ``\sintassi{'}''.
+% e in caso si dovesse incontrare una clausola che dovrebbe contenere
+% x_1 e x_2 senza unificarle è stato aggiunto un metodo che rende le variabili
+% x_3 e x'_3 tendendo sempre la numerazione ma disambiguandole con il ``'''.
+
+
+
+
+
+
+
+
+
+
+\section{Risultati degli esperimenti}\label{sec: esperimenti}
+Tutti i metodi principali sono stati testati con delle classi test
+su esempi fatti a mano scelti tra gli esercizi in classe. Si trovano
+in ``./test.funzionamento.metodi/'' dove è possibile ordinare i letterali
+dati in input, trovare i letterali massimali da un insieme di clausole,
+calcolare i risolventi, le clausole semplificate e sussunte.
+
+Tutti i rilevamenti sono stati eseguiti su un notebook con processore 
+\textsf{Intel core 2 duo T7200 2.0Ghz} con 2GB di RAM e Ubuntu Linux 
+12.04~LTS 64~bit.
+
+Dagli esperimenti effettuati, nella maggior parte dei casi l'utilizzo
+di un ordinamento ha portato benefici, %al computo del risultato, 
+infatti
+per problemi che generano almeno 5000 clausole
+sono state risparmiate anche il 75\% di clausole. % in meno.
+Per problemi più piccoli il tempo necessario per calcolare i letterali 
+massimali non viene compensato dal minor numero di clausole generate.
+Nessuno dei tre ordinamenti è risultato sempre la scelta migliore.
+%Probabilmente sperimentando diverse precedenze e pesi si possono
+%trovare situazioni che in generale risultano migliori.
+
+%anche se i su problemi e risultano più veloci. % e nei casi in cui si arriva a soluzione 
+%per clausola vuota o per insieme ``\campo{To\_Select}'' vuoto sono più veloci.
+%Ovviamente trattandosi di un problema semidecidibile c'è anche il caso in cui 
+%si diverge e quindi non si avrà alcun vantaggio.
+
+L'utilizzo dell'insieme di supporto riduce di molto il tempo di esecuzione
+della procedura%, però su alcuni esempi tptp (mettere nomi\ldots) è stato 
+%riscontrato che abbinato ad ordinamenti porta
+%problemi insoddisfacibili a dare come risposta soddisfacibile
+%per ``\campo{To\_Select}'' vuoto.
+risultando migliore anche rispetto agli ordinamenti. Però
+è necessario che le clausole T che provengono dalle ipotesi
+formino un insieme consistente e nella realtà non sempre è
+vero perché sono possibili errori nella formulazione del problema.
+
+% per il
+%problema in esame. 
+
+Si è provato ad unire ordinamenti e strategia dell'insieme di supporto per vedere
+se si ottenevano ulteriori miglioramenti, ma dagli esperimenti si è notato che 
+%utilizzare la strategia di supporto
+%con la risoluzione ordinata comporta la perdita della completezza refutazionale.
+\emph{non sono compatibili}, infatti molto spesso dà risultato errato.  
+%Questo
+%probabilmente è dovuto al fatto che non sia la congettura negata a rendere 
+%insoddisfacibile l'insieme di clausole. Quindi se l'insieme di clausole 
+%S~=~$<$T~$\uplus$~sos$>$ risulta 
+%soddisfacibile, il motivo è che T non è consistente.
+Un esempio si può vedere in Figura~\ref{fig: esempio incompatibilita}.
+%``\file{vr352595/Problemi/tptp.file/ALG002-1.p}''
+%
+\begin{myfigure}{Esempio di output che dimostra l'incompatibilità tra 
+strategia dell'insieme di supporto e ordinamenti.}{fig: esempio incompatibilita}
+\begin{tabular}{p{0.4\textwidth}p{0.03\textwidth}p{0.4\textwidth}}
+%\toprule
+\footnotesize
+\begin{shell}
+> vr352595.sh 
+  ./Problemi/tptp.file/ALG002-1.p 
+  -sos
+
+/* info */
+14 clauses from parsing, 
+2780 clauses generated, 
+1651 clauses deleted, 
+963 clauses in To_Select, 
+160 clauses in Selected, 
+in 6 sec. and 583 millisec..
+response: UNSATISFIABLE.
+\end{shell}
+& &
+\footnotesize
+\begin{shell}
+> vr352595.sh 
+  ./Problemi/tptp.file/ALG002-1.p 
+  -sos -kbo
+
+/* info */
+14 clauses from parsing, 
+0 clauses generated, 
+0 clauses deleted, 
+0 clauses in To_Select, 
+14 clauses in Selected, 
+in 5 millisec..
+response: SATISFIABLE.
+\end{shell}
+ \\
+%\bottomrule
+\end{tabular}
+\end{myfigure}
+%
+%
+%
+%
+%
+%
+%Infatti analizzando la prova di refutazione in 
+%%``\file{vr352595/Problemi/tptp.file/risultati/ALG002-1.p/ALG002-1-Otter-sos.pdf}''
+%``\file{vr352595/Problemi/tptp.file/}
+%\file{risultati/ALG002-1.p/ALG002-1-Otter-sos.pdf}''
+%si nota che tutto ha inizio con il risolvente tra
+%\begin{tptpcod}
+%cnf(product_and_inverse,axiom,
+%    ( greater_than_0(X)
+%    | product(X,X,additive_identity)
+%    | greater_than_0(additive_inverse(X)) )).
+%
+%cnf(prove_a_inverse_greater_than_0,negated_conjecture,
+%    ( ~ greater_than_0(multiplicative_inverse(a)) )).
+%\end{tptpcod}
+%
+%
+%
+Infatti per fare risoluzione bisogna per forza %usare 
+%``\cod{greater_than_0(X)} \cod{|} \cod{product(X,X,additive_identity)} \cod{|} 
+%\cod{greater_than_0(additive_inverse(X))}'' o 
+%``\cod{~ product(Y,Z,X)} \cod{|} \cod{~ greater_than_0(Y)} \cod{|} 
+%\cod{~ greater_than_0(Z)} \cod{|} \cod{greater_than_0(X)}''
+%e 
+unificare %con ``\cod{~ greater_than_0(multiplicative_inverse(a))}''
+%che è possibile solo 
+usando
+\cod{greater_than_0(X)} %e \cod{~greater_than_0(multiplicative_inverse(a))}
+che però con kbo non risulta tra i letterali massimali.
+%infatti \cod{greater_than_0(additive_inverse(X))} e 
+%\cod{~ product(Y,Z,X)} risultano maggiori nelle rispettive clausole.
+Addirittura se proviamo con ordinamento lessicografico o multiinsieme 
+la computazione sembra divergere.
+Si possono vedere questi risultati in alcuni esperimenti riportati
+in Tabella~\ref{tab: tptp otter}. Per questione di spazio
+è stato espresso con \textsf{T} il numero di clausole in 
+``\campo{To\_Select}'',
+\textsf{S} il numero di clausole in ``\campo{Selected}'',
+\textsf{G} il numero di clausole generate e
+\textsf{D} il numero di clausole eliminate.
+
+Sono state confrontate anche la versione à la Otter con quella à la E e
+%come ci si aspettava il numero di clausole generate dalla versione à la E
+%sono maggiori, ma nonostante questo la maggior parte dei casi
+la maggior parte delle volte il tempo risparmiato a non mantenere 
+interridotto anche \campo{To\_Selected}
+%porta a risultato più velocemente.
+rende la versione à la E più performante.
+Alcuni confronti tra le versioni con e senza l'utilizzo degli ordinamenti
+o dell'insieme di supporto
+si trovano nella Tabella~\ref{tab: tptp otter} per à la Otter
+e nella Tabella~\ref{tab: tptp E} per à la E.
+
+Un'euristica che ho provato ad implementare nella scelta della clausola data
+da \campo{To\_Select} è stata
+la \emph{Peak Given Ratio}, in cui ogni 4 iterazioni del ciclo, invece di prelevare
+la clausola in testa alla coda di priorità, seleziona la più vecchia contenuta 
+in \campo{To\_Select}.
+Questa strategia non è stata soddisfacente 
+in quanto il tempo speso per mantenere una struttura dati
+aggiuntiva per evitare di cercare la clausola più vecchia tra tutte
+si è rilevata più onerosa dei benefici. Per questo motivo
+non viene utilizzata.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Ho provato anche un'approccio diverso del ciclo della clausola data.
+Mentre nell'originale si fa risoluzione tra la
+%ogni clausola risolvente deve avere come padre la clausola
+data e una clausola in ``\campo{Selected}'' 
+e si calcolano i fattori della clausola data
+per poi aggiungere tutte le nuove clausole
+in ``\campo{To\_Select}''; io ho provato a calcolare tutti i risolventi tra
+la clausola data e le clausole in ``\campo{Selected}'' compresi quelli calcolati 
+sui fattori di esse e aggiungendo solo questi risolventi in ``\campo{To\_Select}''.
+Il risultato della prova di soddisfacibilità è lo stesso, anche se il mio esperimento
+risulta più lento. Se si desidera è possibile provarlo inserendo
+il parametro aggiuntivo \sintassi{-vAll} all'avvio del programma ed è 
+disponibile solo nell'interfaccia a riga di comando perché serve solo per test.
+Di default comunque verrà utilizzata la versione corretta come da specifica.
+I rilevamenti effettuati sono stati riportati in Tabella~\ref{tab: sussunzione + vAll}
+nella quale è stato inserito anche il confronto tra i due tipi di sussunzione
+menzionati precedentemente.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Alcuni esercizi fatti in classe sono stati risolti con l'elaborato e i
+risultati si trovano in Tabella~\ref{tab: esempi in classe}.
+
+Nelle tabelle sono stati riportati solo i risultati più interessanti, 
+tutti i rilevamenti delle prove effettuate si possono trovare nella 
+cartella \file{risultati} relativa ad ogni problema, compresi %i grafi
+%con la 
+gli alberi di derivazione.
+
+Nella cartella del progetto è stato inserito anche il \emph{javadoc}
+con la spiegazione dei vari metodi e delle classi.
+%Se invece si vuole analizzare il codice è stato compilato il \emph{javadoc}
+%e si trova nella cartella \file{./Project/}.
+
+%% TABELLA RISULTATI %%
+%Legenda
+%Ris. risultato dell’esecuzione
+%T numero finale di clausole in To_Select
+%S numero finale di clausole in Selected
+%G numero finale di clausole generate
+%D numero finale di clausole eliminate
+%Tempo tempo di esecuzione 
+
+%%%%%%%%%%%%%%%% incompatibilità sos + ordinamento (esempi solo kbo)
+%\begin{table}
+%\centering
+%\small
+%\begin{tabular}{lllS[table-format=5.0]S[table-format=5.0]S[table-format=5.0]S[table-format=5.0]l}
+%\toprule
+% & \textbf{à la Otter} & & & & & & \\
+%File & \textsf{Opzioni} & {Risposta} & {G} & {D} & {T} & {S} & tempo \\
+%\midrule\midrule
+%
+%\multirow{2}*{\file{ALG002-1.p}} 
+%                    &  & \emph{SAT} & 31959 & 20178 & 10973 & 803 & \emph{timeout} \\
+%\cmidrule(l){2-8}
+%                    & kbo & \emph{SAT} & 46897 & 37897 & 28 & 9395 & \emph{timeout} \\
+%\cmidrule(l){2-8}
+%                    & sos & UNSAT & 2780 & 1651 & 963 & 161 & 6 sec. 141 millisec. \\
+%\cmidrule(l){2-8}
+%                    & sos + kbo & SAT & 0 & 0 & 0 & 14 & 5 millisec. \\
+%\midrule\midrule
+%
+%\multirow{2}*{\file{COL123-2.p}} 
+%                    &  & \emph{SAT} & 12892 & 2869 & 8900 & 1104 & \emph{timeout} \\
+%\cmidrule(l){2-8}
+%                    & kbo & \emph{SAT} & 34853 & 26975 & 6932 & 954 & \emph{timeout} \\
+%\cmidrule(l){2-8}
+%                    & sos & UNSAT & 28691 & 19587 & 7026 & 2070 & 4 min. 24 sec. \\
+%\cmidrule(l){2-8}
+%                    & sos + kbo & SAT & 501 & 214 & 174 & 120 & 1 sec. 645 millisec. \\
+%\midrule\midrule
+%
+%\multirow{2}*{\file{COM001-1.p}} 
+%                    &  & UNSAT & 13364 & 12170 & 903 & 197 & 6 sec. 336 millisec. \\
+%\cmidrule(l){2-8}
+%                    & kbo & UNSAT & 1071 & 874 & 114 & 53 & 1 sec. 213 millisec. \\
+%\cmidrule(l){2-8}
+%                    & sos & UNSAT & 48 & 5 & 25 & 28 & 156 millisec. \\
+%\cmidrule(l){2-8}
+%                    & sos + kbo & \emph{SAT} & 20665 & 13112 & 6377 & 1187 & \emph{timeout} \\
+%\midrule\midrule
+%
+%\multirow{2}*{\file{PLA001-1.p}} 
+%                    &  & UNSAT & 272 & 66 & 145 & 76 & 1 sec. 139 millisec. \\
+%\cmidrule(l){2-8}
+%                    & kbo & UNSAT & 216 & 104 & 44 & 83 & 550 millisec. \\
+%\cmidrule(l){2-8}
+%                    & sos & UNSAT & 117 & 49 & 31 & 52 & 346 millisec. \\
+%\cmidrule(l){2-8}
+%                    & sos + kbo & UNSAT & 538 & 292 & 121 & 140 & 1 sec. 697 millisec. \\
+%\midrule\midrule
+%
+%\multirow{2}*{\file{PLA003-1.p}} 
+%                    &  & UNSAT & 78 & 40 & 16 & 31 & 231 millisec. \\
+%\cmidrule(l){2-8}
+%                    & kbo & UNSAT & 737 & 673 & 1 & 54 & 1 sec. 158 millisec. \\
+%\cmidrule(l){2-8}
+%                    & sos & UNSAT & 55 & 31 & 2 & 31 & 155 millisec. \\
+%\cmidrule(l){2-8}
+%                    & sos + kbo & SAT & 1 & 1 & 0 & 11 & 10 millisec. \\
+%\bottomrule
+%\end{tabular}
+%\caption{Rilevamenti ciclo à la Otter applicato a file tptp.}
+%\label{tab: tptp otter}
+%\end{table}
+
+
+%%%%%%%%%%%%%%%% à la Otter
+\begin{table}
+\centering
+\scriptsize
+\begin{tabular}{lllS[table-format=5.0]S[table-format=5.0]S[table-format=5.0]S[table-format=5.0]l}
+\toprule
+ & \textbf{à la Otter} & & & & & & \\
+%\multicolumn{1}{c}{File} & tipo & Ris & T & S & G & D & tempo \\
+File & \textsf{Opzioni} & {Risposta} & {G} & {D} & {T} & {S} & tempo \\
+\midrule%\midrule
+
+\multirow{2}*{\file{ALG002-1.p}} 
+                    & \com{-limit300} & \emph{SAT} & 31959 & 20178 & 10973 & 803 & \emph{timeout} \\
+\cmidrule(l){2-8}
+                    & \com{-lex -limit300} & \emph{SAT} & 15178 & 6940 & 7569 & 683 & \emph{timeout} \\
+\cmidrule(l){2-8}
+                    & \com{-mul -limit300} & \emph{SAT} & 15156 & 6905 & 7593 & 672 & \emph{timeout} \\
+\cmidrule(l){2-8}
+                    & \com{-kbo -limit300} & \emph{SAT} & 46712 & 37340 & 28 & 9358 & \emph{timeout} \\
+\cmidrule(l){2-8}
+                    & \com{-sos -limit300} & UNSAT & 2780 & 1651 & 963 & 161 & 7 sec. 555 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-sos -kbo -limit300} & \cancel{SAT} & 0 & 0 & 0 & 14 & 7 millisec. \\
+%\cmidrule(l){2-8}
+\midrule%\midrule
+
+\multirow{2}*{\file{COL123-2.p}} 
+                    & \com{-limit300} & \emph{SAT} & 13022 & 2921 & 8973 & 1109 & \emph{timeout} \\
+\cmidrule(l){2-8}
+                    & \com{-lex -limit300} & UNSAT & 4080 & 257 & 3316 & 490 & 36 sec. 33 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-mul -limit300} & UNSAT & 3743 & 2627 & 911 & 212 & 6 sec. 823 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-kbo -limit300} & UNSAT & 5887 & 4555 & 1104 & 235 & 8 sec. 664 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-sos -limit300} & UNSAT & 28691 & 19587 & 7026 & 2070 & 4 min. 20 sec. \\
+\cmidrule(l){2-8}
+                    & \com{-sos -kbo -limit300} & \cancel{SAT} & 501 & 216 & 174 & 123 & 1 sec. 370 millisec. \\
+%\cmidrule(l){2-8}
+\midrule%\midrule
+
+\multirow{2}*{\file{COM001-1.p}} 
+                    & \com{-limit300} & UNSAT & 13364 & 12170 & 903 & 197 & 7 sec. 40 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-lex -limit300} & UNSAT & 1071 & 874 & 114 & 53 & 1 sec. 24 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-mul -limit300} & UNSAT & 883 & 705 & 103 & 50 & 911 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-kbo -limit300} & UNSAT & 2047 & 1810 & 141 & 61 & 1 sec. 513 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-sos -limit300} & UNSAT & 48 & 5 & 25 & 28 & 142 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-sos -kbo -limit300} & \emph{SAT} & 20548 & 13033 & 6345 & 1181 & \emph{timeout} \\
+%\cmidrule(l){2-8}
+\midrule%\midrule
+
+\multirow{2}*{\file{PLA001-1.p}} 
+                    & \com{-limit300} & UNSAT & 272 & 66 & 145 & 76 & 1 sec. 60 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-lex -limit300} & UNSAT & 216 & 104 & 44 & 83 & 581 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-mul -limit300} & UNSAT & 213 & 101 & 44 & 83 & 565 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-kbo -limit300} & UNSAT & 216 & 104 & 44 & 83 & 566 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-sos -limit300} & UNSAT & 117 & 49 & 31 & 52 & 327 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-sos -kbo -limit300} & UNSAT & 540 & 294 & 121 & 140 & 1 sec. 775 millisec. \\
+%\cmidrule(l){2-8}
+\midrule%\midrule
+
+\multirow{2}*{\file{PLA003-1.p}} 
+                    & \com{-limit300} & UNSAT & 78 & 40 & 16 & 31 & 224 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-lex -limit300} & UNSAT & 734 & 670 & 1 & 54 & 1 sec. 70 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-mul -limit300} & UNSAT & 989 & 905 & 1 & 67 & 1 sec. 415 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-kbo -limit300} & UNSAT & 78 & 40 & 16 & 31 & 226 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-sos -limit300} & UNSAT & 55 & 31 & 2 & 31 & 149 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-sos -kbo -limit300} & UNSAT & 55 & 31 & 2 & 31 & 150 millisec. \\
+%\cmidrule(l){2-8}
+\midrule%\midrule
+
+\multirow{2}*{\file{PUZ001-3.p}} 
+                    & \com{-limit300} & SAT & 222 & 180 & 0 & 43 & 283 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-lex -limit300} & SAT & 45 & 23 & 0 & 34 & 101 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-mul -limit300} & SAT & 45 & 23 & 0 & 34 & 101 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-kbo -limit300} & SAT & 132 & 99 & 0 & 40 & 226 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-sos -limit300} & SAT & 100 & 87 & 0 & 25 & 151 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-sos -kbo -limit300} & SAT & 12 & 5 & 0 & 19 & 29 millisec. \\
+%\cmidrule(l){2-8}
+
+\bottomrule
+\end{tabular}
+\caption{Rilevamenti ciclo à la Otter applicato a file tptp.}
+\label{tab: tptp otter}
+\end{table}
+
+
+
+%%%%%%%%%%%%%%%%%% à la E
+\begin{table}
+\centering
+\scriptsize
+\begin{tabular}{lllS[table-format=5.0]S[table-format=5.0]S[table-format=5.0]S[table-format=5.0]l}
+\toprule
+ & \textbf{à la E} & & & & & & \\
+%\multicolumn{1}{c}{File} & tipo & Ris & T & S & G & D & tempo \\
+File & \textsf{Opzioni} & {Risposta} & {G} & {D} & {T} & {S} & tempo \\
+\midrule%\midrule
+
+\multirow{2}*{\file{ALG002-1.p}} 
+                    & \com{-limit300} & \emph{SAT} & 84216 & 17350 & 64925 & 1931 & \emph{timeout} \\
+\cmidrule(l){2-8}
+                    & \com{-lex -limit300} & \emph{SAT} & 50526 & 9856 & 38167 & 2517 & \emph{timeout} \\
+\cmidrule(l){2-8}
+                    & \com{-mul -limit300} & \emph{SAT} & 50400 & 9816 & 38086 & 2512 & \emph{timeout} \\
+\cmidrule(l){2-8}
+                    & \com{-kbo -limit300} & \emph{SAT} & 29610 & 22182 & 28 & 7414 & \emph{timeout} \\
+\cmidrule(l){2-8}
+                    & \com{-sos -limit300} & UNSAT & 4221 & 1214 & 2643 & 365 & 4 sec. 464 millisec. \\
+\midrule%\midrule
+
+\multirow{2}*{\file{COL123-2.p}} 
+                    & \com{-limit300} & \emph{SAT} & 51651 & 4333 & 44907 & 2248 & \emph{timeout} \\
+\cmidrule(l){2-8}
+                    & \com{-lex -limit300} & UNSAT & 4087 & 239 & 3341 & 490 & 6 sec. 188 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-mul -limit300} & UNSAT & 3571 & 2178 & 1203 & 197 & 3 sec. 559 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-kbo -limit300} & UNSAT & 5242 & 3576 & 1460 & 213 & 3 sec. 744 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-sos -limit300} & UNSAT & 28840 & 16750 & 9980 & 2101 & 1 min. and 32 sec. \\
+\midrule%\midrule
+
+\multirow{2}*{\file{COM001-1.p}} 
+                    & \com{-limit300} & UNSAT & 8945 & 7188 & 1500 & 175 & 4 sec. 753 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-lex -limit300} & UNSAT & 862 & 636 & 152 & 49 & 762 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-mul -limit300} & UNSAT & 828 & 606 & 149 & 49 & 721 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-kbo -limit300} & UNSAT & 1020 & 790 & 155 & 49 & 832 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-sos -limit300} & UNSAT & 48 & 5 & 25 & 28 & 108 millisec. \\
+%\cmidrule(l){2-8}
+\midrule%\midrule
+
+\multirow{2}*{\file{PLA001-1.p}} 
+                    & \com{-limit300} & UNSAT & 250 & 28 & 170 & 67 & 564 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-lex -limit300} & UNSAT & 152 & 55 & 49 & 63 & 402 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-mul -limit300} & UNSAT & 149 & 52 & 49 & 63 & 435 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-kbo -limit300} & UNSAT & 152 & 55 & 49 & 63 & 405 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-sos -limit300} & UNSAT & 64 & 16 & 24 & 39 & 195 millisec. \\
+%\cmidrule(l){2-8}
+\midrule%\midrule
+
+\multirow{2}*{\file{PLA003-1.p}} 
+                    & \com{-limit300} & UNSAT & 53 & 21 & 18 & 23 & 141 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-lex -limit300} & UNSAT & 175 & 141 & 6 & 29 & 488 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-mul -limit300} & UNSAT & 232 & 186 & 8 & 35 & 596 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-kbo -limit300} & UNSAT & 53 & 21 & 18 & 23 & 134 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-sos -limit300} & UNSAT & 37 & 18 & 2 & 25 & 123 millisec. \\
+%\cmidrule(l){2-8}
+\midrule%\midrule
+
+\multirow{2}*{\file{PUZ001-3.p}} 
+                    & \com{-limit300} & SAT & 169 & 131 & 0 & 37 & 275 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-lex -limit300} & SAT & 38 & 20 & 0 & 30 & 111 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-mul -limit300} & SAT & 38 & 20 & 0 & 30 & 111 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-kbo -limit300} & SAT & 110 & 82 & 0 & 35 & 217 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-sos -limit300} & SAT & 88 & 80 & 0 & 20 & 126 millisec. \\
+%\cmidrule(l){2-8}
+\midrule%\midrule
+
+\multirow{2}*{\file{PUZ003-1.p}} 
+                    & \com{-limit300} & UNSAT & 60 & 18 & 24 & 19 & 99 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-lex -limit300} & UNSAT & 50 & 15 & 17 & 22 & 97 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-mul -limit300} & UNSAT & 50 & 15 & 17 & 22 & 98 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-kbo -limit300} & UNSAT & 20 & 8 & 6 & 13 & 33 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-sos -limit300} & UNSAT & 40 & 17 & 10 & 20 & 64 millisec. \\
+%\cmidrule(l){2-8}
+
+\bottomrule
+\end{tabular}
+\caption{Rilevamenti ciclo à la E applicato a file tptp.}
+\label{tab: tptp E}
+\end{table}
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%% normale vs vAll
+\begin{table}
+\centering
+\scriptsize
+\begin{tabular}{lllS[table-format=5.0]S[table-format=5.0]S[table-format=5.0]S[table-format=5.0]l}
+\toprule
+ & \textbf{à la Otter} & & & & & & \\
+File & Opzioni & {Risposta} & {G} & {D} & {T} & {S} & tempo \\
+\midrule%\midrule
+
+\multirow{2}*{\file{COL123-2.p}} 
+                    & \com{-sos} & UNSAT & 28691 & 19587 & 7026 & 2070 & 4 min. 24 sec. \\
+\cmidrule(l){2-8}
+                    & \com{-sos -changlee} & UNSAT & 26444 & 18538 & 5987 & 1897 & 27 min. and 11 sec. \\
+\cmidrule(l){2-8}
+                    & \com{-sos -vAll} & UNSAT & 29147 & 20038 & 7032 & 2068 & 4 min. 29 sec. \\
+
+\midrule%\midrule
+
+\multirow{2}*{\file{COM001-1.p}} 
+                    &  & UNSAT & 13364 & 12170 & 903 & 197 & 6 sec. 336 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-changlee} & UNSAT & 12760 & 11663 & 820 & 184 & 35 sec. 745 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-vAll} & UNSAT & 17777 & 16550 & 933 & 198 & 7 sec. 227 millisec. \\
+\midrule%\midrule
+
+\multirow{2}*{\file{PUZ001-3.p}} 
+                    &  & SAT & 222 & 180 & 0 & 43 & 283 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-changlee} & SAT & 222 & 180 & 0 & 43 & 583 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-vAll} & SAT & 222 & 180 & 0 & 43 & 299 millisec. \\
+\bottomrule
+\end{tabular}
+\caption{Prestazioni dei due metodi di sussunzione implementati e versione sperimentale.}
+\label{tab: sussunzione + vAll}
+\end{table}
+
+
+\begin{table}
+\centering
+\scriptsize
+\begin{tabular}{lllS[table-format=2.0]S[table-format=2.0]S[table-format=2.0]S[table-format=2.0]l}
+\toprule
+ & \textbf{à la Otter} & & & & & & \\
+%\multicolumn{1}{c}{File} & tipo & Ris & T & S & G & D & tempo \\
+File & Tipo & Risposta & {G} & {D} & {T} & {S} & tempo \\
+\midrule
+\multirow{2}*{\file{blocks.p}} 
+                    &  & UNSAT & 13 & 3 & 5 & 8 & 16 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-lex -usP} & UNSAT & 5 & 1 & 0 & 8 & 9 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-mul -usP} & UNSAT & 5 & 1 & 0 & 8 & 9 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-kbo -usP} & UNSAT & 5 & 1 & 0 & 8 & 7 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-sos} & UNSAT & 13 & 3 & 5 & 8 & 16 millisec. \\
+%\cmidrule(l){2-8}
+\midrule
+
+\multirow{2}*{\file{2013-01-07\_es01.p}} 
+                    &  & UNSAT & 49 & 24 & 10 & 18 & 69 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-lex -usP} & UNSAT & 10 & 3 & 0 & 13 & 18 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-mul -usP} & UNSAT & 10 & 3 & 0 & 13 & 25 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-kbo -usP} & UNSAT & 9 & 4 & 0 & 11 & 13 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-sos} & UNSAT & 49 & 24 & 10 & 18 & 89 millisec. \\
+%\cmidrule(l){2-8}
+\midrule
+\multirow{2}*{\file{monkey-banana.txt}} 
+                    &  & UNSAT & 18 & 3 & 7 & 10 & 25 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-lex} & UNSAT & 16 & 0 & 10 & 10 & 34 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-mul} & UNSAT & 14 & 0 & 7 & 11 & 45 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-kbo} & UNSAT & 14 & 6 & 1 & 9 & 17 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-sos} & UNSAT & 18 & 3 & 7 & 10 & 44 millisec. \\
+\midrule\midrule
+%\bottomrule
+%\end{tabular}
+%\caption{Ciclo della clausola data applicato ad alcuni esempi fatti in classe.}
+%\label{tab: esempi in classe Otter}
+%\end{table}
+
+%\begin{table}
+%\centering
+%\small
+%\begin{tabular}{lllS[table-format=2.0]S[table-format=2.0]S[table-format=2.0]S[table-format=2.0]l}
+%\toprule
+ & \textbf{à la E} & & & & & & \\
+%\multicolumn{1}{c}{File} & tipo & Ris & T & S & G & D & tempo \\
+File & Tipo & Risposta & {G} & {D} & {T} & {S} & tempo \\
+\midrule
+\multirow{2}*{\file{blocks.p}} 
+                    &  & UNSAT & 9 & 2 & 3 & 7 & 10 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-lex -usP} & UNSAT & 5 & 2 & 0 & 7 & 10 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-mul -usP} & UNSAT & 5 & 2 & 0 & 7 & 10 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-kbo -usP} & UNSAT & 5 & 2 & 0 & 7 & 8 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-sos} & UNSAT & 9 & 2 & 3 & 7 & 9 millisec. \\
+
+%\cmidrule(l){2-8}
+\midrule
+
+\multirow{2}*{\file{2013-01-07\_es01.p}} 
+                    &  & UNSAT & 44 & 15 & 14 & 18 & 59 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-lex -usP} & UNSAT & 10 & 3 & 0 & 13 & 29 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-mul -usP} & UNSAT & 10 & 3 & 0 & 13 & 25 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-kbo -usP} & UNSAT & 9 & 5 & 0 & 10 & 16 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-sos} & UNSAT & 44 & 15 & 14 & 18 & 60 millisec. \\
+\midrule
+\multirow{2}*{\file{monkey-banana.txt}} 
+                    &  & UNSAT & 15 & 2 & 6 & 9 & 19 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-lex} & UNSAT & 16 & 0 & 0 & 10 & 28 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-mul} & UNSAT & 14 & 0 & 7 & 11 & 36 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-kbo} & UNSAT & 10 & 3 & 2 & 7 & 14 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-sos} & UNSAT & 15 & 2 & 6 & 9 & 19 millisec. \\
+%\cmidrule(l){2-8}
+%\midrule
+\bottomrule
+\end{tabular}
+\caption{Ciclo della clausola data applicato ad alcuni esempi base.}
+\label{tab: esempi in classe}
+\end{table}
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%% SUSSUNZIONE mia vs Chang-Lee
+\begin{table}
+\centering
+\small
+\begin{tabular}{lllS[table-format=5.0]S[table-format=5.0]S[table-format=5.0]S[table-format=5.0]l}
+\toprule
+ & \textbf{à la Otter} & & & & & & \\
+File & Opzioni & {Risposta} & {G} & {D} & {T} & {S} & tempo \\
+\midrule\midrule
+
+\multirow{2}*{\file{COL123-2.p}} 
+                    & \com{-sos} & UNSAT & 28691 & 19587 & 7026 & 2070 & 4 min. 24 sec. \\
+\cmidrule(l){2-8}
+                    & \com{-sos -changlee} & UNSAT & 26444 & 18538 & 5987 & 1897 & 27 min. and 11 sec. \\
+
+\midrule\midrule
+
+\multirow{2}*{\file{COM001-1.p}} 
+                    &  & UNSAT & 13364 & 12170 & 903 & 197 & 6 sec. 336 millisec. \\
+\cmidrule(l){2-8}
+                    &\com{-changlee} & UNSAT & 12760 & 11663 & 820 & 184 & 35 sec. 745 millisec. \\
+\midrule\midrule
+
+\multirow{2}*{\file{PUZ001-3.p}} 
+                    &  & SAT & 222 & 180 & 0 & 43 & 283 millisec. \\
+\cmidrule(l){2-8}
+                    & \com{-changlee} & SAT & 222 & 180 & 0 & 43 & 583 millisec. \\
+
+\bottomrule
+\end{tabular}
+\caption{Prestazioni dei due metodi di sussunzione implementati.}
+\label{tab: sussunzione}
+\end{table}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%\vspace{-1ex}
+%\begin{itemize}
+%\item \hyperref[sec: interfaccia]{Interfaccia}
+%\vspace{-1ex}
+%\item \hyperref[sec: parser]{Parser}
+%\vspace{-1ex}
+%\item \hyperref[sec: algo cc]{Algoritmo di chiusura di congruenza}
+%\end{itemize}
+\vspace{-1ex}
+\section{Interfaccia}\label{sec: interfaccia}
+L'inserimento della formula avviene tramite un interfaccia grafica e si può
+digitare direttamente nell'area di testo oppure aprire comodamente da file. La
+stringa contenuta nel file viene visualizzata, dando modo all'utente di modificarla
+e salvarla in un altro file (con ``alert'' in caso si tentasse di sovrascrivere un file esistente).
+Però in formule molto lunghe questa operazione appesantirebbe troppo l'interfaccia, 
+quindi se la dimensione è maggiore di 50000 caratteri, si indica solamente il percorso del file
+caricato.
+Tutti i pulsanti vengono abilitati solo all'occorrenza, limitando al minimo i possibili errori degli utenti.
+Per esempio; %se non viene digitata o 
+%caricata nessuna formula, 
+il pulsante ``Start'' %che avvia la procedura 
+che avvia l'analisi non è attivo se la formula è vuota; 
+oppure finché l'algoritmo è in esecuzione, la barra %che consente di cambiare tipo di algoritmo
+dei menu
+%e operazioni sui file 
+risulta non attive e l'area di testo non modificabile, 
+costringendo l'utente ad attendere la fine dell'algoritmo 
+o a terminarla con il pulsante ``Abort'' che appare quando inizia l'algoritmo.
+
+Per apprezzare %appieno 
+l'interfaccia grafica occorre utilizzare formule corpose, così
+si noterà %in 
+che fase dell'algoritmo % ci troviamo. 
+è in esecuzione.
+%Infatti per prima cosa si visualizzerà la
+%scritta che informa che si sta facendo il parsing e la costruzione del grafo con 
+Durante la fase di parsing verrà visualizzata
+una
+barra di caricamento che indica la progressione con la percentuale elaborata. 
+%Quando questa fase sarà completata
+%sarà segnalato indicando anche il tempo impiegato e apparirà l'informazione che si 
+%sta eseguendo 
+Per l'algoritmo di chiusura di congruenza %; e siccome in questa fase 
+non è 
+possibile stimare %a priori 
+il tempo necessario, %si indica semplicemente che il 
+%programma sta elaborando con 
+quindi si usa una barra ``indeterminata'' animata per indicare che il programma sta elaborando.
+%Qualora la computazione risultasse troppo lunga è possibile terminarla premendo il tasto
+%``Abort'' che apparirà al posto dello ``Start''.
+%
+%Senza dilungarci troppo, lasciamo l'interfaccia si presenti da sola quando si testeranno
+%le formule di esempio allegate assieme all'implementazione.
+Al completamento di ogni fase verrà visualizzato il tempo impiegato.
+Passiamo alle fasi più importanti.  
+
+\vspace{-1ex}
+\section{Parser}\label{sec: parser}
+Una volta inserita la formula della quale vogliamo calcolare la soddisfacibilità,
+questa stringa viene passata ad un parser che la analizza carattere per carattere effettuando
+contemporaneamente analisi sintattica e costruzione del grafo.
+\vspace{-1ex}
+\subsection{Analisi sintattica}
+% = != !atom(not atom)
+L'analisi sintattica controlla che la formula sia stata scritta rispettando le seguenti 
+regole sintattiche: 
+\vspace{-1ex}
+\begin{description}
+\item[elemento:] nome senza spazi. Esempio: elem.
+\vspace{-1.5ex}
+\item[funzione:] il nome rispetta la regola per l'elemento, 
+	i parametri sono a loro volta funzioni o elementi e sono racchiusi tra parentesi tonde `(' e `)'
+	e separati %da virgole 
+	`,' o %punti e virgole 
+	`;'. Esempio: fun(el, g(a)).
+\vspace{-1.5ex}
+\item[uguaglianze/disuguaglianze:] sono costituite da funzioni o elementi separati da `='/`!='. Esempio: c = fun(b), a != fun(b).
+%\vspace{-1ex}
+%\item[disuguaglianze:] sono come le uguaglianze ma si usa i caratteri `!='.% Esempio: elem != fun(b).
+\vspace{-1.5ex}
+\item[atom:] viene trattato come una funzione con un solo parametro e per indicare la sua negazione
+	si fa precedere da `!'.% Esempio: atom(c). %
+\vspace{-1.5ex}
+\item[clausole:] sono uguaglianze, disuguaglianze, atom o !atom separati da virgole `,' 
+	o punti e virgole `;'. Esempio: a = f(b); !atom(g(a,b)).% , el != g(a) , atom(a)
+\end{description}
+\vspace{-1ex}
+Gli spazi vengono tutti ignorati tranne quelli presenti nel nome di una funzione o di un elemento
+(che restituiscono errore sintattico) per dare più flessibilità all'utente di scrivere 
+le formule nel formato che preferisce.
+
+%L'analisi semantica invece controlla che gli elementi e le formule abbiano
+%sempre la stessa arietà. Questo ci garantisce che lo stesso nome non possa essere usato sia
+%per funzioni con un numero diverso di argomenti sia per indicare un elemento.
+%Per esempio la formula ``f(a,b) = f'' restituirà errore sintattico perché è scritta nella
+%sintassi giusta, ma ``f'' viene usata nel modo sbagliato.
+
+\vspace{-1ex}
+\subsection{Costruzione del grafo}
+La costruzione del grafo istanzia degli oggetti ``nodi'' ed ognuno rappresenta una funzione
+o un elemento riconosciuto durante il parsing. Siccome nella stringa un elemento può
+comparire più di una volta, è importante non duplicare il nodo corrispondente a quell'elemento.
+Controllare %ogni volta 
+se un nodo %è già stato creato 
+esisste già
+può essere costoso quindi
+serve una struttura dati che permetta %di trovare ed 
+estrarre (se c'è) il nodo in questione
+nel minor tempo possibile. Per questo motivo si è scelto di usare una \emph{tabella hash}
+%di tipo 
+ad \emph{indirizzamento aperto} 
+%per risolvere le collisioni.
+in caso di collisioni.
+La scelta %dell'indirizzamento
+%aperto 
+è dovuta al fatto che se si verifica una collisione possiamo utilizzare il \emph{doppio hashing}
+%che prevede un'
+con esplorazione %delle celle 
+della tabella in modo diverso per ogni chiave, velocizzando
+l'estrazione. Rispetto al metodo del concatenamento, inoltre non usa %ndo 
+liste per memorizzare i nodi che collidono
+%nella stessa cella, 
+quindi
+non si consumerà ulteriore memoria. % istanziando nuovi oggetti.
+%Un altra 
+Caratteristica fondamentale è che i nodi non vengono mai eliminati e quindi cancellati 
+dalla tabella e questa è proprio la situazione ideale per questo tipo di tabella.
+
+In fase di costruzione, ogni nodo `funzione' viene collegato tramite il campo `\campo{param}' ai nodi 
+che sono suoi parametri e siccome sui parametri non ci sono operazione di unione si è 
+scelto di usare un array visto che sappiamo esattamente l'arietà di una funzione. 
+Dualmente, ai nodi argomenti viene aggiunto il nodo funzione al
+campo `\campo{ccpar}' che rappresenta i suoi padri. 
+Qui però %non è possibile 
+l'uso dell'array
+è improponibile
+perché questo campo %che 
+%varia %sia durante la costruzione del grafo sia durante
+%l'algoritmo di chiusura di congruenza
+è soggetto a frequenti unioni, quindi si è
+dovuti ricorrere ad un altra struttura dati diversa %(la scelta verrà specificata successivamente~[\ref{sec: algo cc}]).
+come vedremo successivamente.
+%A dir la verità sono stati implementati due algoritmi
+%Oltre a questi 
+Poi è presente anche il campo `\campo{fn}'
+che identifica il nome della funzione del nodo. 
+
+Per gestire il fatto che un nodo deve essere atomo
+o lista sono stati inseriti i booleani `\campo{atom}' e `\campo{cons}' che se messi a true indicano
+rispettivamente se un nodo è atomo o !atom. Anche se sembra che siano rindondanti, perché 
+una situazione esclude l'altra, si sono usati due campi distinti perché se sono messi entrambi a
+false significa che non si sa di che tipo sia il nodo.
+Questo ci permette di effettuare la prima ottimizzazione riconoscendo come insoddisfacibili le stringhe 
+che contengono un elemento `cons' al posto di `atom' direttamente durante il parsing,
+ per esempio car(cons(x,y)) oppure cons(cons(a,b),b). 
+Poi il campo `\campo{find}' punta al 
+rappresentante della classe di congruenza a cui appartiene il nodo (all'inizio ogni nodo appartiene
+ad una classe differente, quindi punterà a se stesso), in questo modo ogni classe è rappresentata
+come un albero e le varie classi come una foresta.
+Per 
+ottimizazione %controllare le disuguaglianze 
+si è infine aggiunto il campo `\campo{diversi}' che contiene
+tutti i nodi che non possono appartenere alla stessa classe del nodo e anche qui è importante scegliere
+una buona struttura dati.
+
+Assieme al grafo vengono poi costruite due code fifo che contengono coppie di nodi che sono in uguaglianza
+o disuguaglianza tra loro. In questo modo si passa la coda delle uguaglianze all'algoritmo di chiusura
+di congruenza e in caso questi restituisca ``soddisfacibile'', si verificano che anche le disuguaglianze 
+siano rispettate.
+
+\vspace{-1ex}
+\section{Algoritmo di chiusura di congruenza}\label{sec: algo cc}
+Per ogni uguaglianza rilevata nel parsing, si effettua il \emph{merge}. % come visto in classe.
+Già in questa fase si possono fare delle ottimizzazioni. Cominciamo col fatto che invece di
+passare i nodi al merge, si passano direttamente i loro \emph{rappresentanti} e solamente 
+se questi sono diversi. Questo ci permette di non effettuare %gli stessi 
+controlli rindondanti risparmiando le operazioni di \emph{find}(n1), \emph{find}(n2) e il loro confronto.
+Infatti notiamo che anche l'algoritmo per trovare gli elementi congruenti
+le fa già
+prima
+%su cui fare il 
+del merge. % in quel momento. 
+In più, nella \emph{union} quando si imposta un nodo come rappresentante dell'altro
+creerebbe una catena di nodi fino ad arrivare al vero rappresentante; quindi 
+trovare il rappresentate sarebbe dispendioso perché bisognerebbe scorrerla tutta.
+Il tempo richiesto verrebbe ridotto al minimo adottando l'accorgimento precedente.
+Comunque si può sempre adottare la \emph{compressione dei cammini} che durante la
+risalita della catena fa puntare il campo \campo{find} di ogni nodo incontrato al 
+vero rappresentante.
+
+Passiamo ad analizare il campo \campo{ccpar}. 
+Qui occorre scegliere attentamente la struttura dati perché i nodi in esso contenuti
+vengono continuamente uniti nella \emph{union}. %A prima occhiata s
+Si potrebbe decidere
+di utilizzare una lista con puntatore al primo ed all'ultimo elemento %così si
+%può unire in coda 
+con unione in tempo costante, però se andiamo a modificare così una lista
+si incontra un problema quando chiamiamo la funzione \emph{espandiCongruenze} 
+che analizza ogni possibile coppia tra i campi \campo{ccpar} per trovare qualche 
+nuova congruenza su cui fare il merge. %da propagare sulle liste precedenti all'unione. 
+% e poi viene controllata ogni
+%ogni possibile coppia tra i nodi del campo prima che l'unione due 
+%
+Quindi nel `merge' si deve salvare il campo \campo{ccpar} dei due nodi dati in input.
+Si sono pensate tante soluzioni, la più semplice è quella di salvare i nodi
+contenuti in \campo{ccpar} in due array stando sicuri che li sarebbero rimasti inalterati
+anche dopo l'unione. Questo però ha un costo \emph{lineare} nel numero di nodi contenuti
+nel campo.
+Poi c'è da considerare i doppi. Attaccando semplicemente una lista in fondo all'altra
+non ci permette di analizzare i nodi ripetuti e questo, oltre a consumare risorse,
+ci aumenterebbe il numero delle coppie da analizzare.
+
+A questo punto si sono sviluppate due diverse implementazioni, una per gestire
+efficientemente i doppi e l'altra cercando di usufruire dell'unione in tempo lineare. % sarebbe molto interessante.
+Per il primo scopo si è utilizzata una \emph{lista ordinata} così ogni volta che cerco di unire
+un nodo che c'è già, lo trovo mentre cerco di inserirlo nella posizione ordinata.
+Inoltre essendo entrambe già ordinate mi basta scorrerle entrambe solo una volta
+risultando lineare nella somma del numero di nodi. In questo modo ci accorgiamo che
+conviene costruire una nuova lista ordinata invece di unirla a quella del rappresentante.
+Il tempo necessario è sempre lineare, però
+%Così 
+non c'è bisogno di salvare le liste originali in un array.
+Per il secondo scopo invece si è creata una struttura dati ad hoc chiamata \emph{DoppiaLista}
+che non è altro che una lista doppiamente concatenata nella quale ci sono dei campi che
+puntano alle due liste che la compongono così le liste sottostanti rimangono inalterate
+e si può chiamare l'\emph{espandiCongruenze} su di esse. Evitando la copia negli array 
+(come nel caso precedente) ed avendo un unione costante!.  Ma non è tutto oro quello
+che luccica, infatti in fase implementativa si è notato che non gestendo gli elementi doppi
+si ha uno spreco di memoria importante ed %le possibili combinazioni tra elementi già analizzati in
+\emph{espandiCongruenze} considera combinazioni già incontrate in precedenza.
+%precedenza crescono in maniera importante. 
+Per ridurre questo fenomeno nell'\emph{espandiCongruenze} si è implementato un meccanismo 
+di rimozione dei doppi, vanificando di fatto il vantaggio.
+In entrambi i casi si è utilizzato l'ottimizzazione dell'\emph{unione per rango}
+in modo da unire il più piccolo al più grande, così i cammini verso il rappresentanti
+vengono allungati di uno solo sul numero minore di nodi.
+Una caratteristica importante di entrambe le liste è l'estrazione in tempo costante
+di ogni elemento se preso in ordine (proprio come accade in \emph{espandiCongruenze})
+siccome la lista viene scansionata sempre tutta si utilizza un campo aggiuntivo \campo{index}
+che ad ogni chiamata restituisce l'elemento puntato e si agiorna sul successivo.
+
+Una volta completate le merge e le uguaglianze, ci restano da controllare le disuguaglianze
+%trovate nel parsing 
+così confrontiamo i rappresentanti dei nodi che devono essere
+diversi. 
+Però così facendo ci accorgiamo solo alla fine di una disuguaglianza che 
+non viene rispettata magari dopo la prima merge. Per questo %si è provveduto alla
+%seguente ottimizzazione.
+%In ogni nodo si è inserita una lista dei nodi %con i quali non deve condividere
+%lo stesso rappresentante. Questa lista 
+%che rappresenta i 
+è utile il campo ``\campo{diversi}'' che viene 
+mantenuto %aggiornata 
+\emph{solo} nel rappresentante aggiungendo %i nodi contenuti
+%nei nodi che si aggiungono. 
+quelli
+%nei campi dei nodi della sua stessa classe
+di tutta la sua classe.
+Questo campo viene controllato dopo ogni \emph{union}
+così ci accorgeremmo tempestivamente di una eventuale insoddisfacibilità.
+Anche qui sono state fatte diverse prove. La lista ordinata è quella più
+facile da gestrire e non rallenta troppo l'esecuzione. Si è provato anche una tabella
+hash particolare (\emph{HashOpenPlusList}) nella quale vengono usate delle liste
+per avere subito accessibili i nodi senza dover scandire tutte le celle della tabella.
+%Nella fase di parsing viene riempita con i diversi una lista temporanea di supporto dell'hashtable, 
+%e poi quando il grafo è completato si usa un metodo che crea l'effettiva tabella 
+Questa classe crea tabelle
+dalle dimensioni opportune (senza troppo spreco di memoria). 
+%nella quale vengono copiati i nodi.
+Questo %ulteriore passo 
+rallenta un po' l'algoritmo però permette di non dover trovare un compromesso
+sulla dimensione iniziale della tabella evitando dimensioni %che in alcuni casi risulterebbe 
+esagerate %ed in altri
+%magari si è costretti a 
+o frequenti rehash. 
+Utilizzando questa hashtable
+basta controllare che la classe di equivalenza di un nodo sia disgiunta dalla
+tabella dei diversi.
+
+Le diverse implementazioni comportano che le ``merge'' 
+possono essere eseguite in ordine diverso
+tra le due soluzioni, quindi si è analizzato il caso peggiore %per il rilevamento 
+che si ha quando una formula è soddisfacibile perché in entrambi i casi vengono
+analizzate tutte.
+Dai rilevamenti fatti risulta più efficiente la seconda versione con ``DoppiaLista'' costruita ad hoc.
+La differenza non si nota tanto nell'esecuzione dell'algoritmo di chiusura di congruenza,
+ma nella costruzione del grafo.
+ 
+
+%, questo
+%ha creato dei problemi, perché prima che questi campi vengano letti nella funzione chiamata
+%\emph{espandiCongruenze} 
+
+\end{document}
